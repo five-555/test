@@ -81,10 +81,11 @@ copyright: <p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  
 
 # Social
 social:
-  qq: tencent://message/?Menu=yes&uin=2444892369 || iconQQ || '#12B7F5'
-  wechat: 2444892369 || iconwechat-fill || '#09BB07'
+  qq: tencent://message/?Menu=yes&uin=894519210 || iconQQ || '#12B7F5'
+  wechat: javascript:; || iconwechat-fill || '#09BB07'
+  instagram: https://www.instagram.com/izhaoo/ || iconinstagram || '#DA2E76'
   github: https://gitee.com/wzd520 || icongithub-fill || '#9f7be1'
-  email: wuzdon@qq.com || iconmail
+  email: mailto:izhaoo@163.com || iconmail
 
 # Override Scrollbar
 scrollbar:
