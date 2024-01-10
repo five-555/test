@@ -3,13 +3,13 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle: ''
-description: ''
-keywords:
+title: Zdon
+subtitle: '涉身于知识的浪潮与海'
+description: '恭喜你成功发现宝藏空间！请细品~'
+keywords:技术Blog
 author: Zdon
 language: zh-CN
-timezone: ''
+timezone: 'Asia/Shanghai'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
