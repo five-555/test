@@ -6,12 +6,15 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>归档 - Zdon: 2023</title>
+  <title>Go语言学习笔记 - Zdon</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
   <meta name="keywords" content="技术Blog">
-  <meta name="description" content="恭喜你成功发现宝藏空间！请细品~">
+  <meta name="description" content="Go语言的特性
+并发编程
+
+引入goroutine，实...">
   <meta name="author" content="Zdon">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -152,7 +155,7 @@
       
       
     </div>
-    <div class="center">归档</div>
+    <div class="center">Go语言学习笔记</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -188,37 +191,104 @@
   </div>
 </nav>
   <main id="main">
-  <section class="archive">
-    <div class="archive-container">
-      <div class="archive-post">
-        <h3 class="archive-total">归档: 3 篇</h3>
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="/images/theme/post-image.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">Go语言学习笔记</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>十二月 14, 2023</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>283</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+        <h3 id="Go语言的特性"><a href="#Go语言的特性" class="headerlink" title="Go语言的特性"></a>Go语言的特性</h3><ul>
+<li><p>并发编程</p>
+<ul>
+<li><p>引入<code>goroutine</code>，实现快速高效的并发编程，让函数以协程为单位进行运行。</p>
+</li>
+<li><p><code>goroutine</code>内部采用管道<code>channel</code>进行消息传递，从而实现共享内存。</p>
+</li>
+</ul>
+</li>
+<li><p>PS：进程间的通信方式</p>
+<blockquote>
+<p>管道通信、消息队列、共享内存、信号量通信、信号、Socket网络通信</p>
+</blockquote>
+<p>每个进程的用户地址空间都是独立的，一般而言是不可以互相访问，但是内核空间是每个进程共享的，进程之间要通信必须通过内核。</p>
+<ul>
+<li><p>1、管道通信</p>
+<p>管道传输数据是单向的，要相互通信，则需要建两个管道</p>
+</li>
+<li><p>2、消息队列</p>
+</li>
+<li><p>3、共享内存</p>
+</li>
+<li><p>4、信号量通信</p>
+</li>
+<li><p>5、信号</p>
+</li>
+<li><p>6、</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>错误处理</p>
+
+      </section>
+      <section class="extra">
+        
+          <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>Zdon</li>
+    <li><strong>本文链接：</strong><a href="http://zdon.fun/2023/12/14/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html" title="http:&#x2F;&#x2F;zdon.fun&#x2F;2023&#x2F;12&#x2F;14&#x2F;Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0&#x2F;index.html">http:&#x2F;&#x2F;zdon.fun&#x2F;2023&#x2F;12&#x2F;14&#x2F;Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul>
         
         
-          
-            <h3 class="archive-year">2024 年</h3>
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2024/01/02/git/">一月 02</a>
-            <a class="archive-title" href="/2024/01/02/git/">Git常见用法</a>
-          </div>
+          <section class="donate">
+  <div id="qrcode-donate">
+    <img   class="lazyload" data-original="https://pic.izhaoo.com/alipay.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" >
+  </div>
+  <div class="icon">
+    <a href="javascript:;" id="alipay"><i class="iconfont iconalipay"></i></a>
+    <a href="javascript:;" id="wechat"><i class="iconfont iconwechat-fill"></i></a>
+  </div>
+</section>
+        
+        
+        
+  <nav class="nav">
+    <a href="/2024/01/02/git/"><i class="iconfont iconleft"></i>Git常见用法</a>
+    <a href="/2023/12/04/hello-world/">Hello World<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
         
           
-            <h3 class="archive-year">2023 年</h3>
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2023/12/14/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">十二月 14</a>
-            <a class="archive-title" href="/2023/12/14/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">Go语言学习笔记</a>
-          </div>
-        
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2023/12/04/hello-world/">十二月 04</a>
-            <a class="archive-title" href="/2023/12/04/hello-world/">Hello World</a>
-          </div>
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Go%E8%AF%AD%E8%A8%80%E7%9A%84%E7%89%B9%E6%80%A7"><span class="toc-text">Go语言的特性</span></a></li></ol>
+  </aside>
+
         
       </div>
     </div>
-  </section>
+  </div>
 </main>
   
 

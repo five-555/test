@@ -6,12 +6,12 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Hello World - Zdon</title>
+  <title>Git常见用法 - Zdon</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
   <meta name="keywords" content="技术Blog">
-  <meta name="description" content="Welcome to Hexo! This is yo...">
+  <meta name="description" content="怎样撤销一个已经push到远端的版本123456789...">
   <meta name="author" content="Zdon">
   <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
@@ -152,7 +152,7 @@
       
       
     </div>
-    <div class="center">Hello World</div>
+    <div class="center">Git常见用法</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -196,30 +196,53 @@
     <section class="head">
   <img   class="lazyload" data-original="/images/theme/post-image.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
   <div class="head-mask">
-    <h1 class="head-title">Hello World</h1>
+    <h1 class="head-title">Git常见用法</h1>
     <div class="head-info">
-      <span class="post-info-item"><i class="iconfont iconcalendar"></i>十二月 04, 2023</span>
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>一月 02, 2024</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>444</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1001</span>
     </div>
   </div>
 </section>
     <section class="main">
       <section class="content">
         
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
+        <h4 id="怎样撤销一个已经push到远端的版本"><a href="#怎样撤销一个已经push到远端的版本" class="headerlink" title="怎样撤销一个已经push到远端的版本"></a>怎样撤销一个已经push到远端的版本</h4><figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs arcade">每次<span class="hljs-built_in">push</span>之前线pull一下<br><br><span class="hljs-number">1</span>、查看当前提交的信息，找到需要撤回到的版本号复制，一串十六进制的数<br>git <span class="hljs-built_in">log</span><br><br><span class="hljs-number">2</span>、使用git reset<br>git reset --soft 复制的版本号<br><br><span class="hljs-number">3</span>、强制回退当前版本号<br><span class="hljs-comment">// 确认一下当前版本</span><br>git <span class="hljs-built_in">log</span><br><span class="hljs-comment">// 谨慎使用，强制使用本地仓库代码修改远程仓库</span><br>git <span class="hljs-built_in">push</span> orgin master --force<br></code></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
+<h4 id="新建分支并同步到远端的分支"><a href="#新建分支并同步到远端的分支" class="headerlink" title="新建分支并同步到远端的分支"></a>新建分支并同步到远端的分支</h4><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># 在本地新建一个名字为branch_name的分支，并与远端的origin/branch_name同步</span><br>git checkout -<span class="hljs-keyword">b </span><span class="hljs-keyword">branch_name </span><span class="hljs-keyword">origin/branch_name</span><br></code></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
+<h4 id="解决git-clone超时的问题"><a href="#解决git-clone超时的问题" class="headerlink" title="解决git clone超时的问题"></a>解决git clone超时的问题</h4><p>从github上clone代码仓库报错<code>Failed to connect to github.com port 443 after 21038 ms: Couldn&#39;t connect to server</code>且尝试去ping一下github官网会丢包</p>
+<img src="/2024/01/02/git/image-20231204110955462.png" class="" title="image-20231204110955462">
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
+<p>解决方案</p>
+<p>修改系统的hosts</p>
+<img src="/2024/01/02/git/image-20231204111125551.png" class="" title="image-20231204111125551">
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<p>修改hosts需要给文件更高的权限</p>
+<img src="/2024/01/02/git/image-20231204111350240.png" class="" title="image-20231204111350240">
+
+<h4 id="github中git-push出现超时的问题"><a href="#github中git-push出现超时的问题" class="headerlink" title="github中git push出现超时的问题"></a>github中git push出现超时的问题</h4><img src="/2024/01/02/git/image-20231204112945547.png" class="" title="image-20231204112945547">
+
+<p>解决方案</p>
+<p>1、打开本机的代理服务器</p>
+<img src="/2024/01/02/git/image-20231204113100512.png" class="" title="image-20231204113100512">
+
+<p>2、取消git config里面的http和https代理</p>
+<img src="/2024/01/02/git/image-20231204113208566.png" class="" title="image-20231204113208566">
+
+<p>3、设置http代理服务器</p>
+<img src="/2024/01/02/git/image-20231204113304822.png" class="" title="image-20231204113304822">
+
+<h4 id="linux中输出一个文件夹下面的所有文件名"><a href="#linux中输出一个文件夹下面的所有文件名" class="headerlink" title="linux中输出一个文件夹下面的所有文件名"></a>linux中输出一个文件夹下面的所有文件名</h4><ul>
+<li><strong><code>/path/to/directory</code></strong>: 替换为目标目录的路径。</li>
+<li><strong><code>-maxdepth 1</code></strong>: 限制<code>find</code>的搜索深度为1，即仅在指定的目录中搜索，而不会搜索其子目录。</li>
+<li><strong><code>-type f</code></strong>: 限制搜索结果为普通文件（不包括目录和其他类型的文件）。</li>
+<li><strong><code>-exec basename &#123;&#125; \;</code></strong>: 对每一个找到的文件执行<code>basename</code>命令，即输出文件的基本名称。<code>&#123;&#125;</code>是<code>find</code>命令的占位符，表示每个找到的文件的路径。<code>\;</code>表示命令结束。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">find /path/to/directory -maxdepth 1 -<span class="hljs-built_in">type</span> f -<span class="hljs-built_in">exec</span> <span class="hljs-built_in">basename</span> &#123;&#125; \;<br></code></pre></td></tr></table></figure>
+
+<h4 id="git查看远端仓库地址"><a href="#git查看远端仓库地址" class="headerlink" title="git查看远端仓库地址"></a>git查看远端仓库地址</h4><figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dsconfig"><span class="hljs-string">git</span> <span class="hljs-string">remote</span> -<span class="hljs-string">v</span><br><br><span class="hljs-comment"># 更改远程仓库</span><br><span class="hljs-string">git</span> <span class="hljs-string">remote</span> <span class="hljs-built_in">set-url</span> <span class="hljs-string">origin</span> 仓库地址<br></code></pre></td></tr></table></figure>
+
 
       </section>
       <section class="extra">
@@ -227,7 +250,7 @@
           <ul class="copyright">
   
     <li><strong>本文作者：</strong>Zdon</li>
-    <li><strong>本文链接：</strong><a href="http://zdon.fun/2023/12/04/hello-world/index.html" title="http:&#x2F;&#x2F;zdon.fun&#x2F;2023&#x2F;12&#x2F;04&#x2F;hello-world&#x2F;index.html">http:&#x2F;&#x2F;zdon.fun&#x2F;2023&#x2F;12&#x2F;04&#x2F;hello-world&#x2F;index.html</a></li>
+    <li><strong>本文链接：</strong><a href="http://zdon.fun/2024/01/02/git/index.html" title="http:&#x2F;&#x2F;zdon.fun&#x2F;2024&#x2F;01&#x2F;02&#x2F;git&#x2F;index.html">http:&#x2F;&#x2F;zdon.fun&#x2F;2024&#x2F;01&#x2F;02&#x2F;git&#x2F;index.html</a></li>
     <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
   
 </ul>
@@ -246,8 +269,8 @@
         
         
   <nav class="nav">
-    <a href="/2023/12/14/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><i class="iconfont iconleft"></i>Go语言学习笔记</a>
     <a></a>
+    <a href="/2023/12/14/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">Go语言学习笔记<i class="iconfont iconright"></i></a>
   </nav>
 
       </section>
@@ -260,7 +283,7 @@
           
   <aside class="toc-wrap">
     <h3 class="toc-title">文章目录：</h3>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+    
   </aside>
 
         
