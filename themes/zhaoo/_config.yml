@@ -56,15 +56,15 @@ preview:
   background:
     type: image # image video
     default_image:
-      light: /images/theme/welcome-image.jpg
-      dark: /images/theme/welcome-image.jpg
+      light: /images/theme/welcome-image.png
+      dark: /images/theme/welcome-image.png
     video:
     api: # https://source.unsplash.com/random/1920x1080
     size: cover # css: background-size
     position: center # css: background-position
   motto:
     default: 我在开了灯的床头下，想问问自己的心啊。
-    color: '#ffffff'
+    color: '#d0a583'
     typing: true
     api: https://v2.jinrishici.com/one.json
     data_contents: ['data', 'content']
