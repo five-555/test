@@ -52,7 +52,7 @@ loading:
 # Preview
 preview:
   enable: true
-  type: wave  # wave | cloud
+  # type: cloud  # wave | cloud
   background:
     type: image # image video
     default_image:
@@ -149,7 +149,7 @@ toc:
 
 # Donate
 donate:
-  enable: true
+  enable: false
   alipay: https://pic.izhaoo.com/alipay.jpg
   wechat: https://pic.izhaoo.com/wechat.jpg
 
