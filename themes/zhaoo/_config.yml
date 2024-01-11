@@ -46,7 +46,7 @@ background_image:
 
 # Loading
 loading:
-  gif: /images/theme/loading.gif
+  gif: /images/theme/loading1.gif
   lottie:
 
 # Preview
@@ -77,7 +77,7 @@ navbar:
   back_home: true
 
 # Copyright
-copyright: <p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p>
+# copyright: <p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p>
 
 # Social
 social:
@@ -98,7 +98,7 @@ fab:
 
 # Search
 search:
-  enable: false
+  enable: true
 
 # QR Code
 qrcode:
