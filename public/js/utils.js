@@ -1,167 +1,296 @@
-(function ($) {
-  "use strict";
+const btf = {
+  debounce: (func, wait = 0, immediate = false) => {
+    let timeout
+    return (...args) => {
+      const later = () => {
+        timeout = null
+        if (!immediate) func(...args)
+      }
+      const callNow = immediate && !timeout
+      clearTimeout(timeout)
+      timeout = setTimeout(later, wait)
+      if (callNow) func(...args)
+    }
+  },
 
-  ZHAOO.utils = {
-    debounce: function (func, wait, immediate) {
-      var timeout;
-      return function () {
-        var context = this;
-        var args = arguments;
-        timeout && clearTimeout(timeout);
-        if (immediate) {
-          var callNow = !timeout;
-          timeout = setTimeout(function () {
-            timeout = null;
-          }, wait);
-          if (callNow) func.apply(context, args);
-        } else {
-          timeout = setTimeout(function () {
-            func.apply(context, args);
-          }, wait);
+  throttle: function (func, wait, options = {}) {
+    let timeout, context, args
+    let previous = 0
+
+    const later = () => {
+      previous = options.leading === false ? 0 : new Date().getTime()
+      timeout = null
+      func.apply(context, args)
+      if (!timeout) context = args = null
+    }
+
+    const throttled = (...params) => {
+      const now = new Date().getTime()
+      if (!previous && options.leading === false) previous = now
+      const remaining = wait - (now - previous)
+      context = this
+      args = params
+      if (remaining <= 0 || remaining > wait) {
+        if (timeout) {
+          clearTimeout(timeout)
+          timeout = null
         }
+        previous = now
+        func.apply(context, args)
+        if (!timeout) context = args = null
+      } else if (!timeout && options.trailing !== false) {
+        timeout = setTimeout(later, remaining)
       }
-    },
-    throttle: function (func, wait, options) {
-      var timeout, context, args;
-      var previous = 0;
-      if (!options) options = {};
-      var later = function () {
-        previous = options.leading === false ? 0 : new Date().getTime();
-        timeout = null;
-        func.apply(context, args);
-        if (!timeout) context = args = null;
+    }
+
+    return throttled
+  },
+
+  sidebarPaddingR: () => {
+    const innerWidth = window.innerWidth
+    const clientWidth = document.body.clientWidth
+    const paddingRight = innerWidth - clientWidth
+    if (innerWidth !== clientWidth) {
+      document.body.style.paddingRight = paddingRight + 'px'
+    }
+  },
+
+  snackbarShow: (text, showAction = false, duration = 2000) => {
+    const { position, bgLight, bgDark } = GLOBAL_CONFIG.Snackbar
+    const bg = document.documentElement.getAttribute('data-theme') === 'light' ? bgLight : bgDark
+    Snackbar.show({
+      text,
+      backgroundColor: bg,
+      showAction,
+      duration,
+      pos: position,
+      customClass: 'snackbar-css'
+    })
+  },
+
+  diffDate: (d, more = false) => {
+    const dateNow = new Date()
+    const datePost = new Date(d)
+    const dateDiff = dateNow.getTime() - datePost.getTime()
+    const minute = 1000 * 60
+    const hour = minute * 60
+    const day = hour * 24
+    const month = day * 30
+    const { dateSuffix } = GLOBAL_CONFIG
+
+    if (!more) return parseInt(dateDiff / day)
+
+    const monthCount = dateDiff / month
+    const dayCount = dateDiff / day
+    const hourCount = dateDiff / hour
+    const minuteCount = dateDiff / minute
+
+    if (monthCount > 12) return datePost.toISOString().slice(0, 10)
+    if (monthCount >= 1) return `${parseInt(monthCount)} ${dateSuffix.month}`
+    if (dayCount >= 1) return `${parseInt(dayCount)} ${dateSuffix.day}`
+    if (hourCount >= 1) return `${parseInt(hourCount)} ${dateSuffix.hour}`
+    if (minuteCount >= 1) return `${parseInt(minuteCount)} ${dateSuffix.min}`
+    return dateSuffix.just
+  },
+
+  loadComment: (dom, callback) => {
+    if ('IntersectionObserver' in window) {
+      const observerItem = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          callback()
+          observerItem.disconnect()
+        }
+      }, { threshold: [0] })
+      observerItem.observe(dom)
+    } else {
+      callback()
+    }
+  },
+
+  scrollToDest: (pos, time = 500) => {
+    const currentPos = window.pageYOffset
+    const isNavFixed = document.getElementById('page-header').classList.contains('fixed')
+    if (currentPos > pos || isNavFixed) pos = pos - 70
+
+    if ('scrollBehavior' in document.documentElement.style) {
+      window.scrollTo({
+        top: pos,
+        behavior: 'smooth'
+      })
+      return
+    }
+
+    let start = null
+    pos = +pos
+    window.requestAnimationFrame(function step (currentTime) {
+      start = !start ? currentTime : start
+      const progress = currentTime - start
+      if (currentPos < pos) {
+        window.scrollTo(0, ((pos - currentPos) * progress / time) + currentPos)
+      } else {
+        window.scrollTo(0, currentPos - ((currentPos - pos) * progress / time))
       }
-      var throttled = function () {
-        var now = new Date().getTime();
-        if (!previous && options.leading === false) previous = now;
-        var remaining = wait - (now - previous);
-        context = this;
-        args = arguments;
-        if (remaining <= 0 || remaining > wait) {
-          if (timeout) {
-            clearTimeout(timeout);
-            timeout = null;
+      if (progress < time) {
+        window.requestAnimationFrame(step)
+      } else {
+        window.scrollTo(0, pos)
+      }
+    })
+  },
+
+  animateIn: (ele, text) => {
+    ele.style.display = 'block'
+    ele.style.animation = text
+  },
+
+  animateOut: (ele, text) => {
+    ele.addEventListener('animationend', function f () {
+      ele.style.display = ''
+      ele.style.animation = ''
+      ele.removeEventListener('animationend', f)
+    })
+    ele.style.animation = text
+  },
+
+  wrap: (selector, eleType, options) => {
+    const createEle = document.createElement(eleType)
+    for (const [key, value] of Object.entries(options)) {
+      createEle.setAttribute(key, value)
+    }
+    selector.parentNode.insertBefore(createEle, selector)
+    createEle.appendChild(selector)
+  },
+
+  isHidden: ele => ele.offsetHeight === 0 && ele.offsetWidth === 0,
+
+  getEleTop: ele => {
+    let actualTop = ele.offsetTop
+    let current = ele.offsetParent
+
+    while (current !== null) {
+      actualTop += current.offsetTop
+      current = current.offsetParent
+    }
+
+    return actualTop
+  },
+
+  loadLightbox: ele => {
+    const service = GLOBAL_CONFIG.lightbox
+
+    if (service === 'mediumZoom') {
+      mediumZoom(ele, { background: 'var(--zoom-bg)' })
+    }
+
+    if (service === 'fancybox') {
+      Array.from(ele).forEach(i => {
+        if (i.parentNode.tagName !== 'A') {
+          const dataSrc = i.dataset.lazySrc || i.src
+          const dataCaption = i.title || i.alt || ''
+          btf.wrap(i, 'a', { href: dataSrc, 'data-fancybox': 'gallery', 'data-caption': dataCaption, 'data-thumb': dataSrc })
+        }
+      })
+
+      if (!window.fancyboxRun) {
+        Fancybox.bind('[data-fancybox]', {
+          Hash: false,
+          Thumbs: {
+            showOnStart: false
+          },
+          Images: {
+            Panzoom: {
+              maxScale: 4
+            }
+          },
+          Carousel: {
+            transition: 'slide'
+          },
+          Toolbar: {
+            display: {
+              left: ['infobar'],
+              middle: [
+                'zoomIn',
+                'zoomOut',
+                'toggle1to1',
+                'rotateCCW',
+                'rotateCW',
+                'flipX',
+                'flipY'
+              ],
+              right: ['slideshow', 'thumbs', 'close']
+            }
           }
-          previous = now;
-          func.apply(context, args);
-          if (!timeout) context = args = null;
-        } else if (!timeout && options.trailing !== false) {
-          timeout = setTimeout(later, remaining);
-        }
-      }
-      return throttled;
-    },
-    hasMobileUA: function () {
-      var nav = window.navigator;
-      var ua = nav.userAgent;
-      var pa = /iPad|iPhone|Android|Opera Mini|BlackBerry|webOS|UCWEB|Blazer|PSP|IEMobile|Symbian/g;
-      return pa.test(ua);
-    },
-    isTablet: function () {
-      return (
-        window.screen.width > 767 &&
-        window.screen.width < 992 &&
-        this.hasMobileUA()
-      );
-    },
-    isMobile: function () {
-      return window.screen.width < 767 && this.hasMobileUA();
-    },
-    isDesktop: function () {
-      return !this.isTablet() && !this.isMobile();
-    },
-    isDuringDate: function (beginDateStr, endDateStr) {
-      var curDate = new Date(),
-        beginDate = new Date(beginDateStr),
-        endDate = new Date(endDateStr);
-      if (curDate >= beginDate && curDate <= endDate) {
-        return true;
-      }
-      return false;
-    },
-    bindKeyup: function (code, fn) {
-      $(document).keyup(function (e) {
-        var key = e.which || e.keyCode;;
-        if (key == code) {
-          fn();
-        }
-      });
-    }
-  }
-
-  ZHAOO.zui = {
-    message: function ({ text, type, delay }) {
-      var message = '<div class="zui-message ' + (type || "info") + '"><p>' + text + '</p></div>';
-      $("body").append(message);
-      var e = $(".zui-message");
-      e.ready(function () {
-        e.addClass("in");
-        setTimeout(function () {
-          e.removeClass("in");
-          e.on("transitionend webkitTransitionEnd", function () {
-            $(this).remove();
-          });
-        }, delay || 3000);
-      });
-    },
-    notification: function ({ title, content, type, delay }) {
-      var storage = JSON.parse(localStorage.getItem("notification-closed"));
-      if (storage && storage.indexOf(title) >= 0) return;
-      var notification = '<div class="zui-notification ' + (type || "info") + '"><span>' + title + '</span><p>' + content + '</p><i class="j-notification-close iconfont iconbaseline-close-px"></i></div>';
-      $("body").append(notification);
-      var e = $(".zui-notification");
-      var close = $(".j-notification-close");
-      e.ready(function () {
-        e.addClass("in");
-        setTimeout(function () {
-          e.removeClass("in");
-          e.on("transitionend webkitTransitionEnd", function () {
-            $(this).remove();
-          });
-        }, delay || 3000);
-        close.on("click", function () {
-          e.removeClass("in");
-          if (storage) {
-            (storage.indexOf(title) < 0) && localStorage.setItem("notification-closed", JSON.stringify(storage.concat(title)));
-          } else {
-            localStorage.setItem("notification-closed", JSON.stringify([title]));
-          }
-        });
-      });
-    }
-  }
-
-})(jQuery);
-
-class AsyncLimit {
-  constructor(limit) {
-    this.limit = Number(limit) || 2;
-    this.pool = [];
-    this.current = 0;
-  }
-
-  async run(fn) {
-    if (!fn || typeof fn !== 'function') {
-      throw new Error('Function error.');
-    }
-    if (this.current >= this.limit) {
-      await new Promise(resolve => this.pool.push(resolve));
-    }
-    return this._handleRun(fn);
-  }
-
-  async _handleRun(fn) {
-    this.current++;
-    try {
-      return await fn();
-    } catch (err) {
-      return Promise.reject(err);
-    } finally {
-      this.current--;
-      if (this.pool.length) {
-        this.pool[0]();
-        this.pool.shift();
+        })
+        window.fancyboxRun = true
       }
     }
+  },
+
+  setLoading: {
+    add: ele => {
+      const html = `
+        <div class="loading-container">
+          <div class="loading-item">
+            <div></div><div></div><div></div><div></div><div></div>
+          </div>
+        </div>
+      `
+      ele.insertAdjacentHTML('afterend', html)
+    },
+    remove: ele => {
+      ele.nextElementSibling.remove()
+    }
+  },
+
+  updateAnchor: (anchor) => {
+    if (anchor !== window.location.hash) {
+      if (!anchor) anchor = location.pathname
+      const title = GLOBAL_CONFIG_SITE.title
+      window.history.replaceState({
+        url: location.href,
+        title
+      }, title, anchor)
+    }
+  },
+
+  getScrollPercent: (currentTop, ele) => {
+    const docHeight = ele.clientHeight
+    const winHeight = document.documentElement.clientHeight
+    const headerHeight = ele.offsetTop
+    const contentMath = (docHeight > winHeight) ? (docHeight - winHeight) : (document.documentElement.scrollHeight - winHeight)
+    const scrollPercent = (currentTop - headerHeight) / (contentMath)
+    const scrollPercentRounded = Math.round(scrollPercent * 100)
+    const percentage = (scrollPercentRounded > 100) ? 100 : (scrollPercentRounded <= 0) ? 0 : scrollPercentRounded
+    return percentage
+  },
+
+  addGlobalFn: (key, fn, name = false, parent = window) => {
+    const globalFn = parent.globalFn || {}
+    const keyObj = globalFn[key] || {}
+
+    if (name && keyObj[name]) return
+
+    name = name || Object.keys(keyObj).length
+    keyObj[name] = fn
+    globalFn[key] = keyObj
+    parent.globalFn = globalFn
+  },
+
+  addEventListenerPjax: (ele, event, fn, option = false) => {
+    ele.addEventListener(event, fn, option)
+    btf.addGlobalFn('pjax', () => {
+      ele.removeEventListener(event, fn, option)
+    })
+  },
+
+  removeGlobalFnEvent: (key, parent = window) => {
+    const { globalFn = {} } = parent
+    const keyObj = globalFn[key] || {}
+    const keyArr = Object.keys(keyObj)
+    if (!keyArr.length) return
+    keyArr.forEach(i => {
+      keyObj[i]()
+    })
+    delete parent.globalFn[key]
   }
 }
