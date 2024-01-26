@@ -1,6 +1,9 @@
 ---
 title: Git常见用法
 date: 2024年1月4日
+tags: git
+categories: 技术研究
+cover: image-20231204110955462.png
 ---
 
 #### 怎样撤销一个已经push到远端的版本
