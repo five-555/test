@@ -1,6 +1,9 @@
 ---
 title: Git常见用法
 date: 2024年1月4日
+tags: git
+categories: 技术研究
+cover: image-20231204110955462.png
 ---
 
 #### 怎样撤销一个已经push到远端的版本
@@ -36,7 +39,12 @@ git checkout -b branch_name origin/branch_name
 
 解决方案
 
-修改系统的hosts
+修改系统的hosts，跳过域名解析的过程，直接用ip地址访问
+
+```
+192.30.255.112 github.com git
+185.31.16.184 github.global.ssl.fastly.net
+```
 
 ![image-20231204111125551](git/image-20231204111125551.png)
 
