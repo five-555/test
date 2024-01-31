@@ -1,6 +1,5 @@
 ---
 title: Go语言基本语法
-urlname: Go语言基本语法
 date: 2023-12-14 17:16:50
 tags: [go语言 并发]
 categories: Go语言学习笔记
