@@ -90,3 +90,11 @@ git remote -v
 git remote set-url origin 仓库地址
 ```
 
+#### 查看代码贡献量
+
+> 按照各个作者的修改代码总数排序
+
+```
+git log --pretty="%aN" | sort | uniq -c | while read count author; do echo -n "$author "; git log --author="$author" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2 } END { total = add + subs; printf "%d\n", total }'; done | sort -rnk2
+```
+
