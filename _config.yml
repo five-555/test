@@ -115,3 +115,14 @@ math:
     src: custom_mathjax_source
     config:
       # MathJax config
+
+# algolia:
+#   applicationID: 'applicationID'
+#   apiKey: 'apiKey'
+#   indexName: '...'
+
+search:
+  path: search.xml
+  field: post
+  content: true
+  format: html

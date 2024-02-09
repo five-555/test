@@ -1,6 +1,10 @@
 ---
 title: C++使用zlib库来压缩文件
 date: 2024-01-26 10:34:44
+tags: [C++, zlib]
+categories: 技术研究
+cover:
+top_img:
 ---
 
 ## C++使用zlib库来压缩文件
