@@ -370,42 +370,6 @@
       </tags>
   </entry>
   <entry>
-    <title>平方根倒数算法</title>
-    <url>/2024/01/24/%E5%B9%B3%E6%96%B9%E6%A0%B9%E5%80%92%E6%95%B0%E7%AE%97%E6%B3%95/</url>
-    <content><![CDATA[<h3 id="平方根倒数算法"><a href="#平方根倒数算法" class="headerlink" title="平方根倒数算法"></a>平方根倒数算法</h3><script type="math/tex; mode=display">
-1/\sqrt{x}</script><h4 id="求一个数的平方根倒数"><a href="#求一个数的平方根倒数" class="headerlink" title="求一个数的平方根倒数"></a>求一个数的平方根倒数</h4><p>对于计算机来说求一个数的平方根一般有两种方式，二分法和牛顿迭代法</p>
-<ul>
-<li><p>二分法</p>
-<p>EXP表示精度，从0-num不断开始计算mid的平方，直到left&gt;right，此时返回right的值即为所求的平方根，其中注意边界条件：</p>
-<p>当mid <em> mid = num时，此时left需要加上EXP，往后的循环中mid </em> mid 都会大于num，所以right还会不停减小，直到right &lt; left，返回right，这时right已经在精度范围内</p>
-</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">Sqrt</span><span class="hljs-params">(<span class="hljs-type">double</span> num)</span> </span>&#123;<br>    <span class="hljs-type">double</span> left = <span class="hljs-number">0</span>, right = num;<br> <br>    <span class="hljs-keyword">while</span> (left &lt;= right) &#123;<br>        <span class="hljs-type">double</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br> <br>        <span class="hljs-keyword">if</span> (mid * mid &lt;= num)<br>            left = mid + EXP;<br>        <span class="hljs-keyword">else</span><br>            right = mid - EXP;<br>    &#125;   <br> <br>    <span class="hljs-keyword">return</span> right;<br>&#125;<br></code></pre></td></tr></table></figure>
-<ul>
-<li><p>牛顿迭代法</p>
-<p>牛顿迭代法是将原来的求开方问题转化为数学函数问题，即假设<code>x * x = n</code>，求n的开方转化为<code>x * x - n = 0</code>的解，即<code>y = x * x - n</code>与x轴的交点</p>
-<p>代码中last表示上一次的切线与x轴的交点的x坐标，初始值为num，ret表示x = last时的切线与x轴的交点，不断迭代，直到ret - last小于精度，即达到精度返回ret。</p>
-</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">Sqrt</span><span class="hljs-params">(<span class="hljs-type">double</span> num)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == num)<br>        <span class="hljs-keyword">return</span> num;<br> <br>    <span class="hljs-type">double</span> last = num, ret = num;<br> <br>    <span class="hljs-keyword">for</span> (;;) &#123;<br>        last = <span class="hljs-number">0.5</span> * (ret + num / ret);<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">fabs</span>(ret - last) &lt; EXP)<br>            <span class="hljs-keyword">break</span>;<br>        ret = last;<br>    &#125;   <br> <br>    <span class="hljs-keyword">return</span> ret;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>计算完平方根过后，再计算其倒数，也是一个对计算机来说并不是很友好的运算</p>
-<h4 id="快速平方根倒数计算推导"><a href="#快速平方根倒数计算推导" class="headerlink" title="快速平方根倒数计算推导"></a>快速平方根倒数计算推导</h4><p>快速平方根算法是利用了计算机存储浮点数的特性并和牛顿迭代法来共同完成的，也是一个近似计算。对于牛顿迭代法，其精髓是如果能够找到一个接近于解的初始值，是有可能通过一次迭代或者较少次数的迭代达到比较高的近似解，而快速平方根算法旨在于找到一个较为近似的初始值。具体的运算如下。</p>
-<p><strong>笔记中有一处笔误0xD5F400000应改成0x5F400000</strong></p>
-<img src="/2024/01/24/%E5%B9%B3%E6%96%B9%E6%A0%B9%E5%80%92%E6%95%B0%E7%AE%97%E6%B3%95/%E8%BF%90%E7%AE%97%E8%BF%87%E7%A8%8B.png" class="" title="运算过程">
-<p>快速平方根算法代码</p>
-<ul>
-<li>初始值由0x5F400000改为了0x5f3759df，对于X/2代码中使用了位运算加速求解</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">float</span> <span class="hljs-title">Q_rsqrt</span><span class="hljs-params">(<span class="hljs-type">float</span> number)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">long</span> i;<br>    <span class="hljs-type">float</span> x2, y;<br>    <span class="hljs-type">const</span> <span class="hljs-type">float</span> threehalfs = <span class="hljs-number">1.5F</span>;<br>    x2 = number * <span class="hljs-number">0.5F</span>;<br>    y = number;<br>    i = * ( <span class="hljs-type">long</span>* ) &amp;y;							<span class="hljs-comment">// evil floating point bit hack</span><br>    i = <span class="hljs-number">0x5f3759df</span> - (i &gt;&gt; <span class="hljs-number">1</span>);					<span class="hljs-comment">// what the fuck? </span><br>    y = * ( <span class="hljs-type">float</span> * ) &amp;i;<br>    y = y * (threehalfs - ( x2 * y * y ) );		<span class="hljs-comment">// 1st iteration</span><br><span class="hljs-comment">//  y = y * (threehalfs - ( x2 * y * y ) );		// 2st iteration, can be removed</span><br>    <br>    <span class="hljs-keyword">return</span> y;<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>技术研究</category>
-      </categories>
-      <tags>
-        <tag>数学</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>进程间的通信方式</title>
     <url>/2024/01/30/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<h2 id="进程间的通信方式"><a href="#进程间的通信方式" class="headerlink" title="进程间的通信方式"></a>进程间的通信方式</h2><p>每个进程的用户地址空间是独立的，一般情况之下，不同的进程是<strong>无法</strong>通过进程间各自的地址空间来进行互相访问，但是不同的进程所拥有的内核空间是共享的，因此如果不同进程之间需要进行通信必须要通过内核。</p>
@@ -537,6 +501,42 @@
       <tags>
         <tag>操作系统</tag>
         <tag>进程通信</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>平方根倒数算法</title>
+    <url>/2024/01/24/%E5%B9%B3%E6%96%B9%E6%A0%B9%E5%80%92%E6%95%B0%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<h3 id="平方根倒数算法"><a href="#平方根倒数算法" class="headerlink" title="平方根倒数算法"></a>平方根倒数算法</h3><script type="math/tex; mode=display">
+1/\sqrt{x}</script><h4 id="求一个数的平方根倒数"><a href="#求一个数的平方根倒数" class="headerlink" title="求一个数的平方根倒数"></a>求一个数的平方根倒数</h4><p>对于计算机来说求一个数的平方根一般有两种方式，二分法和牛顿迭代法</p>
+<ul>
+<li><p>二分法</p>
+<p>EXP表示精度，从0-num不断开始计算mid的平方，直到left&gt;right，此时返回right的值即为所求的平方根，其中注意边界条件：</p>
+<p>当mid <em> mid = num时，此时left需要加上EXP，往后的循环中mid </em> mid 都会大于num，所以right还会不停减小，直到right &lt; left，返回right，这时right已经在精度范围内</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">Sqrt</span><span class="hljs-params">(<span class="hljs-type">double</span> num)</span> </span>&#123;<br>    <span class="hljs-type">double</span> left = <span class="hljs-number">0</span>, right = num;<br> <br>    <span class="hljs-keyword">while</span> (left &lt;= right) &#123;<br>        <span class="hljs-type">double</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br> <br>        <span class="hljs-keyword">if</span> (mid * mid &lt;= num)<br>            left = mid + EXP;<br>        <span class="hljs-keyword">else</span><br>            right = mid - EXP;<br>    &#125;   <br> <br>    <span class="hljs-keyword">return</span> right;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>牛顿迭代法</p>
+<p>牛顿迭代法是将原来的求开方问题转化为数学函数问题，即假设<code>x * x = n</code>，求n的开方转化为<code>x * x - n = 0</code>的解，即<code>y = x * x - n</code>与x轴的交点</p>
+<p>代码中last表示上一次的切线与x轴的交点的x坐标，初始值为num，ret表示x = last时的切线与x轴的交点，不断迭代，直到ret - last小于精度，即达到精度返回ret。</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">Sqrt</span><span class="hljs-params">(<span class="hljs-type">double</span> num)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == num)<br>        <span class="hljs-keyword">return</span> num;<br> <br>    <span class="hljs-type">double</span> last = num, ret = num;<br> <br>    <span class="hljs-keyword">for</span> (;;) &#123;<br>        last = <span class="hljs-number">0.5</span> * (ret + num / ret);<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">fabs</span>(ret - last) &lt; EXP)<br>            <span class="hljs-keyword">break</span>;<br>        ret = last;<br>    &#125;   <br> <br>    <span class="hljs-keyword">return</span> ret;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>计算完平方根过后，再计算其倒数，也是一个对计算机来说并不是很友好的运算</p>
+<h4 id="快速平方根倒数计算推导"><a href="#快速平方根倒数计算推导" class="headerlink" title="快速平方根倒数计算推导"></a>快速平方根倒数计算推导</h4><p>快速平方根算法是利用了计算机存储浮点数的特性并和牛顿迭代法来共同完成的，也是一个近似计算。对于牛顿迭代法，其精髓是如果能够找到一个接近于解的初始值，是有可能通过一次迭代或者较少次数的迭代达到比较高的近似解，而快速平方根算法旨在于找到一个较为近似的初始值。具体的运算如下。</p>
+<p><strong>笔记中有一处笔误0xD5F400000应改成0x5F400000</strong></p>
+<img src="/2024/01/24/%E5%B9%B3%E6%96%B9%E6%A0%B9%E5%80%92%E6%95%B0%E7%AE%97%E6%B3%95/%E8%BF%90%E7%AE%97%E8%BF%87%E7%A8%8B.png" class="" title="运算过程">
+<p>快速平方根算法代码</p>
+<ul>
+<li>初始值由0x5F400000改为了0x5f3759df，对于X/2代码中使用了位运算加速求解</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">float</span> <span class="hljs-title">Q_rsqrt</span><span class="hljs-params">(<span class="hljs-type">float</span> number)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">long</span> i;<br>    <span class="hljs-type">float</span> x2, y;<br>    <span class="hljs-type">const</span> <span class="hljs-type">float</span> threehalfs = <span class="hljs-number">1.5F</span>;<br>    x2 = number * <span class="hljs-number">0.5F</span>;<br>    y = number;<br>    i = * ( <span class="hljs-type">long</span>* ) &amp;y;							<span class="hljs-comment">// evil floating point bit hack</span><br>    i = <span class="hljs-number">0x5f3759df</span> - (i &gt;&gt; <span class="hljs-number">1</span>);					<span class="hljs-comment">// what the fuck? </span><br>    y = * ( <span class="hljs-type">float</span> * ) &amp;i;<br>    y = y * (threehalfs - ( x2 * y * y ) );		<span class="hljs-comment">// 1st iteration</span><br><span class="hljs-comment">//  y = y * (threehalfs - ( x2 * y * y ) );		// 2st iteration, can be removed</span><br>    <br>    <span class="hljs-keyword">return</span> y;<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>技术研究</category>
+      </categories>
+      <tags>
+        <tag>数学</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
 </search>
