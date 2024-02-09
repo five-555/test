@@ -14,7 +14,7 @@ timezone: 'Asia/Shanghai'
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
 url: http://zdon.fun
-permalink: :year/:month/:day/:urlname/
+permalink: :year/:month/:day/:title/
 permalink_defaults:
  urlname: index
 pretty_urls:

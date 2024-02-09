@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>C++使用zlib库来压缩文件</title>
-    <url>/2024/01/26/index/</url>
+    <url>/2024/01/26/C-%E4%BD%BF%E7%94%A8zlib%E5%BA%93%E6%9D%A5%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<h2 id="C-使用zlib库来压缩文件"><a href="#C-使用zlib库来压缩文件" class="headerlink" title="C++使用zlib库来压缩文件"></a>C++使用zlib库来压缩文件</h2><p>zlib压缩库提供内存压缩和解压缩功能，包括对未压缩的完整性检查数据，提供支持的压缩方法为：deflation，默认使用压缩数据格式为zlib格式。</p>
 <p>zlib库支持读取和写入gzip(.gz)格式的文件，zlib格式旨在紧凑且快速，可用于内存和通信渠道。gzip格式设计用于文件系统上的单文件压缩，比zlib具有更大的头部以维护目录信息，并且使用与zlib不同且更慢的检查方法。</p>
 <p>该库不安装任何信号处理程序。解码器检查压缩数据的一致性，因此即使在输入损坏的情况下，库也不应崩溃。</p>
@@ -28,7 +28,7 @@
   </entry>
   <entry>
     <title>Go语言基本语法</title>
-    <url>/2023/12/14/index/</url>
+    <url>/2023/12/14/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><h3 id="GO语言特性"><a href="#GO语言特性" class="headerlink" title="GO语言特性"></a>GO语言特性</h3><ul>
 <li><p>并发编程</p>
 <p>Go语言中引入了<code>goroutine</code>，通过调用<code>go</code>关键字，可以让函数以goroutine的方式进行运行，以协程为单位进行运行。</p>
@@ -296,25 +296,25 @@
   </entry>
   <entry>
     <title>Git常见用法</title>
-    <url>/2024/01/04/index/</url>
+    <url>/2024/01/04/git/</url>
     <content><![CDATA[<h4 id="怎样撤销一个已经push到远端的版本"><a href="#怎样撤销一个已经push到远端的版本" class="headerlink" title="怎样撤销一个已经push到远端的版本"></a>怎样撤销一个已经push到远端的版本</h4><figure class="highlight arcade"><table><tr><td class="code"><pre><code class="hljs arcade">每次<span class="hljs-built_in">push</span>之前线pull一下<br><br><span class="hljs-number">1</span>、查看当前提交的信息，找到需要撤回到的版本号复制，一串十六进制的数<br>git <span class="hljs-built_in">log</span><br><br><span class="hljs-number">2</span>、使用git reset<br>git reset --soft 复制的版本号<br><br><span class="hljs-number">3</span>、强制回退当前版本号<br><span class="hljs-comment">// 确认一下当前版本</span><br>git <span class="hljs-built_in">log</span><br><span class="hljs-comment">// 谨慎使用，强制使用本地仓库代码修改远程仓库</span><br>git <span class="hljs-built_in">push</span> orgin master --force<br></code></pre></td></tr></table></figure>
 <h4 id="新建分支并同步到远端的分支"><a href="#新建分支并同步到远端的分支" class="headerlink" title="新建分支并同步到远端的分支"></a>新建分支并同步到远端的分支</h4><figure class="highlight mipsasm"><table><tr><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># 在本地新建一个名字为branch_name的分支，并与远端的origin/branch_name同步</span><br>git checkout -<span class="hljs-keyword">b </span><span class="hljs-keyword">branch_name </span><span class="hljs-keyword">origin/branch_name</span><br></code></pre></td></tr></table></figure>
 <h4 id="解决git-clone超时的问题"><a href="#解决git-clone超时的问题" class="headerlink" title="解决git clone超时的问题"></a>解决git clone超时的问题</h4><p>从github上clone代码仓库报错<code>Failed to connect to github.com port 443 after 21038 ms: Couldn&#39;t connect to server</code>且尝试去ping一下github官网会丢包</p>
-<img src="/2024/01/04/index/image-20231204110955462.png" class="" title="image-20231204110955462">
+<img src="/2024/01/04/git/image-20231204110955462.png" class="" title="image-20231204110955462">
 <p>解决方案</p>
 <p>修改系统的hosts，跳过域名解析的过程，直接用ip地址访问</p>
 <figure class="highlight accesslog"><table><tr><td class="code"><pre><code class="hljs accesslog"><span class="hljs-number">192.30.255.112</span> github.com git<br><span class="hljs-number">185.31.16.184</span> github.global.ssl.fastly.net<br></code></pre></td></tr></table></figure>
-<img src="/2024/01/04/index/image-20231204111125551.png" class="" title="image-20231204111125551">
+<img src="/2024/01/04/git/image-20231204111125551.png" class="" title="image-20231204111125551">
 <p>修改hosts需要给文件更高的权限</p>
-<img src="/2024/01/04/index/image-20231204111350240.png" class="" title="image-20231204111350240">
-<h4 id="github中git-push出现超时的问题"><a href="#github中git-push出现超时的问题" class="headerlink" title="github中git push出现超时的问题"></a>github中git push出现超时的问题</h4><img src="/2024/01/04/index/image-20231204112945547.png" class="" title="image-20231204112945547">
+<img src="/2024/01/04/git/image-20231204111350240.png" class="" title="image-20231204111350240">
+<h4 id="github中git-push出现超时的问题"><a href="#github中git-push出现超时的问题" class="headerlink" title="github中git push出现超时的问题"></a>github中git push出现超时的问题</h4><img src="/2024/01/04/git/image-20231204112945547.png" class="" title="image-20231204112945547">
 <p>解决方案</p>
 <p>1、打开本机的代理服务器</p>
-<img src="/2024/01/04/index/image-20231204113100512.png" class="" title="image-20231204113100512">
+<img src="/2024/01/04/git/image-20231204113100512.png" class="" title="image-20231204113100512">
 <p>2、取消git config里面的http和https代理</p>
-<img src="/2024/01/04/index/image-20231204113208566.png" class="" title="image-20231204113208566">
+<img src="/2024/01/04/git/image-20231204113208566.png" class="" title="image-20231204113208566">
 <p>3、设置http代理服务器</p>
-<img src="/2024/01/04/index/image-20231204113304822.png" class="" title="image-20231204113304822">
+<img src="/2024/01/04/git/image-20231204113304822.png" class="" title="image-20231204113304822">
 <h4 id="linux中输出一个文件夹下面的所有文件名"><a href="#linux中输出一个文件夹下面的所有文件名" class="headerlink" title="linux中输出一个文件夹下面的所有文件名"></a>linux中输出一个文件夹下面的所有文件名</h4><ul>
 <li><strong><code>/path/to/directory</code></strong>: 替换为目标目录的路径。</li>
 <li><strong><code>-maxdepth 1</code></strong>: 限制<code>find</code>的搜索深度为1，即仅在指定的目录中搜索，而不会搜索其子目录。</li>
@@ -337,7 +337,7 @@
   </entry>
   <entry>
     <title>算法题-数组和字符串</title>
-    <url>/2024/02/09/index/</url>
+    <url>/2024/02/09/leetcode-0209/</url>
     <content><![CDATA[<h3 id="80-删除有序数组中的重复项-Ⅱ"><a href="#80-删除有序数组中的重复项-Ⅱ" class="headerlink" title="80.删除有序数组中的重复项 Ⅱ"></a><a href="https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/?envType=study-plan-v2&amp;envId=top-interview-150">80.删除有序数组中的重复项 Ⅱ</a></h3><p>给你一个有序数组 <code>nums</code> ，请你<strong>原地</strong>删除重复出现的元素，使得出现次数超过两次的元素<strong>只出现两次</strong> ，返回删除后数组的新长度。</p>
 <p>不要使用额外的数组空间，你必须在 <strong>原地修改输入数组</strong> 并在使用 O(1) 额外空间的条件下完成。</p>
 <p><strong>示例 1：</strong></p>
@@ -370,8 +370,44 @@
       </tags>
   </entry>
   <entry>
+    <title>平方根倒数算法</title>
+    <url>/2024/01/24/%E5%B9%B3%E6%96%B9%E6%A0%B9%E5%80%92%E6%95%B0%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<h3 id="平方根倒数算法"><a href="#平方根倒数算法" class="headerlink" title="平方根倒数算法"></a>平方根倒数算法</h3><script type="math/tex; mode=display">
+1/\sqrt{x}</script><h4 id="求一个数的平方根倒数"><a href="#求一个数的平方根倒数" class="headerlink" title="求一个数的平方根倒数"></a>求一个数的平方根倒数</h4><p>对于计算机来说求一个数的平方根一般有两种方式，二分法和牛顿迭代法</p>
+<ul>
+<li><p>二分法</p>
+<p>EXP表示精度，从0-num不断开始计算mid的平方，直到left&gt;right，此时返回right的值即为所求的平方根，其中注意边界条件：</p>
+<p>当mid <em> mid = num时，此时left需要加上EXP，往后的循环中mid </em> mid 都会大于num，所以right还会不停减小，直到right &lt; left，返回right，这时right已经在精度范围内</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">Sqrt</span><span class="hljs-params">(<span class="hljs-type">double</span> num)</span> </span>&#123;<br>    <span class="hljs-type">double</span> left = <span class="hljs-number">0</span>, right = num;<br> <br>    <span class="hljs-keyword">while</span> (left &lt;= right) &#123;<br>        <span class="hljs-type">double</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br> <br>        <span class="hljs-keyword">if</span> (mid * mid &lt;= num)<br>            left = mid + EXP;<br>        <span class="hljs-keyword">else</span><br>            right = mid - EXP;<br>    &#125;   <br> <br>    <span class="hljs-keyword">return</span> right;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>牛顿迭代法</p>
+<p>牛顿迭代法是将原来的求开方问题转化为数学函数问题，即假设<code>x * x = n</code>，求n的开方转化为<code>x * x - n = 0</code>的解，即<code>y = x * x - n</code>与x轴的交点</p>
+<p>代码中last表示上一次的切线与x轴的交点的x坐标，初始值为num，ret表示x = last时的切线与x轴的交点，不断迭代，直到ret - last小于精度，即达到精度返回ret。</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">Sqrt</span><span class="hljs-params">(<span class="hljs-type">double</span> num)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == num)<br>        <span class="hljs-keyword">return</span> num;<br> <br>    <span class="hljs-type">double</span> last = num, ret = num;<br> <br>    <span class="hljs-keyword">for</span> (;;) &#123;<br>        last = <span class="hljs-number">0.5</span> * (ret + num / ret);<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">fabs</span>(ret - last) &lt; EXP)<br>            <span class="hljs-keyword">break</span>;<br>        ret = last;<br>    &#125;   <br> <br>    <span class="hljs-keyword">return</span> ret;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>计算完平方根过后，再计算其倒数，也是一个对计算机来说并不是很友好的运算</p>
+<h4 id="快速平方根倒数计算推导"><a href="#快速平方根倒数计算推导" class="headerlink" title="快速平方根倒数计算推导"></a>快速平方根倒数计算推导</h4><p>快速平方根算法是利用了计算机存储浮点数的特性并和牛顿迭代法来共同完成的，也是一个近似计算。对于牛顿迭代法，其精髓是如果能够找到一个接近于解的初始值，是有可能通过一次迭代或者较少次数的迭代达到比较高的近似解，而快速平方根算法旨在于找到一个较为近似的初始值。具体的运算如下。</p>
+<p><strong>笔记中有一处笔误0xD5F400000应改成0x5F400000</strong></p>
+<img src="/2024/01/24/%E5%B9%B3%E6%96%B9%E6%A0%B9%E5%80%92%E6%95%B0%E7%AE%97%E6%B3%95/%E8%BF%90%E7%AE%97%E8%BF%87%E7%A8%8B.png" class="" title="运算过程">
+<p>快速平方根算法代码</p>
+<ul>
+<li>初始值由0x5F400000改为了0x5f3759df，对于X/2代码中使用了位运算加速求解</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">float</span> <span class="hljs-title">Q_rsqrt</span><span class="hljs-params">(<span class="hljs-type">float</span> number)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">long</span> i;<br>    <span class="hljs-type">float</span> x2, y;<br>    <span class="hljs-type">const</span> <span class="hljs-type">float</span> threehalfs = <span class="hljs-number">1.5F</span>;<br>    x2 = number * <span class="hljs-number">0.5F</span>;<br>    y = number;<br>    i = * ( <span class="hljs-type">long</span>* ) &amp;y;							<span class="hljs-comment">// evil floating point bit hack</span><br>    i = <span class="hljs-number">0x5f3759df</span> - (i &gt;&gt; <span class="hljs-number">1</span>);					<span class="hljs-comment">// what the fuck? </span><br>    y = * ( <span class="hljs-type">float</span> * ) &amp;i;<br>    y = y * (threehalfs - ( x2 * y * y ) );		<span class="hljs-comment">// 1st iteration</span><br><span class="hljs-comment">//  y = y * (threehalfs - ( x2 * y * y ) );		// 2st iteration, can be removed</span><br>    <br>    <span class="hljs-keyword">return</span> y;<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>技术研究</category>
+      </categories>
+      <tags>
+        <tag>数学</tag>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>进程间的通信方式</title>
-    <url>/2024/01/30/index/</url>
+    <url>/2024/01/30/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<h2 id="进程间的通信方式"><a href="#进程间的通信方式" class="headerlink" title="进程间的通信方式"></a>进程间的通信方式</h2><p>每个进程的用户地址空间是独立的，一般情况之下，不同的进程是<strong>无法</strong>通过进程间各自的地址空间来进行互相访问，但是不同的进程所拥有的内核空间是共享的，因此如果不同进程之间需要进行通信必须要通过内核。</p>
 <h3 id="管道通信"><a href="#管道通信" class="headerlink" title="管道通信"></a>管道通信</h3><p>管道通信分为匿名管道和命名管道，通过名字可以区分，匿名管道是无法获取和控制的管道，命名管道是通过用户可以自己建立的管道。</p>
 <p>管道智能进行半双工的通信，即数据传输是单向的，如果想要实现互相通信，就需要创建两个管道。</p>
@@ -382,9 +418,9 @@
 <figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pipe</span><span class="hljs-params">(<span class="hljs-type">int</span> fd[<span class="hljs-number">2</span>])</span></span>;<br></code></pre></td></tr></table></figure>
 <p>表示创建了一个匿名管道并返回了两个文件描述符，一个是管道读取端的描述符<code>fd[0]</code>，另一个是管道写入端的描述符<code>fd[1]</code>，<strong>匿名管道是特殊的文件，只存在于内存当中，不存在于文件系统中</strong></p>
 <p>管道实际上就是内核中的一串缓存，进程通过文件描述符来对这一串缓存进行读写操作</p>
-<img src="/2024/01/30/index/image-20240130223824673.png" class="" title="image-20240130223824673">
+<img src="/2024/01/30/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/image-20240130223824673.png" class="" title="image-20240130223824673">
 <p><strong>如果说需要实现多个进程之间的通信</strong>，可以使用<code>fork</code>操作来创建子进程，创建子进程时，子进程会同时复制父进程的文件描述符，两个进程便可以通过各自的文件描述符来进行跨进程之间的通信。</p>
-<img src="/2024/01/30/index/image-20240130224638178.png" class="" title="image-20240130224638178">
+<img src="/2024/01/30/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/image-20240130224638178.png" class="" title="image-20240130224638178">
 <p>通过对文件描述符的开放和关闭，可以控制父进程和子进程之间的读写操作。</p>
 <ul>
 <li>如：父进程关闭读取的 fd[0]，只保留写入的 fd[1]；子进程关闭写入的 fd[1]，只保留读取的 fd[0]；</li>
@@ -425,7 +461,7 @@
 </ul>
 <h3 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h3><p>共享内存用到的是现代操作系统中的内存管理的<strong>虚拟内存技术</strong>，每个进程都有自己独立的虚拟内存空间，不同进程的虚拟内存映射到不同的物理内存中。</p>
 <p><strong>共享内存的机制：拿出一块虚拟地址空间，映射到相同的物理内存中。</strong>不同的进程可以使用各自的虚拟地址访问到这一片相同的物理内存。</p>
-<img src="/2024/01/30/index/image-20240130232827259.png" class="" title="image-20240130232827259">
+<img src="/2024/01/30/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/image-20240130232827259.png" class="" title="image-20240130232827259">
 <ul>
 <li><p>优点</p>
 <ul>
@@ -473,7 +509,7 @@
 <blockquote>
 <p>基于 TCP 协议的通信方式需要客户和服务器之间建立TCP连接，进行三次握手。</p>
 </blockquote>
-<img src="/2024/01/30/index/image-20240130234627976.png" class="" title="image-20240130234627976">
+<img src="/2024/01/30/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/image-20240130234627976.png" class="" title="image-20240130234627976">
 <ul>
 <li>服务端和客户端初始化 <code>socket</code>，得到文件描述符；</li>
 <li>服务端调用 <code>bind</code>，将绑定在 IP 地址和端口;</li>
@@ -490,7 +526,7 @@
 <blockquote>
 <p>基于UDP的Socket通信</p>
 </blockquote>
-<img src="/2024/01/30/index/image-20240130234754230.png" class="" title="image-20240130234754230">
+<img src="/2024/01/30/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/image-20240130234754230.png" class="" title="image-20240130234754230">
 <p>UDP 是没有连接的，所以不需要三次握手，也就不需要像 TCP 调用 listen 和 connect，但是 UDP 的交互仍然需要 IP 地址和端口号，因此也需要 bind。</p>
 <p>对于 UDP 来说，不需要要维护连接，那么也就没有所谓的发送方和接收方，甚至都不存在客户端和服务端的概念，只要有一个 socket 多台机器就可以任意通信，因此每一个 UDP 的 socket 都需要 bind。</p>
 <p>另外，每次通信时，调用 sendto 和 recvfrom，都要传入目标主机的 IP 地址和端口。</p>
@@ -501,42 +537,6 @@
       <tags>
         <tag>操作系统</tag>
         <tag>进程通信</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>平方根倒数算法</title>
-    <url>/2024/01/24/index/</url>
-    <content><![CDATA[<h3 id="平方根倒数算法"><a href="#平方根倒数算法" class="headerlink" title="平方根倒数算法"></a>平方根倒数算法</h3><script type="math/tex; mode=display">
-1/\sqrt{x}</script><h4 id="求一个数的平方根倒数"><a href="#求一个数的平方根倒数" class="headerlink" title="求一个数的平方根倒数"></a>求一个数的平方根倒数</h4><p>对于计算机来说求一个数的平方根一般有两种方式，二分法和牛顿迭代法</p>
-<ul>
-<li><p>二分法</p>
-<p>EXP表示精度，从0-num不断开始计算mid的平方，直到left&gt;right，此时返回right的值即为所求的平方根，其中注意边界条件：</p>
-<p>当mid <em> mid = num时，此时left需要加上EXP，往后的循环中mid </em> mid 都会大于num，所以right还会不停减小，直到right &lt; left，返回right，这时right已经在精度范围内</p>
-</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">Sqrt</span><span class="hljs-params">(<span class="hljs-type">double</span> num)</span> </span>&#123;<br>    <span class="hljs-type">double</span> left = <span class="hljs-number">0</span>, right = num;<br> <br>    <span class="hljs-keyword">while</span> (left &lt;= right) &#123;<br>        <span class="hljs-type">double</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br> <br>        <span class="hljs-keyword">if</span> (mid * mid &lt;= num)<br>            left = mid + EXP;<br>        <span class="hljs-keyword">else</span><br>            right = mid - EXP;<br>    &#125;   <br> <br>    <span class="hljs-keyword">return</span> right;<br>&#125;<br></code></pre></td></tr></table></figure>
-<ul>
-<li><p>牛顿迭代法</p>
-<p>牛顿迭代法是将原来的求开方问题转化为数学函数问题，即假设<code>x * x = n</code>，求n的开方转化为<code>x * x - n = 0</code>的解，即<code>y = x * x - n</code>与x轴的交点</p>
-<p>代码中last表示上一次的切线与x轴的交点的x坐标，初始值为num，ret表示x = last时的切线与x轴的交点，不断迭代，直到ret - last小于精度，即达到精度返回ret。</p>
-</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">Sqrt</span><span class="hljs-params">(<span class="hljs-type">double</span> num)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == num)<br>        <span class="hljs-keyword">return</span> num;<br> <br>    <span class="hljs-type">double</span> last = num, ret = num;<br> <br>    <span class="hljs-keyword">for</span> (;;) &#123;<br>        last = <span class="hljs-number">0.5</span> * (ret + num / ret);<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">fabs</span>(ret - last) &lt; EXP)<br>            <span class="hljs-keyword">break</span>;<br>        ret = last;<br>    &#125;   <br> <br>    <span class="hljs-keyword">return</span> ret;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>计算完平方根过后，再计算其倒数，也是一个对计算机来说并不是很友好的运算</p>
-<h4 id="快速平方根倒数计算推导"><a href="#快速平方根倒数计算推导" class="headerlink" title="快速平方根倒数计算推导"></a>快速平方根倒数计算推导</h4><p>快速平方根算法是利用了计算机存储浮点数的特性并和牛顿迭代法来共同完成的，也是一个近似计算。对于牛顿迭代法，其精髓是如果能够找到一个接近于解的初始值，是有可能通过一次迭代或者较少次数的迭代达到比较高的近似解，而快速平方根算法旨在于找到一个较为近似的初始值。具体的运算如下。</p>
-<p><strong>笔记中有一处笔误0xD5F400000应改成0x5F400000</strong></p>
-<img src="/2024/01/24/index/%E8%BF%90%E7%AE%97%E8%BF%87%E7%A8%8B.png" class="" title="运算过程">
-<p>快速平方根算法代码</p>
-<ul>
-<li>初始值由0x5F400000改为了0x5f3759df，对于X/2代码中使用了位运算加速求解</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">float</span> <span class="hljs-title">Q_rsqrt</span><span class="hljs-params">(<span class="hljs-type">float</span> number)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">long</span> i;<br>    <span class="hljs-type">float</span> x2, y;<br>    <span class="hljs-type">const</span> <span class="hljs-type">float</span> threehalfs = <span class="hljs-number">1.5F</span>;<br>    x2 = number * <span class="hljs-number">0.5F</span>;<br>    y = number;<br>    i = * ( <span class="hljs-type">long</span>* ) &amp;y;							<span class="hljs-comment">// evil floating point bit hack</span><br>    i = <span class="hljs-number">0x5f3759df</span> - (i &gt;&gt; <span class="hljs-number">1</span>);					<span class="hljs-comment">// what the fuck? </span><br>    y = * ( <span class="hljs-type">float</span> * ) &amp;i;<br>    y = y * (threehalfs - ( x2 * y * y ) );		<span class="hljs-comment">// 1st iteration</span><br><span class="hljs-comment">//  y = y * (threehalfs - ( x2 * y * y ) );		// 2st iteration, can be removed</span><br>    <br>    <span class="hljs-keyword">return</span> y;<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>技术研究</category>
-      </categories>
-      <tags>
-        <tag>数学</tag>
-        <tag>算法</tag>
       </tags>
   </entry>
 </search>
