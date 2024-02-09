@@ -336,6 +336,26 @@
       </tags>
   </entry>
   <entry>
+    <title>算法题-数组和字符串</title>
+    <url>/2024/02/09/index/</url>
+    <content><![CDATA[<h3 id="80-删除有序数组中的重复项-Ⅱ"><a href="#80-删除有序数组中的重复项-Ⅱ" class="headerlink" title="80.删除有序数组中的重复项 Ⅱ"></a>80.删除有序数组中的重复项 Ⅱ</h3><p>给你一个有序数组 <code>nums</code> ，请你<strong>原地</strong>删除重复出现的元素，使得出现次数超过两次的元素<strong>只出现两次</strong> ，返回删除后数组的新长度。</p>
+<p>不要使用额外的数组空间，你必须在 <strong>原地修改输入数组</strong> 并在使用 O(1) 额外空间的条件下完成。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight accesslog"><table><tr><td class="code"><pre><code class="hljs accesslog">输入：nums = <span class="hljs-string">[1,1,1,2,2,3]</span><br>输出：<span class="hljs-number">5</span>, nums = <span class="hljs-string">[1,1,2,2,3]</span><br>解释：函数应返回新长度 length = <span class="hljs-number">5</span>, 并且原数组的前五个元素被修改为 <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>。 不需要考虑数组中超出新长度后面的元素。<br></code></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight dns"><table><tr><td class="code"><pre><code class="hljs dns">输入：nums = [<span class="hljs-number">0,0,1,1</span>,<span class="hljs-number">1,1,2,3</span>,<span class="hljs-number">3</span>]<br>输出：<span class="hljs-number">7</span>, nums = [<span class="hljs-number">0,0,1,1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">3</span>]<br>解释：函数应返回新长度 length = <span class="hljs-number">7</span>, 并且原数组的前七个元素被修改为 <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>。不需要考虑数组中超出新长度后面的元素。<br></code></pre></td></tr></table></figure>
+<p><strong>解析</strong></p>
+<p>使用快fast慢slow指针来遍历数组，慢指针记录数组的长度，快指针记录当前所在的元素是是否需要保留，如果需要保留则将当前位置nums[slow]存放快指针所在的元素，如果不需要保留则需要将fast++</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">removeDuplicates</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br><br>        <span class="hljs-type">int</span> n = nums.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-keyword">if</span>(n &lt;= <span class="hljs-number">2</span>)&#123;<br>            <span class="hljs-keyword">return</span> n;<br>        &#125;<br>        <br>        <span class="hljs-comment">// 因为前两个元素都是必然回保留的，所以slow和fast都从2开始</span><br>        <span class="hljs-type">int</span> slow = <span class="hljs-number">2</span>;<br>        <span class="hljs-type">int</span> fast = <span class="hljs-number">2</span>;<br>        <span class="hljs-comment">// 使用fast来遍历</span><br>        <span class="hljs-keyword">while</span>(fast &lt; n)&#123;<br>            <span class="hljs-comment">// 如果快指针所在的元素不等于当前位置-2所在的元素</span><br>            <span class="hljs-comment">// 说明，快指针所在的位置的元素的前面至多只有slow - 1位置的元素和其相等，即至多只有一个，所以当前fast所在的位置的元素是需要保留的</span><br>            <span class="hljs-comment">// 如果相等的话，说明slow-1和slow-2和fast都相等，所以fast是不需要保留的，fast++</span><br>            <span class="hljs-keyword">if</span>(nums[slow - <span class="hljs-number">2</span>] != nums[fast])&#123;<br>                nums[slow] = nums[fast];<br>                <span class="hljs-comment">// 更新slow位置</span><br>                ++slow;<br>            &#125;<br>            ++fast;<br>        &#125;<br>        <span class="hljs-keyword">return</span> slow;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>算法实践</category>
+      </categories>
+      <tags>
+        <tag>leetcode 算法 数组 字符串</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>平方根倒数算法</title>
     <url>/2024/01/24/index/</url>
     <content><![CDATA[<h3 id="平方根倒数算法"><a href="#平方根倒数算法" class="headerlink" title="平方根倒数算法"></a>平方根倒数算法</h3><script type="math/tex; mode=display">
