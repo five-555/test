@@ -157,6 +157,8 @@ DELETE FROM 表名 [WHERE 条件];
 * #### DQL
 
   > 数据库查询语言，用来查询数据库中的表的记录
+  >
+  > SELECT后面加上\G可以将某一行转化为一列查看
 
 **语法结构**
 
@@ -572,6 +574,208 @@ show engines;
   MEMORY：将所有数据保存在内存当中，访问速度快，通常用于临时表以及缓存。MEMORY对表的大小有限制，太大的表无法缓存在内存中。**这个场景被Redis替代了**
 
 ### 2、索引
+
+* **索引概述**
+  * 索引的结构
+
+* #### **索引分类**
+
+|   分类   |                含义                |           特点           |  关键字  |
+| :------: | :--------------------------------: | :----------------------: | :------: |
+| 主键索引 |      针对于表中主键创建的索引      | 默认自动创建，只能有一个 | PRIMARY  |
+| 唯一索引 |  避免同一个表中某数据列中的值重复  |        可以有多个        |  UNIQUE  |
+| 常规索引 |          快速定位特定数据          |        可以有多个        |          |
+| 全文索引 | 全文索引查找的是文本中通过的关键词 |        可以有多个        | FULLTEXT |
+
+按照索引的存储形式分类
+
+|   分类   |                            含义                            |         特点         |
+| :------: | :--------------------------------------------------------: | :------------------: |
+| 聚集索引 |                 将数据存储与索引放到了一块                 | 必须有，而且只有一个 |
+| 二级索引 | 将数据与索引分开存储，索引结构的叶子节点关联的是对应的主键 |     可以存在多个     |
+
+![image-20240218203730285](database-mysql/image-20240218203730285.png)
+
+
+
+* #### **索引语法**
+
+```mysql
+# 创建索引
+# 一个索引可以关联多行，如果关联多行称为联合索引
+CREATE [UNIQUE|FULLTEXT] INDEX index_name ON table_name (index_col_name, )
+
+# 查看索引
+SHOW INDEX FROM table_name;
+
+# 删除索引
+DROP INDEX index_name ON table_name;
+```
+
+* #### **SQL性能分析**
+
+  > 使用于select的优化
+
+```mysql
+# SQL执行频率，查看当前数据库语句的访问频率
+SHOW [session|global] STATUS
+# Com七个下划线，模糊匹配
+SHOW GLOBAL STATUS LIKE 'Com_______'
+```
+
+**SQL语句的频率**
+
+![image-20240218204502697](database-mysql/image-20240218204502697.png)
+
+**慢查询日志**
+
+> 慢查询日志记录了所有执行时间超过指定参数(long_query_time，单位：秒，默认10)的所有SQL语句的日志
+
+```mysql
+# 查看是否开启，日志文件默认在/var/lib/mysql里面
+SHOW VARIABLES LIKE 'slow_query_log';
+
+# 修改/etc/my.cnf中配置开启，配置时间
+slow_query_log=1   
+long_query_time=2
+```
+
+**profile详情**
+
+```mysql
+# 查看是否支持prifile
+SELECT @@have_profiling;
+
+# 设置为开
+SET profiling=1;
+
+# 查看profile
+SHOW PROFILES;
+```
+
+执行完SQL语句以后，通过以下指令查看执行耗时情况
+
+```mysql
+# 查看每一条SQL耗时基本情况
+SHOW PROFILES;
+
+# 查看指定query_id的SQL语句各个阶段的耗时情况
+SHOW PROFILE FOR QUERY query_id;
+
+# 查看指定SQL语句的CPU使用情况
+SHOW PROFILE CPU FOR QUERY query_id;
+```
+
+**explain执行计划**
+
+> EXPLAIN或者DESC命令获取Mysql如何执行SELECT语句的信息，包括在SELECT语句执行过程中表如何连接和连接的顺序
+
+```mysql
+EXPLAIN SELECT SQL语句;
+```
+
+![image-20240218211138993](database-mysql/image-20240218211138993.png)
+
+表头的含义：
+
+![image-20240218212814126](database-mysql/image-20240218212814126.png)
+
+![image-20240218212115878](database-mysql/image-20240218212115878.png)
+
+```txt
+type
+const	以主键或以唯一的列作为索引扫描
+ref		非唯一的值作为查询索引
+index	用了索引，但是会对整个索引进行遍历
+all		全表扫描
+```
+
+* #### **索引使用**
+
+**联合索引**
+
+使用要遵循**最左前缀法则**：查询**从索引的最左列开始**，并且不跳过索引中的列。如果跳跃某一列，索引将部分失效（后面的字段索引失效）。
+
+**范围查询**：联合索引中出现范围查询（>,<)，范围查询右侧的列索引失效。但是使用大于等于和小于等于索引并不会失效。
+
+例子
+
+```mysql
+# student有联合索引(id,name,age)
+# 1、索引都可以使用
+select * from student where id = 1 and name = "Lili" and age = 20;
+
+# 2、索引name，age失效
+select * from student where id = 1 and age = 20;
+
+# 范围查询
+# name和age索引均失效
+select * from student where id > 1 and name = "Lili" and age = 20;
+```
+
+**索引失效**
+
+索引列操作：不要在索引上进行列操作，否则索引会失效
+
+字符串类型：不加单引号索引会失效
+
+模糊查询：**头部进行模糊匹配(%%某某)**，索引会失效，尾部进行模糊匹配（某某%%），索引不会失效。
+
+or连接的条件：如果or前面的条件列有索引，后面的条件没有索引，所涉及的索引都不会引用到，只有两侧都有索引的时候，才有效
+
+数据分布影响：如果索引比全表扫描更慢，则不使用索引，查询的数据大于一半，走全表不走索引。
+
+**SQL提示**
+
+> 在sql语句中加入一些认为的提示来达到优化操作的目的
+
+```mysql
+# use index指定使用哪个索引
+explain select * from table use index(idxname) ...
+
+# ignore index
+# force index 同上
+```
+
+**覆盖索引**
+
+尽量使用覆盖索引：查询使用了索引，并且需要返回的列，在该索引中已经能够全部找到，减少使用select *
+
+using index condition：查找使用了索引，但是需要回表查询数据
+
+using where, using index：查询使用了索引，但是不需要回表
+
+![image-20240218221642388](database-mysql/image-20240218221642388.png)
+
+前两条不需要回表，后一条需要回表
+
+**前缀索引**
+
+> 将字符串的前缀提取出来，创建索引，可以节约索引空间
+
+```mysql
+# n表示取column_name列的前n个数据
+CREATE INDEX idx_XXX ON table_name(column_name(n));
+
+# 计算前缀长度的选择性，越接近1越好
+SELECT COUNT(DISTINCT substring(email, 1, 5)) / COUNT(*) FROM table_name;
+```
+
+**单列索引和联合索引选择**
+
+如果涉及到多个查询条件，推荐使用联合索引，联合索引会更少的回表查询
+
+#### Quetion
+
+![image-20240218221919863](database-mysql/image-20240218221919863.png)
+
+建立id主键，username，password联合索引
+
+* #### **索引设计原则**
+
+![image-20240218224016746](database-mysql/image-20240218224016746.png)
+
+
 
 ### 3、SQL优化
 
