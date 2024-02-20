@@ -101,91 +101,6 @@
       </tags>
   </entry>
   <entry>
-    <title>GANES101现代计算机图形学入门-02</title>
-    <url>/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/</url>
-    <content><![CDATA[<h2 id="计算机图形学02"><a href="#计算机图形学02" class="headerlink" title="计算机图形学02"></a>计算机图形学02</h2><blockquote>
-<p>Transform（变换），图形的变换</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="code"><pre><code class="hljs">为什么学习变换<br>2维变换：旋转、缩放、切变<br>齐次坐标 Homogeneous coordinates<br>组合变换<br>3维变换<br></code></pre></td></tr></table></figure>
-<h3 id="二维变换"><a href="#二维变换" class="headerlink" title="二维变换"></a>二维变换</h3><p>将矩阵和变换联系起来</p>
-<ul>
-<li><p>1、缩放</p>
-<p>将坐标在向量左边乘一个对角矩阵</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116161524873-17084118809551.png" class="" title="image-20231116161524873">
-</li>
-<li><p>2、反射对称</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116161727694-17084118809562.png" class="" title="image-20231116161727694">
-</li>
-<li><p>3、切变（Shear Matrix）</p>
-<p>水平方向坐标发生改变，竖直方向不变，水平的移动大小，按照Y的当前坐标成正比</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116161842894-17084118809563.png" class="" title="image-20231116161842894">
-</li>
-<li><p>4、旋转</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116164956551-17084118809564.png" class="" title="image-20231116164956551">
-<p>.PNG)</p>
-</li>
-</ul>
-<p>通过矩阵乘积可以将一个输入图形的坐标转化为想要的输出矩阵的坐标，这样的变换都称为<strong>线性变换</strong></p>
-<h3 id="齐次坐标（homogeneous-coordinates）"><a href="#齐次坐标（homogeneous-coordinates）" class="headerlink" title="齐次坐标（homogeneous coordinates）"></a>齐次坐标（homogeneous coordinates）</h3><blockquote>
-<p>平移操作无法使用线性变化即矩阵的乘法来获得，所以引入齐次坐标，增加一个维度</p>
-<p>齐次坐标的矩阵操作，可以叫做仿射变换</p>
-</blockquote>
-<p>增加维度以后，通过与新增加列的运算就可以达到平移的变换</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116165833300-17084118809565.png" class="" title="image-20231116165833300">
-<ul>
-<li><p>Q：Why？将二维的点，增加一个1，将二维的向量，增加一个0</p>
-<p>1、通过增加的维度可以标识当前的坐标表示点还是表示向量。可以保证向量具有平移不变性</p>
-<p>2、最后一个维度的运算正好表示运算结果的性质</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116170520355-17084118809566.png" class="" title="image-20231116170520355">
-<p>3、点+点，得到的结果为两个点的终点，因为第三维为2，与两点之和相除便是中点</p>
-</li>
-</ul>
-<p><strong>齐次坐标下的变换操作矩阵</strong></p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116171041924-17084118809567.png" class="" title="image-20231116171041924">
-<ul>
-<li><p>逆变换</p>
-<p>乘以变化矩阵的逆矩阵，可以变换成原来的图片</p>
-</li>
-</ul>
-<h3 id="变换组合"><a href="#变换组合" class="headerlink" title="变换组合"></a>变换组合</h3><p>1、复杂变换可以通过简单的变化来得到</p>
-<p>2、变换的顺序不同，得到的结果不同</p>
-<p>3、变换的组合，等价于原始矩阵依次乘上按照一定顺序的齐次矩阵</p>
-<ul>
-<li>将一个变化还原，或者以任意一个点为中心进行变化，可以先移动到原点，再进行操作</li>
-</ul>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116200444279-17084118809568.png" class="" title="image-20231116200444279">
-<h3 id="三维变换"><a href="#三维变换" class="headerlink" title="三维变换"></a>三维变换</h3><ul>
-<li><p>三维点和三维向量</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116201112834-17084118809569.png" class="" title="image-20231116201112834">
-</li>
-<li><p>三维变换齐次矩阵</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116201139440-170841188095610.png" class="" title="image-20231116201139440">
-</li>
-<li><p>旋转</p>
-<p>绕哪个轴旋转哪个轴保持不变</p>
-<p>对于一般性的旋转，可以使用简单旋转的组合来完成</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231118142130480-170841188095611.png" class="" title="image-20231118142130480">
-</li>
-<li><p>使用旋转公式</p>
-<p>旋转角度定义为a</p>
-<p>旋转轴定义为n</p>
-<p>其中<strong>I</strong>表示为单位矩阵</p>
-<p>表示为，沿着旋转轴n旋转a的角度得到的旋转矩阵</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231118142833380-170841188095612.png" class="" title="image-20231118142833380">
-</li>
-</ul>
-<h3 id="观测变换（Viewing-transformation）"><a href="#观测变换（Viewing-transformation）" class="headerlink" title="观测变换（Viewing transformation）"></a>观测变换（Viewing transformation）</h3><blockquote>
-<p>视图变换、投影变换（正交投影，透视投影）</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-      </categories>
-      <tags>
-        <tag>计算机图形学 GAMES101</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Go语言基本语法</title>
     <url>/2023/12/14/Go%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><h3 id="GO语言特性"><a href="#GO语言特性" class="headerlink" title="GO语言特性"></a>GO语言特性</h3><ul>
@@ -454,6 +369,91 @@
       </tags>
   </entry>
   <entry>
+    <title>GANES101现代计算机图形学入门-02</title>
+    <url>/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/</url>
+    <content><![CDATA[<h2 id="计算机图形学02"><a href="#计算机图形学02" class="headerlink" title="计算机图形学02"></a>计算机图形学02</h2><blockquote>
+<p>Transform（变换），图形的变换</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="code"><pre><code class="hljs">为什么学习变换<br>2维变换：旋转、缩放、切变<br>齐次坐标 Homogeneous coordinates<br>组合变换<br>3维变换<br></code></pre></td></tr></table></figure>
+<h3 id="二维变换"><a href="#二维变换" class="headerlink" title="二维变换"></a>二维变换</h3><p>将矩阵和变换联系起来</p>
+<ul>
+<li><p>1、缩放</p>
+<p>将坐标在向量左边乘一个对角矩阵</p>
+<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116161524873-17084118809551.png" class="" title="image-20231116161524873">
+</li>
+<li><p>2、反射对称</p>
+<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116161727694-17084118809562.png" class="" title="image-20231116161727694">
+</li>
+<li><p>3、切变（Shear Matrix）</p>
+<p>水平方向坐标发生改变，竖直方向不变，水平的移动大小，按照Y的当前坐标成正比</p>
+<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116161842894-17084118809563.png" class="" title="image-20231116161842894">
+</li>
+<li><p>4、旋转</p>
+<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116164956551-17084118809564.png" class="" title="image-20231116164956551">
+<p>.PNG)</p>
+</li>
+</ul>
+<p>通过矩阵乘积可以将一个输入图形的坐标转化为想要的输出矩阵的坐标，这样的变换都称为<strong>线性变换</strong></p>
+<h3 id="齐次坐标（homogeneous-coordinates）"><a href="#齐次坐标（homogeneous-coordinates）" class="headerlink" title="齐次坐标（homogeneous coordinates）"></a>齐次坐标（homogeneous coordinates）</h3><blockquote>
+<p>平移操作无法使用线性变化即矩阵的乘法来获得，所以引入齐次坐标，增加一个维度</p>
+<p>齐次坐标的矩阵操作，可以叫做仿射变换</p>
+</blockquote>
+<p>增加维度以后，通过与新增加列的运算就可以达到平移的变换</p>
+<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116165833300-17084118809565.png" class="" title="image-20231116165833300">
+<ul>
+<li><p>Q：Why？将二维的点，增加一个1，将二维的向量，增加一个0</p>
+<p>1、通过增加的维度可以标识当前的坐标表示点还是表示向量。可以保证向量具有平移不变性</p>
+<p>2、最后一个维度的运算正好表示运算结果的性质</p>
+<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116170520355-17084118809566.png" class="" title="image-20231116170520355">
+<p>3、点+点，得到的结果为两个点的终点，因为第三维为2，与两点之和相除便是中点</p>
+</li>
+</ul>
+<p><strong>齐次坐标下的变换操作矩阵</strong></p>
+<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116171041924-17084118809567.png" class="" title="image-20231116171041924">
+<ul>
+<li><p>逆变换</p>
+<p>乘以变化矩阵的逆矩阵，可以变换成原来的图片</p>
+</li>
+</ul>
+<h3 id="变换组合"><a href="#变换组合" class="headerlink" title="变换组合"></a>变换组合</h3><p>1、复杂变换可以通过简单的变化来得到</p>
+<p>2、变换的顺序不同，得到的结果不同</p>
+<p>3、变换的组合，等价于原始矩阵依次乘上按照一定顺序的齐次矩阵</p>
+<ul>
+<li>将一个变化还原，或者以任意一个点为中心进行变化，可以先移动到原点，再进行操作</li>
+</ul>
+<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116200444279-17084118809568.png" class="" title="image-20231116200444279">
+<h3 id="三维变换"><a href="#三维变换" class="headerlink" title="三维变换"></a>三维变换</h3><ul>
+<li><p>三维点和三维向量</p>
+<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116201112834-17084118809569.png" class="" title="image-20231116201112834">
+</li>
+<li><p>三维变换齐次矩阵</p>
+<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116201139440-170841188095610.png" class="" title="image-20231116201139440">
+</li>
+<li><p>旋转</p>
+<p>绕哪个轴旋转哪个轴保持不变</p>
+<p>对于一般性的旋转，可以使用简单旋转的组合来完成</p>
+<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231118142130480-170841188095611.png" class="" title="image-20231118142130480">
+</li>
+<li><p>使用旋转公式</p>
+<p>旋转角度定义为a</p>
+<p>旋转轴定义为n</p>
+<p>其中<strong>I</strong>表示为单位矩阵</p>
+<p>表示为，沿着旋转轴n旋转a的角度得到的旋转矩阵</p>
+<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231118142833380-170841188095612.png" class="" title="image-20231118142833380">
+</li>
+</ul>
+<h3 id="观测变换（Viewing-transformation）"><a href="#观测变换（Viewing-transformation）" class="headerlink" title="观测变换（Viewing transformation）"></a>观测变换（Viewing transformation）</h3><blockquote>
+<p>视图变换、投影变换（正交投影，透视投影）</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>计算机图形学 GAMES101</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>算法题-数组和字符串</title>
     <url>/2024/02/09/leetcode-0209/</url>
     <content><![CDATA[<h3 id="80-删除有序数组中的重复项-Ⅱ"><a href="#80-删除有序数组中的重复项-Ⅱ" class="headerlink" title="80.删除有序数组中的重复项 Ⅱ"></a><a href="https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/?envType=study-plan-v2&amp;envId=top-interview-150">80.删除有序数组中的重复项 Ⅱ</a></h3><p>给你一个有序数组 <code>nums</code> ，请你<strong>原地</strong>删除重复出现的元素，使得出现次数超过两次的元素<strong>只出现两次</strong> ，返回删除后数组的新长度。</p>
@@ -526,6 +526,101 @@
       </categories>
       <tags>
         <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>大话设计模式</title>
+    <url>/2024/02/20/%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h2 id="一、简单工厂模式"><a href="#一、简单工厂模式" class="headerlink" title="一、简单工厂模式"></a>一、简单工厂模式</h2><blockquote>
+<p>注意：命名规范、多个分支使用switch、考虑异常情况</p>
+</blockquote>
+<p>面向对象的编程，对代码做到：可维护、可复用、灵活性好</p>
+<ul>
+<li><p>业务的封装</p>
+<p>前后端分离，将业务逻辑和界面逻辑分开，让他们之间的耦合度下降，可以依赖面向对象的三大特性来实现</p>
+</li>
+<li><p>工厂模式</p>
+<p>通过工厂类，传入不同的字符串来返回不同继承类的构造函数，需要实例哪一个子类，可以通过传入参数来进行选择</p>
+<p>可以使用switch，或者使用map映射等方式</p>
+</li>
+<li><p>UML类图</p>
+<ul>
+<li>依赖关系</li>
+<li>聚合关系</li>
+<li>合成关系</li>
+<li>继承关系</li>
+<li>关联关系</li>
+<li>接口关系</li>
+<li>泛化关系</li>
+</ul>
+</li>
+</ul>
+<img src="/2024/02/20/%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/image-20231008153018253.png" class="" title="image-20231008153018253">
+<h2 id="二、策略模式"><a href="#二、策略模式" class="headerlink" title="二、策略模式"></a>二、策略模式</h2><blockquote>
+<p>策略模式定义了算法家族，分别封装起来，让它们之间可以互相替换，此模式让算法的变化，不会影响到使用算法的用户。</p>
+</blockquote>
+<p>只有算法需要替换，而其它不需要替换</p>
+<p>使用策略类，定义所有支持算法的公共接口</p>
+<ul>
+<li>策略模式是一种定义一系列算法的方法，所有这些算法完成的是相同的工作，但是实现不同，可以以相同的方式调用所有的方法，减少了各种算法类与使用算法类之间的耦合</li>
+<li>策略模式的优点可以简化单元测试，因为每个算法都有自己的类，可以通过自己的接口单独测试</li>
+</ul>
+<figure class="highlight maxima"><table><tr><td class="code"><pre><code class="hljs maxima">策略模式的三个要点<br><span class="hljs-number">1</span>、基类，策略接口，用于子类继承该基类，并重写基类中的策略方法<br><span class="hljs-number">2</span>、具体的策略类，不同的策略类使用不同的方法来实现基类的虚方法<br><span class="hljs-number">3</span>、上下文，<span class="hljs-built_in">context</span>，在上下文中，通过一个公共的方法，来调用不同子类实现的虚方法（使用传入不同子类对象来实现）<br><br>用户只需要使用<span class="hljs-built_in">context</span>来使用不同对象传入即可以完成不同的策略选择<br></code></pre></td></tr></table></figure>
+<h2 id="三、单一职责原则"><a href="#三、单一职责原则" class="headerlink" title="三、单一职责原则"></a>三、单一职责原则</h2><blockquote>
+<p>对于一个类而言，应该仅有一个引起它变化的原因。</p>
+<p>如果一个类承担的职责过多，就等于把这些职责耦合在一起，一个职责的变化可能会削弱或者这个类完成其它职责的能力。这种耦合会导致脆弱的设计，当变化发生时，设计会遭到意想不到的破坏。</p>
+</blockquote>
+<h2 id="四、开放-封闭原则"><a href="#四、开放-封闭原则" class="headerlink" title="四、开放-封闭原则"></a>四、开放-封闭原则</h2><p><strong>软件实体（类、模块、函数等）应该可以扩展但不可修改，即对拓展开放，对修改封闭</strong></p>
+<h2 id="五、依赖倒置原则"><a href="#五、依赖倒置原则" class="headerlink" title="五、依赖倒置原则"></a>五、依赖倒置原则</h2><p>1、高层模块不应该依赖底层模块，两个都应该依赖抽象</p>
+<p>2、抽象不应该依赖细节，细节应该依赖抽象</p>
+<ul>
+<li><p>里氏代换原则</p>
+<p>一个软件实体如果使用的是一个父类的话，那么一定适用于其子类，而且它察觉不出父类对象和子类对象的区别。</p>
+<p>即：子类型必须能够替换掉它们的父类型</p>
+</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><code class="hljs ruby">和策略模式有一定的相似之处，例子<br><br><span class="hljs-title class_">Device</span>类<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Device</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_on</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        pass<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_off</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        pass<br><br>子类<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Light</span>(<span class="hljs-title class_">Device</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_on</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Light is turned on&quot;</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_off</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Light is turned off&quot;</span>)<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Fan</span>(<span class="hljs-title class_">Device</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_on</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Fan is turned on&quot;</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_off</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Fan is turned off&quot;</span>)<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Speaker</span>(<span class="hljs-title class_">Device</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_on</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Speaker is turned on&quot;</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_off</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Speaker is turned off&quot;</span>)<br><br>高层模块<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DeviceController</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span>, device</span>):<br>        <span class="hljs-variable language_">self</span>.device = device<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">operate</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        <span class="hljs-variable language_">self</span>.device.turn_on()<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">stop</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        <span class="hljs-variable language_">self</span>.device.turn_off()<br><br>main<br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    light = <span class="hljs-title class_">Light</span>()<br>    fan = <span class="hljs-title class_">Fan</span>()<br>    speaker = <span class="hljs-title class_">Speaker</span>()<br><br>    controller1 = <span class="hljs-title class_">DeviceController</span>(light)<br>    controller2 = <span class="hljs-title class_">DeviceController</span>(fan)<br>    controller3 = <span class="hljs-title class_">DeviceController</span>(speaker)<br><br>    controller1.operate()<br>    controller2.operate()<br>    controller3.operate()<br><br>    controller1.stop()<br>    controller2.stop()<br>    controller3.stop()<br>高层模块 <span class="hljs-title class_">DeviceController</span> 不直接依赖于具体的设备类（如 <span class="hljs-title class_">Light</span>、<span class="hljs-title class_">Fan</span> 和 <span class="hljs-title class_">Speaker</span>），而是依赖于抽象的 <span class="hljs-title class_">Device</span> 接口。这就是依赖倒置原则的应用，它使得高层模块更加灵活，可以轻松地切换和扩展不同类型的设备，而不需要修改高层模块的代码。这有助于创建松耦合的、易于维护和扩展的代码<br></code></pre></td></tr></table></figure>
+<h2 id="六、装饰模式"><a href="#六、装饰模式" class="headerlink" title="六、装饰模式"></a>六、装饰模式</h2><p><strong>动态地给一个对象添加一些额外的职责</strong>，就增加功能来说，装饰模式比生成子类更为灵活</p>
+<p>在子类中定义一个父类对象，该对象使用需要装饰的对象作为初始化，并在子类中对该对象进行操作，即可达到，对对象的额外装饰结果，但是这一个对象和之前的对象不一定是同一个对象。</p>
+<ul>
+<li>基本结构</li>
+</ul>
+<figure class="highlight"><table><tr><td class="code"><pre><code class="hljs">1、父类：父类定义一个抽象的方法<br>2、子类：子类继承父类抽象方法并添加一些最基本的属性<br>3、装饰器类：装饰器类继承父类，并定义一个父类的保护类型数据<br>4、不同的装饰器类：不同的装饰器类继承于装饰器类，重写各自装饰器需要添加的职责<br><br>通常第“2”步中定义基本属性的子类，会作为第一层装饰包装子类，后续会作为参数传入到装饰器类中<br></code></pre></td></tr></table></figure>
+<p>装饰模式可以把类中的装饰功能从类中搬移去除，这样就可以简化原有的类。同事有效地把类的核心职责和装饰功能区分开，去除相关类中的重复的装饰逻辑，重复的装饰逻辑可以使用一个子类作为最基类型。</p>
+<figure class="highlight 1c"><table><tr><td class="code"><pre><code class="hljs 1c"><span class="hljs-built_in">exp</span>：<br>游戏中，不同人物角色使用不同技能进行装饰。最开始都是有一个人物的基类（低级的时候）。公共技能可以作为重复逻辑继承在一个类中，使用装饰模式，可以学习一些不同的技能。<br></code></pre></td></tr></table></figure>
+<h2 id="七、代理模式"><a href="#七、代理模式" class="headerlink" title="七、代理模式"></a>七、代理模式</h2><p>代理模式，为其它对象提供一种代理以控制对这个对象的访问</p>
+<p>在客户与另一客户交互的过程中，中间会有一层代理，代理可以拥有两个客户的接口，作为中间实体来进行来促使两客户进行交互，在代理中如果需要交互，则需要定义一个客户的类，来调用该客户的方法。</p>
+<ul>
+<li><p>代理模式应用场景</p>
+<p>远程代理：为一个对象在不同的地址空间提供局部代表，这样可以隐藏一个对象存在于不同地址空间的事实</p>
+<p>虚拟代理：根据需要创建开销很大的对象，通过它来存放实例化需要很长时间的真实对象，浏览器中加载图片就是使用虚拟代理</p>
+<p>安全代理：用来控制真实对象访问时的权限</p>
+<p>智能指引：当掉哟个真实对象时，代理处理另外一些事</p>
+</li>
+</ul>
+<h2 id="八、工厂方法模式"><a href="#八、工厂方法模式" class="headerlink" title="八、工厂方法模式"></a>八、工厂方法模式</h2><p>封装实例来创建过程，可以让创建实例的过程封装到工厂类中，避免耦合</p>
+<h2 id="九、原型模式"><a href="#九、原型模式" class="headerlink" title="九、原型模式"></a>九、原型模式</h2><p>用原型（Prototype）实例指定创建对象的种类，并且通过复制这些原型创建新的对象</p>
+<ul>
+<li><p>用法</p>
+<p>在类里面定义一个函数，函数可以返回一个原型对象</p>
+</li>
+<li><p>在类中定义修改原型中属性的set方法</p>
+</li>
+<li><p>在使用的过程中，只需要调用set方法修改不同的地方</p>
+</li>
+</ul>
+<p>深拷贝与浅拷贝，若在原型类中使用对象引用，在修改的时候记得使用深拷贝</p>
+<h2 id="十、模板方法模式"><a href="#十、模板方法模式" class="headerlink" title="十、模板方法模式"></a>十、模板方法模式</h2><p>定义一个操作中的算法的骨架，将一些步骤延迟到子类中。模板方法使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤</p>
+<h2 id="十一、迪米特法则"><a href="#十一、迪米特法则" class="headerlink" title="十一、迪米特法则"></a>十一、迪米特法则</h2><blockquote>
+<p>最小知识原则</p>
+</blockquote>
+<p>如果两个类不必彼此直接通信，那么这两个类就不应当发生直接的相互作用。如果一个类需要调用另一个类的某一个方法的话，可以通过第三者转发这个调用。</p>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>设计模式 UML</tag>
       </tags>
   </entry>
   <entry>

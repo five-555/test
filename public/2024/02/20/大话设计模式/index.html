@@ -1,0 +1,270 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>大话设计模式 | Zdon</title><meta name="author" content="Zdon"><meta name="copyright" content="Zdon"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、简单工厂模式 注意：命名规范、多个分支使用switch、考虑异常情况  面向对象的编程，对代码做到：可维护、可复用、灵活性好  业务的封装 前后端分离，将业务逻辑和界面逻辑分开，让他们之间的耦合度下降，可以依赖面向对象的三大特性来实现  工厂模式 通过工厂类，传入不同的字符串来返回不同继承类的构造函数，需要实例哪一个子类，可以通过传入参数来进行选择 可以使用switch，或者使用map映射等方">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大话设计模式">
+<meta property="og:url" content="http://zdon.fun/2024/02/20/%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+<meta property="og:site_name" content="Zdon">
+<meta property="og:description" content="一、简单工厂模式 注意：命名规范、多个分支使用switch、考虑异常情况  面向对象的编程，对代码做到：可维护、可复用、灵活性好  业务的封装 前后端分离，将业务逻辑和界面逻辑分开，让他们之间的耦合度下降，可以依赖面向对象的三大特性来实现  工厂模式 通过工厂类，传入不同的字符串来返回不同继承类的构造函数，需要实例哪一个子类，可以通过传入参数来进行选择 可以使用switch，或者使用map映射等方">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zdon.fun/img/default_cover03.jpg">
+<meta property="article:published_time" content="2024-02-20T07:09:00.000Z">
+<meta property="article:modified_time" content="2024-02-20T07:14:08.993Z">
+<meta property="article:author" content="Zdon">
+<meta property="article:tag" content="设计模式 UML">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zdon.fun/img/default_cover03.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://zdon.fun/2024/02/20/%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '大话设计模式',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-02-20 15:14:08'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/default_cover03.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Zdon"><span class="site-name">Zdon</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">大话设计模式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-02-20T07:09:00.000Z" title="发表于 2024-02-20 15:09:00">2024-02-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-02-20T07:14:08.993Z" title="更新于 2024-02-20 15:14:08">2024-02-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="大话设计模式"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="一、简单工厂模式"><a href="#一、简单工厂模式" class="headerlink" title="一、简单工厂模式"></a>一、简单工厂模式</h2><blockquote>
+<p>注意：命名规范、多个分支使用switch、考虑异常情况</p>
+</blockquote>
+<p>面向对象的编程，对代码做到：可维护、可复用、灵活性好</p>
+<ul>
+<li><p>业务的封装</p>
+<p>前后端分离，将业务逻辑和界面逻辑分开，让他们之间的耦合度下降，可以依赖面向对象的三大特性来实现</p>
+</li>
+<li><p>工厂模式</p>
+<p>通过工厂类，传入不同的字符串来返回不同继承类的构造函数，需要实例哪一个子类，可以通过传入参数来进行选择</p>
+<p>可以使用switch，或者使用map映射等方式</p>
+</li>
+<li><p>UML类图</p>
+<ul>
+<li>依赖关系</li>
+<li>聚合关系</li>
+<li>合成关系</li>
+<li>继承关系</li>
+<li>关联关系</li>
+<li>接口关系</li>
+<li>泛化关系</li>
+</ul>
+</li>
+</ul>
+<img src="/2024/02/20/%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/image-20231008153018253.png" class="" title="image-20231008153018253">
+<h2 id="二、策略模式"><a href="#二、策略模式" class="headerlink" title="二、策略模式"></a>二、策略模式</h2><blockquote>
+<p>策略模式定义了算法家族，分别封装起来，让它们之间可以互相替换，此模式让算法的变化，不会影响到使用算法的用户。</p>
+</blockquote>
+<p>只有算法需要替换，而其它不需要替换</p>
+<p>使用策略类，定义所有支持算法的公共接口</p>
+<ul>
+<li>策略模式是一种定义一系列算法的方法，所有这些算法完成的是相同的工作，但是实现不同，可以以相同的方式调用所有的方法，减少了各种算法类与使用算法类之间的耦合</li>
+<li>策略模式的优点可以简化单元测试，因为每个算法都有自己的类，可以通过自己的接口单独测试</li>
+</ul>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs maxima">策略模式的三个要点<br><span class="hljs-number">1</span>、基类，策略接口，用于子类继承该基类，并重写基类中的策略方法<br><span class="hljs-number">2</span>、具体的策略类，不同的策略类使用不同的方法来实现基类的虚方法<br><span class="hljs-number">3</span>、上下文，<span class="hljs-built_in">context</span>，在上下文中，通过一个公共的方法，来调用不同子类实现的虚方法（使用传入不同子类对象来实现）<br><br>用户只需要使用<span class="hljs-built_in">context</span>来使用不同对象传入即可以完成不同的策略选择<br></code></pre></td></tr></table></figure>
+<h2 id="三、单一职责原则"><a href="#三、单一职责原则" class="headerlink" title="三、单一职责原则"></a>三、单一职责原则</h2><blockquote>
+<p>对于一个类而言，应该仅有一个引起它变化的原因。</p>
+<p>如果一个类承担的职责过多，就等于把这些职责耦合在一起，一个职责的变化可能会削弱或者这个类完成其它职责的能力。这种耦合会导致脆弱的设计，当变化发生时，设计会遭到意想不到的破坏。</p>
+</blockquote>
+<h2 id="四、开放-封闭原则"><a href="#四、开放-封闭原则" class="headerlink" title="四、开放-封闭原则"></a>四、开放-封闭原则</h2><p><strong>软件实体（类、模块、函数等）应该可以扩展但不可修改，即对拓展开放，对修改封闭</strong></p>
+<h2 id="五、依赖倒置原则"><a href="#五、依赖倒置原则" class="headerlink" title="五、依赖倒置原则"></a>五、依赖倒置原则</h2><p>1、高层模块不应该依赖底层模块，两个都应该依赖抽象</p>
+<p>2、抽象不应该依赖细节，细节应该依赖抽象</p>
+<ul>
+<li><p>里氏代换原则</p>
+<p>一个软件实体如果使用的是一个父类的话，那么一定适用于其子类，而且它察觉不出父类对象和子类对象的区别。</p>
+<p>即：子类型必须能够替换掉它们的父类型</p>
+</li>
+</ul>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><code class="hljs ruby">和策略模式有一定的相似之处，例子<br><br><span class="hljs-title class_">Device</span>类<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Device</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_on</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        pass<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_off</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        pass<br><br>子类<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Light</span>(<span class="hljs-title class_">Device</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_on</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Light is turned on&quot;</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_off</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Light is turned off&quot;</span>)<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Fan</span>(<span class="hljs-title class_">Device</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_on</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Fan is turned on&quot;</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_off</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Fan is turned off&quot;</span>)<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Speaker</span>(<span class="hljs-title class_">Device</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_on</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Speaker is turned on&quot;</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_off</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Speaker is turned off&quot;</span>)<br><br>高层模块<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DeviceController</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span>, device</span>):<br>        <span class="hljs-variable language_">self</span>.device = device<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">operate</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        <span class="hljs-variable language_">self</span>.device.turn_on()<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">stop</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        <span class="hljs-variable language_">self</span>.device.turn_off()<br><br>main<br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    light = <span class="hljs-title class_">Light</span>()<br>    fan = <span class="hljs-title class_">Fan</span>()<br>    speaker = <span class="hljs-title class_">Speaker</span>()<br><br>    controller1 = <span class="hljs-title class_">DeviceController</span>(light)<br>    controller2 = <span class="hljs-title class_">DeviceController</span>(fan)<br>    controller3 = <span class="hljs-title class_">DeviceController</span>(speaker)<br><br>    controller1.operate()<br>    controller2.operate()<br>    controller3.operate()<br><br>    controller1.stop()<br>    controller2.stop()<br>    controller3.stop()<br>高层模块 <span class="hljs-title class_">DeviceController</span> 不直接依赖于具体的设备类（如 <span class="hljs-title class_">Light</span>、<span class="hljs-title class_">Fan</span> 和 <span class="hljs-title class_">Speaker</span>），而是依赖于抽象的 <span class="hljs-title class_">Device</span> 接口。这就是依赖倒置原则的应用，它使得高层模块更加灵活，可以轻松地切换和扩展不同类型的设备，而不需要修改高层模块的代码。这有助于创建松耦合的、易于维护和扩展的代码<br></code></pre></td></tr></table></figure>
+<h2 id="六、装饰模式"><a href="#六、装饰模式" class="headerlink" title="六、装饰模式"></a>六、装饰模式</h2><p><strong>动态地给一个对象添加一些额外的职责</strong>，就增加功能来说，装饰模式比生成子类更为灵活</p>
+<p>在子类中定义一个父类对象，该对象使用需要装饰的对象作为初始化，并在子类中对该对象进行操作，即可达到，对对象的额外装饰结果，但是这一个对象和之前的对象不一定是同一个对象。</p>
+<ul>
+<li>基本结构</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs">1、父类：父类定义一个抽象的方法<br>2、子类：子类继承父类抽象方法并添加一些最基本的属性<br>3、装饰器类：装饰器类继承父类，并定义一个父类的保护类型数据<br>4、不同的装饰器类：不同的装饰器类继承于装饰器类，重写各自装饰器需要添加的职责<br><br>通常第“2”步中定义基本属性的子类，会作为第一层装饰包装子类，后续会作为参数传入到装饰器类中<br></code></pre></td></tr></table></figure>
+<p>装饰模式可以把类中的装饰功能从类中搬移去除，这样就可以简化原有的类。同事有效地把类的核心职责和装饰功能区分开，去除相关类中的重复的装饰逻辑，重复的装饰逻辑可以使用一个子类作为最基类型。</p>
+<figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs 1c"><span class="hljs-built_in">exp</span>：<br>游戏中，不同人物角色使用不同技能进行装饰。最开始都是有一个人物的基类（低级的时候）。公共技能可以作为重复逻辑继承在一个类中，使用装饰模式，可以学习一些不同的技能。<br></code></pre></td></tr></table></figure>
+<h2 id="七、代理模式"><a href="#七、代理模式" class="headerlink" title="七、代理模式"></a>七、代理模式</h2><p>代理模式，为其它对象提供一种代理以控制对这个对象的访问</p>
+<p>在客户与另一客户交互的过程中，中间会有一层代理，代理可以拥有两个客户的接口，作为中间实体来进行来促使两客户进行交互，在代理中如果需要交互，则需要定义一个客户的类，来调用该客户的方法。</p>
+<ul>
+<li><p>代理模式应用场景</p>
+<p>远程代理：为一个对象在不同的地址空间提供局部代表，这样可以隐藏一个对象存在于不同地址空间的事实</p>
+<p>虚拟代理：根据需要创建开销很大的对象，通过它来存放实例化需要很长时间的真实对象，浏览器中加载图片就是使用虚拟代理</p>
+<p>安全代理：用来控制真实对象访问时的权限</p>
+<p>智能指引：当掉哟个真实对象时，代理处理另外一些事</p>
+</li>
+</ul>
+<h2 id="八、工厂方法模式"><a href="#八、工厂方法模式" class="headerlink" title="八、工厂方法模式"></a>八、工厂方法模式</h2><p>封装实例来创建过程，可以让创建实例的过程封装到工厂类中，避免耦合</p>
+<h2 id="九、原型模式"><a href="#九、原型模式" class="headerlink" title="九、原型模式"></a>九、原型模式</h2><p>用原型（Prototype）实例指定创建对象的种类，并且通过复制这些原型创建新的对象</p>
+<ul>
+<li><p>用法</p>
+<p>在类里面定义一个函数，函数可以返回一个原型对象</p>
+</li>
+<li><p>在类中定义修改原型中属性的set方法</p>
+</li>
+<li><p>在使用的过程中，只需要调用set方法修改不同的地方</p>
+</li>
+</ul>
+<p>深拷贝与浅拷贝，若在原型类中使用对象引用，在修改的时候记得使用深拷贝</p>
+<h2 id="十、模板方法模式"><a href="#十、模板方法模式" class="headerlink" title="十、模板方法模式"></a>十、模板方法模式</h2><p>定义一个操作中的算法的骨架，将一些步骤延迟到子类中。模板方法使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤</p>
+<h2 id="十一、迪米特法则"><a href="#十一、迪米特法则" class="headerlink" title="十一、迪米特法则"></a>十一、迪米特法则</h2><blockquote>
+<p>最小知识原则</p>
+</blockquote>
+<p>如果两个类不必彼此直接通信，那么这两个类就不应当发生直接的相互作用。如果一个类需要调用另一个类的某一个方法的话，可以通过第三者转发这个调用。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://zdon.fun">Zdon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://zdon.fun/2024/02/20/%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">http://zdon.fun/2024/02/20/%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zdon.fun" target="_blank">Zdon</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-UML/">设计模式 UML</a></div><div class="post_share"><div class="social-share" data-image="/img/default_cover03.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/02/09/leetcode-0209/" title="算法题-数组和字符串"><img class="cover" src="/img/top.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">算法题-数组和字符串</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Zdon</div><div class="author-info__description">我来自偶然，像一颗尘土。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/five-555"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/five-555" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:wuzdon@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">一、简单工厂模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">二、策略模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99"><span class="toc-number">3.</span> <span class="toc-text">三、单一职责原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%BC%80%E6%94%BE-%E5%B0%81%E9%97%AD%E5%8E%9F%E5%88%99"><span class="toc-number">4.</span> <span class="toc-text">四、开放-封闭原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99"><span class="toc-number">5.</span> <span class="toc-text">五、依赖倒置原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F"><span class="toc-number">6.</span> <span class="toc-text">六、装饰模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F"><span class="toc-number">7.</span> <span class="toc-text">七、代理模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F"><span class="toc-number">8.</span> <span class="toc-text">八、工厂方法模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">9.</span> <span class="toc-text">九、原型模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E3%80%81%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F"><span class="toc-number">10.</span> <span class="toc-text">十、模板方法模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%B8%80%E3%80%81%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99"><span class="toc-number">11.</span> <span class="toc-text">十一、迪米特法则</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/02/20/%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="大话设计模式"><img src="/img/default_cover03.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="大话设计模式"/></a><div class="content"><a class="title" href="/2024/02/20/%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" title="大话设计模式">大话设计模式</a><time datetime="2024-02-20T07:09:00.000Z" title="发表于 2024-02-20 15:09:00">2024-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/02/09/leetcode-0209/" title="算法题-数组和字符串"><img src="/img/top.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="算法题-数组和字符串"/></a><div class="content"><a class="title" href="/2024/02/09/leetcode-0209/" title="算法题-数组和字符串">算法题-数组和字符串</a><time datetime="2024-02-09T10:07:22.000Z" title="发表于 2024-02-09 18:07:22">2024-02-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/01/30/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" title="进程间的通信方式"><img src="/img/default_cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="进程间的通信方式"/></a><div class="content"><a class="title" href="/2024/01/30/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" title="进程间的通信方式">进程间的通信方式</a><time datetime="2024-01-30T03:27:05.000Z" title="发表于 2024-01-30 11:27:05">2024-01-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/01/26/C-%E4%BD%BF%E7%94%A8zlib%E5%BA%93%E6%9D%A5%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6/" title="C++使用zlib库来压缩文件"><img src="/img/default_cover02.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++使用zlib库来压缩文件"/></a><div class="content"><a class="title" href="/2024/01/26/C-%E4%BD%BF%E7%94%A8zlib%E5%BA%93%E6%9D%A5%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6/" title="C++使用zlib库来压缩文件">C++使用zlib库来压缩文件</a><time datetime="2024-01-26T02:34:44.000Z" title="发表于 2024-01-26 10:34:44">2024-01-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/01/24/%E5%B9%B3%E6%96%B9%E6%A0%B9%E5%80%92%E6%95%B0%E7%AE%97%E6%B3%95/" title="平方根倒数算法"><img src="/img/default_cover04.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="平方根倒数算法"/></a><div class="content"><a class="title" href="/2024/01/24/%E5%B9%B3%E6%96%B9%E6%A0%B9%E5%80%92%E6%95%B0%E7%AE%97%E6%B3%95/" title="平方根倒数算法">平方根倒数算法</a><time datetime="2024-01-24T11:53:09.000Z" title="发表于 2024-01-24 19:53:09">2024-01-24</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/default_cover03.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By Zdon</div><div class="footer_custom_text">没有人是一座孤岛</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'QABC9cDUiFvfbJkVsG3I0mp1-gzGzoHsz',
+      appKey: '7s6lJmCCK7Bczu8Z93wTmEWb',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine@1.5.1/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="true" data-click="false"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.12.0"></script></div></div></body></html>
