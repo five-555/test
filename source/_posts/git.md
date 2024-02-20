@@ -3,6 +3,7 @@ title: Git常见用法
 date: 2024-01-04 12:07:20
 tags: git
 categories: 技术研究
+cover: /img/default_cover01.jpg
 top_img: image-20231204110955462.png
 ---
 

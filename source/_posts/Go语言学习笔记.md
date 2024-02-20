@@ -3,7 +3,7 @@ title: Go语言基本语法
 date: 2023-12-14 17:16:50
 tags: [go语言 并发]
 categories: 学习笔记
-cover:
+cover: /img/default_cover05.jpg
 top_img:
 ---
 
