@@ -1,11 +1,13 @@
 ---
-title: 数据库-Mysql
-date: 2024-02-10 16:00:39
-tags: [Database 数据库 Mysql SQL]
+title: 数据库-MySQL
+tags:
+  - Database 数据库 Mysql SQL
 categories: 技术研究
+date: 2024-02-10 16:00:39
 cover:
 top_img:
 ---
+### 
 
 ## 数据库-Mysql
 
