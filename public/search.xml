@@ -27,8 +27,8 @@
       </tags>
   </entry>
   <entry>
-    <title>GANES101现代计算机图形学入门-01</title>
-    <url>/2023/12/15/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/</url>
+    <title>GAMES101现代计算机图形学入门-01</title>
+    <url>/2023/12/15/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/</url>
     <content><![CDATA[<h2 id="计算机图形学01"><a href="#计算机图形学01" class="headerlink" title="计算机图形学01"></a>计算机图形学01</h2><blockquote>
 <p>应用场景：电影，动画，可视化，家具，模拟，虚拟现实（VR），GUI（图形用户接口），字体</p>
 </blockquote>
@@ -36,7 +36,7 @@
 <li>好的画面：足够亮（全局光照）</li>
 </ul>
 <figure class="highlight armasm"><table><tr><td class="code"><pre><code class="hljs armasm"><span class="hljs-number">1</span>、光栅化	Resterization<br><span class="hljs-number">2</span>、曲线曲面（几何）	Curves <span class="hljs-keyword">and</span> Meshes<br><span class="hljs-number">3</span>、光线追踪	Ray	Tracing<br><span class="hljs-number">4</span>、动画/模拟	Animation/Simulation<br></code></pre></td></tr></table></figure>
-<h3 id="计算机图形学-VS-计算机视觉"><a href="#计算机图形学-VS-计算机视觉" class="headerlink" title="计算机图形学 VS 计算机视觉"></a>计算机图形学 VS 计算机视觉</h3><img src="/2023/12/15/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/image-20231104113151777-17084112899531.png" class="" title="image-20231104113151777">
+<h3 id="计算机图形学-VS-计算机视觉"><a href="#计算机图形学-VS-计算机视觉" class="headerlink" title="计算机图形学 VS 计算机视觉"></a>计算机图形学 VS 计算机视觉</h3><img src="/2023/12/15/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/image-20231104113151777-17084112899531.png" class="" title="image-20231104113151777">
 <ul>
 <li><p>MODEL，计算机画（图形学）</p>
 <p>正向箭头：将三维空间的图形在二维中展示出来，特指图像渲染</p>
@@ -61,31 +61,31 @@
 <p>确定向量的基本方向，大于零同方向，小于零反方向</p>
 </li>
 </ul>
-<img src="/2023/12/15/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/image-20231104150955701-17084112899532.png" class="" title="image-20231104150955701">
+<img src="/2023/12/15/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/image-20231104150955701-17084112899532.png" class="" title="image-20231104150955701">
 <ul>
 <li><p>叉乘的重要性（使用右手螺旋定则可以确定叉乘的方向）</p>
 <p>叉乘可以建立一个三位空间的直角坐标系</p>
 <p>任意的三维空间向量都可以分解到三位的单位向量中</p>
 </li>
 </ul>
-<img src="/2023/12/15/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/image-20231104164704660-17084112899533.png" class="" title="image-20231104164704660">
+<img src="/2023/12/15/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/image-20231104164704660-17084112899533.png" class="" title="image-20231104164704660">
 <p>​        叉乘的代数表示（矩阵相乘）</p>
-<img src="/2023/12/15/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/image-20231104164849274-17084112899534.png" class="" title="image-20231104164849274">
+<img src="/2023/12/15/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/image-20231104164849274-17084112899534.png" class="" title="image-20231104164849274">
 <p><strong>Q&amp;A:判断一个点是否在三角形的内部</strong></p>
 <p>对三角形做逆时针，分别做三条边之间的向量，三个顶点分别于需要判断的点进行叉乘，如AB叉乘AP，如果都大于0，则说明在三角形内部。</p>
 <p>结论比较简单，很容易在计算机中使用公式实现出来。</p>
-<img src="/2023/12/15/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/image-20231104165645532-17084112899535.png" class="" title="image-20231104165645532">
+<img src="/2023/12/15/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/image-20231104165645532-17084112899535.png" class="" title="image-20231104165645532">
 <ul>
 <li><p>矩阵的重要性</p>
 <p>图像转换，旋转，平移，剪切，数乘</p>
 <ul>
 <li><p>矩阵的乘积（第一个矩阵的列数等于第二个矩阵的行数）</p>
-<img src="/2023/12/15/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/image-20231116154858801-17084112899536.png" class="" title="image-20231116154858801">
+<img src="/2023/12/15/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/image-20231116154858801-17084112899536.png" class="" title="image-20231116154858801">
 <p><strong>矩阵的乘积没有任何交换律</strong>，但是有结合律</p>
 </li>
 <li><p>矩阵与向量的乘积（列向量，可以表示为点的坐标）</p>
 <p>可以利用矩阵乘积做一些变化操作（如下：将x，y变化为-x，y）</p>
-<img src="/2023/12/15/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/image-20231116155210293-17084112899537.png" class="" title="image-20231116155210293">
+<img src="/2023/12/15/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/image-20231116155210293-17084112899537.png" class="" title="image-20231116155210293">
 </li>
 <li><p>转置矩阵、单位矩阵（对角矩阵）</p>
 </li>
@@ -97,12 +97,13 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>计算机图形学 GAMES101</tag>
+        <tag>计算机图形学</tag>
+        <tag>GAMES101</tag>
       </tags>
   </entry>
   <entry>
-    <title>GANES101现代计算机图形学入门-02</title>
-    <url>/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/</url>
+    <title>GAMES101现代计算机图形学入门-02</title>
+    <url>/2023/12/16/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/</url>
     <content><![CDATA[<h2 id="计算机图形学02"><a href="#计算机图形学02" class="headerlink" title="计算机图形学02"></a>计算机图形学02</h2><blockquote>
 <p>Transform（变换），图形的变换</p>
 </blockquote>
@@ -111,17 +112,17 @@
 <ul>
 <li><p>1、缩放</p>
 <p>将坐标在向量左边乘一个对角矩阵</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116161524873-17084118809551.png" class="" title="image-20231116161524873">
+<img src="/2023/12/16/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116161524873-17084118809551.png" class="" title="image-20231116161524873">
 </li>
 <li><p>2、反射对称</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116161727694-17084118809562.png" class="" title="image-20231116161727694">
+<img src="/2023/12/16/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116161727694-17084118809562.png" class="" title="image-20231116161727694">
 </li>
 <li><p>3、切变（Shear Matrix）</p>
 <p>水平方向坐标发生改变，竖直方向不变，水平的移动大小，按照Y的当前坐标成正比</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116161842894-17084118809563.png" class="" title="image-20231116161842894">
+<img src="/2023/12/16/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116161842894-17084118809563.png" class="" title="image-20231116161842894">
 </li>
 <li><p>4、旋转</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116164956551-17084118809564.png" class="" title="image-20231116164956551">
+<img src="/2023/12/16/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116164956551-17084118809564.png" class="" title="image-20231116164956551">
 <p>.PNG)</p>
 </li>
 </ul>
@@ -131,17 +132,17 @@
 <p>齐次坐标的矩阵操作，可以叫做仿射变换</p>
 </blockquote>
 <p>增加维度以后，通过与新增加列的运算就可以达到平移的变换</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116165833300-17084118809565.png" class="" title="image-20231116165833300">
+<img src="/2023/12/16/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116165833300-17084118809565.png" class="" title="image-20231116165833300">
 <ul>
 <li><p>Q：Why？将二维的点，增加一个1，将二维的向量，增加一个0</p>
 <p>1、通过增加的维度可以标识当前的坐标表示点还是表示向量。可以保证向量具有平移不变性</p>
 <p>2、最后一个维度的运算正好表示运算结果的性质</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116170520355-17084118809566.png" class="" title="image-20231116170520355">
+<img src="/2023/12/16/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116170520355-17084118809566.png" class="" title="image-20231116170520355">
 <p>3、点+点，得到的结果为两个点的终点，因为第三维为2，与两点之和相除便是中点</p>
 </li>
 </ul>
 <p><strong>齐次坐标下的变换操作矩阵</strong></p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116171041924-17084118809567.png" class="" title="image-20231116171041924">
+<img src="/2023/12/16/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116171041924-17084118809567.png" class="" title="image-20231116171041924">
 <ul>
 <li><p>逆变换</p>
 <p>乘以变化矩阵的逆矩阵，可以变换成原来的图片</p>
@@ -153,25 +154,25 @@
 <ul>
 <li>将一个变化还原，或者以任意一个点为中心进行变化，可以先移动到原点，再进行操作</li>
 </ul>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116200444279-17084118809568.png" class="" title="image-20231116200444279">
+<img src="/2023/12/16/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116200444279-17084118809568.png" class="" title="image-20231116200444279">
 <h3 id="三维变换"><a href="#三维变换" class="headerlink" title="三维变换"></a>三维变换</h3><ul>
 <li><p>三维点和三维向量</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116201112834-17084118809569.png" class="" title="image-20231116201112834">
+<img src="/2023/12/16/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116201112834-17084118809569.png" class="" title="image-20231116201112834">
 </li>
 <li><p>三维变换齐次矩阵</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116201139440-170841188095610.png" class="" title="image-20231116201139440">
+<img src="/2023/12/16/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231116201139440-170841188095610.png" class="" title="image-20231116201139440">
 </li>
 <li><p>旋转</p>
 <p>绕哪个轴旋转哪个轴保持不变</p>
 <p>对于一般性的旋转，可以使用简单旋转的组合来完成</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231118142130480-170841188095611.png" class="" title="image-20231118142130480">
+<img src="/2023/12/16/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231118142130480-170841188095611.png" class="" title="image-20231118142130480">
 </li>
 <li><p>使用旋转公式</p>
 <p>旋转角度定义为a</p>
 <p>旋转轴定义为n</p>
 <p>其中<strong>I</strong>表示为单位矩阵</p>
 <p>表示为，沿着旋转轴n旋转a的角度得到的旋转矩阵</p>
-<img src="/2023/12/16/GANES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231118142833380-170841188095612.png" class="" title="image-20231118142833380">
+<img src="/2023/12/16/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-02/image-20231118142833380-170841188095612.png" class="" title="image-20231118142833380">
 </li>
 </ul>
 <h3 id="观测变换（Viewing-transformation）"><a href="#观测变换（Viewing-transformation）" class="headerlink" title="观测变换（Viewing transformation）"></a>观测变换（Viewing transformation）</h3><blockquote>
@@ -182,7 +183,908 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>计算机图形学 GAMES101</tag>
+        <tag>计算机图形学</tag>
+        <tag>GAMES101</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>数据库-MySQL</title>
+    <url>/2024/02/10/database-mysql/</url>
+    <content><![CDATA[<h2 id="数据库-Mysql"><a href="#数据库-Mysql" class="headerlink" title="数据库-Mysql"></a>数据库-Mysql</h2><blockquote>
+<p>Mysql数据库的关键词：事务、存储引擎、索引、SQL优化、<strong>锁、日志、主从复制、读写分离、分库分表</strong></p>
+</blockquote>
+<img src="/2024/02/10/database-mysql/image-20240210160421874.png" class="" title="image-20240210160421874">
+<h2 id="数据库基础"><a href="#数据库基础" class="headerlink" title="数据库基础"></a>数据库基础</h2><h3 id="1、Mysql概述"><a href="#1、Mysql概述" class="headerlink" title="1、Mysql概述"></a>1、Mysql概述</h3><p>关系型数据库：建立在关系模型基础上，由多张互连接的二维表组成的数据库</p>
+<p>特点：使用表存储数据，便于维护；使用sql语句操作，使用方便</p>
+<p><strong>MySQL数据模型</strong></p>
+<blockquote>
+<p>1、客户端通过与数据库管理系统进行连接</p>
+<p>2、使用sql语句通过数据库管理系统对指定的数据库进行增删改查</p>
+<p>3、一个数据库模型中可以对多个数据库进行管理，一个数据库中可以拥有多个表</p>
+</blockquote>
+<p>// TODO数据库模型的图</p>
+<h3 id="2、SQL"><a href="#2、SQL" class="headerlink" title="2、SQL"></a>2、SQL</h3><p><strong>SQL分类</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>全称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DDL</td>
+<td>Data Definition Language</td>
+<td>数据库定义语句，定义数据库对象，数据库，表，字段等</td>
+</tr>
+<tr>
+<td>DML</td>
+<td>Data Manipulation Language</td>
+<td>数据库操作语句，用于对数据库表中的数据进行增增删改</td>
+</tr>
+<tr>
+<td>DQL</td>
+<td>Data Query Language</td>
+<td>数据库查询语句，查询数据库表中的记录</td>
+</tr>
+<tr>
+<td>DCL</td>
+<td>Data Control Language</td>
+<td>数据库控制语句，创建数据库用户，控制数据库的访问权限</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li><h4 id="DDL"><a href="#DDL" class="headerlink" title="DDL"></a>DDL</h4><p><strong>数据库层次</strong></p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 查询所有数据库表格<br>SHOW DATABASES;<br># 查询当前所在的数据库<br>SELECT DATABASE();<br># 创建数据库，方括号可以省略<br>CREATE DATABASE [IF NOT EXISTS] 数据库名 [COLLATE 排序规则]<br># 删除数据库<br>DROP DATABASE [IF EXISTS] 数据库名<br># 使用数据库，切换到数据库当中<br>USE 数据库名<br></code></pre></td></tr></table></figure>
+<p>​        表结构</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 查看所有表<br>SHOW TABLES;<br># 查询表结构<br>DESC 表名<br># 查询指定表的建表语句<br>SHOW CREATE TABLE 表名;<br></code></pre></td></tr></table></figure>
+<p>​        MySQL中的数据类型</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>描述</th>
+<th>大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TINYINT</td>
+<td>微小整数，有符号或无符号（UNSIGNED）</td>
+<td>1 字节</td>
+</tr>
+<tr>
+<td>SMALLINT</td>
+<td>小整数，有符号或无符号</td>
+<td>2 字节</td>
+</tr>
+<tr>
+<td>MEDIUMINT</td>
+<td>中等整数，有符号或无符号</td>
+<td>3 字节</td>
+</tr>
+<tr>
+<td>INT 或 INTEGER</td>
+<td>整数，有符号或无符号</td>
+<td>4 字节</td>
+</tr>
+<tr>
+<td>BIGINT</td>
+<td>大整数，有符号或无符号</td>
+<td>8 字节</td>
+</tr>
+<tr>
+<td>FLOAT(M,D)</td>
+<td>单精度浮点数，M 是总位数，D 是小数位数</td>
+<td>4 字节</td>
+</tr>
+<tr>
+<td>DOUBLE(M,D)</td>
+<td>双精度浮点数，M 是总位数，D 是小数位数</td>
+<td>8 字节</td>
+</tr>
+<tr>
+<td>DECIMAL(M,D)</td>
+<td>定点数，M 是总位数，D 是小数位数</td>
+<td>取决于 M 和 D</td>
+</tr>
+<tr>
+<td>DATE</td>
+<td>日期 YYYY-MM-DD</td>
+<td>3 字节</td>
+</tr>
+<tr>
+<td>TIME</td>
+<td>时间 HH:MM:SS</td>
+<td>3 字节</td>
+</tr>
+<tr>
+<td>DATETIME</td>
+<td>日期和时间</td>
+<td>8 字节</td>
+</tr>
+<tr>
+<td>TIMESTAMP</td>
+<td>时间戳</td>
+<td>4 字节</td>
+</tr>
+<tr>
+<td>CHAR(N)</td>
+<td><strong>定长</strong>字符串，最大长度为 N</td>
+<td>最大 255 字节</td>
+</tr>
+<tr>
+<td>VARCHAR(N)</td>
+<td><strong>变长</strong>字符串，最大长度为 N</td>
+<td>最大 65,535 字节</td>
+</tr>
+<tr>
+<td>TEXT</td>
+<td>变长文本，最大长度为 65,535 字节</td>
+<td>最大 65,535 字节</td>
+</tr>
+<tr>
+<td>BLOB</td>
+<td>二进制大对象，最大长度为 65,535 字节</td>
+<td>最大 65,535 字节</td>
+</tr>
+<tr>
+<td>ENUM</td>
+<td>枚举类型</td>
+<td>1 或 2 字节，取决于成员数量</td>
+</tr>
+<tr>
+<td>SET</td>
+<td>集合类型</td>
+<td>1、2、3、4 或 8 字节，取决于成员数量</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>创建表：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql">CREATE TABLE member(<br>    number INT COMMENT &#x27;编号&#x27;,<br>    id CHAR(10) COMMENT &#x27;员工工号&#x27;,<br>    name VARCHAR(10) COMMENT &#x27;员工姓名&#x27;,<br>    gender CHAR(4) COMMENT &#x27;员工性别&#x27;,<br>    age INT UNSIGNED COMMENT &#x27;年龄&#x27;,<br>    id_number CHAR(18) COMMENT &#x27;身份证号&#x27;,<br>    time DATE COMMENT &#x27;入职时间&#x27;<br>)<br></code></pre></td></tr></table></figure>
+<p><strong>表结构的修改</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 添加字段<br>ALTER TABLE 表名 ADD 字段名 类型(长度) [COMMENT 注释][约束];<br><br># 修改字段和字段类型<br>ALTER TABLE 表明 CHANGE 旧字段名 新字段名 类型(长度) [COMMENT 注释][约束]<br><br># 删除字段<br>ALTER TABLE 表名 DROP 字段名;<br><br># 修改表名<br>ALTER TABLE 表名 RENAME TO 新表名;<br><br># 删除表<br>DROP TABLE [IF EXSITS] 表名;<br># 删除指定表并重新创建该表，清空数据<br>TRUNCATE TABLE 表名;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><h4 id="DML（数据操作语言）"><a href="#DML（数据操作语言）" class="headerlink" title="DML（数据操作语言）"></a>DML（数据操作语言）</h4></li>
+</ul>
+<p><strong>添加数据</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 给指定字段添加数据<br>INSERT INTO 表名(字段名1, 字段名2, ...) VALUES (值1, 值2, ...);<br><br># 给全部字段添加数据<br>INSERT INTO 表名 VALUES(值1, 值2, ...);<br></code></pre></td></tr></table></figure>
+<p><strong>修改数据</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 修改数据<br>UPDATE 表名 SET 字段名1 = 值1, 字段名2 = 值2, ...[WHERE 条件];<br></code></pre></td></tr></table></figure>
+<p><strong>删除数据</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 删除数据<br>DELETE FROM 表名 [WHERE 条件];<br></code></pre></td></tr></table></figure>
+<ul>
+<li><h4 id="DQL"><a href="#DQL" class="headerlink" title="DQL"></a>DQL</h4><blockquote>
+<p>数据库查询语言，用来查询数据库中的表的记录</p>
+<p>SELECT后面加上\G可以将某一行转化为一列查看</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>语法结构</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql">SELECT<br>	字段列表<br>FROM<br>	表名列表<br>WHERE<br>	条件列表(条件查询)<br>GROUP BY<br>	分组字段列表(分组查询)<br>HAVING<br>	分组后条件列表<br>ORDER BY<br>	排序字段列表<br>LIMIT<br>	分页参数<br></code></pre></td></tr></table></figure>
+<p><strong>基本查询</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql">SELECT 字段1 [AS 别名]，字段2 [AS 别名]， FROM 表名;<br><br># 去重<br>SELECT DISTINCT 字段列表 FROM 表名;<br></code></pre></td></tr></table></figure>
+<p><strong>条件查询</strong></p>
+<p>条件运算符</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">比较运算符</th>
+<th style="text-align:center">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">&lt;&gt;或!=</td>
+<td style="text-align:center">不等于</td>
+</tr>
+<tr>
+<td style="text-align:center">BETWEEN … AND …</td>
+<td style="text-align:center">在某个范围之内</td>
+</tr>
+<tr>
+<td style="text-align:center">IN(…)</td>
+<td style="text-align:center">在in之后的列表中的值，多选一</td>
+</tr>
+<tr>
+<td style="text-align:center">LIKE 占位符</td>
+<td style="text-align:center">模糊匹配(_匹配单个字符，%匹配任意个字符)</td>
+</tr>
+<tr>
+<td style="text-align:center">IS NULL</td>
+<td style="text-align:center">是NULL</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>聚和函数</strong></p>
+<blockquote>
+<p>将一列数据作为一个整体，进行纵向计算。</p>
+</blockquote>
+<p>所有的null值不参与聚合函数的计算</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th style="text-align:center">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">count</td>
+<td style="text-align:center">统计数量</td>
+</tr>
+<tr>
+<td style="text-align:center">max</td>
+<td style="text-align:center">最大值</td>
+</tr>
+<tr>
+<td style="text-align:center">min</td>
+<td style="text-align:center">最小值</td>
+</tr>
+<tr>
+<td style="text-align:center">avg</td>
+<td style="text-align:center">平均值</td>
+</tr>
+<tr>
+<td style="text-align:center">sum</td>
+<td style="text-align:center">求和</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql">SELECT 聚合函数(字段列表) FROM 表名;<br></code></pre></td></tr></table></figure>
+<p><strong>分组查询</strong></p>
+<blockquote>
+<p>在where中不可以使用聚合函数，在having中可以使用聚合函数</p>
+<p>分组之前过滤用where，分组之后过滤条件用having</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql">SELECT 字段列表	FROM 表名 [WHERE 条件] GROUP BY 分组字段名 [HAVING 分组后过滤条件];<br></code></pre></td></tr></table></figure>
+<p>执行顺序：where &gt; 聚合函数 &gt; having</p>
+<p><strong>排序查询</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql">SELECT 字段列表 FROM 表名 ORDER BY 字段1 排序方式1，字段2 排序方式2<br></code></pre></td></tr></table></figure>
+<p>排序方式： ASC升序（默认），DESC降序</p>
+<p><strong>分页查询</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql">SELECT 字段列表 FROM 表名 LIMIT 起始索引,查询记录数;<br></code></pre></td></tr></table></figure>
+<p>显示从起始索引开始的记录数条的查询结果</p>
+<p><strong>DQL执行顺序</strong></p>
+<p>FROM &gt; WHERE &gt; GROUP BY &gt; SELECT &gt; ORDER BY &gt; LIMIT</p>
+<ul>
+<li><h4 id="DCL"><a href="#DCL" class="headerlink" title="DCL"></a>DCL</h4></li>
+</ul>
+<blockquote>
+<p>数据控制语句，用来管理数据库用户，控制数据库访问权限</p>
+</blockquote>
+<p><strong>DCL用户管理</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 查询用户<br>USE mysql;<br>SELECT * FROM user;<br><br># 创建用户，主机名换成&quot;%&quot;表示可以在任意主机访问数据库<br>CREATE USER &#x27;用户名&#x27;@&#x27;主机名&#x27; IDENTIFIED BY &#x27;密码&#x27;;<br><br># 修改用户密码<br>ALTER USER &#x27;用户名&#x27;@&#x27;主机名&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;新密码&#x27;<br><br># 删除用户<br>DROP USER &#x27;用户名&#x27;@&#x27;主机名&#x27;;<br></code></pre></td></tr></table></figure>
+<p><strong>权限控制</strong></p>
+<p>常用权限</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">权限</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">ALL, ALL PRIVILEGES</td>
+<td style="text-align:center">所有权限</td>
+</tr>
+<tr>
+<td style="text-align:center">SELECT</td>
+<td style="text-align:center">查询数据</td>
+</tr>
+<tr>
+<td style="text-align:center">INSERT</td>
+<td style="text-align:center">插入数据</td>
+</tr>
+<tr>
+<td style="text-align:center">UPDATE</td>
+<td style="text-align:center">修改数据</td>
+</tr>
+<tr>
+<td style="text-align:center">DELETE</td>
+<td style="text-align:center">删除数据</td>
+</tr>
+<tr>
+<td style="text-align:center">ALTER</td>
+<td style="text-align:center">修改表</td>
+</tr>
+<tr>
+<td style="text-align:center">DROP</td>
+<td style="text-align:center">删除数据库/表/视图</td>
+</tr>
+<tr>
+<td style="text-align:center">CREATE</td>
+<td style="text-align:center">创建数据库/表</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 查询权限<br>SHOW GRANTS FOR &#x27;用户名&#x27;@&#x27;主机名&#x27;;<br><br># 授予权限<br>GRANT 权限列表 ON 数据库名.表名(*.*所有表) TO &#x27;用户名&#x27;@&#x27;主机名&#x27;;<br><br># 撤销权限<br>REVOKE 权限列表 ON 数据库名.表名 FROM &#x27;用户名&#x27;@&#x27;主机名&#x27;;<br></code></pre></td></tr></table></figure>
+<h3 id="3、函数"><a href="#3、函数" class="headerlink" title="3、函数"></a>3、函数</h3><ul>
+<li><strong>字符串函数</strong></li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th style="text-align:center">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">CONCAT(S1,S2, … Sn)</td>
+<td style="text-align:center">字符串拼接，将S1-Sn拼接成一个字符串</td>
+</tr>
+<tr>
+<td style="text-align:center">LOWER(str)</td>
+<td style="text-align:center">将字符串str全部转为小写</td>
+</tr>
+<tr>
+<td style="text-align:center">UPPER(str)</td>
+<td style="text-align:center">将字符串全部转为大写</td>
+</tr>
+<tr>
+<td style="text-align:center">LPAD(str, n, pad)</td>
+<td style="text-align:center">左填充，用字符串pad对str的左边进行填充，达到n个字符串长度</td>
+</tr>
+<tr>
+<td style="text-align:center">RPAD(str, n,  pad)</td>
+<td style="text-align:center">右填充</td>
+</tr>
+<tr>
+<td style="text-align:center">TRIM(str)</td>
+<td style="text-align:center">去掉字符串头部和尾部的空格</td>
+</tr>
+<tr>
+<td style="text-align:center">SUBSTRING(str, start, len)</td>
+<td style="text-align:center">返回从字符串str从start起的len长度的字符串</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql">SELECT 函数;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong>数值函数</strong></li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th style="text-align:center">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">CEIL(x)</td>
+<td style="text-align:center">向上取整</td>
+</tr>
+<tr>
+<td style="text-align:center">FLOOR(x)</td>
+<td style="text-align:center">向下取整</td>
+</tr>
+<tr>
+<td style="text-align:center">MOD(x, y)</td>
+<td style="text-align:center">返回x/y的模</td>
+</tr>
+<tr>
+<td style="text-align:center">RAND()</td>
+<td style="text-align:center">返回0~1内的随机数</td>
+</tr>
+<tr>
+<td style="text-align:center">ROUND(x, y)</td>
+<td style="text-align:center">求参数x的四舍五入的值，保留y位小数</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li><strong>日期函数</strong></li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th style="text-align:center">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">CURDATE()</td>
+<td style="text-align:center">返回当前日期</td>
+</tr>
+<tr>
+<td style="text-align:center">CURTIME()</td>
+<td style="text-align:center">返回当前时间</td>
+</tr>
+<tr>
+<td style="text-align:center">NOW()</td>
+<td style="text-align:center">返回当前日期和时间</td>
+</tr>
+<tr>
+<td style="text-align:center">YEAR(date)</td>
+<td style="text-align:center">获取指定date的年份</td>
+</tr>
+<tr>
+<td style="text-align:center">MONTH(date)</td>
+<td style="text-align:center">获取指定date的月份</td>
+</tr>
+<tr>
+<td style="text-align:center">DAY(date)</td>
+<td style="text-align:center">获取指定date的日期</td>
+</tr>
+<tr>
+<td style="text-align:center">DATE_ADD(date, INTERVAL expr type)</td>
+<td style="text-align:center">返回上一个日期加上时间间隔expr以后的时间值，type(year,month,day)指定年月天</td>
+</tr>
+<tr>
+<td style="text-align:center">DATEDIFF(date1, date2)</td>
+<td style="text-align:center">返回起始时间date1和结束时间date2之间的天数，第一个时间减去第二个时间</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li><strong>流程函数</strong></li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">函数</th>
+<th style="text-align:center">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">IF(value, t. f)</td>
+<td style="text-align:center">如果value为true，返回t，否则返回f</td>
+</tr>
+<tr>
+<td style="text-align:center">IFNULL(value1, value2)</td>
+<td style="text-align:center">如果value1不为空，返回value1，否则返回value2</td>
+</tr>
+<tr>
+<td style="text-align:center">CASE WHEN [val] THEN [res1] … ELSE [ default ] END</td>
+<td style="text-align:center">如果val1为true，返回res1，…否则返回default默认值</td>
+</tr>
+<tr>
+<td style="text-align:center">CASE [expr] WHEN [val1] THEN [res1] … ELSE [default] END</td>
+<td style="text-align:center">如果expr的值等于val1，返回res1，…否则返回default默认值</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="4、约束"><a href="#4、约束" class="headerlink" title="4、约束"></a>4、约束</h3><p>作用于表中字段上的规则，用于限制存储在表中的数据</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">约束</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">关键字</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">非空约束</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">唯一约束</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">主键约束</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">默认约束</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">检查约束</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">外键约束</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="5、多表查询"><a href="#5、多表查询" class="headerlink" title="5、多表查询"></a>5、多表查询</h3><ul>
+<li><p><strong>多表关系</strong></p>
+<p>一对多：在多的一方建立外键，指向一的一方的主键</p>
+</li>
+</ul>
+<p>​        多对多：建立第三张中间表，中间表至少包含两个外键，分别关联两方的主键</p>
+<p>​        一对一：用于做单表拆分，基础字段放在一张表，详情字段放在另一张表。在任意一方加入外键，关联另一方的主键，并设置外键为唯一（UNIQUE）</p>
+<ul>
+<li><p><strong>多表查询</strong></p>
+<ul>
+<li><p>内连接</p>
+<blockquote>
+<p>相当于查询A、B交集部分数据</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 隐式内连接<br>SELECT 字段列表 FROM 表1，表2 WHERE 条件...;<br><br># 显示内连接<br>SELECT 字段列表 FROM 表1 [INNER] JOIN 表2 ON 连接条件;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>外连接</p>
+<blockquote>
+<p>左外连接：查询左表所有数据，以及两张表交集部分数据，将左表的数据和右表的部分数据连接起来</p>
+<p>右外连接：查询右表所有数据，以及两张表交集部分数据</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 左外连接，表1所有数据以及和表2交集部分的数据<br>SELECT 字段列表 FROM 表1 LEFT [OUTER] JOIN 表2 ON 条件;<br><br># 右外连接，表2所有数据以及和表1交集部分的数据<br>SELECT 字段列表 FROM 表1 RIGHT [OUTER] JOIN 表2 ON 条件;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>自连接</p>
+<blockquote>
+<p>自连接：当前表与自身的连接查询，自连接必须使用表别名</p>
+</blockquote>
+</li>
+<li><p>联合查询-union，union all</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 把多次查询的结果合并起来，形成一个新的查询结果集<br># ALL去掉以后会对结果进行去重<br>SELECT 字段列表 表A<br>UNION [ALL]<br>SELECT 字段列表 表B;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>子查询</strong></p>
+<ul>
+<li><p>标量子查询，子查询返回一个标量</p>
+</li>
+<li><p>列子查询，子查询返回一列</p>
+<p>| 操作符 |                 描述                 |<br>| :——: | :—————————————————: |<br>|   IN   |     在指定的集合范围之内，多选一     |<br>| NOT IN |          不在指定的范围之内          |<br>|  ANY   | 子查询返回列表中，有任意一个满足即可 |<br>|  SOME  |              与ANY等同               |<br>|  ALL   |   子查询返回列表的所有值都必须满足   |</p>
+</li>
+<li><p>行子查询，子查询返回的结果是一行</p>
+<p>此时column1可以使用(column1， column2)聚合成多个参数</p>
+<p>操作符：=、&lt;&gt;、IN、NOT IN</p>
+</li>
+<li><p>表子查询，子查询的返回结果是一个表，可以和行子查询加上列子查询的操作符使用，表可以放到from后面</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 对于子查询，可以将问题拆解成多个不同的查询步骤<br>SELECT * FROM t1 WHERE column1 = (SELECT column1 FROM t2);<br></code></pre></td></tr></table></figure>
+<h3 id="6、事务"><a href="#6、事务" class="headerlink" title="6、事务"></a>6、事务</h3><blockquote>
+<p>一组操作的集合，是一个不可分割的工作单位，事务会把所有的操作作为一个整体一起向系统提交或撤销操作请求，这些操作要么<strong>同时成功，要么同时失败</strong></p>
+<p>默认Mysql的事务是自动提交的，当执行一条DML语句，Mysql会立即隐式的提交事务</p>
+</blockquote>
+<ul>
+<li><strong>事务操作</strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 查看/设置事务提交方式<br>SELECT @@autocommit;<br># 事务设置为手动提交<br>SET @@autocommit = 0;<br><br># 提交事务<br>COMMIT;<br><br># 回滚事务<br>ROLLBACK;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 不修改事务的提交方式操作事务<br># 开启事务<br>START TRANSACTION 或 BEGIN;<br><br># 提交事务<br>COMMIT;<br><br># 回滚事务<br>ROLLBACK;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>事务四大特性</strong></p>
+<ul>
+<li>原子性(Atomicity)：事务时不可分割的最小操作单元，要么全部成功，要么全部失败</li>
+<li>一致性(Consistency)：事务完成时，必须使所有的数据都保持一致状态</li>
+<li>隔离性(Isolation)：数据库系统提供的隔离机制，保证事务在不受外部并发操作影响的独立环境下运行</li>
+<li>持久性(Durability)：事务一旦提交或者回滚，它对数据库中的数据改变就是永久的</li>
+</ul>
+</li>
+<li><p><strong>并发事务问题</strong></p>
+<p>|    问题    |                             描述                             |<br>| :————: | :—————————————————————————————: |<br>|    脏读    |            一个事务读到另一个事务还没有提交的数据            |<br>| 不可重复读 | 一个事务先后读取同一条记录，但两次读取的数据不同，称为不可重复读 |<br>|    幻读    | 一个事务按照条件查询数据时，没有对应的数据行，但是在插入数据时，又发现这一行数据已经存在 |</p>
+</li>
+<li><p><strong>事务隔离级别</strong></p>
+<blockquote>
+<p>读未提交、读已提交、可重复读、串行化</p>
+<p>√表示会出现这个问题，×表示不会出现这个问题</p>
+</blockquote>
+<p>|     隔离级别     | 脏读 | 不可重复读 | 幻读 |<br>| :———————: | :—: | :————: | :—: |<br>| Read uncommitted |  √   |     √      |  √   |<br>|  Read committed  |  ×   |     √      |  √   |<br>| Repeatable Read  |  ×   |     ×      |  √   |<br>|   Serializable   |  ×   |     ×      |  ×   |</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 查看事务的隔离级别<br>SELECT @@TRANSACTION_ISOLATION;<br><br># 设置事务隔离级别<br>SET [SESSION(只对当前窗口有效)|GLOBAL] TRANSACTION ISOLATION LEVEL &#123;隔离级别&#125;<br></code></pre></td></tr></table></figure>
+<p>事务的隔离界别越高，数据越安全，但是性能越低</p>
+</li>
+</ul>
+<h2 id="数据库进阶"><a href="#数据库进阶" class="headerlink" title="数据库进阶"></a>数据库进阶</h2><h3 id="1、存储引擎"><a href="#1、存储引擎" class="headerlink" title="1、存储引擎"></a>1、存储引擎</h3><ul>
+<li><p>Mysql体系结构 </p>
+<p>连接层：完成一些类似于连接处理、授权认证及相关的安全方案</p>
+<p>服务层：主要完成大多数的核心服务功能</p>
+<p>引擎层：负责mysql中数据的存储和提取，服务器通过API和存储引擎进行通信</p>
+<p>存储层：将数据存储在文件系统之上，并完成与存储引擎的交互</p>
+<img src="/2024/02/10/database-mysql/Mysql.png" class="" title="Mysql">
+</li>
+<li><p>存储引擎</p>
+<blockquote>
+<p>存储引擎就是存储数据、建立索引、更新/查询数据等技术的实现方式。存储引擎时基于表的，而不是基于库的。一个数据库的不同的表可以选择不同的存储引擎</p>
+<p>Mysql默认InnoDB</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 查询支持的存储引擎<br>show engines;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>InnoDB</p>
+<ul>
+<li>DML操作遵循ACID模型，支持事务</li>
+<li>行级锁，提高并发访问性能</li>
+<li>支持外键，保证事务的完整性和正确性</li>
+</ul>
+<p>文件：每个表对应一个.ibd文件，代表表空间文件，可以通过命令<code>idb2sdi 文件名</code>查看表结构json文件格式</p>
+<img src="/2024/02/10/database-mysql/image-20240216162915509.png" class="" title="image-20240216162915509">
+</li>
+<li><p>MyISAM</p>
+<ul>
+<li>不支持事务，不支持外键</li>
+<li>支持表锁、不支持行锁</li>
+<li>访问速度快</li>
+</ul>
+<p>文件.MYD（数据），.MYI（索引），.sdi（表结构）</p>
+</li>
+<li><p>Memory</p>
+<ul>
+<li>表数据存储在内存当中，收到硬件问题或断电影响只能作为临时表或者缓存使用</li>
+<li>内存存放</li>
+<li>hash索引（默认）</li>
+</ul>
+</li>
+</ul>
+<img src="/2024/02/10/database-mysql/image-20240216163439353.png" class="" title="image-20240216163439353">
+<ul>
+<li><p>存储引擎选择</p>
+<p>InnoDB：如果对事务的完整性有比较高的要求，在并发情况下要求事务的一致性，数据操作除了插入和查询意外，还包括很多的更新、删除操作，InnoDB引擎比较合适</p>
+<p>MyISAM：如果应用是以读操作和插入操作为主，只有很少的更新和删除操作，并且对事务的完整性和并发现要求不是很高。<strong>这个场景被Nosql数据库MongoDB替代了</strong></p>
+<p>MEMORY：将所有数据保存在内存当中，访问速度快，通常用于临时表以及缓存。MEMORY对表的大小有限制，太大的表无法缓存在内存中。<strong>这个场景被Redis替代了</strong></p>
+</li>
+</ul>
+<h3 id="2、索引"><a href="#2、索引" class="headerlink" title="2、索引"></a>2、索引</h3><ul>
+<li><p><strong>索引概述</strong></p>
+<ul>
+<li>索引的结构</li>
+</ul>
+</li>
+<li><h4 id="索引分类"><a href="#索引分类" class="headerlink" title="索引分类"></a><strong>索引分类</strong></h4></li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">分类</th>
+<th style="text-align:center">含义</th>
+<th style="text-align:center">特点</th>
+<th style="text-align:center">关键字</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">主键索引</td>
+<td style="text-align:center">针对于表中主键创建的索引</td>
+<td style="text-align:center">默认自动创建，只能有一个</td>
+<td style="text-align:center">PRIMARY</td>
+</tr>
+<tr>
+<td style="text-align:center">唯一索引</td>
+<td style="text-align:center">避免同一个表中某数据列中的值重复</td>
+<td style="text-align:center">可以有多个</td>
+<td style="text-align:center">UNIQUE</td>
+</tr>
+<tr>
+<td style="text-align:center">常规索引</td>
+<td style="text-align:center">快速定位特定数据</td>
+<td style="text-align:center">可以有多个</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">全文索引</td>
+<td style="text-align:center">全文索引查找的是文本中通过的关键词</td>
+<td style="text-align:center">可以有多个</td>
+<td style="text-align:center">FULLTEXT</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>按照索引的存储形式分类</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">分类</th>
+<th style="text-align:center">含义</th>
+<th style="text-align:center">特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">聚集索引</td>
+<td style="text-align:center">将数据存储与索引放到了一块</td>
+<td style="text-align:center">必须有，而且只有一个</td>
+</tr>
+<tr>
+<td style="text-align:center">二级索引</td>
+<td style="text-align:center">将数据与索引分开存储，索引结构的叶子节点关联的是对应的主键</td>
+<td style="text-align:center">可以存在多个</td>
+</tr>
+</tbody>
+</table>
+</div>
+<img src="/2024/02/10/database-mysql/image-20240218203730285.png" class="" title="image-20240218203730285">
+<ul>
+<li><h4 id="索引语法"><a href="#索引语法" class="headerlink" title="索引语法"></a><strong>索引语法</strong></h4></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 创建索引<br># 一个索引可以关联多行，如果关联多行称为联合索引<br>CREATE [UNIQUE|FULLTEXT] INDEX index_name ON table_name (index_col_name, )<br><br># 查看索引<br>SHOW INDEX FROM table_name;<br><br># 删除索引<br>DROP INDEX index_name ON table_name;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><h4 id="SQL性能分析"><a href="#SQL性能分析" class="headerlink" title="SQL性能分析"></a><strong>SQL性能分析</strong></h4><blockquote>
+<p>使用于select的优化</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># SQL执行频率，查看当前数据库语句的访问频率<br>SHOW [session|global] STATUS<br># Com七个下划线，模糊匹配<br>SHOW GLOBAL STATUS LIKE &#x27;Com_______&#x27;<br></code></pre></td></tr></table></figure>
+<p><strong>SQL语句的频率</strong></p>
+<img src="/2024/02/10/database-mysql/image-20240218204502697.png" class="" title="image-20240218204502697">
+<p><strong>慢查询日志</strong></p>
+<blockquote>
+<p>慢查询日志记录了所有执行时间超过指定参数(long_query_time，单位：秒，默认10)的所有SQL语句的日志</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 查看是否开启，日志文件默认在/var/lib/mysql里面<br>SHOW VARIABLES LIKE &#x27;slow_query_log&#x27;;<br><br># 修改/etc/my.cnf中配置开启，配置时间<br>slow_query_log=1   <br>long_query_time=2<br></code></pre></td></tr></table></figure>
+<p><strong>profile详情</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 查看是否支持prifile<br>SELECT @@have_profiling;<br><br># 设置为开<br>SET profiling=1;<br><br># 查看profile<br>SHOW PROFILES;<br></code></pre></td></tr></table></figure>
+<p>执行完SQL语句以后，通过以下指令查看执行耗时情况</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 查看每一条SQL耗时基本情况<br>SHOW PROFILES;<br><br># 查看指定query_id的SQL语句各个阶段的耗时情况<br>SHOW PROFILE FOR QUERY query_id;<br><br># 查看指定SQL语句的CPU使用情况<br>SHOW PROFILE CPU FOR QUERY query_id;<br></code></pre></td></tr></table></figure>
+<p><strong>explain执行计划</strong></p>
+<blockquote>
+<p>EXPLAIN或者DESC命令获取Mysql如何执行SELECT语句的信息，包括在SELECT语句执行过程中表如何连接和连接的顺序</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql">EXPLAIN SELECT SQL语句;<br></code></pre></td></tr></table></figure>
+<img src="/2024/02/10/database-mysql/image-20240218211138993.png" class="" title="image-20240218211138993">
+<p>表头的含义：</p>
+<img src="/2024/02/10/database-mysql/image-20240218212814126.png" class="" title="image-20240218212814126">
+<img src="/2024/02/10/database-mysql/image-20240218212115878.png" class="" title="image-20240218212115878">
+<figure class="highlight txt"><table><tr><td class="code"><pre><code class="hljs txt">type<br>const	以主键或以唯一的列作为索引扫描<br>ref		非唯一的值作为查询索引<br>index	用了索引，但是会对整个索引进行遍历<br>all		全表扫描<br></code></pre></td></tr></table></figure>
+<ul>
+<li><h4 id="索引使用"><a href="#索引使用" class="headerlink" title="索引使用"></a><strong>索引使用</strong></h4></li>
+</ul>
+<p><strong>联合索引</strong></p>
+<p>使用要遵循<strong>最左前缀法则</strong>：查询<strong>从索引的最左列开始</strong>，并且不跳过索引中的列。如果跳跃某一列，索引将部分失效（后面的字段索引失效）。</p>
+<p><strong>范围查询</strong>：联合索引中出现范围查询（&gt;,&lt;)，范围查询右侧的列索引失效。但是使用大于等于和小于等于索引并不会失效。</p>
+<p>例子</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># student有联合索引(id,name,age)<br># 1、索引都可以使用<br>select * from student where id = 1 and name = &quot;Lili&quot; and age = 20;<br><br># 2、索引name，age失效<br>select * from student where id = 1 and age = 20;<br><br># 范围查询<br># name和age索引均失效<br>select * from student where id &gt; 1 and name = &quot;Lili&quot; and age = 20;<br></code></pre></td></tr></table></figure>
+<p><strong>索引失效</strong></p>
+<p>索引列操作：不要在索引上进行列操作，否则索引会失效</p>
+<p>字符串类型：不加单引号索引会失效</p>
+<p>模糊查询：<strong>头部进行模糊匹配(%%某某)</strong>，索引会失效，尾部进行模糊匹配（某某%%），索引不会失效。</p>
+<p>or连接的条件：如果or前面的条件列有索引，后面的条件没有索引，所涉及的索引都不会引用到，只有两侧都有索引的时候，才有效</p>
+<p>数据分布影响：如果索引比全表扫描更慢，则不使用索引，查询的数据大于一半，走全表不走索引。</p>
+<p><strong>SQL提示</strong></p>
+<blockquote>
+<p>在sql语句中加入一些认为的提示来达到优化操作的目的</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># use index指定使用哪个索引<br>explain select * from table use index(idxname) ...<br><br># ignore index<br># force index 同上<br></code></pre></td></tr></table></figure>
+<p><strong>覆盖索引</strong></p>
+<p>尽量使用覆盖索引：查询使用了索引，并且需要返回的列，在该索引中已经能够全部找到，减少使用select *</p>
+<p>using index condition：查找使用了索引，但是需要回表查询数据</p>
+<p>using where, using index：查询使用了索引，但是不需要回表</p>
+<img src="/2024/02/10/database-mysql/image-20240218221642388.png" class="" title="image-20240218221642388">
+<p>前两条不需要回表，后一条需要回表</p>
+<p><strong>前缀索引</strong></p>
+<blockquote>
+<p>将字符串的前缀提取出来，创建索引，可以节约索引空间</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># n表示取column_name列的前n个数据<br>CREATE INDEX idx_XXX ON table_name(column_name(n));<br><br># 计算前缀长度的选择性，越接近1越好<br>SELECT COUNT(DISTINCT substring(email, 1, 5)) / COUNT(*) FROM table_name;<br></code></pre></td></tr></table></figure>
+<p><strong>单列索引和联合索引选择</strong></p>
+<p>如果涉及到多个查询条件，推荐使用联合索引，联合索引会更少的回表查询</p>
+<h4 id="Quetion"><a href="#Quetion" class="headerlink" title="Quetion"></a>Quetion</h4><img src="/2024/02/10/database-mysql/image-20240218221919863.png" class="" title="image-20240218221919863">
+<p>建立id主键，username，password联合索引</p>
+<ul>
+<li><h4 id="索引设计原则"><a href="#索引设计原则" class="headerlink" title="索引设计原则"></a><strong>索引设计原则</strong></h4></li>
+</ul>
+<img src="/2024/02/10/database-mysql/image-20240218224016746.png" class="" title="image-20240218224016746">
+<h3 id="3、SQL优化"><a href="#3、SQL优化" class="headerlink" title="3、SQL优化"></a>3、SQL优化</h3><ul>
+<li><h4 id="插入数据insert优化"><a href="#插入数据insert优化" class="headerlink" title="插入数据insert优化"></a><strong>插入数据</strong>insert优化</h4><p>批量插入而不是单条插入：批量插入只需要建立一次连接即可</p>
+<p>建议手动提交事务：不需要每一次插入时自动开启和关闭事务，而是将所有insert执行结束以后统一关闭</p>
+<p><strong>建议主键顺序插入</strong></p>
+<p>大批量插入数据：使用Mysql数据库提供的load指令进行插入</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 如何使用load<br># 1、连接服务器时加上参数--local-infile<br>mysql --local-infile -u root -p<br><br># 2、设置全局参数local_infile为1<br>set global local_infile = 1;<br><br># 3、执行load指令将数据加载表结构中<br>load data local infile &#x27;文件名&#x27; into table &#x27;表名&#x27; fields teminated by &#x27;分割符&#x27; lines terminated by &#x27;行分隔符\n&#x27;;<br></code></pre></td></tr></table></figure>
+</li>
+<li><h4 id="主键优化"><a href="#主键优化" class="headerlink" title="主键优化"></a><strong>主键优化</strong></h4></li>
+</ul>
+<blockquote>
+<p>InnoDB中表数据都是根据主键顺序组织存放的，这种存储方式的表称为索引组织表。</p>
+</blockquote>
+<p>页大小为16kb，每个页至少包含两行数据</p>
+<p>主键乱序插入可能会出现页分裂现象，执行删除操作会出现页合并现象</p>
+<p>主键设计原则：</p>
+<p>​    满足业务需求的情况下，尽量降低主键的长度</p>
+<p>​    插入时尽量按照主键顺序插入，选择自增主键</p>
+<p>​    尽量不要使用无序的自然主键</p>
+<p>​    业务操作，避免对主键的修改</p>
+<ul>
+<li><strong>order by优化</strong></li>
+</ul>
+<p>排序方式</p>
+<p>Using filesort：先找到数据再进行排序</p>
+<p>Using index：通过有序索引直接返回，不需要额外排序</p>
+<p>默认会对索引进行升序排序</p>
+<ul>
+<li><strong>limit优化</strong></li>
+</ul>
+<p>对于数据量大的，优化思路为使用覆盖索引+子查询</p>
+<ul>
+<li><p>count</p>
+<p>count(*)优于count(1)&gt;count(主键)&gt;count(字段)</p>
+</li>
+<li><h4 id="update优化"><a href="#update优化" class="headerlink" title="update优化"></a><strong>update优化</strong></h4></li>
+</ul>
+<p>对需要更新的字段尽可能建立索引，这样如果处于多个事务情况下，只会使用行锁，如果没有建立索引，行锁会升级为表锁，无法进行并行</p>
+<h3 id="4、视图-存储过程-触发器"><a href="#4、视图-存储过程-触发器" class="headerlink" title="4、视图/存储过程/触发器"></a>4、视图/存储过程/触发器</h3><ul>
+<li><h4 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h4></li>
+</ul>
+<blockquote>
+<p>视图（View）是一种虚拟存在的表。视图中的数据并不在数据库中实际存在，行和列数据来自定义视图的查询中使用的表，并且是在使用视图时动态生成的。</p>
+</blockquote>
+<ul>
+<li><h4 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h4></li>
+</ul>
+<blockquote>
+<p>存储过程是事先经过编译并存储在数据库中的一段SQL语句的集合，调用存储过程可以简化应用开发人员的很多工作，减少数据在数据库和应用服务器之间的传输</p>
+<p>思想上就是数据库SQL语言层面的代码封装与重用，下一次如果执行相同的业务直接调用存储过程</p>
+</blockquote>
+<p><strong>特点</strong>    好像跟函数有点像</p>
+<p>封装、复用</p>
+<p>可以接收参数，也可以返回数据</p>
+<p>作用：减少网络交互，提升效率</p>
+<blockquote>
+<p>在命令行中，执行创建存储过程的sql时，需要通过关键字<code>delimiter</code>指定SQL语句的结束符</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 创建<br># 参数列表为IN/OUT/INOUT 参数名，分别表示参数输入，输出，输入和输出参数<br>CREATE PROCEDURE 存储过程名称([参数列表])<br>BEGIN<br>	--SQL语句，可以是多条<br>END;<br><br># 调用<br>CALL 名称([参数列表]);<br><br># 查看<br># 方法一，查看系统的数据库表，xxx为数据库名<br>SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_SCHEMA = &#x27;XXX&#x27;;<br># 方法二，使用show查看创建过程<br>SHOW CREATE PROCEDURE 存储过程名称;<br><br># 删除<br>DROP PROCEDURE [IF EXISTS] 存储过程名称;<br><br># 定义结束符为$$<br>delimiter $$<br></code></pre></td></tr></table></figure>
+<p><strong>系统变量</strong>（全局GLOBAL，会话SESSION）</p>
+<p>重启以后系统参数会恢复为默认值</p>
+<p>永久修改系统参数需要修改/etc/my.cnf中配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 查看所有系统变量<br>SHOW [SESSION|GLOBAL] VARIABLES;<br>SHOW VARIABLES LIKE &#x27;..&#x27;;<br># 查看指定变量<br>SELECT @@[SESSION|GLOBAL].系统变量名<br><br># 设置系统变量，默认为SESSION级别<br>SET [SESSION|GLOBAL] 变量名=值;<br>SET @@[SESSION|GLOBAL].系统变量名 = 值;<br></code></pre></td></tr></table></figure>
+<p><strong>用户自定义变量</strong></p>
+<blockquote>
+<p>作用域为当前连接</p>
+<p>变量无需声明，如果拿到的是没有声明的变量，则会获得NULL</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 赋值，可以同时赋值多个变量，用逗号隔开<br>SET @var_name = expr;<br>SET @var_name := expr;<br><br># SELECT赋值<br>SELECT @var_name := expr;<br># 将sql查询的结果赋值给变量<br>SELECT 字段名 INTO @var_name FROM 表名;<br><br># 使用<br>SELECT @var_name;<br></code></pre></td></tr></table></figure>
+<p><strong>局部变量</strong></p>
+<blockquote>
+<p>在局部生效，需要DECLARE声明，作用域在BEGIN…END块内</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 声明<br>DECLARE 变量名 变量类型(数据库数据的类型) [DEFAULT 默认值]<br><br># 赋值<br>SET 变量名 = 值;<br>SET 变量名 := 值;<br>SELECT 字段名 INTO @var_name FROM 表名;<br></code></pre></td></tr></table></figure>
+<p><strong>存储过程相关语法</strong></p>
+<blockquote>
+<p>逻辑语言都在存储过程中定义，可以使用传入的参数</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># IF 条件判断<br>IF 条件1 THEN<br>	...<br>ELSEIF 条件2 THEN<br>	...<br>ELSE<br>	...<br>END IF;<br><br># CASE 条件选择，WHEN后面可以有多种选择<br># 语法一<br>CASE case_value<br>	WHEN when_value1 THEN ...<br>	WHEN when_value2 THEN ...<br>	ELSE ...<br>END CASE;<br># 语法二<br>CASE <br>	WHEN 表达式真 THEN ...<br>	ELSE ...<br>END CASE;<br><br># WHILE循环<br>WHILE 条件 DO<br>	SQL逻辑<br>END WHILE：<br><br># REPEAT循环，当满足条件时，退出循环<br>REPEAT<br>	SQL逻辑...<br>	UNTIL 条件<br>END REPEAT;<br><br># LOOP循环<br># LOOP实现的是简单循环<br># LEAVE：配合循环使用，退出循环，作用类似于break<br># ITERATE：必须在循环中使用，作用类似于CONTINUE<br>[begin_label:] LOOP<br>	SQL逻辑<br>	<br>END LOOP[end_label]<br><br># 退出循环<br>LEAVE label;<br># 跳过本次进入下一次循环<br>ITERATE label;<br></code></pre></td></tr></table></figure>
+<p><strong>游标Cursor</strong></p>
+<p>游标（Cursor）是一种用于在存储过程或函数中遍历结果集的机制。游标允许逐行访问结果集，并在每行上执行相应的操作</p>
+<p>通常情况下，当执行一个查询语句时，MySQL 会返回一个结果集，该结果集包含了查询返回的所有行。以使用游标来逐行处理这个结果集，而不是一次性获取所有结果。这在处理大量数据或需要逐行处理结果的情况下非常有用</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 声明游标、打开游标、获取下一行、关闭游标<br>DELIMITER //<br><br>CREATE PROCEDURE process_users()<br>BEGIN<br>    DECLARE done INT DEFAULT FALSE;<br>    DECLARE user_id INT;<br>    DECLARE user_name VARCHAR(255);<br><br>    -- 声明游标<br>    DECLARE user_cursor CURSOR FOR <br>        SELECT id, name FROM users;<br><br>    -- 打开游标<br>    OPEN user_cursor;<br><br>    -- 循环遍历结果集<br>    read_loop: LOOP<br>        -- 获取下一行数据<br>        FETCH user_cursor INTO user_id, user_name;<br>        IF done THEN<br>            LEAVE read_loop;<br>        END IF;<br>        <br>        -- 处理当前行数据<br>        -- 这里可以执行相应的操作，如输出到日志或进行其他逻辑处理<br>        SELECT CONCAT(&#x27;User ID: &#x27;, user_id, &#x27;, User Name: &#x27;, user_name);<br><br>    END LOOP;<br><br>    -- 关闭游标<br>    CLOSE user_cursor;<br><br>END //<br><br>DELIMITER ;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><h4 id="存储函数"><a href="#存储函数" class="headerlink" title="存储函数"></a>存储函数</h4></li>
+<li><h4 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a>触发器</h4></li>
+</ul>
+<h3 id="5、锁"><a href="#5、锁" class="headerlink" title="5、锁"></a>5、锁</h3><h3 id="6、InnoDB核心"><a href="#6、InnoDB核心" class="headerlink" title="6、InnoDB核心"></a>6、InnoDB核心</h3><h3 id="7、MySQL管理"><a href="#7、MySQL管理" class="headerlink" title="7、MySQL管理"></a>7、MySQL管理</h3><h2 id="数据库运维"><a href="#数据库运维" class="headerlink" title="数据库运维"></a>数据库运维</h2><h3 id="1、日志"><a href="#1、日志" class="headerlink" title="1、日志"></a>1、日志</h3><h3 id="2、主从复制"><a href="#2、主从复制" class="headerlink" title="2、主从复制"></a>2、主从复制</h3><h3 id="3、分库分表"><a href="#3、分库分表" class="headerlink" title="3、分库分表"></a>3、分库分表</h3><h3 id="4、读写分离"><a href="#4、读写分离" class="headerlink" title="4、读写分离"></a>4、读写分离</h3><h3 id=""><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
+      <categories>
+        <category>技术研究</category>
+      </categories>
+      <tags>
+        <tag>Database</tag>
+        <tag>数据库</tag>
+        <tag>Mysql</tag>
+        <tag>SQL</tag>
       </tags>
   </entry>
   <entry>
@@ -257,102 +1159,10 @@
         <category>算法实践</category>
       </categories>
       <tags>
-        <tag>leetcode 算法 数组 字符串</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>大话设计模式</title>
-    <url>/2024/02/20/%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<h2 id="一、简单工厂模式"><a href="#一、简单工厂模式" class="headerlink" title="一、简单工厂模式"></a>一、简单工厂模式</h2><blockquote>
-<p>注意：命名规范、多个分支使用switch、考虑异常情况</p>
-</blockquote>
-<p>面向对象的编程，对代码做到：可维护、可复用、灵活性好</p>
-<ul>
-<li><p>业务的封装</p>
-<p>前后端分离，将业务逻辑和界面逻辑分开，让他们之间的耦合度下降，可以依赖面向对象的三大特性来实现</p>
-</li>
-<li><p>工厂模式</p>
-<p>通过工厂类，传入不同的字符串来返回不同继承类的构造函数，需要实例哪一个子类，可以通过传入参数来进行选择</p>
-<p>可以使用switch，或者使用map映射等方式</p>
-</li>
-<li><p>UML类图</p>
-<ul>
-<li>依赖关系</li>
-<li>聚合关系</li>
-<li>合成关系</li>
-<li>继承关系</li>
-<li>关联关系</li>
-<li>接口关系</li>
-<li>泛化关系</li>
-</ul>
-</li>
-</ul>
-<img src="/2024/02/20/%E5%A4%A7%E8%AF%9D%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/image-20231008153018253.png" class="" title="image-20231008153018253">
-<h2 id="二、策略模式"><a href="#二、策略模式" class="headerlink" title="二、策略模式"></a>二、策略模式</h2><blockquote>
-<p>策略模式定义了算法家族，分别封装起来，让它们之间可以互相替换，此模式让算法的变化，不会影响到使用算法的用户。</p>
-</blockquote>
-<p>只有算法需要替换，而其它不需要替换</p>
-<p>使用策略类，定义所有支持算法的公共接口</p>
-<ul>
-<li>策略模式是一种定义一系列算法的方法，所有这些算法完成的是相同的工作，但是实现不同，可以以相同的方式调用所有的方法，减少了各种算法类与使用算法类之间的耦合</li>
-<li>策略模式的优点可以简化单元测试，因为每个算法都有自己的类，可以通过自己的接口单独测试</li>
-</ul>
-<figure class="highlight maxima"><table><tr><td class="code"><pre><code class="hljs maxima">策略模式的三个要点<br><span class="hljs-number">1</span>、基类，策略接口，用于子类继承该基类，并重写基类中的策略方法<br><span class="hljs-number">2</span>、具体的策略类，不同的策略类使用不同的方法来实现基类的虚方法<br><span class="hljs-number">3</span>、上下文，<span class="hljs-built_in">context</span>，在上下文中，通过一个公共的方法，来调用不同子类实现的虚方法（使用传入不同子类对象来实现）<br><br>用户只需要使用<span class="hljs-built_in">context</span>来使用不同对象传入即可以完成不同的策略选择<br></code></pre></td></tr></table></figure>
-<h2 id="三、单一职责原则"><a href="#三、单一职责原则" class="headerlink" title="三、单一职责原则"></a>三、单一职责原则</h2><blockquote>
-<p>对于一个类而言，应该仅有一个引起它变化的原因。</p>
-<p>如果一个类承担的职责过多，就等于把这些职责耦合在一起，一个职责的变化可能会削弱或者这个类完成其它职责的能力。这种耦合会导致脆弱的设计，当变化发生时，设计会遭到意想不到的破坏。</p>
-</blockquote>
-<h2 id="四、开放-封闭原则"><a href="#四、开放-封闭原则" class="headerlink" title="四、开放-封闭原则"></a>四、开放-封闭原则</h2><p><strong>软件实体（类、模块、函数等）应该可以扩展但不可修改，即对拓展开放，对修改封闭</strong></p>
-<h2 id="五、依赖倒置原则"><a href="#五、依赖倒置原则" class="headerlink" title="五、依赖倒置原则"></a>五、依赖倒置原则</h2><p>1、高层模块不应该依赖底层模块，两个都应该依赖抽象</p>
-<p>2、抽象不应该依赖细节，细节应该依赖抽象</p>
-<ul>
-<li><p>里氏代换原则</p>
-<p>一个软件实体如果使用的是一个父类的话，那么一定适用于其子类，而且它察觉不出父类对象和子类对象的区别。</p>
-<p>即：子类型必须能够替换掉它们的父类型</p>
-</li>
-</ul>
-<figure class="highlight ruby"><table><tr><td class="code"><pre><code class="hljs ruby">和策略模式有一定的相似之处，例子<br><br><span class="hljs-title class_">Device</span>类<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Device</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_on</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        pass<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_off</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        pass<br><br>子类<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Light</span>(<span class="hljs-title class_">Device</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_on</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Light is turned on&quot;</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_off</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Light is turned off&quot;</span>)<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Fan</span>(<span class="hljs-title class_">Device</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_on</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Fan is turned on&quot;</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_off</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Fan is turned off&quot;</span>)<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Speaker</span>(<span class="hljs-title class_">Device</span>):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_on</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Speaker is turned on&quot;</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">turn_off</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        print(<span class="hljs-string">&quot;Speaker is turned off&quot;</span>)<br><br>高层模块<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">DeviceController</span>:<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span>, device</span>):<br>        <span class="hljs-variable language_">self</span>.device = device<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">operate</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        <span class="hljs-variable language_">self</span>.device.turn_on()<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">stop</span>(<span class="hljs-params"><span class="hljs-variable language_">self</span></span>):<br>        <span class="hljs-variable language_">self</span>.device.turn_off()<br><br>main<br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    light = <span class="hljs-title class_">Light</span>()<br>    fan = <span class="hljs-title class_">Fan</span>()<br>    speaker = <span class="hljs-title class_">Speaker</span>()<br><br>    controller1 = <span class="hljs-title class_">DeviceController</span>(light)<br>    controller2 = <span class="hljs-title class_">DeviceController</span>(fan)<br>    controller3 = <span class="hljs-title class_">DeviceController</span>(speaker)<br><br>    controller1.operate()<br>    controller2.operate()<br>    controller3.operate()<br><br>    controller1.stop()<br>    controller2.stop()<br>    controller3.stop()<br>高层模块 <span class="hljs-title class_">DeviceController</span> 不直接依赖于具体的设备类（如 <span class="hljs-title class_">Light</span>、<span class="hljs-title class_">Fan</span> 和 <span class="hljs-title class_">Speaker</span>），而是依赖于抽象的 <span class="hljs-title class_">Device</span> 接口。这就是依赖倒置原则的应用，它使得高层模块更加灵活，可以轻松地切换和扩展不同类型的设备，而不需要修改高层模块的代码。这有助于创建松耦合的、易于维护和扩展的代码<br></code></pre></td></tr></table></figure>
-<h2 id="六、装饰模式"><a href="#六、装饰模式" class="headerlink" title="六、装饰模式"></a>六、装饰模式</h2><p><strong>动态地给一个对象添加一些额外的职责</strong>，就增加功能来说，装饰模式比生成子类更为灵活</p>
-<p>在子类中定义一个父类对象，该对象使用需要装饰的对象作为初始化，并在子类中对该对象进行操作，即可达到，对对象的额外装饰结果，但是这一个对象和之前的对象不一定是同一个对象。</p>
-<ul>
-<li>基本结构</li>
-</ul>
-<figure class="highlight"><table><tr><td class="code"><pre><code class="hljs">1、父类：父类定义一个抽象的方法<br>2、子类：子类继承父类抽象方法并添加一些最基本的属性<br>3、装饰器类：装饰器类继承父类，并定义一个父类的保护类型数据<br>4、不同的装饰器类：不同的装饰器类继承于装饰器类，重写各自装饰器需要添加的职责<br><br>通常第“2”步中定义基本属性的子类，会作为第一层装饰包装子类，后续会作为参数传入到装饰器类中<br></code></pre></td></tr></table></figure>
-<p>装饰模式可以把类中的装饰功能从类中搬移去除，这样就可以简化原有的类。同事有效地把类的核心职责和装饰功能区分开，去除相关类中的重复的装饰逻辑，重复的装饰逻辑可以使用一个子类作为最基类型。</p>
-<figure class="highlight 1c"><table><tr><td class="code"><pre><code class="hljs 1c"><span class="hljs-built_in">exp</span>：<br>游戏中，不同人物角色使用不同技能进行装饰。最开始都是有一个人物的基类（低级的时候）。公共技能可以作为重复逻辑继承在一个类中，使用装饰模式，可以学习一些不同的技能。<br></code></pre></td></tr></table></figure>
-<h2 id="七、代理模式"><a href="#七、代理模式" class="headerlink" title="七、代理模式"></a>七、代理模式</h2><p>代理模式，为其它对象提供一种代理以控制对这个对象的访问</p>
-<p>在客户与另一客户交互的过程中，中间会有一层代理，代理可以拥有两个客户的接口，作为中间实体来进行来促使两客户进行交互，在代理中如果需要交互，则需要定义一个客户的类，来调用该客户的方法。</p>
-<ul>
-<li><p>代理模式应用场景</p>
-<p>远程代理：为一个对象在不同的地址空间提供局部代表，这样可以隐藏一个对象存在于不同地址空间的事实</p>
-<p>虚拟代理：根据需要创建开销很大的对象，通过它来存放实例化需要很长时间的真实对象，浏览器中加载图片就是使用虚拟代理</p>
-<p>安全代理：用来控制真实对象访问时的权限</p>
-<p>智能指引：当掉哟个真实对象时，代理处理另外一些事</p>
-</li>
-</ul>
-<h2 id="八、工厂方法模式"><a href="#八、工厂方法模式" class="headerlink" title="八、工厂方法模式"></a>八、工厂方法模式</h2><p>封装实例来创建过程，可以让创建实例的过程封装到工厂类中，避免耦合</p>
-<h2 id="九、原型模式"><a href="#九、原型模式" class="headerlink" title="九、原型模式"></a>九、原型模式</h2><p>用原型（Prototype）实例指定创建对象的种类，并且通过复制这些原型创建新的对象</p>
-<ul>
-<li><p>用法</p>
-<p>在类里面定义一个函数，函数可以返回一个原型对象</p>
-</li>
-<li><p>在类中定义修改原型中属性的set方法</p>
-</li>
-<li><p>在使用的过程中，只需要调用set方法修改不同的地方</p>
-</li>
-</ul>
-<p>深拷贝与浅拷贝，若在原型类中使用对象引用，在修改的时候记得使用深拷贝</p>
-<h2 id="十、模板方法模式"><a href="#十、模板方法模式" class="headerlink" title="十、模板方法模式"></a>十、模板方法模式</h2><p>定义一个操作中的算法的骨架，将一些步骤延迟到子类中。模板方法使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤</p>
-<h2 id="十一、迪米特法则"><a href="#十一、迪米特法则" class="headerlink" title="十一、迪米特法则"></a>十一、迪米特法则</h2><blockquote>
-<p>最小知识原则</p>
-</blockquote>
-<p>如果两个类不必彼此直接通信，那么这两个类就不应当发生直接的相互作用。如果一个类需要调用另一个类的某一个方法的话，可以通过第三者转发这个调用。</p>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-      </categories>
-      <tags>
-        <tag>设计模式 UML</tag>
+        <tag>leetcode</tag>
+        <tag>算法</tag>
+        <tag>数组</tag>
+        <tag>字符串</tag>
       </tags>
   </entry>
   <entry>
@@ -387,8 +1197,8 @@
         <category>技术研究</category>
       </categories>
       <tags>
-        <tag>数学</tag>
         <tag>算法</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
