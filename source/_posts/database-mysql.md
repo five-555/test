@@ -1078,11 +1078,56 @@ END //
 DELIMITER ;
 ```
 
-
-
 * #### 存储函数
 
+> 有返回值的存储过程，存储函数的参数只能时IN类型’
+
+```mysql
+# 语法结构
+CREATE FUNCTION 存储函数名称([参数列表])
+RETURNS type [characteristic...]
+BEGIN
+	--SQL语句
+	RETURN ...;
+END;
+
+characteristics存储参数的特性
+DETERMINISTIC : 相同的输入参数总是产生相同的结果
+NO SQL : 不包含SQL语句
+READS SQL DATA : 包含读取数据的语句，但不包含写入数据的语句
+```
+
 * #### 触发器
+
+> 在insert/update/delete之前或者之后，触发并执行触发器中定义的SQL语句集合。
+>
+> 使用别名OLD和NEW来引用触发器中发生变化的记录内容
+>
+> 触发器只支持行级触发，不支持语句级别触发：如果一个UPDATE语句影响了5行，则触发器会被出发5次
+
+|   触发器类型   |                       NEW和OLD                       |
+| :------------: | :--------------------------------------------------: |
+| INSERT型触发器 |            NEW表示将要或者已经新增的数据             |
+| UPDATE型触发器 | OLD表示修改之前的数据，NEW表示将要或已经修改后的数据 |
+| DELETE型触发器 |            OLD表示将要或者已经删除的数据             |
+
+```mysql
+# 创建触发器
+CREATE TRIGGER trigger_name
+BEFORE/AFTER(在之前还是之后) INSERT/UPDATE/DELETE(触发器类型)
+ON tbl_name FOR EACH ROW --行级触发器
+BEGIN
+	trigger_stmt; # 触发器逻辑
+END;
+
+# 查看
+SHOW TRIGGERS;
+
+# 删除，数据库中的触发器
+DROP TRIGGER [schema_name.]trigger_name;
+```
+
+
 
 ### 5、锁
 

@@ -1,32 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>C++使用zlib库来压缩文件</title>
-    <url>/2024/01/26/C-%E4%BD%BF%E7%94%A8zlib%E5%BA%93%E6%9D%A5%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<h2 id="C-使用zlib库来压缩文件"><a href="#C-使用zlib库来压缩文件" class="headerlink" title="C++使用zlib库来压缩文件"></a>C++使用zlib库来压缩文件</h2><p>zlib压缩库提供内存压缩和解压缩功能，包括对未压缩的完整性检查数据，提供支持的压缩方法为：deflation，默认使用压缩数据格式为zlib格式。</p>
-<p>zlib库支持读取和写入gzip(.gz)格式的文件，zlib格式旨在紧凑且快速，可用于内存和通信渠道。gzip格式设计用于文件系统上的单文件压缩，比zlib具有更大的头部以维护目录信息，并且使用与zlib不同且更慢的检查方法。</p>
-<p>该库不安装任何信号处理程序。解码器检查压缩数据的一致性，因此即使在输入损坏的情况下，库也不应崩溃。</p>
-<h3 id="数据流结构"><a href="#数据流结构" class="headerlink" title="数据流结构"></a>数据流结构</h3><figure class="highlight angelscript"><table><tr><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">typedef</span> <span class="hljs-built_in">void</span>pf (*alloc_func)(<span class="hljs-built_in">void</span>pf opaque, uInt items, uInt size);<br><span class="hljs-keyword">typedef</span> <span class="hljs-built_in">void</span>   (*free_func)(<span class="hljs-built_in">void</span>pf opaque, <span class="hljs-built_in">void</span>pf address);<br></code></pre></td></tr></table></figure>
-<ul>
-<li><code>typedef voidpf (*alloc_func)(voidpf opaque, uInt items, uInt size);</code>这个函数指针通常用于内存分配，允许用户自定义的内存分配函数</li>
-<li><code>typedef void   (*free_func)(voidpf opaque, voidpf address);</code>这个函数指针通常用于内存释放，允许用户自定义的内存释放函数</li>
-</ul>
-<h3 id="基本功能"><a href="#基本功能" class="headerlink" title="基本功能"></a>基本功能</h3><figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino"><span class="hljs-function">ZEXTERN <span class="hljs-type">int</span> ZEXPORT <span class="hljs-title">deflateInit</span><span class="hljs-params">(z_streamp strm, <span class="hljs-type">int</span> level)</span></span>;<br></code></pre></td></tr></table></figure>
-<ul>
-<li><code>level</code>表示压缩级别，要么为<code>Z_DEFAULT_COMPRESSION</code>，要么介于0-9之间，1表示最佳速度，9表示最佳压缩，0表示没有压缩，<code>Z_DEFAULT_COMPRESSION</code>默认在6级别。</li>
-<li><code>deflateInit</code> 返回 <code>Z_OK</code> 如果成功，则返回 <code>Z_MEM_ERROR</code> 如果没有 足够的内存，<code>Z_STREAM_ERROR</code> <code>level</code> 不是有效的压缩级别，<code>Z_VERSION_ERROR</code> <em>zlib</em> 库版本 （<code>zlib_version</code>） 不兼容 替换为调用方 （<code>ZLIB_VERSION</code>） 假定的版本。如果没有错误消息，<code>则 msg</code> 设置为 null。<code>deflateInit</code> 不 执行任何压缩：这将由 <code>deflate（）</code> 完成。</li>
-</ul>
-<figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino"><span class="hljs-function">ZEXTERN <span class="hljs-type">int</span> ZEXPORT <span class="hljs-title">deflate</span><span class="hljs-params">(z_streamp strm, <span class="hljs-type">int</span> flush)</span></span>;<br></code></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>技术研究</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>zlib</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>GAMES101现代计算机图形学入门-01</title>
     <url>/2023/12/15/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/</url>
     <content><![CDATA[<h2 id="计算机图形学01"><a href="#计算机图形学01" class="headerlink" title="计算机图形学01"></a>计算机图形学01</h2><blockquote>
@@ -185,6 +159,157 @@
       <tags>
         <tag>计算机图形学</tag>
         <tag>GAMES101</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git常见用法</title>
+    <url>/2024/01/04/git/</url>
+    <content><![CDATA[<h4 id="怎样撤销一个已经push到远端的版本"><a href="#怎样撤销一个已经push到远端的版本" class="headerlink" title="怎样撤销一个已经push到远端的版本"></a>怎样撤销一个已经push到远端的版本</h4><figure class="highlight arcade"><table><tr><td class="code"><pre><code class="hljs arcade">每次<span class="hljs-built_in">push</span>之前线pull一下<br><br><span class="hljs-number">1</span>、查看当前提交的信息，找到需要撤回到的版本号复制，一串十六进制的数<br>git <span class="hljs-built_in">log</span><br><br><span class="hljs-number">2</span>、使用git reset<br>git reset --soft 复制的版本号<br><br><span class="hljs-number">3</span>、强制回退当前版本号<br><span class="hljs-comment">// 确认一下当前版本</span><br>git <span class="hljs-built_in">log</span><br><span class="hljs-comment">// 谨慎使用，强制使用本地仓库代码修改远程仓库</span><br>git <span class="hljs-built_in">push</span> orgin master --force<br></code></pre></td></tr></table></figure>
+<h4 id="新建分支并同步到远端的分支"><a href="#新建分支并同步到远端的分支" class="headerlink" title="新建分支并同步到远端的分支"></a>新建分支并同步到远端的分支</h4><figure class="highlight mipsasm"><table><tr><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># 在本地新建一个名字为branch_name的分支，并与远端的origin/branch_name同步</span><br>git checkout -<span class="hljs-keyword">b </span><span class="hljs-keyword">branch_name </span><span class="hljs-keyword">origin/branch_name</span><br></code></pre></td></tr></table></figure>
+<h4 id="解决git-clone超时的问题"><a href="#解决git-clone超时的问题" class="headerlink" title="解决git clone超时的问题"></a>解决git clone超时的问题</h4><p>从github上clone代码仓库报错<code>Failed to connect to github.com port 443 after 21038 ms: Couldn&#39;t connect to server</code>且尝试去ping一下github官网会丢包</p>
+<img src="/2024/01/04/git/image-20231204110955462.png" class="" title="image-20231204110955462">
+<p>解决方案</p>
+<p>修改系统的hosts，跳过域名解析的过程，直接用ip地址访问</p>
+<figure class="highlight accesslog"><table><tr><td class="code"><pre><code class="hljs accesslog"><span class="hljs-number">192.30.255.112</span> github.com git<br><span class="hljs-number">185.31.16.184</span> github.global.ssl.fastly.net<br></code></pre></td></tr></table></figure>
+<img src="/2024/01/04/git/image-20231204111125551.png" class="" title="image-20231204111125551">
+<p>修改hosts需要给文件更高的权限</p>
+<img src="/2024/01/04/git/image-20231204111350240.png" class="" title="image-20231204111350240">
+<h4 id="github中git-push出现超时的问题"><a href="#github中git-push出现超时的问题" class="headerlink" title="github中git push出现超时的问题"></a>github中git push出现超时的问题</h4><img src="/2024/01/04/git/image-20231204112945547.png" class="" title="image-20231204112945547">
+<p>解决方案</p>
+<p>1、打开本机的代理服务器</p>
+<img src="/2024/01/04/git/image-20231204113100512.png" class="" title="image-20231204113100512">
+<p>2、取消git config里面的http和https代理</p>
+<img src="/2024/01/04/git/image-20231204113208566.png" class="" title="image-20231204113208566">
+<p>3、设置http代理服务器</p>
+<img src="/2024/01/04/git/image-20231204113304822.png" class="" title="image-20231204113304822">
+<h4 id="linux中输出一个文件夹下面的所有文件名"><a href="#linux中输出一个文件夹下面的所有文件名" class="headerlink" title="linux中输出一个文件夹下面的所有文件名"></a>linux中输出一个文件夹下面的所有文件名</h4><ul>
+<li><strong><code>/path/to/directory</code></strong>: 替换为目标目录的路径。</li>
+<li><strong><code>-maxdepth 1</code></strong>: 限制<code>find</code>的搜索深度为1，即仅在指定的目录中搜索，而不会搜索其子目录。</li>
+<li><strong><code>-type f</code></strong>: 限制搜索结果为普通文件（不包括目录和其他类型的文件）。</li>
+<li><strong><code>-exec basename &#123;&#125; \;</code></strong>: 对每一个找到的文件执行<code>basename</code>命令，即输出文件的基本名称。<code>&#123;&#125;</code>是<code>find</code>命令的占位符，表示每个找到的文件的路径。<code>\;</code>表示命令结束。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">find /path/to/directory -maxdepth 1 -<span class="hljs-built_in">type</span> f -<span class="hljs-built_in">exec</span> <span class="hljs-built_in">basename</span> &#123;&#125; \;<br></code></pre></td></tr></table></figure>
+<h4 id="git查看远端仓库地址"><a href="#git查看远端仓库地址" class="headerlink" title="git查看远端仓库地址"></a>git查看远端仓库地址</h4><figure class="highlight dsconfig"><table><tr><td class="code"><pre><code class="hljs dsconfig"><span class="hljs-string">git</span> <span class="hljs-string">remote</span> -<span class="hljs-string">v</span><br><br><span class="hljs-comment"># 更改远程仓库</span><br><span class="hljs-string">git</span> <span class="hljs-string">remote</span> <span class="hljs-built_in">set-url</span> <span class="hljs-string">origin</span> 仓库地址<br></code></pre></td></tr></table></figure>
+<h4 id="查看代码贡献量"><a href="#查看代码贡献量" class="headerlink" title="查看代码贡献量"></a>查看代码贡献量</h4><blockquote>
+<p>按照各个作者的修改代码总数排序</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --pretty=<span class="hljs-string">&quot;%aN&quot;</span> | <span class="hljs-built_in">sort</span> | <span class="hljs-built_in">uniq</span> -c | <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> count author; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> -n <span class="hljs-string">&quot;<span class="hljs-variable">$author</span> &quot;</span>; git <span class="hljs-built_in">log</span> --author=<span class="hljs-string">&quot;<span class="hljs-variable">$author</span>&quot;</span> --pretty=tformat: --numstat | awk <span class="hljs-string">&#x27;&#123; add += $1; subs += $2 &#125; END &#123; total = add + subs; printf &quot;%d\n&quot;, total &#125;&#x27;</span>; <span class="hljs-keyword">done</span> | <span class="hljs-built_in">sort</span> -rnk2<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>技术研究</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++使用zlib库来压缩文件</title>
+    <url>/2024/01/26/C-%E4%BD%BF%E7%94%A8zlib%E5%BA%93%E6%9D%A5%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h2 id="C-使用zlib库来压缩文件"><a href="#C-使用zlib库来压缩文件" class="headerlink" title="C++使用zlib库来压缩文件"></a>C++使用zlib库来压缩文件</h2><p>zlib压缩库提供内存压缩和解压缩功能，包括对未压缩的完整性检查数据，提供支持的压缩方法为：deflation，默认使用压缩数据格式为zlib格式。</p>
+<p>zlib库支持读取和写入gzip(.gz)格式的文件，zlib格式旨在紧凑且快速，可用于内存和通信渠道。gzip格式设计用于文件系统上的单文件压缩，比zlib具有更大的头部以维护目录信息，并且使用与zlib不同且更慢的检查方法。</p>
+<p>该库不安装任何信号处理程序。解码器检查压缩数据的一致性，因此即使在输入损坏的情况下，库也不应崩溃。</p>
+<h3 id="数据流结构"><a href="#数据流结构" class="headerlink" title="数据流结构"></a>数据流结构</h3><figure class="highlight angelscript"><table><tr><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">typedef</span> <span class="hljs-built_in">void</span>pf (*alloc_func)(<span class="hljs-built_in">void</span>pf opaque, uInt items, uInt size);<br><span class="hljs-keyword">typedef</span> <span class="hljs-built_in">void</span>   (*free_func)(<span class="hljs-built_in">void</span>pf opaque, <span class="hljs-built_in">void</span>pf address);<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>typedef voidpf (*alloc_func)(voidpf opaque, uInt items, uInt size);</code>这个函数指针通常用于内存分配，允许用户自定义的内存分配函数</li>
+<li><code>typedef void   (*free_func)(voidpf opaque, voidpf address);</code>这个函数指针通常用于内存释放，允许用户自定义的内存释放函数</li>
+</ul>
+<h3 id="基本功能"><a href="#基本功能" class="headerlink" title="基本功能"></a>基本功能</h3><figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino"><span class="hljs-function">ZEXTERN <span class="hljs-type">int</span> ZEXPORT <span class="hljs-title">deflateInit</span><span class="hljs-params">(z_streamp strm, <span class="hljs-type">int</span> level)</span></span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>level</code>表示压缩级别，要么为<code>Z_DEFAULT_COMPRESSION</code>，要么介于0-9之间，1表示最佳速度，9表示最佳压缩，0表示没有压缩，<code>Z_DEFAULT_COMPRESSION</code>默认在6级别。</li>
+<li><code>deflateInit</code> 返回 <code>Z_OK</code> 如果成功，则返回 <code>Z_MEM_ERROR</code> 如果没有 足够的内存，<code>Z_STREAM_ERROR</code> <code>level</code> 不是有效的压缩级别，<code>Z_VERSION_ERROR</code> <em>zlib</em> 库版本 （<code>zlib_version</code>） 不兼容 替换为调用方 （<code>ZLIB_VERSION</code>） 假定的版本。如果没有错误消息，<code>则 msg</code> 设置为 null。<code>deflateInit</code> 不 执行任何压缩：这将由 <code>deflate（）</code> 完成。</li>
+</ul>
+<figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino"><span class="hljs-function">ZEXTERN <span class="hljs-type">int</span> ZEXPORT <span class="hljs-title">deflate</span><span class="hljs-params">(z_streamp strm, <span class="hljs-type">int</span> flush)</span></span>;<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>技术研究</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>zlib</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>算法题-数组和字符串</title>
+    <url>/2024/02/09/leetcode-0209/</url>
+    <content><![CDATA[<h3 id="80-删除有序数组中的重复项-Ⅱ"><a href="#80-删除有序数组中的重复项-Ⅱ" class="headerlink" title="80.删除有序数组中的重复项 Ⅱ"></a><a href="https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/?envType=study-plan-v2&amp;envId=top-interview-150">80.删除有序数组中的重复项 Ⅱ</a></h3><p>给你一个有序数组 <code>nums</code> ，请你<strong>原地</strong>删除重复出现的元素，使得出现次数超过两次的元素<strong>只出现两次</strong> ，返回删除后数组的新长度。</p>
+<p>不要使用额外的数组空间，你必须在 <strong>原地修改输入数组</strong> 并在使用 O(1) 额外空间的条件下完成。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight accesslog"><table><tr><td class="code"><pre><code class="hljs accesslog">输入：nums = <span class="hljs-string">[1,1,1,2,2,3]</span><br>输出：<span class="hljs-number">5</span>, nums = <span class="hljs-string">[1,1,2,2,3]</span><br>解释：函数应返回新长度 length = <span class="hljs-number">5</span>, 并且原数组的前五个元素被修改为 <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>。 不需要考虑数组中超出新长度后面的元素。<br></code></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight dns"><table><tr><td class="code"><pre><code class="hljs dns">输入：nums = [<span class="hljs-number">0,0,1,1</span>,<span class="hljs-number">1,1,2,3</span>,<span class="hljs-number">3</span>]<br>输出：<span class="hljs-number">7</span>, nums = [<span class="hljs-number">0,0,1,1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">3</span>]<br>解释：函数应返回新长度 length = <span class="hljs-number">7</span>, 并且原数组的前七个元素被修改为 <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>。不需要考虑数组中超出新长度后面的元素。<br></code></pre></td></tr></table></figure>
+<p><strong>解析</strong></p>
+<p>使用快fast慢slow指针来遍历数组，慢指针记录数组的长度，快指针记录当前所在的元素是是否需要保留，如果需要保留则将当前位置nums[slow]存放快指针所在的元素，如果不需要保留则需要将fast++</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">removeDuplicates</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br><br>        <span class="hljs-type">int</span> n = nums.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-keyword">if</span>(n &lt;= <span class="hljs-number">2</span>)&#123;<br>            <span class="hljs-keyword">return</span> n;<br>        &#125;<br>        <br>        <span class="hljs-comment">// 因为前两个元素都是必然回保留的，所以slow和fast都从2开始</span><br>        <span class="hljs-type">int</span> slow = <span class="hljs-number">2</span>;<br>        <span class="hljs-type">int</span> fast = <span class="hljs-number">2</span>;<br>        <span class="hljs-comment">// 使用fast来遍历</span><br>        <span class="hljs-keyword">while</span>(fast &lt; n)&#123;<br>            <span class="hljs-comment">// 如果快指针所在的元素不等于当前位置-2所在的元素</span><br>            <span class="hljs-comment">// 说明，快指针所在的位置的元素的前面至多只有slow - 1位置的元素和其相等，即至多只有一个，所以当前fast所在的位置的元素是需要保留的</span><br>            <span class="hljs-comment">// 如果相等的话，说明slow-1和slow-2和fast都相等，所以fast是不需要保留的，fast++</span><br>            <span class="hljs-keyword">if</span>(nums[slow - <span class="hljs-number">2</span>] != nums[fast])&#123;<br>                nums[slow] = nums[fast];<br>                <span class="hljs-comment">// 更新slow位置</span><br>                ++slow;<br>            &#125;<br>            ++fast;<br>        &#125;<br>        <span class="hljs-keyword">return</span> slow;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<h3 id="122-买股票的最佳时机-Ⅱ"><a href="#122-买股票的最佳时机-Ⅱ" class="headerlink" title="122.买股票的最佳时机 Ⅱ"></a><a href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/description/?envType=study-plan-v2&amp;envId=top-interview-150">122.买股票的最佳时机 Ⅱ</a></h3><p>给你一个整数数组 <code>prices</code> ，其中 <code>prices[i]</code> 表示某支股票第 <code>i</code> 天的价格。</p>
+<p>在每一天，你可以决定是否购买和/或出售股票。你在任何时候 <strong>最多</strong> 只能持有 <strong>一股</strong> 股票。你也可以先购买，然后在 <strong>同一天</strong> 出售。</p>
+<p>返回 <em>你能获得的 <strong>最大</strong> 利润</em> 。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight tap"><table><tr><td class="code"><pre><code class="hljs tap">输入：prices = [7,1,5,3,6,4]<br>输出：7<br>解释：在第<span class="hljs-number"> 2 </span>天（股票价格 = 1）的时候买入，在第<span class="hljs-number"> 3 </span>天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 =<span class="hljs-number"> 5 </span>-<span class="hljs-number"> 1 </span>=<span class="hljs-number"> 4 </span>。<br>     随后，在第<span class="hljs-number"> 4 </span>天（股票价格 = 3）的时候买入，在第<span class="hljs-number"> 5 </span>天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 =<span class="hljs-number"> 6 </span>-<span class="hljs-number"> 3 </span>=<span class="hljs-number"> 3 </span>。<br>     总利润为<span class="hljs-number"> 4 </span>+<span class="hljs-number"> 3 </span>=<span class="hljs-number"> 7 </span>。<br></code></pre></td></tr></table></figure>
+<p><strong>示例 2：</strong></p>
+<figure class="highlight tap"><table><tr><td class="code"><pre><code class="hljs tap">输入：prices = [1,2,3,4,5]<br>输出：4<br>解释：在第<span class="hljs-number"> 1 </span>天（股票价格 = 1）的时候买入，在第<span class="hljs-number"> 5 </span>天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 =<span class="hljs-number"> 5 </span>-<span class="hljs-number"> 1 </span>=<span class="hljs-number"> 4 </span>。<br>     总利润为<span class="hljs-number"> 4 </span>。<br></code></pre></td></tr></table></figure>
+<p><strong>示例 3：</strong></p>
+<figure class="highlight accesslog"><table><tr><td class="code"><pre><code class="hljs accesslog">输入：prices = <span class="hljs-string">[7,6,4,3,1]</span><br>输出：<span class="hljs-number">0</span><br>解释：在这种情况下, 交易无法获得正利润，所以不参与交易可以获得最大利润，最大利润为 <span class="hljs-number">0</span> 。<br></code></pre></td></tr></table></figure>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= prices.length &lt;= 3 * 104</code></li>
+<li><code>0 &lt;= prices[i] &lt;= 104</code></li>
+</ul>
+]]></content>
+      <categories>
+        <category>算法实践</category>
+      </categories>
+      <tags>
+        <tag>leetcode</tag>
+        <tag>算法</tag>
+        <tag>数组</tag>
+        <tag>字符串</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>常见的排序算法</title>
+    <url>/2024/02/21/sort-algrithon/</url>
+    <content><![CDATA[<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3><h2 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h2><blockquote>
+<p>输入：整数数组nums</p>
+<p>输出： 按照升序排序</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">// 函数接口</span><br><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <br>    <span class="hljs-keyword">return</span> nums;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h3><p>思想：每次选择数组当前数组中最小的元素，放置到数组当前未选定的最前的位置</p>
+<p>时间复杂度：n^2</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-type">int</span> n = nums.<span class="hljs-built_in">size</span>();<br>    <br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n<span class="hljs-number">-1</span>; ++i)&#123;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = i+<span class="hljs-number">1</span>; j &lt; n; ++j)&#123;<br>            <span class="hljs-keyword">if</span>(nums[i] &gt; nums[j])&#123;<br>                std::<span class="hljs-built_in">swap</span>(nums[i], nums[j]);<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> nums;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h3><p>思想：</p>
+<p>每次比较相邻的元素，如果前面的元素大于后面的元素，则进行交换</p>
+<p>当某一轮没有进行交换时，说明数组已经有序</p>
+<p>时间复杂度：n^2</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-type">int</span> n = nums.<span class="hljs-built_in">size</span>();<br>    <span class="hljs-comment">// 冒泡排序</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; ++i)&#123;<br>        <span class="hljs-type">bool</span> flag = <span class="hljs-number">0</span>;<br>        <span class="hljs-comment">// 每一次最大的元素都能够沉到最下面</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; n-i<span class="hljs-number">-1</span>; ++j)&#123;<br>            <span class="hljs-keyword">if</span>(nums[j] &gt; nums[j+<span class="hljs-number">1</span>])&#123;<br>                std::<span class="hljs-built_in">swap</span>(nums[j], nums[j+<span class="hljs-number">1</span>]);<br>                flag = <span class="hljs-number">1</span>;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">if</span>(flag == <span class="hljs-number">0</span>)<span class="hljs-keyword">return</span> nums;<br>    &#125;<br>    <span class="hljs-keyword">return</span> nums;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h3><p>思想：</p>
+<p>从前往后选择元素，插入到前面已经排序好的数组元素当中</p>
+<p>始终保证当前元素前半部分都是有序的，直到所有元素遍历完</p>
+<p>时间复杂度：n^2</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-type">int</span> n = nums.<span class="hljs-built_in">size</span>();<br>    <span class="hljs-comment">// 插入排序</span><br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; n; ++i)&#123;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j = i<span class="hljs-number">-1</span>; j &gt;= <span class="hljs-number">0</span>; --j)&#123;<br>            <span class="hljs-comment">// 注意比较的是相邻的元素，而不是num[i]</span><br>            <span class="hljs-keyword">if</span>(nums[j+<span class="hljs-number">1</span>] &gt;= nums[j])&#123;<br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br>            <span class="hljs-keyword">else</span>&#123;<br>                std::<span class="hljs-built_in">swap</span>(nums[j+<span class="hljs-number">1</span>], nums[j]);<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> nums;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h3><p>思想：分治法</p>
+<p>将长度为n的数组分为两个长度为n/2的数组</p>
+<p>继续分为长度为n/4的数组，最后分为长度为1的数组</p>
+<p>分别对长度为1的两两数组进行合并</p>
+<p>对长度为2的两两数组进行合并</p>
+<p>长度为4的两两数组进行合并</p>
+<p>最后对长度为n/2的数组进行合并得到的就是长度为n的有序数组</p>
+<p><strong>因为合并过程中依赖的小序列都是有序的，通过选择最小元素很容易合并</strong></p>
+<p>时间复杂度：nlog(n)</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">merge</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> mid, <span class="hljs-type">int</span> right)</span> </span>&#123;<br>    <span class="hljs-type">int</span> n1 = mid - left + <span class="hljs-number">1</span>;<br>    <span class="hljs-type">int</span> n2 = right - mid;<br><br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">L</span><span class="hljs-params">(n1)</span>, <span class="hljs-title">R</span><span class="hljs-params">(n2)</span></span>;<br>    <br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n1; i++)<br>        L[i] = nums[left + i];<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; n2; j++)<br>        R[j] = nums[mid + <span class="hljs-number">1</span> + j];<br>    <br>    <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>, j = <span class="hljs-number">0</span>, k = left;<br>    <br>    <span class="hljs-keyword">while</span> (i &lt; n1 &amp;&amp; j &lt; n2) &#123;<br>        <span class="hljs-keyword">if</span> (L[i] &lt;= R[j]) &#123;<br>            nums[k] = L[i];<br>            i++;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            nums[k] = R[j];<br>            j++;<br>        &#125;<br>        k++;<br>    &#125;<br>    <br>    <span class="hljs-keyword">while</span> (i &lt; n1) &#123;<br>        nums[k] = L[i];<br>        i++;<br>        k++;<br>    &#125;<br>    <br>    <span class="hljs-keyword">while</span> (j &lt; n2) &#123;<br>        nums[k] = R[j];<br>        j++;<br>        k++;<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">mergeSort</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (left &lt; right) &#123;<br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <span class="hljs-built_in">mergeSort</span>(nums, left, mid);<br>        <span class="hljs-built_in">mergeSort</span>(nums, mid + <span class="hljs-number">1</span>, right);<br>        <span class="hljs-built_in">merge</span>(nums, left, mid, right);<br>    &#125;<br>&#125;<br><br><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-built_in">mergeSort</span>(nums, <span class="hljs-number">0</span>, nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>);<br>    <span class="hljs-keyword">return</span> nums;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h3><p>思想：分治法，快排要注意要从right开始</p>
+<p>选择一个主元</p>
+<p>将小于主元的元素放在左边</p>
+<p>将大于主元的元素放在右边</p>
+<p>主元的位置则可以确定</p>
+<p>分别对主元左边的数组和右边的数组再次进行快速排序</p>
+<p>时间复杂度：nlog(n)</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">partion</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span></span>&#123;<br>    <span class="hljs-type">int</span> value = nums[left];<br>    <span class="hljs-type">int</span> idx = left;<br>    <span class="hljs-comment">// left += 1; left不用+1，相等的情况已经考虑了</span><br>    <br>    <span class="hljs-keyword">while</span>(left &lt; right)&#123;<br>        <span class="hljs-keyword">while</span>(left &lt; right &amp;&amp; nums[right] &gt;= value)right--;<br>        nums[idx] = nums[right];<br>        idx = right;<br>        <span class="hljs-keyword">while</span>(left &lt; right &amp;&amp; nums[left] &lt;= value)left++;<br>        nums[idx] = nums[left];<br>        idx = left;<br>    &#125;<br>    nums[idx] = value;<br>    <span class="hljs-keyword">return</span> left;<br>&#125;<br>    <br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">quicksort</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(left &gt;= right)<span class="hljs-keyword">return</span>;<br>    <br>    <span class="hljs-type">int</span> mid = <span class="hljs-built_in">partion</span>(nums, left, right);<br>    <span class="hljs-built_in">quicksort</span>(nums, left, mid - <span class="hljs-number">1</span>);<br>    <span class="hljs-built_in">quicksort</span>(nums, mid+<span class="hljs-number">1</span>, right);<br>&#125;<br><br><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-built_in">quicksort</span>(nums, <span class="hljs-number">0</span>, nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>);<br>    <span class="hljs-keyword">return</span> nums;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h3><h3 id="计数排序"><a href="#计数排序" class="headerlink" title="计数排序"></a>计数排序</h3>]]></content>
+      <categories>
+        <category>算法研究</category>
+      </categories>
+      <tags>
+        <tag>排序 算法 选择排序 冒泡排序 插入排序 归并排序 快速排序 堆排序 计数排序</tag>
       </tags>
   </entry>
   <entry>
@@ -1027,12 +1152,27 @@
 <li><h4 id="update优化"><a href="#update优化" class="headerlink" title="update优化"></a><strong>update优化</strong></h4></li>
 </ul>
 <p>对需要更新的字段尽可能建立索引，这样如果处于多个事务情况下，只会使用行锁，如果没有建立索引，行锁会升级为表锁，无法进行并行</p>
-<h3 id="4、视图-存储过程-触发器"><a href="#4、视图-存储过程-触发器" class="headerlink" title="4、视图/存储过程/触发器"></a>4、视图/存储过程/触发器</h3><ul>
+<h3 id="4、视图-存储过程-触发器"><a href="#4、视图-存储过程-触发器" class="headerlink" title="4、视图/存储过程/触发器"></a>4、视图/存储过程/触发器</h3><blockquote>
+<p>Mysql数据库当中的存储对象</p>
+</blockquote>
+<ul>
 <li><h4 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h4></li>
 </ul>
 <blockquote>
 <p>视图（View）是一种虚拟存在的表。视图中的数据并不在数据库中实际存在，行和列数据来自定义视图的查询中使用的表，并且是在使用视图时动态生成的。</p>
 </blockquote>
+<p>操作视图中的数据就和操作数据库表一样，可以将视图理解为一张不被存储的虚拟表。</p>
+<p>视图当中的数据并不存在，如果往视图里面插入数据，数据将存在基表当中，如果不想给用户表的权限，可以给用户一个视图。 </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 创建视图<br>CREATE [OR REPLACE] VIEW 视图名称(列名列表) AS SELECT语句 [WITH CASCADED|LOCAL CHECk OPTION];<br><br># 查询视图<br># 查看创建视图语句<br>SHOW CREATE VIEW 视图名称;<br># 查看视图数据<br>SELECT * FROM 视图名称...;<br><br># 修改视图<br># 方式一、使用创建的语句，用REPLACE替换掉<br>CREATE[OR REPLACE]...<br># 方式二<br>ALTER VIEW 视图名称(列表名称) AS SELECT ...;<br><br># 删除视图<br>DROP VIEW IF EXISTS 视图名称<br></code></pre></td></tr></table></figure>
+<p><strong>视图当中的检查选项</strong></p>
+<p><strong>CASCADED（向下级联）</strong></p>
+<p>当使用WITH CHECK OPTION子句创建视图时，Mysql会通过视图检查正在更改的每个行。进行校验，所插入的数据是否满足SELECT语句。</p>
+<p>Mysql中还可以为视图再创建新的视图，新的视图如果有option选项会影响到之前的视图</p>
+<p><strong>LOCAL（不向下级联，只是检查有option的条件）</strong></p>
+<p><strong>视图的更新和作用</strong></p>
+<p>要使视图可以更新，视图中的行与基础表中的行之间必须存在一对一的关系。如果视图包含以下中任何一项，则该视图不可更新：</p>
+<p>聚合函数、DISTINCT、GROUP BY、HAVING、UNION或者UNION ALL</p>
+<p>作用：1、可以简化用户对数据的理解，简化用户操作。2、控制用户对表的查看权限。3、数据独立，屏蔽真实表结构。4、可以简化多表联查的操作。</p>
 <ul>
 <li><h4 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h4></li>
 </ul>
@@ -1074,8 +1214,44 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 声明游标、打开游标、获取下一行、关闭游标<br>DELIMITER //<br><br>CREATE PROCEDURE process_users()<br>BEGIN<br>    DECLARE done INT DEFAULT FALSE;<br>    DECLARE user_id INT;<br>    DECLARE user_name VARCHAR(255);<br><br>    -- 声明游标<br>    DECLARE user_cursor CURSOR FOR <br>        SELECT id, name FROM users;<br><br>    -- 打开游标<br>    OPEN user_cursor;<br><br>    -- 循环遍历结果集<br>    read_loop: LOOP<br>        -- 获取下一行数据<br>        FETCH user_cursor INTO user_id, user_name;<br>        IF done THEN<br>            LEAVE read_loop;<br>        END IF;<br>        <br>        -- 处理当前行数据<br>        -- 这里可以执行相应的操作，如输出到日志或进行其他逻辑处理<br>        SELECT CONCAT(&#x27;User ID: &#x27;, user_id, &#x27;, User Name: &#x27;, user_name);<br><br>    END LOOP;<br><br>    -- 关闭游标<br>    CLOSE user_cursor;<br><br>END //<br><br>DELIMITER ;<br></code></pre></td></tr></table></figure>
 <ul>
 <li><h4 id="存储函数"><a href="#存储函数" class="headerlink" title="存储函数"></a>存储函数</h4></li>
+</ul>
+<blockquote>
+<p>有返回值的存储过程，存储函数的参数只能时IN类型’</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 语法结构<br>CREATE FUNCTION 存储函数名称([参数列表])<br>RETURNS type [characteristic...]<br>BEGIN<br>	--SQL语句<br>	RETURN ...;<br>END;<br><br>characteristics存储参数的特性<br>DETERMINISTIC : 相同的输入参数总是产生相同的结果<br>NO SQL : 不包含SQL语句<br>READS SQL DATA : 包含读取数据的语句，但不包含写入数据的语句<br></code></pre></td></tr></table></figure>
+<ul>
 <li><h4 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a>触发器</h4></li>
 </ul>
+<blockquote>
+<p>在insert/update/delete之前或者之后，触发并执行触发器中定义的SQL语句集合。</p>
+<p>使用别名OLD和NEW来引用触发器中发生变化的记录内容</p>
+<p>触发器只支持行级触发，不支持语句级别触发：如果一个UPDATE语句影响了5行，则触发器会被出发5次</p>
+</blockquote>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">触发器类型</th>
+<th style="text-align:center">NEW和OLD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">INSERT型触发器</td>
+<td style="text-align:center">NEW表示将要或者已经新增的数据</td>
+</tr>
+<tr>
+<td style="text-align:center">UPDATE型触发器</td>
+<td style="text-align:center">OLD表示修改之前的数据，NEW表示将要或已经修改后的数据</td>
+</tr>
+<tr>
+<td style="text-align:center">DELETE型触发器</td>
+<td style="text-align:center">OLD表示将要或者已经删除的数据</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 创建触发器<br>CREATE TRIGGER trigger_name<br>BEFORE/AFTER(在之前还是之后) INSERT/UPDATE/DELETE(触发器类型)<br>ON tbl_name FOR EACH ROW --行级触发器<br>BEGIN<br>	trigger_stmt; # 触发器逻辑<br>END;<br><br># 查看<br>SHOW TRIGGERS;<br><br># 删除，数据库中的触发器<br>DROP TRIGGER [schema_name.]trigger_name;<br></code></pre></td></tr></table></figure>
 <h3 id="5、锁"><a href="#5、锁" class="headerlink" title="5、锁"></a>5、锁</h3><h3 id="6、InnoDB核心"><a href="#6、InnoDB核心" class="headerlink" title="6、InnoDB核心"></a>6、InnoDB核心</h3><h3 id="7、MySQL管理"><a href="#7、MySQL管理" class="headerlink" title="7、MySQL管理"></a>7、MySQL管理</h3><h2 id="数据库运维"><a href="#数据库运维" class="headerlink" title="数据库运维"></a>数据库运维</h2><h3 id="1、日志"><a href="#1、日志" class="headerlink" title="1、日志"></a>1、日志</h3><h3 id="2、主从复制"><a href="#2、主从复制" class="headerlink" title="2、主从复制"></a>2、主从复制</h3><h3 id="3、分库分表"><a href="#3、分库分表" class="headerlink" title="3、分库分表"></a>3、分库分表</h3><h3 id="4、读写分离"><a href="#4、读写分离" class="headerlink" title="4、读写分离"></a>4、读写分离</h3><h3 id=""><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
       <categories>
         <category>技术研究</category>
@@ -1085,84 +1261,6 @@
         <tag>数据库</tag>
         <tag>Mysql</tag>
         <tag>SQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Git常见用法</title>
-    <url>/2024/01/04/git/</url>
-    <content><![CDATA[<h4 id="怎样撤销一个已经push到远端的版本"><a href="#怎样撤销一个已经push到远端的版本" class="headerlink" title="怎样撤销一个已经push到远端的版本"></a>怎样撤销一个已经push到远端的版本</h4><figure class="highlight arcade"><table><tr><td class="code"><pre><code class="hljs arcade">每次<span class="hljs-built_in">push</span>之前线pull一下<br><br><span class="hljs-number">1</span>、查看当前提交的信息，找到需要撤回到的版本号复制，一串十六进制的数<br>git <span class="hljs-built_in">log</span><br><br><span class="hljs-number">2</span>、使用git reset<br>git reset --soft 复制的版本号<br><br><span class="hljs-number">3</span>、强制回退当前版本号<br><span class="hljs-comment">// 确认一下当前版本</span><br>git <span class="hljs-built_in">log</span><br><span class="hljs-comment">// 谨慎使用，强制使用本地仓库代码修改远程仓库</span><br>git <span class="hljs-built_in">push</span> orgin master --force<br></code></pre></td></tr></table></figure>
-<h4 id="新建分支并同步到远端的分支"><a href="#新建分支并同步到远端的分支" class="headerlink" title="新建分支并同步到远端的分支"></a>新建分支并同步到远端的分支</h4><figure class="highlight mipsasm"><table><tr><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># 在本地新建一个名字为branch_name的分支，并与远端的origin/branch_name同步</span><br>git checkout -<span class="hljs-keyword">b </span><span class="hljs-keyword">branch_name </span><span class="hljs-keyword">origin/branch_name</span><br></code></pre></td></tr></table></figure>
-<h4 id="解决git-clone超时的问题"><a href="#解决git-clone超时的问题" class="headerlink" title="解决git clone超时的问题"></a>解决git clone超时的问题</h4><p>从github上clone代码仓库报错<code>Failed to connect to github.com port 443 after 21038 ms: Couldn&#39;t connect to server</code>且尝试去ping一下github官网会丢包</p>
-<img src="/2024/01/04/git/image-20231204110955462.png" class="" title="image-20231204110955462">
-<p>解决方案</p>
-<p>修改系统的hosts，跳过域名解析的过程，直接用ip地址访问</p>
-<figure class="highlight accesslog"><table><tr><td class="code"><pre><code class="hljs accesslog"><span class="hljs-number">192.30.255.112</span> github.com git<br><span class="hljs-number">185.31.16.184</span> github.global.ssl.fastly.net<br></code></pre></td></tr></table></figure>
-<img src="/2024/01/04/git/image-20231204111125551.png" class="" title="image-20231204111125551">
-<p>修改hosts需要给文件更高的权限</p>
-<img src="/2024/01/04/git/image-20231204111350240.png" class="" title="image-20231204111350240">
-<h4 id="github中git-push出现超时的问题"><a href="#github中git-push出现超时的问题" class="headerlink" title="github中git push出现超时的问题"></a>github中git push出现超时的问题</h4><img src="/2024/01/04/git/image-20231204112945547.png" class="" title="image-20231204112945547">
-<p>解决方案</p>
-<p>1、打开本机的代理服务器</p>
-<img src="/2024/01/04/git/image-20231204113100512.png" class="" title="image-20231204113100512">
-<p>2、取消git config里面的http和https代理</p>
-<img src="/2024/01/04/git/image-20231204113208566.png" class="" title="image-20231204113208566">
-<p>3、设置http代理服务器</p>
-<img src="/2024/01/04/git/image-20231204113304822.png" class="" title="image-20231204113304822">
-<h4 id="linux中输出一个文件夹下面的所有文件名"><a href="#linux中输出一个文件夹下面的所有文件名" class="headerlink" title="linux中输出一个文件夹下面的所有文件名"></a>linux中输出一个文件夹下面的所有文件名</h4><ul>
-<li><strong><code>/path/to/directory</code></strong>: 替换为目标目录的路径。</li>
-<li><strong><code>-maxdepth 1</code></strong>: 限制<code>find</code>的搜索深度为1，即仅在指定的目录中搜索，而不会搜索其子目录。</li>
-<li><strong><code>-type f</code></strong>: 限制搜索结果为普通文件（不包括目录和其他类型的文件）。</li>
-<li><strong><code>-exec basename &#123;&#125; \;</code></strong>: 对每一个找到的文件执行<code>basename</code>命令，即输出文件的基本名称。<code>&#123;&#125;</code>是<code>find</code>命令的占位符，表示每个找到的文件的路径。<code>\;</code>表示命令结束。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">find /path/to/directory -maxdepth 1 -<span class="hljs-built_in">type</span> f -<span class="hljs-built_in">exec</span> <span class="hljs-built_in">basename</span> &#123;&#125; \;<br></code></pre></td></tr></table></figure>
-<h4 id="git查看远端仓库地址"><a href="#git查看远端仓库地址" class="headerlink" title="git查看远端仓库地址"></a>git查看远端仓库地址</h4><figure class="highlight dsconfig"><table><tr><td class="code"><pre><code class="hljs dsconfig"><span class="hljs-string">git</span> <span class="hljs-string">remote</span> -<span class="hljs-string">v</span><br><br><span class="hljs-comment"># 更改远程仓库</span><br><span class="hljs-string">git</span> <span class="hljs-string">remote</span> <span class="hljs-built_in">set-url</span> <span class="hljs-string">origin</span> 仓库地址<br></code></pre></td></tr></table></figure>
-<h4 id="查看代码贡献量"><a href="#查看代码贡献量" class="headerlink" title="查看代码贡献量"></a>查看代码贡献量</h4><blockquote>
-<p>按照各个作者的修改代码总数排序</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --pretty=<span class="hljs-string">&quot;%aN&quot;</span> | <span class="hljs-built_in">sort</span> | <span class="hljs-built_in">uniq</span> -c | <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> count author; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> -n <span class="hljs-string">&quot;<span class="hljs-variable">$author</span> &quot;</span>; git <span class="hljs-built_in">log</span> --author=<span class="hljs-string">&quot;<span class="hljs-variable">$author</span>&quot;</span> --pretty=tformat: --numstat | awk <span class="hljs-string">&#x27;&#123; add += $1; subs += $2 &#125; END &#123; total = add + subs; printf &quot;%d\n&quot;, total &#125;&#x27;</span>; <span class="hljs-keyword">done</span> | <span class="hljs-built_in">sort</span> -rnk2<br></code></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>技术研究</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>算法题-数组和字符串</title>
-    <url>/2024/02/09/leetcode-0209/</url>
-    <content><![CDATA[<h3 id="80-删除有序数组中的重复项-Ⅱ"><a href="#80-删除有序数组中的重复项-Ⅱ" class="headerlink" title="80.删除有序数组中的重复项 Ⅱ"></a><a href="https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/?envType=study-plan-v2&amp;envId=top-interview-150">80.删除有序数组中的重复项 Ⅱ</a></h3><p>给你一个有序数组 <code>nums</code> ，请你<strong>原地</strong>删除重复出现的元素，使得出现次数超过两次的元素<strong>只出现两次</strong> ，返回删除后数组的新长度。</p>
-<p>不要使用额外的数组空间，你必须在 <strong>原地修改输入数组</strong> 并在使用 O(1) 额外空间的条件下完成。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight accesslog"><table><tr><td class="code"><pre><code class="hljs accesslog">输入：nums = <span class="hljs-string">[1,1,1,2,2,3]</span><br>输出：<span class="hljs-number">5</span>, nums = <span class="hljs-string">[1,1,2,2,3]</span><br>解释：函数应返回新长度 length = <span class="hljs-number">5</span>, 并且原数组的前五个元素被修改为 <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>。 不需要考虑数组中超出新长度后面的元素。<br></code></pre></td></tr></table></figure>
-<p><strong>示例 2：</strong></p>
-<figure class="highlight dns"><table><tr><td class="code"><pre><code class="hljs dns">输入：nums = [<span class="hljs-number">0,0,1,1</span>,<span class="hljs-number">1,1,2,3</span>,<span class="hljs-number">3</span>]<br>输出：<span class="hljs-number">7</span>, nums = [<span class="hljs-number">0,0,1,1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">3</span>]<br>解释：函数应返回新长度 length = <span class="hljs-number">7</span>, 并且原数组的前七个元素被修改为 <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>。不需要考虑数组中超出新长度后面的元素。<br></code></pre></td></tr></table></figure>
-<p><strong>解析</strong></p>
-<p>使用快fast慢slow指针来遍历数组，慢指针记录数组的长度，快指针记录当前所在的元素是是否需要保留，如果需要保留则将当前位置nums[slow]存放快指针所在的元素，如果不需要保留则需要将fast++</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">removeDuplicates</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br><br>        <span class="hljs-type">int</span> n = nums.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-keyword">if</span>(n &lt;= <span class="hljs-number">2</span>)&#123;<br>            <span class="hljs-keyword">return</span> n;<br>        &#125;<br>        <br>        <span class="hljs-comment">// 因为前两个元素都是必然回保留的，所以slow和fast都从2开始</span><br>        <span class="hljs-type">int</span> slow = <span class="hljs-number">2</span>;<br>        <span class="hljs-type">int</span> fast = <span class="hljs-number">2</span>;<br>        <span class="hljs-comment">// 使用fast来遍历</span><br>        <span class="hljs-keyword">while</span>(fast &lt; n)&#123;<br>            <span class="hljs-comment">// 如果快指针所在的元素不等于当前位置-2所在的元素</span><br>            <span class="hljs-comment">// 说明，快指针所在的位置的元素的前面至多只有slow - 1位置的元素和其相等，即至多只有一个，所以当前fast所在的位置的元素是需要保留的</span><br>            <span class="hljs-comment">// 如果相等的话，说明slow-1和slow-2和fast都相等，所以fast是不需要保留的，fast++</span><br>            <span class="hljs-keyword">if</span>(nums[slow - <span class="hljs-number">2</span>] != nums[fast])&#123;<br>                nums[slow] = nums[fast];<br>                <span class="hljs-comment">// 更新slow位置</span><br>                ++slow;<br>            &#125;<br>            ++fast;<br>        &#125;<br>        <span class="hljs-keyword">return</span> slow;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-<h3 id="122-买股票的最佳时机-Ⅱ"><a href="#122-买股票的最佳时机-Ⅱ" class="headerlink" title="122.买股票的最佳时机 Ⅱ"></a><a href="https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/description/?envType=study-plan-v2&amp;envId=top-interview-150">122.买股票的最佳时机 Ⅱ</a></h3><p>给你一个整数数组 <code>prices</code> ，其中 <code>prices[i]</code> 表示某支股票第 <code>i</code> 天的价格。</p>
-<p>在每一天，你可以决定是否购买和/或出售股票。你在任何时候 <strong>最多</strong> 只能持有 <strong>一股</strong> 股票。你也可以先购买，然后在 <strong>同一天</strong> 出售。</p>
-<p>返回 <em>你能获得的 <strong>最大</strong> 利润</em> 。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight tap"><table><tr><td class="code"><pre><code class="hljs tap">输入：prices = [7,1,5,3,6,4]<br>输出：7<br>解释：在第<span class="hljs-number"> 2 </span>天（股票价格 = 1）的时候买入，在第<span class="hljs-number"> 3 </span>天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 =<span class="hljs-number"> 5 </span>-<span class="hljs-number"> 1 </span>=<span class="hljs-number"> 4 </span>。<br>     随后，在第<span class="hljs-number"> 4 </span>天（股票价格 = 3）的时候买入，在第<span class="hljs-number"> 5 </span>天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 =<span class="hljs-number"> 6 </span>-<span class="hljs-number"> 3 </span>=<span class="hljs-number"> 3 </span>。<br>     总利润为<span class="hljs-number"> 4 </span>+<span class="hljs-number"> 3 </span>=<span class="hljs-number"> 7 </span>。<br></code></pre></td></tr></table></figure>
-<p><strong>示例 2：</strong></p>
-<figure class="highlight tap"><table><tr><td class="code"><pre><code class="hljs tap">输入：prices = [1,2,3,4,5]<br>输出：4<br>解释：在第<span class="hljs-number"> 1 </span>天（股票价格 = 1）的时候买入，在第<span class="hljs-number"> 5 </span>天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 =<span class="hljs-number"> 5 </span>-<span class="hljs-number"> 1 </span>=<span class="hljs-number"> 4 </span>。<br>     总利润为<span class="hljs-number"> 4 </span>。<br></code></pre></td></tr></table></figure>
-<p><strong>示例 3：</strong></p>
-<figure class="highlight accesslog"><table><tr><td class="code"><pre><code class="hljs accesslog">输入：prices = <span class="hljs-string">[7,6,4,3,1]</span><br>输出：<span class="hljs-number">0</span><br>解释：在这种情况下, 交易无法获得正利润，所以不参与交易可以获得最大利润，最大利润为 <span class="hljs-number">0</span> 。<br></code></pre></td></tr></table></figure>
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>1 &lt;= prices.length &lt;= 3 * 104</code></li>
-<li><code>0 &lt;= prices[i] &lt;= 104</code></li>
-</ul>
-]]></content>
-      <categories>
-        <category>算法实践</category>
-      </categories>
-      <tags>
-        <tag>leetcode</tag>
-        <tag>算法</tag>
-        <tag>数组</tag>
-        <tag>字符串</tag>
       </tags>
   </entry>
   <entry>
