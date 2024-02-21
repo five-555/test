@@ -1,7 +1,6 @@
 ---
 title: 数据库-MySQL
-tags:
-  - Database 数据库 Mysql SQL
+tags: [Database, 数据库, Mysql, SQL]
 categories: 技术研究
 date: 2024-02-10 16:00:39
 cover:
