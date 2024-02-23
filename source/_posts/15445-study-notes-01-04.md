@@ -1,5 +1,5 @@
 ---
-title: 15445_study_notes_01_04
+title: CMU15445数据库学习笔记01-04
 date: 2024-02-10 16:08:56
 tags: [数据库, CMU15445]
 categories: [学习笔记]
