@@ -10,7 +10,7 @@ top_img:
 
 > Mysql数据库的关键词：事务、存储引擎、索引、SQL优化、**锁、日志、主从复制、读写分离、分库分表**
 
-![image-20240210160421874](database-mysql/image-20240210160421874.png)
+![image-20240223203653517](database-mysql/image-20240223203653517.png)
 
 ## 数据库基础
 
@@ -1227,7 +1227,9 @@ select object_schema, object_name, index_name, lock_type, lock_mode, lock_data f
 
 
 
-### 6、InnoDB核心
+### 6、InnoDB引擎
+
+* 逻辑存储结构
 
 ### 7、MySQL管理
 
