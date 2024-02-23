@@ -1,6 +1,334 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>15445_study_notes_01_04</title>
+    <url>/2024/02/10/15445-study-notes-01-04/</url>
+    <content><![CDATA[<h2 id="01-Relational-Model-amp-Relational-Algebra"><a href="#01-Relational-Model-amp-Relational-Algebra" class="headerlink" title="01-Relational Model &amp; Relational Algebra"></a>01-Relational Model &amp; Relational Algebra</h2><h3 id="数据库基本概念"><a href="#数据库基本概念" class="headerlink" title="数据库基本概念"></a>数据库基本概念</h3><p>数据库管理系统：允许应用在数据库中存储、操作、分析数据信息的一种软件。通常的数据库管理系统（DBMS）支持通过一些数据模型（data model）定义、创建、查询、更新以及数据库的管理工作</p>
+<p>数据模型（data model）： 将存储的概念的高级抽象在数据库中，是数据库中描述数据的一种概念集合，能够表明数据的形状、属性等。</p>
+<ul>
+<li>关系型数据模型：关系型数据库</li>
+<li>非关系型模型Nosql：key/value、Graph、Document/Object</li>
+<li>矩阵/向量/列表</li>
+<li>分层、网络</li>
+</ul>
+<p>模式（schema）：是一个逻辑概念，用于组织数据库中的对象。模式中的对象通常包括表、索引、数据类型、序列、视图、存储过程、主键、外键等。</p>
+<h3 id="关系型模型（Relational-Model）"><a href="#关系型模型（Relational-Model）" class="headerlink" title="关系型模型（Relational Model）"></a>关系型模型（Relational Model）</h3><p>定义了一个数据库抽象层，用于如何替换表示关系以避免数据库维护的开销。</p>
+<ul>
+<li>三大原则<ul>
+<li>存储数据库的简单数据结构</li>
+<li>数据库的存储由数据库管理系统来实现，无需用户定义数据的存储形式，例如tree等</li>
+<li>允许数据使用高级语言，数据库管理系统产生最优的执行策略</li>
+</ul>
+</li>
+</ul>
+<p>关系（table、relation）：包含代表实体属性关系的一种无序集合</p>
+<p>元组（tuple）：关系中的属性值表现的集合，值也叫做域（domain）</p>
+<p>主键（primary key）：识别唯一元组的方法，是一组关键的属性</p>
+<p>外键（foreign key）：允许定义一个关系中的数据如何与另一个关系相关，外键作为一个映射表（交叉引用表）</p>
+<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><ul>
+<li><p>SELECT</p>
+<p>从一个关系中通过某些过滤信息选择出元组的子集，条件通常写在where 后面</p>
+<img src="/2024/02/10/15445-study-notes-01-04/image-20240102163927925.png" class="" title="image-20240102163927925">
+</li>
+<li><p>PROJECTION（投影）</p>
+<p>使用数据库中的元组重新生成一个关系，只包含某一些特殊的属性。</p>
+<p>把原来的表映射成一个新的表</p>
+<img src="/2024/02/10/15445-study-notes-01-04/image-20240102201317281.png" class="" title="image-20240102201317281">
+</li>
+<li><p>UNION（联合关系）</p>
+<p>UNION ALL：不去重</p>
+<p>UNION：去重</p>
+<p>联合不同的数据库，但是数据库具有完全相同的属性。</p>
+<p>默认情况下并集允许重复性</p>
+</li>
+<li><p>INTERSECT（交集关系）</p>
+<p>两个数据库关系的交集，相同的元组集合</p>
+</li>
+<li><p>DIFFERENCE（取补集）</p>
+<p>语法：EXCEPT</p>
+</li>
+<li><p>PRODUCT（笛卡尔积）</p>
+<p>语法CROSS JOIN</p>
+</li>
+<li><p>JOIN</p>
+<img src="/2024/02/10/15445-study-notes-01-04/image-20240103093506806.png" class="" title="image-20240103093506806">
+</li>
+</ul>
+<h2 id="02-Modern-SQL"><a href="#02-Modern-SQL" class="headerlink" title="02-Modern SQL"></a>02-Modern SQL</h2><h3 id="AGGREGATES"><a href="#AGGREGATES" class="headerlink" title="AGGREGATES"></a>AGGREGATES</h3><blockquote>
+<p>聚合（aggregations）：类似一个在查询中获取一组元组的函数</p>
+<p>AVG、MIN、MAX、SUM、COUNT</p>
+</blockquote>
+<img src="/2024/02/10/15445-study-notes-01-04/image-20240104092359606.png" class="" title="image-20240104092359606">
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> student(<br>	sid <span class="hljs-type">INT</span> <span class="hljs-keyword">PRIMARY KEY</span>,<br>	<span class="hljs-type">name</span> <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">50</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>	<span class="hljs-keyword">login</span> <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">50</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>	age <span class="hljs-type">INT</span> <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>	gpa <span class="hljs-type">FLOAT</span> <span class="hljs-keyword">DEFAULT</span> <span class="hljs-number">0</span><br>);<br><br><span class="hljs-keyword">INSERT</span> <span class="hljs-keyword">INTO</span> student (sid, <span class="hljs-type">name</span>, <span class="hljs-keyword">login</span>, age, gpa) <span class="hljs-keyword">VALUES</span><br>(<span class="hljs-number">53666</span>, &quot;Kanye&quot;, &quot;kanye@cs&quot;, <span class="hljs-number">44</span>, <span class="hljs-number">4.0</span>),<br>(<span class="hljs-number">53688</span>, &quot;Bieber&quot;, &quot;jbieber@cs&quot;, <span class="hljs-number">27</span>, <span class="hljs-number">3.9</span>),<br>(<span class="hljs-number">53655</span>, &quot;Tupac&quot;, &quot;shakur@cs&quot;, <span class="hljs-number">25</span>, <span class="hljs-number">3.5</span>);<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> enrolled(<br>	sid <br>)<br></code></pre></td></tr></table></figure>
+<ul>
+<li>获取到student表中的注册统计数</li>
+</ul>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">SELECT</span> COUNT(<span class="hljs-keyword">login</span>) <span class="hljs-keyword">AS</span> cnt <span class="hljs-keyword">FROM</span> student <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">login</span> <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;%@cs&#x27;</span>;<br>// 大多数数据库都对count（*）有优化<br><span class="hljs-keyword">SELECT</span> COUNT(*) <span class="hljs-keyword">AS</span> cnt <span class="hljs-keyword">FROM</span> student <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">login</span> <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;%@cs&#x27;</span>;<br><span class="hljs-keyword">SELECT</span> COUNT(<span class="hljs-number">1</span>) <span class="hljs-keyword">AS</span> cnt <span class="hljs-keyword">FROM</span> student <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">login</span> <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;%@cs&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>多聚合，多个属性的聚合</li>
+</ul>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">SELECT</span> AVG(gpa), COUNT(sid) <span class="hljs-keyword">FROM</span> student <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">login</span> <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;%@cs&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>DISTINCT</p>
+<p>COUNT、SUM、AVG支持DISTINCT，表示只会统计不同的元素，去重</p>
+</li>
+</ul>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">SELECT</span> COUNTA(<span class="hljs-keyword">DISTINCT</span> <span class="hljs-keyword">login</span>) <span class="hljs-keyword">FROM</span> student <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">login</span> <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;%@cs&#x27;</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>GROUP BY</p>
+<p>按照group by后面的元组进行select操作</p>
+</li>
+</ul>
+<figure class="highlight n1ql"><table><tr><td class="code"><pre><code class="hljs n1ql">// 按照cid的分组来计算gpa的平均值，并聚合cid和平均值两列元素<br><span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">AVG</span>(s.gpa), <span class="hljs-built_in">e</span>.cid<br><span class="hljs-keyword">FROM</span> enrolled <span class="hljs-keyword">AS</span> <span class="hljs-built_in">e</span>, student <span class="hljs-keyword">AS</span> s<br><span class="hljs-keyword">WHERE</span> <span class="hljs-built_in">e</span>.sid = s.sid<br><span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> <span class="hljs-built_in">e</span>.cid;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>HAVING</p>
+<p>在完成group by以后还需要再进行一些筛选，可以使用having</p>
+</li>
+</ul>
+<h3 id="STRING-OPERATIONS（字符串操作）"><a href="#STRING-OPERATIONS（字符串操作）" class="headerlink" title="STRING OPERATIONS（字符串操作）"></a>STRING OPERATIONS（字符串操作）</h3><ul>
+<li><p>模糊查询</p>
+<blockquote>
+<p>数据库中没有搜索引擎，少用右模糊查询或者全模糊查询，百分号尽量不放在前面，在索引过程当中遵循最左匹配原则</p>
+</blockquote>
+<p>%：代表一个或多个字符</p>
+<p>_：代表单个字符</p>
+</li>
+<li><p>SUBSTRING</p>
+<p>字符串切片操作</p>
+</li>
+</ul>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql">// 对<span class="hljs-type">name</span>这一列中的字符串进行切片操作<br><span class="hljs-keyword">SELECT</span> SUBSTRING(<span class="hljs-type">name</span>, <span class="hljs-number">1</span>, <span class="hljs-number">5</span>) <span class="hljs-keyword">AS</span> abbrv_name <span class="hljs-keyword">FROM</span> student <span class="hljs-keyword">WHERE</span> sid = <span class="hljs-number">53688</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>UPPER：大写</p>
+</li>
+<li><p>LOWER：小写</p>
+</li>
+<li><p>CONCAT</p>
+<p>连接操作，将字符串拼接起来</p>
+</li>
+</ul>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">SELECT</span> <span class="hljs-type">name</span> <span class="hljs-keyword">FROM</span> student <span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">login</span> = CONCAT(LOWER(<span class="hljs-type">name</span>), <span class="hljs-string">&#x27;@cs&#x27;</span>);<br></code></pre></td></tr></table></figure>
+<h3 id="OUTPUT-REDIRECTION（输出重定向）"><a href="#OUTPUT-REDIRECTION（输出重定向）" class="headerlink" title="OUTPUT REDIRECTION（输出重定向）"></a>OUTPUT REDIRECTION（输出重定向）</h3><p>将一个查询的结果集建成一个新的表，要求重定向的表是没有被定义的表，同时</p>
+<ul>
+<li>CREATE TABLE</li>
+</ul>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"># 使用查询建一张表格<br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> CourseIds(<br>	<span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">DISTINCT</span> cid <span class="hljs-keyword">FROM</span> enrolled<br>);<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>ORDER BY <cloumn*> [ASC|DESC]</p>
+<p>按照某一列或者多列进行增序或者降序</p>
+</li>
+</ul>
+<figure class="highlight oxygene"><table><tr><td class="code"><pre><code class="hljs oxygene"># <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> <span class="hljs-number">1</span>: 根据第一列进行排序<br><span class="hljs-keyword">SELECT</span> sid, grade <span class="hljs-keyword">FROM</span> enrolled <span class="hljs-keyword">WHERE</span> cid = <span class="hljs-string">&#x27;15-721&#x27;</span> <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> grade<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>LIMIT &lt; count &gt; [offset]</p>
+<p>输出count行，从第offset个开始</p>
+</li>
+</ul>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"># 从满足条件的第<span class="hljs-number">10</span>个开始查找<span class="hljs-number">20</span>个学生<br><span class="hljs-keyword">SELECT</span> sid, <span class="hljs-type">name</span> <span class="hljs-keyword">FROM</span> student<br><span class="hljs-keyword">WHERE</span> <span class="hljs-keyword">login</span> <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;%@cs&#x27;</span><br><span class="hljs-keyword">LIMIT</span> <span class="hljs-number">20</span> <span class="hljs-keyword">OFFSET</span> <span class="hljs-number">10</span>;<br></code></pre></td></tr></table></figure>
+<h3 id="NESTED-QUERIES（嵌套查询）"><a href="#NESTED-QUERIES（嵌套查询）" class="headerlink" title="NESTED QUERIES（嵌套查询）"></a>NESTED QUERIES（嵌套查询）</h3><p>将一个查询或多个查询嵌入到另一个查询当中</p>
+<img src="/2024/02/10/15445-study-notes-01-04/image-20240104193223551.png" class="" title="image-20240104193223551">
+<p>对子嵌套的关系进行操作</p>
+<ul>
+<li>ALL：所有的行必须满足子查询中的表达式</li>
+<li>ANY：至少一行必须在子查询中匹配</li>
+<li>IN：等价于=ANY</li>
+<li>EXISTS：只要内部查询产生一个输出记录就返回</li>
+</ul>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">SELECT</span> <span class="hljs-type">name</span> <span class="hljs-keyword">FROM</span> student<br><span class="hljs-keyword">WHERE</span> sid = <span class="hljs-keyword">ANY</span>(<br><span class="hljs-keyword">SELECT</span> sid <span class="hljs-keyword">FROM</span> enrolled<br><span class="hljs-keyword">WHERE</span> cid = <span class="hljs-string">&#x27;15-445&#x27;</span><br>);<br></code></pre></td></tr></table></figure>
+<h3 id="WINDOW-FUNCTIONS（窗口函数）"><a href="#WINDOW-FUNCTIONS（窗口函数）" class="headerlink" title="WINDOW FUNCTIONS（窗口函数）"></a>WINDOW FUNCTIONS（窗口函数）</h3><p>类似于聚合，但不仅仅是将元组折叠成单个聚合，而是以一种增量的方式计算聚合</p>
+<ul>
+<li><p>SELECT … FUNC-NAME(…) OVER(…) FROM table</p>
+<p>使用窗口函数FUNC-NAME，按照OVER的方式对查询的col进行聚合</p>
+</li>
+<li><p>窗口函数种类</p>
+<ul>
+<li>ROW_NUMBER() ：每一行的行号</li>
+<li>RANK() ：位置</li>
+<li>二者的区别在于，rank可以并列，但是row_number是唯一的</li>
+</ul>
+</li>
+<li><p>PARTITION BY  cid：按照cid分组，可以写在over中的条件里面</p>
+</li>
+</ul>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"># 先将enrolled表按照cid分组，并按照grade排序<br># 再找出每一门课当中的第二名，ranking中第<span class="hljs-number">2</span>高成绩的数据<br><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> (<br><span class="hljs-keyword">SELECT</span> *, RANK() <span class="hljs-keyword">OVER</span> (<span class="hljs-keyword">PARTITION</span> <span class="hljs-keyword">BY</span> cid<br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> grade <span class="hljs-keyword">ASC</span>) <span class="hljs-keyword">AS</span> rank<br><span class="hljs-keyword">FROM</span> enrolled) <span class="hljs-keyword">AS</span> ranking<br><span class="hljs-keyword">WHERE</span> ranking.rank = <span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>CTE（COMMON TABLE EXPRESSIONS）</p>
+<p>通用表达式：只在sql语句内部起作用的临时语句</p>
+<p>RECURSIVE：递归调用，不是所有的sql都能够使用递归</p>
+</li>
+</ul>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">WITH</span> cteName (col1, col2) <span class="hljs-keyword">AS</span> (<br><span class="hljs-keyword">SELECT</span> <span class="hljs-number">1</span>, <span class="hljs-number">2</span><br>)<br><span class="hljs-keyword">SELECT</span> col1 + col2 <span class="hljs-keyword">FROM</span> cteName<br><br><span class="hljs-keyword">WITH</span> cteSource (maxId) <span class="hljs-keyword">AS</span> (<br><span class="hljs-keyword">SELECT</span> MAX(sid) <span class="hljs-keyword">FROM</span> enrolled<br>)<br><span class="hljs-keyword">SELECT</span> <span class="hljs-type">name</span> <span class="hljs-keyword">FROM</span> student, cteSource<br><span class="hljs-keyword">WHERE</span> student.sid = cteSource.maxId<br><br># CTE递归的调用，很少用，可读性差<br><span class="hljs-keyword">WITH</span> <span class="hljs-keyword">RECURSIVE</span> cteSource (counter) <span class="hljs-keyword">AS</span> (<br>(<span class="hljs-keyword">SELECT</span> <span class="hljs-number">1</span>)<br><span class="hljs-keyword">UNION</span> <span class="hljs-keyword">ALL</span><br>(<span class="hljs-keyword">SELECT</span> counter + <span class="hljs-number">1</span> <span class="hljs-keyword">FROM</span> cteSource<br><span class="hljs-keyword">WHERE</span> counter &lt; <span class="hljs-number">10</span>)<br>)<br><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> cteSource<br></code></pre></td></tr></table></figure>
+<ul>
+<li>CTE可以递归调用自身</li>
+</ul>
+<h2 id="03-Database-Storage-1"><a href="#03-Database-Storage-1" class="headerlink" title="03-Database Storage 1"></a>03-Database Storage 1</h2><h3 id="基于磁盘的架构"><a href="#基于磁盘的架构" class="headerlink" title="基于磁盘的架构"></a>基于磁盘的架构</h3><blockquote>
+<p> 数据库管理系统（DBMS）假设数据库的主要存储位置位于非易失性磁盘上。DBMS 的各个组件负责管理在非易失性存储和易失性存储之间的数据移动。</p>
+</blockquote>
+<ul>
+<li><p>数据库系统的设计目标</p>
+<blockquote>
+<p>数据库系统做的操作有点类似于虚拟内存，如下图</p>
+</blockquote>
+<p>1、系统可以管理超过内存可使用的总内存的数据</p>
+<p>2、由于读写内存十分昂贵，需要尽可能避免数据大量的读写内存造成的性能损耗</p>
+<p>3、尽可能使用顺序存储的方式提高效率</p>
+</li>
+<li><p>为什么不适用操作系统？操作系统的虚拟内存可以进行相关操作</p>
+<blockquote>
+<p>数据库管理系统使用内存映射存储文件的内容到程序的地址空间</p>
+<p>操作系统负责文件页面的命中与否，数据库管理系统不需要考虑</p>
+</blockquote>
+</li>
+</ul>
+<img src="/2024/02/10/15445-study-notes-01-04/image-20240105160547664.png" class="" title="image-20240105160547664">
+<ul>
+<li><p>内存映射会遇到的问题（MEMORY MAPPED I/O PROBLEMS）</p>
+<ul>
+<li><p>事务安全Transaction Safety</p>
+</li>
+<li><p>I/O阻塞</p>
+<p>数据库系统不知道内存中有哪些页面，所以在取数据如果发生错误，操作系统会阻塞线程</p>
+</li>
+<li><p>错误处理</p>
+</li>
+<li><p>性能问题</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>结论：数据库管理系统不使用MMAP内存映射</p>
+<ul>
+<li><p>数据库进行管理</p>
+<p>问题1、数据库系统如何表示磁盘上的文件数据</p>
+<p>问题2、如何管理内存以从磁盘中来回移动这些页面的数据，数据的读入与写回</p>
+</li>
+</ul>
+<h3 id="文件存储"><a href="#文件存储" class="headerlink" title="文件存储"></a>文件存储</h3><blockquote>
+<p>数据库系统会使用数据库独有的文件格式在磁盘上存储一个或者多个文件</p>
+<p>操作系统并无法知晓文件的内容</p>
+</blockquote>
+<ul>
+<li><p>存储管理器</p>
+<p>用于维护数据库文件，进行页面调度提升性能，利用局部性原则，组织一系列的页面文件读写</p>
+</li>
+<li><p>数据页面</p>
+<blockquote>
+<p>页面被锁定为固定大小的数据块，可以包含任何内容，不可以包含混合的数据</p>
+</blockquote>
+<p>硬件页面：存储设备可以保证它原子写出的最小数据或数据块大小，默认大小4KB</p>
+<p>操作系统页面：通常4KB</p>
+<p>数据库页面：512B-16KB</p>
+<ul>
+<li>硬件页面是存储设备能够保证正确写入的最大块大小</li>
+<li>使用更大的页面可以减少IO，运用到局部性原理，但是不能够确保更大的页面读写是原子的，需要使用一些操作来确保数据不会丢失</li>
+</ul>
+</li>
+<li><p>堆文件heap file</p>
+<p>按照随机顺序存储的无序页面的集合</p>
+<p>包含有获取、创建、写入、删除页面，以及迭代功能</p>
+<p>数据库管理系统维护一张特殊的表格用于定位数据库文件中的页面，也可以称为目录</p>
+</li>
+</ul>
+<h3 id="页面Page"><a href="#页面Page" class="headerlink" title="页面Page"></a>页面Page</h3><ul>
+<li><p>页面标头</p>
+<p>页面大小</p>
+<p>校验和：检查是否有数据损坏</p>
+<p>数据库管理系统版本：升级系统会更新</p>
+<p>事务可见性：用于进行权限管理</p>
+<p>压缩信息、备份</p>
+</li>
+<li><p>内部组织形式</p>
+<ul>
+<li><p>面向元组tuple的存储方式</p>
+<ul>
+<li>方式1</li>
+</ul>
+<img src="/2024/02/10/15445-study-notes-01-04/image-20240110074224104.png" class="" title="image-20240110074224104">
+<p>删除其中一个tuple需要进行线性的移动</p>
+<p>无法对可变长度的属性进行存储</p>
+<ul>
+<li>方式二、开槽页面slot</li>
+</ul>
+<p>在页面开头存入槽数组，将元组映射到页面的实际位置</p>
+<p>槽页面是从尾端按照顺序存储</p>
+<img src="/2024/02/10/15445-study-notes-01-04/image-20240110074349028.png" class="" title="image-20240110074349028">
+</li>
+</ul>
+</li>
+<li><p>Record IDS</p>
+<blockquote>
+<p>每一个元组都有一个唯一的记录ID号</p>
+</blockquote>
+<p>大部分格式为：页面ID+偏移量，可以使用ctid来获取（数据库中不能有列名为ctid的列） </p>
+<ul>
+<li>每个元组都有元数据，元组头部：可见性信息（元组是否删除）、使用位图表示元组中的空值</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql">#在数据库中可以对碎片整理，会填补前面因为元组删除而空余的slot<br><span class="hljs-keyword">VACUUM</span> <span class="hljs-keyword">FULL</span> <span class="hljs-keyword">table</span>;<br></code></pre></td></tr></table></figure>
+<h2 id="04-Database-Storage-2"><a href="#04-Database-Storage-2" class="headerlink" title="04-Database Storage 2"></a>04-Database Storage 2</h2><h3 id="基于日志的架构"><a href="#基于日志的架构" class="headerlink" title="基于日志的架构"></a>基于日志的架构</h3><blockquote>
+<p>数据库管理系统存包含改变元组的日志记录（PUT、DELETE）</p>
+<p>每一条日志记录包含元组独特的ID</p>
+<p>PUT：包含元组修改后的内容</p>
+<p>DELETE：将元组标记为删除</p>
+</blockquote>
+<p>数据库管理系统在内存页面中存储对元组操作的一些记录，例如修改某一个元组，删除某一个元组，当页面存满以后，记录会被永久保存，并切换到下一个页面，这样的好处可以磁盘IO更少，便于写入</p>
+<p>读入的时候，会需要向前不断追溯到最新的记录，读入很慢，在数据库管理系统中会维护一张index的表，映射到元组id的最新记录</p>
+<ul>
+<li><p>日志压缩</p>
+<p>因为日志是随着数据库的操作而进行持续增长的，数据库管理系统会定期的压缩页面以减少空间浪费</p>
+<p>通过将多个页面合并（找到记录的最新版本），移除掉不必要的记录</p>
+<ul>
+<li><p>通用压缩（Universal Compation）</p>
+<p>查看两个连续的排序文件，将其组合在一起，随后删除旧的文件</p>
+</li>
+<li><p>层级压缩（Level Compation）</p>
+<p>类似于2048，层级较低的过多以后，整合压缩成更大的高层文件</p>
+</li>
+</ul>
+</li>
+<li><p>基于日志的架构有什么缺点</p>
+<ul>
+<li><p>对写功能的放大</p>
+<p>如果需要更新某一个元组，会在查询的过程中压缩，会和压缩过后的页面一起写回，写就被放大了</p>
+</li>
+<li><p>压缩代价较大</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="元组的存储"><a href="#元组的存储" class="headerlink" title="元组的存储"></a>元组的存储</h3><p>4类基本数据类型：整型，浮点（FLOAT/REAL，NUMERIC/DECIMAL），varchar，time</p>
+<ul>
+<li>高精度的数据<ul>
+<li>Postgres，最终结果使用字符串的别名来表示，需要实现不同数据的拼接，很影响性能</li>
+</ul>
+</li>
+</ul>
+<img src="/2024/02/10/15445-study-notes-01-04/image-20240112101151040.png" class="" title="image-20240112101151040">
+<ul>
+<li><p>大数据：例如大小超过一个页面的数据</p>
+<p>使用其它的页面存储这些更大的页</p>
+</li>
+</ul>
+<img src="/2024/02/10/15445-study-notes-01-04/image-20240112102928169.png" class="" title="image-20240112102928169">
+<ul>
+<li><p>外部资源数据</p>
+<p>一些数据库系统允许存储外部文件的数据，对于这些外部文件，数据库系统无法做到持续性保护以及业务的保护，无法保证外部文件不被修改</p>
+</li>
+<li><p>系统目录</p>
+<p>数据库系统维护数据库的一些表格</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>数据库</tag>
+        <tag>CMU15445</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C++使用zlib库来压缩文件</title>
     <url>/2024/01/26/C-%E4%BD%BF%E7%94%A8zlib%E5%BA%93%E6%9D%A5%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<h2 id="C-使用zlib库来压缩文件"><a href="#C-使用zlib库来压缩文件" class="headerlink" title="C++使用zlib库来压缩文件"></a>C++使用zlib库来压缩文件</h2><p>zlib压缩库提供内存压缩和解压缩功能，包括对未压缩的完整性检查数据，提供支持的压缩方法为：deflation，默认使用压缩数据格式为zlib格式。</p>
@@ -1311,8 +1639,8 @@
         <category>技术研究</category>
       </categories>
       <tags>
-        <tag>Database</tag>
         <tag>数据库</tag>
+        <tag>Database</tag>
         <tag>Mysql</tag>
         <tag>SQL</tag>
       </tags>
@@ -1397,7 +1725,28 @@
 <p>分别对主元左边的数组和右边的数组再次进行快速排序</p>
 <p>时间复杂度：nlog(n)</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">partion</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span></span>&#123;<br>    <span class="hljs-type">int</span> value = nums[left];<br>    <span class="hljs-type">int</span> idx = left;<br>    <span class="hljs-comment">// left += 1; left不用+1，相等的情况已经考虑了</span><br>    <br>    <span class="hljs-keyword">while</span>(left &lt; right)&#123;<br>        <span class="hljs-keyword">while</span>(left &lt; right &amp;&amp; nums[right] &gt;= value)right--;<br>        nums[idx] = nums[right];<br>        idx = right;<br>        <span class="hljs-keyword">while</span>(left &lt; right &amp;&amp; nums[left] &lt;= value)left++;<br>        nums[idx] = nums[left];<br>        idx = left;<br>    &#125;<br>    nums[idx] = value;<br>    <span class="hljs-keyword">return</span> left;<br>&#125;<br>    <br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">quicksort</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span></span>&#123;<br>    <span class="hljs-keyword">if</span>(left &gt;= right)<span class="hljs-keyword">return</span>;<br>    <br>    <span class="hljs-type">int</span> mid = <span class="hljs-built_in">partion</span>(nums, left, right);<br>    <span class="hljs-built_in">quicksort</span>(nums, left, mid - <span class="hljs-number">1</span>);<br>    <span class="hljs-built_in">quicksort</span>(nums, mid+<span class="hljs-number">1</span>, right);<br>&#125;<br><br><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-built_in">quicksort</span>(nums, <span class="hljs-number">0</span>, nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>);<br>    <span class="hljs-keyword">return</span> nums;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h3 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h3><h3 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h3><h3 id="计数排序"><a href="#计数排序" class="headerlink" title="计数排序"></a>计数排序</h3>]]></content>
+<h3 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h3><p>思想：</p>
+<p>将数组看成一棵完全二叉树，按照数组中的元素建立大顶堆</p>
+<p>交换堆顶元素和当前最末端元素，此时最大的元素到了数组尾部，锁定位置</p>
+<p>对当前堆进行更新</p>
+<p>时间复杂度：nlg(n)</p>
+<blockquote>
+<p>建堆时间为lg(n)</p>
+<p>取出元素为1，更新堆为lg(n)</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">heapify</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums, <span class="hljs-type">int</span> n, <span class="hljs-type">int</span> i)</span> </span>&#123;<br>    <span class="hljs-type">int</span> largest = i;  <span class="hljs-comment">// 初始化最大值为当前节点</span><br>    <span class="hljs-type">int</span> left = <span class="hljs-number">2</span> * i + <span class="hljs-number">1</span>;  <span class="hljs-comment">// 左孩子节点的索引为 2*i + 1</span><br>    <span class="hljs-type">int</span> right = <span class="hljs-number">2</span> * i + <span class="hljs-number">2</span>;  <span class="hljs-comment">// 右孩子节点的索引为 2*i + 2</span><br><br>    <span class="hljs-comment">// 如果左孩子节点比当前节点大</span><br>    <span class="hljs-keyword">if</span> (left &lt; n &amp;&amp; nums[left] &gt; nums[largest])<br>        largest = left;<br><br>    <span class="hljs-comment">// 如果右孩子节点比当前最大值大</span><br>    <span class="hljs-keyword">if</span> (right &lt; n &amp;&amp; nums[right] &gt; nums[largest])<br>        largest = right;<br><br>    <span class="hljs-comment">// 如果最大值不是当前节点</span><br>    <span class="hljs-keyword">if</span> (largest != i) &#123;<br>        <span class="hljs-comment">// 交换当前节点和最大值节点的值</span><br>        <span class="hljs-built_in">swap</span>(nums[i], nums[largest]);<br><br>        <span class="hljs-comment">// 递归地对受影响的子树进行堆化</span><br>        <span class="hljs-built_in">heapify</span>(nums, n, largest);<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">make_heap</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-type">int</span> n = nums.<span class="hljs-built_in">size</span>();<br><br>    <span class="hljs-comment">// 构建堆（重新排列数组）</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = n / <span class="hljs-number">2</span> - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--)<br>        <span class="hljs-built_in">heapify</span>(nums, n, i);<br>&#125;<br><br><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-built_in">make_heap</span>(nums);<br><br>    <span class="hljs-comment">// 逐个从堆中提取元素</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = nums.<span class="hljs-built_in">size</span>() - <span class="hljs-number">1</span>; i &gt; <span class="hljs-number">0</span>; i--) &#123;<br>        <span class="hljs-comment">// 将当前根节点移动到末尾</span><br>        <span class="hljs-built_in">swap</span>(nums[<span class="hljs-number">0</span>], nums[i]);<br><br>        <span class="hljs-comment">// 对减小后的堆进行堆化</span><br>        <span class="hljs-built_in">heapify</span>(nums, i, <span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-keyword">return</span> nums;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<h3 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h3><p>思想：</p>
+<p>使用一定的间隔（数组长度的一半）对数组进行分组，然后对每个分组进行插入排序</p>
+<p>随着排序的进行，间隔逐步减小，直到间隔为1，最终完成排序</p>
+<p>时间复杂度：n^1.3</p>
+<p>设置</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">shellSort</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; arr)</span> </span>&#123;<br>    <span class="hljs-type">int</span> n = arr.<span class="hljs-built_in">size</span>();<br><br>    <span class="hljs-comment">// 初始化间隔gap为数组长度的一半，然后逐步缩小间隔直至为1</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> gap = n / <span class="hljs-number">2</span>; gap &gt; <span class="hljs-number">0</span>; gap /= <span class="hljs-number">2</span>) &#123;<br>        <span class="hljs-comment">// 对每个间隔进行插入排序</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = gap; i &lt; n; i++) &#123;<br>            <span class="hljs-type">int</span> temp = arr[i];<br>            <span class="hljs-type">int</span> j;<br><br>            <span class="hljs-comment">// 将arr[i]插入到正确的位置</span><br>            <span class="hljs-keyword">for</span> (j = i; j &gt;= gap &amp;&amp; arr[j - gap] &gt; temp; j -= gap) &#123;<br>                arr[j] = arr[j - gap];<br>            &#125;<br>            arr[j] = temp;<br>        &#125;<br>    &#125;<br>&#125;<br><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-built_in">shellSort</span>(nums);<br>    <span class="hljs-keyword">return</span> nums;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="计数排序"><a href="#计数排序" class="headerlink" title="计数排序"></a>计数排序</h3><p>时间复杂度：n+k，k为当前数组中的最大值</p>
+<blockquote>
+<p>如果有负数还需要进行另外处理</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">countingSort</span><span class="hljs-params">(std::vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-comment">// 找到数组中的最大值</span><br>    <span class="hljs-type">int</span> max_num = *std::<span class="hljs-built_in">max_element</span>(nums.<span class="hljs-built_in">begin</span>(), nums.<span class="hljs-built_in">end</span>());<br><br>    <span class="hljs-comment">// 创建计数数组，并初始化为0</span><br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">count</span><span class="hljs-params">(max_num + <span class="hljs-number">1</span>, <span class="hljs-number">0</span>)</span></span>;<br><br>    <span class="hljs-comment">// 统计每个元素出现的次数</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> num : nums) &#123;<br>        count[num]++;<br>    &#125;<br><br>    <span class="hljs-comment">// 根据计数数组重建排序后的数组</span><br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortedArray</span><span class="hljs-params">(nums.size())</span></span>;<br>    <span class="hljs-type">int</span> index = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= max_num; ++i) &#123;<br>        <span class="hljs-keyword">while</span> (count[i] &gt; <span class="hljs-number">0</span>) &#123;<br>            sortedArray[index++] = i;<br>            count[i]--;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> sortedArray;<br>&#125;<br><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">countingSort</span>(nums);<br>&#125;<br></code></pre></td></tr></table></figure>
+]]></content>
       <categories>
         <category>算法研究</category>
       </categories>
@@ -1411,6 +1760,42 @@
         <tag>快速排序</tag>
         <tag>堆排序</tag>
         <tag>计数排序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>平方根倒数算法</title>
+    <url>/2024/01/24/%E5%B9%B3%E6%96%B9%E6%A0%B9%E5%80%92%E6%95%B0%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<h3 id="平方根倒数算法"><a href="#平方根倒数算法" class="headerlink" title="平方根倒数算法"></a>平方根倒数算法</h3><script type="math/tex; mode=display">
+1/\sqrt{x}</script><h4 id="求一个数的平方根倒数"><a href="#求一个数的平方根倒数" class="headerlink" title="求一个数的平方根倒数"></a>求一个数的平方根倒数</h4><p>对于计算机来说求一个数的平方根一般有两种方式，二分法和牛顿迭代法</p>
+<ul>
+<li><p>二分法</p>
+<p>EXP表示精度，从0-num不断开始计算mid的平方，直到left&gt;right，此时返回right的值即为所求的平方根，其中注意边界条件：</p>
+<p>当mid <em> mid = num时，此时left需要加上EXP，往后的循环中mid </em> mid 都会大于num，所以right还会不停减小，直到right &lt; left，返回right，这时right已经在精度范围内</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">Sqrt</span><span class="hljs-params">(<span class="hljs-type">double</span> num)</span> </span>&#123;<br>    <span class="hljs-type">double</span> left = <span class="hljs-number">0</span>, right = num;<br> <br>    <span class="hljs-keyword">while</span> (left &lt;= right) &#123;<br>        <span class="hljs-type">double</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br> <br>        <span class="hljs-keyword">if</span> (mid * mid &lt;= num)<br>            left = mid + EXP;<br>        <span class="hljs-keyword">else</span><br>            right = mid - EXP;<br>    &#125;   <br> <br>    <span class="hljs-keyword">return</span> right;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>牛顿迭代法</p>
+<p>牛顿迭代法是将原来的求开方问题转化为数学函数问题，即假设<code>x * x = n</code>，求n的开方转化为<code>x * x - n = 0</code>的解，即<code>y = x * x - n</code>与x轴的交点</p>
+<p>代码中last表示上一次的切线与x轴的交点的x坐标，初始值为num，ret表示x = last时的切线与x轴的交点，不断迭代，直到ret - last小于精度，即达到精度返回ret。</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">Sqrt</span><span class="hljs-params">(<span class="hljs-type">double</span> num)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == num)<br>        <span class="hljs-keyword">return</span> num;<br> <br>    <span class="hljs-type">double</span> last = num, ret = num;<br> <br>    <span class="hljs-keyword">for</span> (;;) &#123;<br>        last = <span class="hljs-number">0.5</span> * (ret + num / ret);<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">fabs</span>(ret - last) &lt; EXP)<br>            <span class="hljs-keyword">break</span>;<br>        ret = last;<br>    &#125;   <br> <br>    <span class="hljs-keyword">return</span> ret;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>计算完平方根过后，再计算其倒数，也是一个对计算机来说并不是很友好的运算</p>
+<h4 id="快速平方根倒数计算推导"><a href="#快速平方根倒数计算推导" class="headerlink" title="快速平方根倒数计算推导"></a>快速平方根倒数计算推导</h4><p>快速平方根算法是利用了计算机存储浮点数的特性并和牛顿迭代法来共同完成的，也是一个近似计算。对于牛顿迭代法，其精髓是如果能够找到一个接近于解的初始值，是有可能通过一次迭代或者较少次数的迭代达到比较高的近似解，而快速平方根算法旨在于找到一个较为近似的初始值。具体的运算如下。</p>
+<p><strong>笔记中有一处笔误0xD5F400000应改成0x5F400000</strong></p>
+<img src="/2024/01/24/%E5%B9%B3%E6%96%B9%E6%A0%B9%E5%80%92%E6%95%B0%E7%AE%97%E6%B3%95/%E8%BF%90%E7%AE%97%E8%BF%87%E7%A8%8B.png" class="" title="运算过程">
+<p>快速平方根算法代码</p>
+<ul>
+<li>初始值由0x5F400000改为了0x5f3759df，对于X/2代码中使用了位运算加速求解</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">float</span> <span class="hljs-title">Q_rsqrt</span><span class="hljs-params">(<span class="hljs-type">float</span> number)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">long</span> i;<br>    <span class="hljs-type">float</span> x2, y;<br>    <span class="hljs-type">const</span> <span class="hljs-type">float</span> threehalfs = <span class="hljs-number">1.5F</span>;<br>    x2 = number * <span class="hljs-number">0.5F</span>;<br>    y = number;<br>    i = * ( <span class="hljs-type">long</span>* ) &amp;y;							<span class="hljs-comment">// evil floating point bit hack</span><br>    i = <span class="hljs-number">0x5f3759df</span> - (i &gt;&gt; <span class="hljs-number">1</span>);					<span class="hljs-comment">// what the fuck? </span><br>    y = * ( <span class="hljs-type">float</span> * ) &amp;i;<br>    y = y * (threehalfs - ( x2 * y * y ) );		<span class="hljs-comment">// 1st iteration</span><br><span class="hljs-comment">//  y = y * (threehalfs - ( x2 * y * y ) );		// 2st iteration, can be removed</span><br>    <br>    <span class="hljs-keyword">return</span> y;<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>技术研究</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>数学</tag>
       </tags>
   </entry>
   <entry>
@@ -1545,42 +1930,6 @@
       <tags>
         <tag>操作系统</tag>
         <tag>进程通信</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>平方根倒数算法</title>
-    <url>/2024/01/24/%E5%B9%B3%E6%96%B9%E6%A0%B9%E5%80%92%E6%95%B0%E7%AE%97%E6%B3%95/</url>
-    <content><![CDATA[<h3 id="平方根倒数算法"><a href="#平方根倒数算法" class="headerlink" title="平方根倒数算法"></a>平方根倒数算法</h3><script type="math/tex; mode=display">
-1/\sqrt{x}</script><h4 id="求一个数的平方根倒数"><a href="#求一个数的平方根倒数" class="headerlink" title="求一个数的平方根倒数"></a>求一个数的平方根倒数</h4><p>对于计算机来说求一个数的平方根一般有两种方式，二分法和牛顿迭代法</p>
-<ul>
-<li><p>二分法</p>
-<p>EXP表示精度，从0-num不断开始计算mid的平方，直到left&gt;right，此时返回right的值即为所求的平方根，其中注意边界条件：</p>
-<p>当mid <em> mid = num时，此时left需要加上EXP，往后的循环中mid </em> mid 都会大于num，所以right还会不停减小，直到right &lt; left，返回right，这时right已经在精度范围内</p>
-</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">Sqrt</span><span class="hljs-params">(<span class="hljs-type">double</span> num)</span> </span>&#123;<br>    <span class="hljs-type">double</span> left = <span class="hljs-number">0</span>, right = num;<br> <br>    <span class="hljs-keyword">while</span> (left &lt;= right) &#123;<br>        <span class="hljs-type">double</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br> <br>        <span class="hljs-keyword">if</span> (mid * mid &lt;= num)<br>            left = mid + EXP;<br>        <span class="hljs-keyword">else</span><br>            right = mid - EXP;<br>    &#125;   <br> <br>    <span class="hljs-keyword">return</span> right;<br>&#125;<br></code></pre></td></tr></table></figure>
-<ul>
-<li><p>牛顿迭代法</p>
-<p>牛顿迭代法是将原来的求开方问题转化为数学函数问题，即假设<code>x * x = n</code>，求n的开方转化为<code>x * x - n = 0</code>的解，即<code>y = x * x - n</code>与x轴的交点</p>
-<p>代码中last表示上一次的切线与x轴的交点的x坐标，初始值为num，ret表示x = last时的切线与x轴的交点，不断迭代，直到ret - last小于精度，即达到精度返回ret。</p>
-</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">Sqrt</span><span class="hljs-params">(<span class="hljs-type">double</span> num)</span> </span>&#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-number">0</span> == num)<br>        <span class="hljs-keyword">return</span> num;<br> <br>    <span class="hljs-type">double</span> last = num, ret = num;<br> <br>    <span class="hljs-keyword">for</span> (;;) &#123;<br>        last = <span class="hljs-number">0.5</span> * (ret + num / ret);<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">fabs</span>(ret - last) &lt; EXP)<br>            <span class="hljs-keyword">break</span>;<br>        ret = last;<br>    &#125;   <br> <br>    <span class="hljs-keyword">return</span> ret;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>计算完平方根过后，再计算其倒数，也是一个对计算机来说并不是很友好的运算</p>
-<h4 id="快速平方根倒数计算推导"><a href="#快速平方根倒数计算推导" class="headerlink" title="快速平方根倒数计算推导"></a>快速平方根倒数计算推导</h4><p>快速平方根算法是利用了计算机存储浮点数的特性并和牛顿迭代法来共同完成的，也是一个近似计算。对于牛顿迭代法，其精髓是如果能够找到一个接近于解的初始值，是有可能通过一次迭代或者较少次数的迭代达到比较高的近似解，而快速平方根算法旨在于找到一个较为近似的初始值。具体的运算如下。</p>
-<p><strong>笔记中有一处笔误0xD5F400000应改成0x5F400000</strong></p>
-<img src="/2024/01/24/%E5%B9%B3%E6%96%B9%E6%A0%B9%E5%80%92%E6%95%B0%E7%AE%97%E6%B3%95/%E8%BF%90%E7%AE%97%E8%BF%87%E7%A8%8B.png" class="" title="运算过程">
-<p>快速平方根算法代码</p>
-<ul>
-<li>初始值由0x5F400000改为了0x5f3759df，对于X/2代码中使用了位运算加速求解</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">float</span> <span class="hljs-title">Q_rsqrt</span><span class="hljs-params">(<span class="hljs-type">float</span> number)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">long</span> i;<br>    <span class="hljs-type">float</span> x2, y;<br>    <span class="hljs-type">const</span> <span class="hljs-type">float</span> threehalfs = <span class="hljs-number">1.5F</span>;<br>    x2 = number * <span class="hljs-number">0.5F</span>;<br>    y = number;<br>    i = * ( <span class="hljs-type">long</span>* ) &amp;y;							<span class="hljs-comment">// evil floating point bit hack</span><br>    i = <span class="hljs-number">0x5f3759df</span> - (i &gt;&gt; <span class="hljs-number">1</span>);					<span class="hljs-comment">// what the fuck? </span><br>    y = * ( <span class="hljs-type">float</span> * ) &amp;i;<br>    y = y * (threehalfs - ( x2 * y * y ) );		<span class="hljs-comment">// 1st iteration</span><br><span class="hljs-comment">//  y = y * (threehalfs - ( x2 * y * y ) );		// 2st iteration, can be removed</span><br>    <br>    <span class="hljs-keyword">return</span> y;<br>&#125;<br></code></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>技术研究</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>数学</tag>
       </tags>
   </entry>
 </search>
