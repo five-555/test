@@ -1229,20 +1229,43 @@ select object_schema, object_name, index_name, lock_type, lock_mode, lock_data f
 
 ### 6、InnoDB引擎
 
-* 逻辑存储结构
+* #### **逻辑存储结构**
+
+表空间（ibd文件）：一个mysql实例可以对应多个表空间，用于存储记录、索引等数据
+
+段：分为数据段、索引段、回滚段，InnoDB是索引组织表，数据段就是B+书的叶子节点，索引段即是B+书的非叶子节点，段用来管理多个区
+
+区：表空间的单元结构，每个区的大小为1M，一个区中一共有64个连续的页
+
+页：页大小16kB，是InnoDB存储引擎磁盘管理的最小单元，保证页的连续性，会申请4-5个区
+
+![image-20240223204149464](database-mysql/image-20240223204149464.png)
+
+* #### 架构
+
+![innodb-architecture-8-0](database-mysql/innodb-architecture-8-0.png)
+
+**内存结构**
+
+buffer pool缓存池
+
+缓冲区是内存中的一个区域，可以缓冲存储磁盘上经常要操作的数据，利用局部性原理减少磁盘IO，加快处理速度
+
+缓冲池以page页为单位，底层采用链表数据结构管理page
+
+change buffer更改缓存，**针对非唯一二级索引页**
+
+当需要对数据进行变更，即执行DML语句时，如果buffer pool中不存在当前数据page，不会直接操作磁盘，会先将数据变更缓存在change buffer在未来数据被读取的时候，再将数据合并恢复到buffer pool中
+
+Adaptive Hash Index自适应哈希索引
+
+log buffer日志缓存区
+
+* #### 事务原理
+
+* #### MVCC
 
 ### 7、MySQL管理
 
 
 
-## 数据库运维
-
-### 1、日志
-
-### 2、主从复制
-
-### 3、分库分表
-
-### 4、读写分离
-
-### 
