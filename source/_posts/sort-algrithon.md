@@ -1,7 +1,7 @@
 ---
 title: 常见的排序算法
 tags: [排序, 算法, 选择排序, 冒泡排序, 插入排序, 归并排序, 快速排序, 堆排序, 计数排序]
-categories: 算法研究
+categories: 算法实践
 date: 2024-02-21 16:53:53
 cover:
 top_img:

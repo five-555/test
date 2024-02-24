@@ -1,7 +1,7 @@
 ---
 title: 数据库-MySQL
 tags: [Database, 数据库, Mysql, SQL]
-categories: 技术研究
+categories: 学习笔记
 date: 2024-02-10 16:00:39
 cover:
 top_img:
