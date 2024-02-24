@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>15445_study_notes_01_04</title>
+    <title>CMU15445数据库学习笔记01-04</title>
     <url>/2024/02/10/15445-study-notes-01-04/</url>
     <content><![CDATA[<h2 id="01-Relational-Model-amp-Relational-Algebra"><a href="#01-Relational-Model-amp-Relational-Algebra" class="headerlink" title="01-Relational Model &amp; Relational Algebra"></a>01-Relational Model &amp; Relational Algebra</h2><h3 id="数据库基本概念"><a href="#数据库基本概念" class="headerlink" title="数据库基本概念"></a>数据库基本概念</h3><p>数据库管理系统：允许应用在数据库中存储、操作、分析数据信息的一种软件。通常的数据库管理系统（DBMS）支持通过一些数据模型（data model）定义、创建、查询、更新以及数据库的管理工作</p>
 <p>数据模型（data model）： 将存储的概念的高级抽象在数据库中，是数据库中描述数据的一种概念集合，能够表明数据的形状、属性等。</p>
@@ -516,12 +516,53 @@
       </tags>
   </entry>
   <entry>
+    <title>Git常见用法</title>
+    <url>/2024/01/04/git/</url>
+    <content><![CDATA[<h4 id="怎样撤销一个已经push到远端的版本"><a href="#怎样撤销一个已经push到远端的版本" class="headerlink" title="怎样撤销一个已经push到远端的版本"></a>怎样撤销一个已经push到远端的版本</h4><figure class="highlight arcade"><table><tr><td class="code"><pre><code class="hljs arcade">每次<span class="hljs-built_in">push</span>之前线pull一下<br><br><span class="hljs-number">1</span>、查看当前提交的信息，找到需要撤回到的版本号复制，一串十六进制的数<br>git <span class="hljs-built_in">log</span><br><br><span class="hljs-number">2</span>、使用git reset<br>git reset --soft 复制的版本号<br><br><span class="hljs-number">3</span>、强制回退当前版本号<br><span class="hljs-comment">// 确认一下当前版本</span><br>git <span class="hljs-built_in">log</span><br><span class="hljs-comment">// 谨慎使用，强制使用本地仓库代码修改远程仓库</span><br>git <span class="hljs-built_in">push</span> orgin master --force<br></code></pre></td></tr></table></figure>
+<h4 id="新建分支并同步到远端的分支"><a href="#新建分支并同步到远端的分支" class="headerlink" title="新建分支并同步到远端的分支"></a>新建分支并同步到远端的分支</h4><figure class="highlight mipsasm"><table><tr><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># 在本地新建一个名字为branch_name的分支，并与远端的origin/branch_name同步</span><br>git checkout -<span class="hljs-keyword">b </span><span class="hljs-keyword">branch_name </span><span class="hljs-keyword">origin/branch_name</span><br></code></pre></td></tr></table></figure>
+<h4 id="解决git-clone超时的问题"><a href="#解决git-clone超时的问题" class="headerlink" title="解决git clone超时的问题"></a>解决git clone超时的问题</h4><p>从github上clone代码仓库报错<code>Failed to connect to github.com port 443 after 21038 ms: Couldn&#39;t connect to server</code>且尝试去ping一下github官网会丢包</p>
+<img src="/2024/01/04/git/image-20231204110955462.png" class="" title="image-20231204110955462">
+<p>解决方案</p>
+<p>修改系统的hosts，跳过域名解析的过程，直接用ip地址访问</p>
+<figure class="highlight accesslog"><table><tr><td class="code"><pre><code class="hljs accesslog"><span class="hljs-number">192.30.255.112</span> github.com git<br><span class="hljs-number">185.31.16.184</span> github.global.ssl.fastly.net<br></code></pre></td></tr></table></figure>
+<img src="/2024/01/04/git/image-20231204111125551.png" class="" title="image-20231204111125551">
+<p>修改hosts需要给文件更高的权限</p>
+<img src="/2024/01/04/git/image-20231204111350240.png" class="" title="image-20231204111350240">
+<h4 id="github中git-push出现超时的问题"><a href="#github中git-push出现超时的问题" class="headerlink" title="github中git push出现超时的问题"></a>github中git push出现超时的问题</h4><img src="/2024/01/04/git/image-20231204112945547.png" class="" title="image-20231204112945547">
+<p>解决方案</p>
+<p>1、打开本机的代理服务器</p>
+<img src="/2024/01/04/git/image-20231204113100512.png" class="" title="image-20231204113100512">
+<p>2、取消git config里面的http和https代理</p>
+<img src="/2024/01/04/git/image-20231204113208566.png" class="" title="image-20231204113208566">
+<p>3、设置http代理服务器</p>
+<img src="/2024/01/04/git/image-20231204113304822.png" class="" title="image-20231204113304822">
+<h4 id="linux中输出一个文件夹下面的所有文件名"><a href="#linux中输出一个文件夹下面的所有文件名" class="headerlink" title="linux中输出一个文件夹下面的所有文件名"></a>linux中输出一个文件夹下面的所有文件名</h4><ul>
+<li><strong><code>/path/to/directory</code></strong>: 替换为目标目录的路径。</li>
+<li><strong><code>-maxdepth 1</code></strong>: 限制<code>find</code>的搜索深度为1，即仅在指定的目录中搜索，而不会搜索其子目录。</li>
+<li><strong><code>-type f</code></strong>: 限制搜索结果为普通文件（不包括目录和其他类型的文件）。</li>
+<li><strong><code>-exec basename &#123;&#125; \;</code></strong>: 对每一个找到的文件执行<code>basename</code>命令，即输出文件的基本名称。<code>&#123;&#125;</code>是<code>find</code>命令的占位符，表示每个找到的文件的路径。<code>\;</code>表示命令结束。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">find /path/to/directory -maxdepth 1 -<span class="hljs-built_in">type</span> f -<span class="hljs-built_in">exec</span> <span class="hljs-built_in">basename</span> &#123;&#125; \;<br></code></pre></td></tr></table></figure>
+<h4 id="git查看远端仓库地址"><a href="#git查看远端仓库地址" class="headerlink" title="git查看远端仓库地址"></a>git查看远端仓库地址</h4><figure class="highlight dsconfig"><table><tr><td class="code"><pre><code class="hljs dsconfig"><span class="hljs-string">git</span> <span class="hljs-string">remote</span> -<span class="hljs-string">v</span><br><br><span class="hljs-comment"># 更改远程仓库</span><br><span class="hljs-string">git</span> <span class="hljs-string">remote</span> <span class="hljs-built_in">set-url</span> <span class="hljs-string">origin</span> 仓库地址<br></code></pre></td></tr></table></figure>
+<h4 id="查看代码贡献量"><a href="#查看代码贡献量" class="headerlink" title="查看代码贡献量"></a>查看代码贡献量</h4><blockquote>
+<p>按照各个作者的修改代码总数排序</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --pretty=<span class="hljs-string">&quot;%aN&quot;</span> | <span class="hljs-built_in">sort</span> | <span class="hljs-built_in">uniq</span> -c | <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> count author; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> -n <span class="hljs-string">&quot;<span class="hljs-variable">$author</span> &quot;</span>; git <span class="hljs-built_in">log</span> --author=<span class="hljs-string">&quot;<span class="hljs-variable">$author</span>&quot;</span> --pretty=tformat: --numstat | awk <span class="hljs-string">&#x27;&#123; add += $1; subs += $2 &#125; END &#123; total = add + subs; printf &quot;%d\n&quot;, total &#125;&#x27;</span>; <span class="hljs-keyword">done</span> | <span class="hljs-built_in">sort</span> -rnk2<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>技术研究</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数据库-MySQL</title>
     <url>/2024/02/10/database-mysql/</url>
     <content><![CDATA[<h2 id="数据库-Mysql"><a href="#数据库-Mysql" class="headerlink" title="数据库-Mysql"></a>数据库-Mysql</h2><blockquote>
 <p>Mysql数据库的关键词：事务、存储引擎、索引、SQL优化、<strong>锁、日志、主从复制、读写分离、分库分表</strong></p>
 </blockquote>
-<img src="/2024/02/10/database-mysql/image-20240210160421874.png" class="" title="image-20240210160421874">
+<img src="/2024/02/10/database-mysql/image-20240223203653517.png" class="" title="image-20240223203653517">
 <h2 id="数据库基础"><a href="#数据库基础" class="headerlink" title="数据库基础"></a>数据库基础</h2><h3 id="1、Mysql概述"><a href="#1、Mysql概述" class="headerlink" title="1、Mysql概述"></a>1、Mysql概述</h3><p>关系型数据库：建立在关系模型基础上，由多张互连接的二维表组成的数据库</p>
 <p>特点：使用表存储数据，便于维护；使用sql语句操作，使用方便</p>
 <p><strong>MySQL数据模型</strong></p>
@@ -1634,56 +1675,176 @@
 <p><strong>临建锁</strong>（next-key）</p>
 <p>同时锁住行记录也锁住间隙</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># 查询数据库中的锁<br>select object_schema, object_name, index_name, lock_type, lock_mode, lock_data from performance_schema.data_locks;<br></code></pre></td></tr></table></figure>
-<h3 id="6、InnoDB核心"><a href="#6、InnoDB核心" class="headerlink" title="6、InnoDB核心"></a>6、InnoDB核心</h3><h3 id="7、MySQL管理"><a href="#7、MySQL管理" class="headerlink" title="7、MySQL管理"></a>7、MySQL管理</h3><h2 id="数据库运维"><a href="#数据库运维" class="headerlink" title="数据库运维"></a>数据库运维</h2><h3 id="1、日志"><a href="#1、日志" class="headerlink" title="1、日志"></a>1、日志</h3><h3 id="2、主从复制"><a href="#2、主从复制" class="headerlink" title="2、主从复制"></a>2、主从复制</h3><h3 id="3、分库分表"><a href="#3、分库分表" class="headerlink" title="3、分库分表"></a>3、分库分表</h3><h3 id="4、读写分离"><a href="#4、读写分离" class="headerlink" title="4、读写分离"></a>4、读写分离</h3><h3 id=""><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
+<h3 id="6、InnoDB引擎"><a href="#6、InnoDB引擎" class="headerlink" title="6、InnoDB引擎"></a>6、InnoDB引擎</h3><ul>
+<li><h4 id="逻辑存储结构"><a href="#逻辑存储结构" class="headerlink" title="逻辑存储结构"></a><strong>逻辑存储结构</strong></h4></li>
+</ul>
+<p>表空间（ibd文件）：一个mysql实例可以对应多个表空间，用于存储记录、索引等数据</p>
+<p>段：分为数据段、索引段、回滚段，InnoDB是索引组织表，数据段就是B+书的叶子节点，索引段即是B+书的非叶子节点，段用来管理多个区</p>
+<p>区：表空间的单元结构，每个区的大小为1M，一个区中一共有64个连续的页</p>
+<p>页：页大小16kB，是InnoDB存储引擎磁盘管理的最小单元，保证页的连续性，会申请4-5个区</p>
+<img src="/2024/02/10/database-mysql/image-20240223204149464.png" class="" title="image-20240223204149464">
+<ul>
+<li><h4 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h4></li>
+</ul>
+<img src="/2024/02/10/database-mysql/innodb-architecture-8-0.png" class="" title="innodb-architecture-8-0">
+<p><strong>内存结构</strong></p>
+<blockquote>
+<p>磁盘结构存储的是一些表空间和表数据文件，包括日志表空间，系统表空间，撤销表空间，重做表空间等等</p>
+</blockquote>
+<p>buffer pool缓存池</p>
+<p>缓冲区是内存中的一个区域，可以缓冲存储磁盘上经常要操作的数据，利用局部性原理减少磁盘IO，加快处理速度</p>
+<p>缓冲池以page页为单位，底层采用链表数据结构管理page</p>
+<p>change buffer更改缓存，<strong>针对非唯一二级索引页</strong></p>
+<p>当需要对数据进行变更，即执行DML语句时，如果buffer pool中不存在当前数据page，不会直接操作磁盘，会先将数据变更缓存在change buffer在未来数据被读取的时候，再将数据合并恢复到buffer pool中</p>
+<p>Adaptive Hash Index自适应哈希索引</p>
+<p>log buffer日志缓存区</p>
+<p><strong>后台线程</strong></p>
+<blockquote>
+<p>作用：将InnoDB缓冲区当中的数据在合适的时间写入到磁盘当中</p>
+</blockquote>
+<p>1、Master Thread</p>
+<p>核心后台线程，负责调度其他线程，将缓冲池中的数据异步刷新到磁盘当中，保持数据的一致性</p>
+<p>2、IO Thread</p>
+<p>采用的是AIO（异步非阻塞IO）来处理IO请求</p>
+<p>4个读线程、4个写线程、1个日志线程、1个插入缓存线程（写缓冲区刷新到磁盘）</p>
+<p>3、Purge Thread</p>
+<p>回收事务已经提交的undo log，在事务提交之后，undo log可能不用了，就用它来回收</p>
+<p>4、Page Cheaner Thread</p>
+<p>协助Master Thread刷新脏页到磁盘的线程</p>
+<ul>
+<li><h4 id="事务原理"><a href="#事务原理" class="headerlink" title="事务原理"></a>事务原理</h4></li>
+</ul>
+<p>事务的原子性、一致性和持久性是通过日志文件来保证的，包括redo.log和undo.log</p>
+<p>事务的隔离性是通过锁+MVCC（多版本并发控制）来进行保证的</p>
+<p><strong>redo log</strong>事务的持久性（事务提交后数据的改变是永久的）</p>
+<p>重做日志，记录事务提交时数据页的物理修改，用来实现事务的持久性(事务一旦提交，对数据的改变时持久的）</p>
+<p>当系统在执行Mysql的DML语句时，会先从数据库缓存中查找是否有对应的页面，如果在缓存当中则对数据进行修改，这种在缓冲中修改后但还未写入磁盘的数据页，叫做脏页，后通过后台进程写入到磁盘当中，如果在写入的过程中发生异常，就会出现持久性消失的现象</p>
+<p>redo log会把数据页的变化记录到redo log当中，当事务提交时，会把redo log刷新到磁盘当中，可以通过log对数据进行恢复，如果redo log刷新页失败，则事务执行也就失败，不影响一致性</p>
+<p><strong>undo log</strong>事务的原子性（事务是最小操作单位，要么全部成功，要么全部失败）</p>
+<p>回滚日志，用于记录数据被修改前的信息，提供回滚和MVCC。当执行DML语句时，会记录数据变化前的数据长什么样，在回滚日志中，记录的时执行sql的反向操作，逆操作</p>
+<p>undo log存放在段当中，回滚段</p>
+<ul>
+<li><h4 id="MVCC多版本并发控制"><a href="#MVCC多版本并发控制" class="headerlink" title="MVCC多版本并发控制"></a>MVCC多版本并发控制</h4></li>
+</ul>
+<blockquote>
+<p>Mutil-Version Concurrency Control，多版本并发控制。维护一个数据的多个版本，使得读写此操作没有冲突。依赖于数据库记录中的三个隐式字段、undo log日志、readView</p>
+</blockquote>
+<p><strong>相关概念</strong></p>
+<p>当前读：读取的时记录的最新版本。因为Mysql的默认隔离界别是RR（repeatable read）可重复读，所以当另一个事务对数据进行修改时，当前事务读到的数据就不是当前最新的版本。要想读到最新版本，可以通过select .. lock in share mode,select .. for update来完成</p>
+<p>快照读：正常的select（不加锁）就是快照读，读取的是数据的可见版本</p>
+<p>Read Committed：每一次select 都会生成一个快照读</p>
+<p>Repeatable Read：开始事务后第一个select才是产生快照读的地方，后面的select都是查询快照</p>
+<p>Serializable：快照读会退化为当前读</p>
+<p><strong>记录当中的隐藏字段</strong></p>
+<p>DB_TRX_ID：最近修改事务ID，记录插入这条记录或最后一次修改该记录的事务ID</p>
+<p>DB_ROLL_PTR：回滚指针，指向这条记录的上一个版本，用于配合undo log<br>DB_ROW_ID：隐藏主键，表结构没有主键，则会自动生成隐藏字段</p>
+<p><strong>undo log日志</strong></p>
+<p>如果使用insert的时候产生的日志只在回滚的时候需要，在事务提交后，可以立即删除</p>
+<p>如果使用的是update、delete的时候，产生的undo log日志不仅在回滚时需要，在快照读的时候也需要，不会立即被删除</p>
+<img src="/2024/02/10/database-mysql/image-20240224160500080.png" class="" title="image-20240224160500080">
+<p><strong>ReadView</strong></p>
+<p>读视图：快照读SQL执行时MVCC提取数据的一句，记录并维护系统当前活跃的事务id</p>
+<p>字段，通过对比当前事务的id：trx_id和下面的id进行对比来实现版本访问控制</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字段</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">m_ids</td>
+<td style="text-align:center">当前活跃的事务ID集合</td>
+</tr>
+<tr>
+<td style="text-align:center">min_trx_id</td>
+<td style="text-align:center">最小活跃事务ID</td>
+</tr>
+<tr>
+<td style="text-align:center">max_trx_id</td>
+<td style="text-align:center">预分配事务ID，当前最大事务ID+1</td>
+</tr>
+<tr>
+<td style="text-align:center">creator_trx_id</td>
+<td style="text-align:center">ReadView创建者的事务ID</td>
+</tr>
+</tbody>
+</table>
+</div>
+<img src="/2024/02/10/database-mysql/image-20240224161313751.png" class="" title="image-20240224161313751">
+<p><strong>Read Commited</strong>读提交下的规则</p>
+<blockquote>
+<p>事务中每一次执行快照读时都会生成ReadView</p>
+</blockquote>
+<img src="/2024/02/10/database-mysql/image-20240224162152111.png" class="" title="image-20240224162152111">
+<p>通过上面四条规则可以找到最新已经提交的事务版本</p>
+<p><strong>Repeatable Read</strong>可重复读的情况</p>
+<blockquote>
+<p>仅在事务中第一次执行快照读的时候生成ReadView，后续会复用该ReadView</p>
+</blockquote>
+<img src="/2024/02/10/database-mysql/image-20240224162359110.png" class="" title="image-20240224162359110">
+<p>隔离性：保证事务不在外部并发操作影响下独立完成，通过MVCC+锁来保证</p>
+<p>一致性：事务完成时，所有数据都保持一致，通过日志实现</p>
+<img src="/2024/02/10/database-mysql/image-20240224162626695.png" class="" title="image-20240224162626695">
+<h3 id="7、MySQL管理"><a href="#7、MySQL管理" class="headerlink" title="7、MySQL管理"></a>7、MySQL管理</h3><ul>
+<li>系统数据库</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">数据库</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">mysql</td>
+<td style="text-align:center">存储Mysql服务器正常运行所需要的各种信息（用户、权限等）</td>
+</tr>
+<tr>
+<td style="text-align:center">information_schema</td>
+<td style="text-align:center">提供了访问数据库元数据的各种表和视图，包含数据库、表、字段类型以及访问权限</td>
+</tr>
+<tr>
+<td style="text-align:center">performance_schema</td>
+<td style="text-align:center">为Mysql服务器运行时状态提供了一个底层监控功能，用于收集数据库服务器性能参数</td>
+</tr>
+<tr>
+<td style="text-align:center">sys</td>
+<td style="text-align:center">方便开发人员进行性能调优和诊断的视图</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>常用工具</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs mysql"># mysql [option] [database]<br>mysql<br>	-u, --user=		 # 指定用户名<br>    -p, --password=		# 指定密码<br>    -h, --host=		# 指定服务器ip或域名<br>    -p, --port=		# 指定端口号<br>    -e, --execute=	# 执行sql语句并推出<br></code></pre></td></tr></table></figure>
+<p>mysqladmin</p>
+<p>​    执行管理操作的客户端程序</p>
+<p>​    —help查看帮助文档</p>
+<p>mysqlbinlog</p>
+<p>​    如果查看一些二进制文本的数据，使用这个可以进行数据查看</p>
+<p>mysqlshow</p>
+<p>​    客户端对象查找工具，可以用于查找存在哪些数据库、数据库中的表、表中的列或者索引</p>
+<p>​    —count 显示数据库及表的统计信息</p>
+<p>​    -i 显示指定数据库或指定表的状态信息</p>
+<p><strong>mysqldump</strong></p>
+<p>​    用于备份数据库或在不同数据库之间进行数据迁移</p>
+<p><strong>mysqlimport/source</strong></p>
+<p>​    用于数据的导入工具</p>
+]]></content>
       <categories>
-        <category>技术研究</category>
+        <category>学习笔记</category>
       </categories>
       <tags>
         <tag>数据库</tag>
         <tag>Database</tag>
         <tag>Mysql</tag>
         <tag>SQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Git常见用法</title>
-    <url>/2024/01/04/git/</url>
-    <content><![CDATA[<h4 id="怎样撤销一个已经push到远端的版本"><a href="#怎样撤销一个已经push到远端的版本" class="headerlink" title="怎样撤销一个已经push到远端的版本"></a>怎样撤销一个已经push到远端的版本</h4><figure class="highlight arcade"><table><tr><td class="code"><pre><code class="hljs arcade">每次<span class="hljs-built_in">push</span>之前线pull一下<br><br><span class="hljs-number">1</span>、查看当前提交的信息，找到需要撤回到的版本号复制，一串十六进制的数<br>git <span class="hljs-built_in">log</span><br><br><span class="hljs-number">2</span>、使用git reset<br>git reset --soft 复制的版本号<br><br><span class="hljs-number">3</span>、强制回退当前版本号<br><span class="hljs-comment">// 确认一下当前版本</span><br>git <span class="hljs-built_in">log</span><br><span class="hljs-comment">// 谨慎使用，强制使用本地仓库代码修改远程仓库</span><br>git <span class="hljs-built_in">push</span> orgin master --force<br></code></pre></td></tr></table></figure>
-<h4 id="新建分支并同步到远端的分支"><a href="#新建分支并同步到远端的分支" class="headerlink" title="新建分支并同步到远端的分支"></a>新建分支并同步到远端的分支</h4><figure class="highlight mipsasm"><table><tr><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># 在本地新建一个名字为branch_name的分支，并与远端的origin/branch_name同步</span><br>git checkout -<span class="hljs-keyword">b </span><span class="hljs-keyword">branch_name </span><span class="hljs-keyword">origin/branch_name</span><br></code></pre></td></tr></table></figure>
-<h4 id="解决git-clone超时的问题"><a href="#解决git-clone超时的问题" class="headerlink" title="解决git clone超时的问题"></a>解决git clone超时的问题</h4><p>从github上clone代码仓库报错<code>Failed to connect to github.com port 443 after 21038 ms: Couldn&#39;t connect to server</code>且尝试去ping一下github官网会丢包</p>
-<img src="/2024/01/04/git/image-20231204110955462.png" class="" title="image-20231204110955462">
-<p>解决方案</p>
-<p>修改系统的hosts，跳过域名解析的过程，直接用ip地址访问</p>
-<figure class="highlight accesslog"><table><tr><td class="code"><pre><code class="hljs accesslog"><span class="hljs-number">192.30.255.112</span> github.com git<br><span class="hljs-number">185.31.16.184</span> github.global.ssl.fastly.net<br></code></pre></td></tr></table></figure>
-<img src="/2024/01/04/git/image-20231204111125551.png" class="" title="image-20231204111125551">
-<p>修改hosts需要给文件更高的权限</p>
-<img src="/2024/01/04/git/image-20231204111350240.png" class="" title="image-20231204111350240">
-<h4 id="github中git-push出现超时的问题"><a href="#github中git-push出现超时的问题" class="headerlink" title="github中git push出现超时的问题"></a>github中git push出现超时的问题</h4><img src="/2024/01/04/git/image-20231204112945547.png" class="" title="image-20231204112945547">
-<p>解决方案</p>
-<p>1、打开本机的代理服务器</p>
-<img src="/2024/01/04/git/image-20231204113100512.png" class="" title="image-20231204113100512">
-<p>2、取消git config里面的http和https代理</p>
-<img src="/2024/01/04/git/image-20231204113208566.png" class="" title="image-20231204113208566">
-<p>3、设置http代理服务器</p>
-<img src="/2024/01/04/git/image-20231204113304822.png" class="" title="image-20231204113304822">
-<h4 id="linux中输出一个文件夹下面的所有文件名"><a href="#linux中输出一个文件夹下面的所有文件名" class="headerlink" title="linux中输出一个文件夹下面的所有文件名"></a>linux中输出一个文件夹下面的所有文件名</h4><ul>
-<li><strong><code>/path/to/directory</code></strong>: 替换为目标目录的路径。</li>
-<li><strong><code>-maxdepth 1</code></strong>: 限制<code>find</code>的搜索深度为1，即仅在指定的目录中搜索，而不会搜索其子目录。</li>
-<li><strong><code>-type f</code></strong>: 限制搜索结果为普通文件（不包括目录和其他类型的文件）。</li>
-<li><strong><code>-exec basename &#123;&#125; \;</code></strong>: 对每一个找到的文件执行<code>basename</code>命令，即输出文件的基本名称。<code>&#123;&#125;</code>是<code>find</code>命令的占位符，表示每个找到的文件的路径。<code>\;</code>表示命令结束。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">find /path/to/directory -maxdepth 1 -<span class="hljs-built_in">type</span> f -<span class="hljs-built_in">exec</span> <span class="hljs-built_in">basename</span> &#123;&#125; \;<br></code></pre></td></tr></table></figure>
-<h4 id="git查看远端仓库地址"><a href="#git查看远端仓库地址" class="headerlink" title="git查看远端仓库地址"></a>git查看远端仓库地址</h4><figure class="highlight dsconfig"><table><tr><td class="code"><pre><code class="hljs dsconfig"><span class="hljs-string">git</span> <span class="hljs-string">remote</span> -<span class="hljs-string">v</span><br><br><span class="hljs-comment"># 更改远程仓库</span><br><span class="hljs-string">git</span> <span class="hljs-string">remote</span> <span class="hljs-built_in">set-url</span> <span class="hljs-string">origin</span> 仓库地址<br></code></pre></td></tr></table></figure>
-<h4 id="查看代码贡献量"><a href="#查看代码贡献量" class="headerlink" title="查看代码贡献量"></a>查看代码贡献量</h4><blockquote>
-<p>按照各个作者的修改代码总数排序</p>
-</blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --pretty=<span class="hljs-string">&quot;%aN&quot;</span> | <span class="hljs-built_in">sort</span> | <span class="hljs-built_in">uniq</span> -c | <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> count author; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> -n <span class="hljs-string">&quot;<span class="hljs-variable">$author</span> &quot;</span>; git <span class="hljs-built_in">log</span> --author=<span class="hljs-string">&quot;<span class="hljs-variable">$author</span>&quot;</span> --pretty=tformat: --numstat | awk <span class="hljs-string">&#x27;&#123; add += $1; subs += $2 &#125; END &#123; total = add + subs; printf &quot;%d\n&quot;, total &#125;&#x27;</span>; <span class="hljs-keyword">done</span> | <span class="hljs-built_in">sort</span> -rnk2<br></code></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>技术研究</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
       </tags>
   </entry>
   <entry>
@@ -1748,7 +1909,7 @@
 <figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">countingSort</span><span class="hljs-params">(std::vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-comment">// 找到数组中的最大值</span><br>    <span class="hljs-type">int</span> max_num = *std::<span class="hljs-built_in">max_element</span>(nums.<span class="hljs-built_in">begin</span>(), nums.<span class="hljs-built_in">end</span>());<br><br>    <span class="hljs-comment">// 创建计数数组，并初始化为0</span><br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">count</span><span class="hljs-params">(max_num + <span class="hljs-number">1</span>, <span class="hljs-number">0</span>)</span></span>;<br><br>    <span class="hljs-comment">// 统计每个元素出现的次数</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> num : nums) &#123;<br>        count[num]++;<br>    &#125;<br><br>    <span class="hljs-comment">// 根据计数数组重建排序后的数组</span><br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortedArray</span><span class="hljs-params">(nums.size())</span></span>;<br>    <span class="hljs-type">int</span> index = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= max_num; ++i) &#123;<br>        <span class="hljs-keyword">while</span> (count[i] &gt; <span class="hljs-number">0</span>) &#123;<br>            sortedArray[index++] = i;<br>            count[i]--;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> sortedArray;<br>&#125;<br><span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">sortArray</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">countingSort</span>(nums);<br>&#125;<br></code></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>算法研究</category>
+        <category>算法实践</category>
       </categories>
       <tags>
         <tag>排序</tag>
