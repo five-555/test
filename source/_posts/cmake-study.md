@@ -1,7 +1,7 @@
 ---
 title: Cmake学习笔记
 categories: 学习笔记
-date: 2024-02-26 08:24:31
+date: 2023-07-26 08:24:31
 tags: [C++, Cmake, 编译]
 cover: 
 top_img:

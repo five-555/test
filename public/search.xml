@@ -355,6 +355,155 @@
       </tags>
   </entry>
   <entry>
+    <title>Modern C++学习笔记</title>
+    <url>/2023/08/15/Effective-Modern-C-notes/</url>
+    <content><![CDATA[<h2 id="Effective-Modern-C-学习笔记"><a href="#Effective-Modern-C-学习笔记" class="headerlink" title="Effective Modern C++学习笔记"></a>Effective Modern C++学习笔记</h2><blockquote>
+<p>重点掌握auto、智能指针、移动构造、lambda</p>
+</blockquote>
+<h3 id="第一章、类型推导"><a href="#第一章、类型推导" class="headerlink" title="第一章、类型推导"></a>第一章、类型推导</h3><h4 id="条款1、模板类型推导"><a href="#条款1、模板类型推导" class="headerlink" title="条款1、模板类型推导"></a>条款1、模板类型推导</h4><figure class="highlight d"><table><tr><td class="code"><pre><code class="hljs d">情况一、按值传递，传入副本<br><span class="hljs-keyword">template</span>&lt;typename T&gt;<br><span class="hljs-keyword">void</span> f(T param)<br><br>情况二、引用传递，传入地址<br><span class="hljs-keyword">template</span>&lt;typename T&gt;<br><span class="hljs-keyword">void</span> f(<span class="hljs-keyword">const</span> T&amp; param)<br><br>情况三、指针传递<br><span class="hljs-keyword">template</span>&lt;typename T&gt;<br><span class="hljs-keyword">void</span> f(T* param)<br><br>万能引用，即也可以引用右值<br>情况四、万能引用，如果是右值，则传入的是右值的地址<br><span class="hljs-keyword">template</span>&lt;typename T&gt;<br><span class="hljs-keyword">void</span> f(T&amp;&amp; param)<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>当向引用型别的形参传入const对象时，他们期望该对象保持其不可该修改的属性，即const引用</p>
+<p>因此向持有T&amp;型别的模板传入const对象时安全的</p>
+</blockquote>
+<ul>
+<li><p>当使用万能引用时，型别推导规则会区分实参是左值还是右值，如果是左值就是单个引用情况“&amp;”，如果是右值则是“&amp;&amp;”情况</p>
+</li>
+<li><p>如果是按值传递，则传入的是一个副本，无论做什么操作都无法改变原始的数据</p>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">const</span> <span class="hljs-type">char</span> name[] = <span class="hljs-string">&quot;sda&quot;</span><br><span class="hljs-type">const</span> <span class="hljs-type">char</span>* ptrToName = name<br><br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-type">void</span> <span class="hljs-built_in">f</span>(T param)<br><span class="hljs-built_in">f</span>(name)<br><br>T会推到成<span class="hljs-type">const</span> <span class="hljs-type">char</span>*的类型<br></code></pre></td></tr></table></figure>
+<h4 id="条款2、auto类型推导"><a href="#条款2、auto类型推导" class="headerlink" title="条款2、auto类型推导"></a>条款2、auto类型推导</h4><blockquote>
+<p>auto类型推导就是模板类型推导，当某一个变量采用auto来声明时，auto则扮演模板中的角色，通过表达式的右边的值推出左边。</p>
+</blockquote>
+<p>C++14允许auto来说明函数返回值需要推导</p>
+<h4 id="条款3、decltype"><a href="#条款3、decltype" class="headerlink" title="条款3、decltype"></a>条款3、decltype</h4><p>decltype可以声明返回值型别依赖于形参性别的函数模板，因为函数模板的数据类型不确定，通过使用decltype引用一个模板类型的数据，可以推出该函数模板的类型，通过尾序返回值可返回该数据类型的结果。</p>
+<p>在对万能引用进行推导时，返回值需要加上std::forward</p>
+<h3 id="第二章、auto"><a href="#第二章、auto" class="headerlink" title="第二章、auto"></a>第二章、auto</h3><blockquote>
+<p>优先使用auto定义，而非使用显式定义，可以防止对象忘记初始化的错误。</p>
+</blockquote>
+<p>auto优点</p>
+<ul>
+<li>1、避免初始化变量和冗余的变量声明（如，迭代器声明）</li>
+<li>2、在不同位的操作系统移植过程中可以避免参数位数表达不一致的问题</li>
+</ul>
+<p>auto不能用在vector&lt; bool &gt;中，在单个返回operator[]时返回的是bool的引用。</p>
+<h3 id="第三章——模板还是有点晦涩难懂"><a href="#第三章——模板还是有点晦涩难懂" class="headerlink" title="第三章——模板还是有点晦涩难懂"></a>第三章——模板还是有点晦涩难懂</h3><h4 id="条款7、创建对象注意区分（）和"><a href="#条款7、创建对象注意区分（）和" class="headerlink" title="条款7、创建对象注意区分（）和{}"></a>条款7、创建对象注意区分（）和{}</h4><figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 使用大括号初始化容器会强烈优先选择带有std::initializer_list类别形参的构造函数</span><br>vector&lt;<span class="hljs-type">int</span>&gt; v&#123;<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-number">5</span>&#125;<br></code></pre></td></tr></table></figure>
+<p>空大括号表达的是没有形参，如果使用list的话，应该在小括号在再加一个大括号。</p>
+<h4 id="条款8、优先使用nullptr"><a href="#条款8、优先使用nullptr" class="headerlink" title="条款8、优先使用nullptr"></a>条款8、优先使用nullptr</h4><p>作为指针传入参数时，传入空指针优先使用nullptr，因为nullptr指代明确，不像0和NULL既可以指代整型也可以指代空指针。</p>
+<p>nullptr可以隐式的转化为所有指针类型。</p>
+<h4 id="条款9、优先使用别名声明，而非typedef————-回头看"><a href="#条款9、优先使用别名声明，而非typedef————-回头看" class="headerlink" title="条款9、优先使用别名声明，而非typedef————-回头看"></a>条款9、优先使用别名声明，而非typedef————-回头看</h4><p>using作用可以等效于typedef用于别名的声明，使用using的优势在于，可以将其与模板进行结合起来，别名模板。</p>
+<h4 id="条款10、优先使用限定作用域的枚举"><a href="#条款10、优先使用限定作用域的枚举" class="headerlink" title="条款10、优先使用限定作用域的枚举"></a>条款10、优先使用限定作用域的枚举</h4><blockquote>
+<p>enum class name{}；使用class关键词限定作用域，又称为枚举类。</p>
+</blockquote>
+<p>使用枚举的成员需要用到<code>name::</code>来取。</p>
+<ul>
+<li>使用限定作用域的枚举的枚举量是更强型别的，不限范围的枚举型别中的枚举量可以隐式转化到整数类别。</li>
+<li>强类型的参数不能够和非同类型的参数进行比较，也不能进行隐式转换，必须通过强制转化才能够进行比较。</li>
+<li>限定作用域的枚举型别可以进行前置声明。不限定作用域的枚举要想进行前置声明，则可以进行对底层型别的声明：enum color: std::uint8_t</li>
+</ul>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><code class="hljs angelscript"><span class="hljs-comment">// 条款10、优先使用限定作用域的枚举</span><br><span class="hljs-keyword">enum</span> color &#123;<br>	black,<br>	white,<br>	red<br>&#125;;<br><br><span class="hljs-comment">// 重定义报错</span><br><span class="hljs-comment">// auto white = false;</span><br><br><span class="hljs-comment">// 枚举类，限定作用域在color2中</span><br><span class="hljs-keyword">enum</span> <span class="hljs-keyword">class</span> <span class="hljs-symbol">color2</span> &#123;<br>	black1,<br>	white1,<br>	red1<br>&#125;;<br><br><span class="hljs-built_in">auto</span> white1 = <span class="hljs-literal">false</span>;<br><span class="hljs-built_in">auto</span> c = color2::red1;<br></code></pre></td></tr></table></figure>
+<h4 id="条款11、优先选用删除函数"><a href="#条款11、优先选用删除函数" class="headerlink" title="条款11、优先选用删除函数"></a>条款11、优先选用删除函数</h4><p>在类里面的函数后面加上<code>=delete</code>可以组x织客户去调用函数，说明该函数已经失效。</p>
+<p>任何函数都可以成为删除函数，但只有成员函数能声明为private。</p>
+<h4 id="条款12、在需要改写的函数添后面加上override声明表示子类需要改写这个函数"><a href="#条款12、在需要改写的函数添后面加上override声明表示子类需要改写这个函数" class="headerlink" title="条款12、在需要改写的函数添后面加上override声明表示子类需要改写这个函数"></a>条款12、在需要改写的函数添后面加上override声明表示子类需要改写这个函数</h4><p>函数重写的必要条件：</p>
+<ul>
+<li>基类中的函数必须是虚函数</li>
+<li>函数名字必须完全相同（析构函数例外）</li>
+<li>函数形参型别完全相同</li>
+<li>函数常量性必须完全相同</li>
+<li>函数返回值和异常规格必须兼容</li>
+<li>引用饰词必须完全相同</li>
+</ul>
+<p>成员函数引用饰词的作用就是针对发起成员函数调用的现象，加一些区分度。</p>
+<h4 id="条款13、优先选用const-iterator"><a href="#条款13、优先选用const-iterator" class="headerlink" title="条款13、优先选用const_iterator"></a>条款13、优先选用const_iterator</h4><figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql">// 建立iterator并插入<br>std::vector&lt;<span class="hljs-type">int</span>&gt;::iterator it = std::find(<span class="hljs-keyword">values</span>.<span class="hljs-keyword">begin</span>(), <span class="hljs-keyword">values</span>.<span class="hljs-keyword">end</span>(), <span class="hljs-number">1983</span>);<br><span class="hljs-keyword">values</span>.<span class="hljs-keyword">insert</span>(it, <span class="hljs-number">1998</span>)<br></code></pre></td></tr></table></figure>
+<p>容器的cbegin和cend都返回的是const_iterator型别，不能修改，但是可以通过insert插入元素到列表中。</p>
+<p>将const元素传入begin函数中，会产生一个const_iterator</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 条款13、优先选用const_iterator</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">demo13</span><span class="hljs-params">()</span> </span>&#123;<br>	std::vector&lt;<span class="hljs-type">int</span>&gt; vec&#123; <span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span> &#125;;<br><br>	<span class="hljs-keyword">for</span> (std::vector&lt;<span class="hljs-type">int</span>&gt;::iterator iter = vec.<span class="hljs-built_in">begin</span>(); iter != vec.<span class="hljs-built_in">end</span>(); ++iter) &#123;<br>		std::cout &lt;&lt; <span class="hljs-string">&quot;old element:&quot;</span> &lt;&lt; *iter;				<span class="hljs-comment">// 打印元素</span><br><br>		(*iter) += <span class="hljs-number">1</span>;										<span class="hljs-comment">// 通过迭代器修改对应元素</span><br>		std::cout &lt;&lt; <span class="hljs-string">&quot;, new:&quot;</span> &lt;&lt; *iter &lt;&lt; std::endl;<br><br>	&#125;<br><br>	<span class="hljs-keyword">auto</span> it = std::<span class="hljs-built_in">find</span>(vec.<span class="hljs-built_in">cbegin</span>(), vec.<span class="hljs-built_in">cend</span>(), <span class="hljs-number">3</span>);<br>	vec.<span class="hljs-built_in">insert</span>(it, <span class="hljs-number">1</span>);<br><br>	<span class="hljs-keyword">for</span> (std::vector&lt;<span class="hljs-type">int</span>&gt;::const_iterator iter = vec.<span class="hljs-built_in">cbegin</span>(); iter != vec.<span class="hljs-built_in">cend</span>(); ++iter) &#123;<br>		std::cout &lt;&lt; <span class="hljs-string">&quot;old element:&quot;</span> &lt;&lt; *iter &lt;&lt; std::endl;				<span class="hljs-comment">// 打印元素</span><br><br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>优先使用begin，end等，而非成员函数版本</li>
+</ul>
+<h4 id="条款14、对于确保不发生异常的函数，加上noexcept声明"><a href="#条款14、对于确保不发生异常的函数，加上noexcept声明" class="headerlink" title="条款14、对于确保不发生异常的函数，加上noexcept声明"></a>条款14、对于确保不发生异常的函数，加上noexcept声明</h4><p>在C++98中，出现异常后，调用栈会开解至异常出现的调用方，C++11中，中止前只是可能会解开。因此优化器不需要再异常传出函数的前提下，将执行期间栈保持在开解状态，也不用在异常溢出函数的前提下，保证所有对象的构造顺序的逆序完成解析。</p>
+<p><code>push_back</code>中采用的原则是：能移动则移动，必须复制才复制。具有强异常性质。</p>
+<p>使用<code>noexcept</code>能够极大程度的便于编译器优化。</p>
+<p>析构函数和内存释放函数都隐式的具备又noexcept的性质。</p>
+<h4 id="条款15、使用constexpr"><a href="#条款15、使用constexpr" class="headerlink" title="条款15、使用constexpr"></a>条款15、使用constexpr</h4><p>const：表示“只读”的含义，被const修饰的变量不能够修改，可以定义编译器和运行期的常量</p>
+<p>constexpr：表示“常量”的含义，只能够定义编译器的常量，可以提高运行效率</p>
+<ul>
+<li>constexpr修饰的函数在编译过程展开，被隐式的转化为了内联函数</li>
+<li>如果要修改const修饰的变量的值，需要加上关键字volatile</li>
+</ul>
+<p>constexpr函数仅限于掺入和返回字面型别：在编译器就可以确定的数据类型。</p>
+<h4 id="条款16、使用const成员函数的线程安全性"><a href="#条款16、使用const成员函数的线程安全性" class="headerlink" title="条款16、使用const成员函数的线程安全性"></a>条款16、使用const成员函数的线程安全性</h4><h4 id="条款17、"><a href="#条款17、" class="headerlink" title="条款17、"></a>条款17、</h4><h3 id="第四章、智能指针"><a href="#第四章、智能指针" class="headerlink" title="第四章、智能指针"></a>第四章、智能指针</h3><blockquote>
+<p>智能指针是用来管理内存泄漏的，内存泄漏：在为对象动态申请内存空间后，如存在忘记释放内存，或者运行过程中程序中断的问题，导致申请的内存空间被占用造成内存泄漏。</p>
+</blockquote>
+<h4 id="条款18、使用unique-ptr管理具备专属所有权的资源"><a href="#条款18、使用unique-ptr管理具备专属所有权的资源" class="headerlink" title="条款18、使用unique_ptr管理具备专属所有权的资源"></a>条款18、使用unique_ptr管理具备专属所有权的资源</h4><p>智能指针<code>unique_ptr</code></p>
+<ul>
+<li>独享它的对象</li>
+<li>包含头文件#include<memory></li>
+<li>可以高效的转化为<code>shared_ptr</code></li>
+</ul>
+<p>unique_ptr和裸指针在默认情况下有着相同的尺寸，实现的是专属所有权语义，</p>
+<p>工厂函数返回的是一个<code>unique_ptr</code>指针，可以用auto来接收。</p>
+<ul>
+<li>将一个裸指针赋值给<code>unique_ptr</code>将不会通过编译</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 智能指针用法</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">AA</span> &#123;<br><span class="hljs-keyword">public</span>:<br>	std::string _name;<br>	<span class="hljs-built_in">AA</span>() &#123;<br>		std::cout &lt;&lt; _name &lt;&lt; <span class="hljs-string">&quot;调用构造函数1\n&quot;</span>;<br>	&#125;<br>	<span class="hljs-built_in">AA</span>(<span class="hljs-type">const</span> std::string&amp; m_name) :_name(m_name) &#123;<br><br>		std::cout &lt;&lt; _name &lt;&lt; <span class="hljs-string">&quot;调用构造函数2\n&quot;</span>;<br>	&#125;<br>	~<span class="hljs-built_in">AA</span>() &#123;<br><br>		std::cout &lt;&lt; <span class="hljs-string">&quot;调用析构函数\n&quot;</span>;<br>	&#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">demo19</span><span class="hljs-params">()</span> </span>&#123;<br>	<span class="hljs-keyword">using</span> std::unique_ptr;<br>	<span class="hljs-keyword">using</span> std::make_unique;<br>	<span class="hljs-function">unique_ptr&lt;AA&gt; <span class="hljs-title">p0</span><span class="hljs-params">(<span class="hljs-keyword">new</span> AA(<span class="hljs-string">&quot;xiaoli&quot;</span>))</span></span>;<br>	unique_ptr&lt;AA&gt; p1 = std::<span class="hljs-built_in">make_unique</span>&lt;AA&gt;(<span class="hljs-string">&quot;xiaowang&quot;</span>);<br>	unique_ptr&lt;<span class="hljs-type">int</span>&gt; pp1 = <span class="hljs-built_in">make_unique</span>&lt;<span class="hljs-type">int</span>&gt;();         <span class="hljs-comment">// 数据类型为int。</span><br>	unique_ptr&lt;AA&gt; pp2 = <span class="hljs-built_in">make_unique</span>&lt;AA&gt;();       <span class="hljs-comment">// 数据类型为AA，默认构造函数。</span><br>	unique_ptr&lt;AA&gt; pp3 = <span class="hljs-built_in">make_unique</span>&lt;AA&gt;(<span class="hljs-string">&quot;xiaoxi&quot;</span>);  <span class="hljs-comment">// 数据类型为AA，一个参数的构造函数。</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="条款19、使用shared-ptr管理具备共享所有权的资源"><a href="#条款19、使用shared-ptr管理具备共享所有权的资源" class="headerlink" title="条款19、使用shared_ptr管理具备共享所有权的资源"></a>条款19、使用shared_ptr管理具备共享所有权的资源</h4><p>RAII思想（Resource Acquisition Is Initialization）资源获取即初始化。将获取的资源和对象的生命周期绑定在一起。</p>
+<ul>
+<li>设计RAII类的四个步骤<ul>
+<li>设计一个类封装资源，资源可以是内存、文件、socket、锁等等一切</li>
+<li>在构造函数中执行资源的初始化，比如申请内存、打开文件、申请锁</li>
+<li>在析构函数中执行销毁操作，比如释放内存、关闭文件、释放锁</li>
+<li>使用时声明一个该对象的类，一般在你希望的作用域声明即可，比如在函数开始，或者作为类的成员变量</li>
+</ul>
+</li>
+</ul>
+<p>引用计数带来的一些性能问题：</p>
+<ul>
+<li>尺寸是裸指针的两倍</li>
+<li>引用计数的内存必须动态分配</li>
+<li>引用计数的递增和递减必须是原子操作</li>
+</ul>
+<p>从一个已有shared_ptr移动构造一个新的shared_ptr会将源shared_ptr置空，不会增加引用计数。</p>
+<p>使用shared_ptr如果出现了循环引用则会导致计数用于也无法回到0，资源将无法被释放。使用<code>weak_ptr</code>配合使用便可以解决这个问题，因为<code>weak_ptr</code>不会控制对象的生命周期，但是知道对象释放的时间，会和对象共同消失。</p>
+<h4 id="条款20、weak-ptr使用"><a href="#条款20、weak-ptr使用" class="headerlink" title="条款20、weak_ptr使用"></a>条款20、weak_ptr使用</h4><p>1、使用<code>weak_ptr</code>代替可能空悬的<code>shared_ptr</code></p>
+<p>2、<code>weak_ptr</code>可以用于缓存，观察者列表，以及避免shared_ptr指针环路</p>
+<h4 id="条款21、优先使用make-…ptr而不是直接使用new"><a href="#条款21、优先使用make-…ptr而不是直接使用new" class="headerlink" title="条款21、优先使用make_…ptr而不是直接使用new"></a>条款21、优先使用make_…ptr而不是直接使用new</h4><p>1、使用new的代码更加冗余</p>
+<p>2、使用new会触发两次内存分配，而使用make系列则只用触发一次内存分配</p>
+<h4 id="条款22、Pimpl用法"><a href="#条款22、Pimpl用法" class="headerlink" title="条款22、Pimpl用法"></a>条款22、Pimpl用法</h4><p>将类内的数据成员使用struct结构体打包起来，并使用一个智能指针指向该结构体，在.cpp文件中对这些数据进行操作，能够极大便利的降低类的客户和类的实现者之间的依赖。</p>
+<h3 id="右值引用、移动语义和完美转发"><a href="#右值引用、移动语义和完美转发" class="headerlink" title="右值引用、移动语义和完美转发"></a>右值引用、移动语义和完美转发</h3><ul>
+<li>移动语义可以使得编译器能够使用移动操作代替昂贵的复制操作。</li>
+<li>完美转发使得人们可以撰写接收任意实参的函数模板，并将其转发到其它函数，目标函数会接收到与转发函数所接收到的完全相同的实参。</li>
+</ul>
+<h4 id="条款23、理解std-move和std-forward"><a href="#条款23、理解std-move和std-forward" class="headerlink" title="条款23、理解std::move和std::forward"></a>条款23、理解std::move和std::forward</h4><p>使用move可以将参数强制转化为右值</p>
+<p>如果想要取得对某一个对象执行移动操作的能力，则不要将其声明为常量，因为针对常量对象执行的移动操作将会变化为复制操作。</p>
+<p>forward是一个有条件的强制转化，只有当实参是使用右值完成初始化时，它才会执行向右值型别的强制转化。如果需要选择性的对某一些形参进行左值或者右值引用，则可以用forward来进行标识。</p>
+<h4 id="条款24、区分万能引用和右值引用"><a href="#条款24、区分万能引用和右值引用" class="headerlink" title="条款24、区分万能引用和右值引用"></a>条款24、区分万能引用和右值引用</h4><p>在模板和类型推导中出现<code>&amp; &amp;</code>很大可能就是万能引用：即表达式或者传入的实参，既可以是左值也可以时右值。</p>
+<h4 id="条款25、针对右值引用使用move，针对万能引用使用forward"><a href="#条款25、针对右值引用使用move，针对万能引用使用forward" class="headerlink" title="条款25、针对右值引用使用move，针对万能引用使用forward"></a>条款25、针对右值引用使用move，针对万能引用使用forward</h4><p>因为万能引用使用<code>forward</code>它可以有条件的自动转化传入的实参作为左值还是右值。</p>
+<h4 id=""><a href="#" class="headerlink" title=" "></a> </h4><h4 id="条例30、完美转发失败的情形"><a href="#条例30、完美转发失败的情形" class="headerlink" title="条例30、完美转发失败的情形"></a>条例30、完美转发失败的情形</h4><p>完美转发的含义：一个函数把自己的形参传递（转发）给另一个函数，为了使得第二个函数接受第一个函数所接受的同一个对象。</p>
+<p>完美转发不仅仅转发对象，还转发其显著的特征：型别、是左值还是右值，是否带有const或者volatile修饰词。</p>
+<p>转发失败的定义：使用某特定实参调用转发函数会执行某操作，但使用同一实参调用其封装后的函数会执行不同的操作。即右值引用成功，但是万能引用失败。</p>
+<p>具体形参：</p>
+<ul>
+<li>大括号初始化的列表</li>
+<li>0或者NULL用作空指针</li>
+<li>仅有声明的整型static const成员变量</li>
+<li>重载的函数名字和模板名字</li>
+<li>位域</li>
+</ul>
+<h3 id="第五章、lambda表达式"><a href="#第五章、lambda表达式" class="headerlink" title="第五章、lambda表达式"></a>第五章、lambda表达式</h3><p>lambda运行期的对象是<code>闭包</code>，根据不同的捕获模式，闭包会持有数据的副本或引用。</p>
+<p>闭包类就是实例化闭包的类，每个lambda式都会触发编译器生成一个独一无二的闭包类。闭包中的语句会变成它的闭包类成员函数的可执行指令。</p>
+<h4 id="条款31、避免默认捕获模式"><a href="#条款31、避免默认捕获模式" class="headerlink" title="条款31、避免默认捕获模式"></a>条款31、避免默认捕获模式</h4><p>C++11有两种默认捕获模式：按值或按引用。按引用的默认捕获模式可能导致空悬引用。</p>
+<p>按引用捕获会导致闭包包含指涉到局部变量的引用，或者指涉到定义lambda式作用域内的形参的引用。一旦lambda式所创建的闭包越过了该局部变量或者形参的生命周期，那么闭包内的引用就会悬空。</p>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>C++新特性</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>GAMES101现代计算机图形学入门-01</title>
     <url>/2023/12/15/GAMES101%E7%8E%B0%E4%BB%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8-01/</url>
     <content><![CDATA[<h2 id="计算机图形学01"><a href="#计算机图形学01" class="headerlink" title="计算机图形学01"></a>计算机图形学01</h2><blockquote>
@@ -516,44 +665,1843 @@
       </tags>
   </entry>
   <entry>
-    <title>Git常见用法</title>
-    <url>/2024/01/04/git/</url>
-    <content><![CDATA[<h4 id="怎样撤销一个已经push到远端的版本"><a href="#怎样撤销一个已经push到远端的版本" class="headerlink" title="怎样撤销一个已经push到远端的版本"></a>怎样撤销一个已经push到远端的版本</h4><figure class="highlight arcade"><table><tr><td class="code"><pre><code class="hljs arcade">每次<span class="hljs-built_in">push</span>之前线pull一下<br><br><span class="hljs-number">1</span>、查看当前提交的信息，找到需要撤回到的版本号复制，一串十六进制的数<br>git <span class="hljs-built_in">log</span><br><br><span class="hljs-number">2</span>、使用git reset<br>git reset --soft 复制的版本号<br><br><span class="hljs-number">3</span>、强制回退当前版本号<br><span class="hljs-comment">// 确认一下当前版本</span><br>git <span class="hljs-built_in">log</span><br><span class="hljs-comment">// 谨慎使用，强制使用本地仓库代码修改远程仓库</span><br>git <span class="hljs-built_in">push</span> orgin master --force<br></code></pre></td></tr></table></figure>
-<h4 id="新建分支并同步到远端的分支"><a href="#新建分支并同步到远端的分支" class="headerlink" title="新建分支并同步到远端的分支"></a>新建分支并同步到远端的分支</h4><figure class="highlight mipsasm"><table><tr><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># 在本地新建一个名字为branch_name的分支，并与远端的origin/branch_name同步</span><br>git checkout -<span class="hljs-keyword">b </span><span class="hljs-keyword">branch_name </span><span class="hljs-keyword">origin/branch_name</span><br></code></pre></td></tr></table></figure>
-<h4 id="解决git-clone超时的问题"><a href="#解决git-clone超时的问题" class="headerlink" title="解决git clone超时的问题"></a>解决git clone超时的问题</h4><p>从github上clone代码仓库报错<code>Failed to connect to github.com port 443 after 21038 ms: Couldn&#39;t connect to server</code>且尝试去ping一下github官网会丢包</p>
-<img src="/2024/01/04/git/image-20231204110955462.png" class="" title="image-20231204110955462">
-<p>解决方案</p>
-<p>修改系统的hosts，跳过域名解析的过程，直接用ip地址访问</p>
-<figure class="highlight accesslog"><table><tr><td class="code"><pre><code class="hljs accesslog"><span class="hljs-number">192.30.255.112</span> github.com git<br><span class="hljs-number">185.31.16.184</span> github.global.ssl.fastly.net<br></code></pre></td></tr></table></figure>
-<img src="/2024/01/04/git/image-20231204111125551.png" class="" title="image-20231204111125551">
-<p>修改hosts需要给文件更高的权限</p>
-<img src="/2024/01/04/git/image-20231204111350240.png" class="" title="image-20231204111350240">
-<h4 id="github中git-push出现超时的问题"><a href="#github中git-push出现超时的问题" class="headerlink" title="github中git push出现超时的问题"></a>github中git push出现超时的问题</h4><img src="/2024/01/04/git/image-20231204112945547.png" class="" title="image-20231204112945547">
-<p>解决方案</p>
-<p>1、打开本机的代理服务器</p>
-<img src="/2024/01/04/git/image-20231204113100512.png" class="" title="image-20231204113100512">
-<p>2、取消git config里面的http和https代理</p>
-<img src="/2024/01/04/git/image-20231204113208566.png" class="" title="image-20231204113208566">
-<p>3、设置http代理服务器</p>
-<img src="/2024/01/04/git/image-20231204113304822.png" class="" title="image-20231204113304822">
-<h4 id="linux中输出一个文件夹下面的所有文件名"><a href="#linux中输出一个文件夹下面的所有文件名" class="headerlink" title="linux中输出一个文件夹下面的所有文件名"></a>linux中输出一个文件夹下面的所有文件名</h4><ul>
-<li><strong><code>/path/to/directory</code></strong>: 替换为目标目录的路径。</li>
-<li><strong><code>-maxdepth 1</code></strong>: 限制<code>find</code>的搜索深度为1，即仅在指定的目录中搜索，而不会搜索其子目录。</li>
-<li><strong><code>-type f</code></strong>: 限制搜索结果为普通文件（不包括目录和其他类型的文件）。</li>
-<li><strong><code>-exec basename &#123;&#125; \;</code></strong>: 对每一个找到的文件执行<code>basename</code>命令，即输出文件的基本名称。<code>&#123;&#125;</code>是<code>find</code>命令的占位符，表示每个找到的文件的路径。<code>\;</code>表示命令结束。</li>
+    <title>Physical_design</title>
+    <url>/2024/08/09/Physical-design/</url>
+    <content><![CDATA[<h2 id="第一章、集成电路物理设计方法"><a href="#第一章、集成电路物理设计方法" class="headerlink" title="第一章、集成电路物理设计方法"></a>第一章、集成电路物理设计方法</h2><h3 id="数字集成电路设计流程"><a href="#数字集成电路设计流程" class="headerlink" title="数字集成电路设计流程"></a>数字集成电路设计流程</h3><p>三个I年代，发明，实施和整合</p>
+<p>Innovation：布局布线的基本算法、时序分析和逻辑综合的发明</p>
+<p>Implementation：开始于FPGA中门阵列的实现，ASIC设计中同等高度标准逻辑单元库的设计</p>
+<p>Integration：模块化</p>
+<p><strong>芯片的物理实施重点解决的问题</strong></p>
+<p>对于深亚微米芯片</p>
+<ul>
+<li><p>解决时序驱动设计</p>
+</li>
+<li><p>防止工艺天线效应</p>
+</li>
+<li>进行信号完整性分析</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">find /path/to/directory -maxdepth 1 -<span class="hljs-built_in">type</span> f -<span class="hljs-built_in">exec</span> <span class="hljs-built_in">basename</span> &#123;&#125; \;<br></code></pre></td></tr></table></figure>
-<h4 id="git查看远端仓库地址"><a href="#git查看远端仓库地址" class="headerlink" title="git查看远端仓库地址"></a>git查看远端仓库地址</h4><figure class="highlight dsconfig"><table><tr><td class="code"><pre><code class="hljs dsconfig"><span class="hljs-string">git</span> <span class="hljs-string">remote</span> -<span class="hljs-string">v</span><br><br><span class="hljs-comment"># 更改远程仓库</span><br><span class="hljs-string">git</span> <span class="hljs-string">remote</span> <span class="hljs-built_in">set-url</span> <span class="hljs-string">origin</span> 仓库地址<br></code></pre></td></tr></table></figure>
-<h4 id="查看代码贡献量"><a href="#查看代码贡献量" class="headerlink" title="查看代码贡献量"></a>查看代码贡献量</h4><blockquote>
-<p>按照各个作者的修改代码总数排序</p>
+<p>对于纳米的设计，需要多考虑的问题</p>
+<ul>
+<li>功耗分析和低功耗设计，并要统一考虑它的功能验证，逻辑综合和形式验证</li>
+<li>实施纳米设计中的光学近似检查（OPC）和移相掩膜（PSM），增加设计产额和可制造性设计</li>
+<li>统计静态时序分析，多端角分析</li>
+</ul>
+<p><strong>展平式物理设计</strong></p>
+<blockquote>
+<p>标准逻辑门单元库的简历。采用自下向上的方法，设计晶体管-仿真-建立版图-对逻辑门单元仿真建模</p>
 </blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --pretty=<span class="hljs-string">&quot;%aN&quot;</span> | <span class="hljs-built_in">sort</span> | <span class="hljs-built_in">uniq</span> -c | <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> count author; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> -n <span class="hljs-string">&quot;<span class="hljs-variable">$author</span> &quot;</span>; git <span class="hljs-built_in">log</span> --author=<span class="hljs-string">&quot;<span class="hljs-variable">$author</span>&quot;</span> --pretty=tformat: --numstat | awk <span class="hljs-string">&#x27;&#123; add += $1; subs += $2 &#125; END &#123; total = add + subs; printf &quot;%d\n&quot;, total &#125;&#x27;</span>; <span class="hljs-keyword">done</span> | <span class="hljs-built_in">sort</span> -rnk2<br></code></pre></td></tr></table></figure>
+<img src="/2024/08/09/Physical-design/01.png" class="">
+<p><strong>硅虚拟原型设计</strong></p>
+<img src="/2024/08/09/Physical-design/02.png" class="">
+<p>与展平化的物理设计流程区别</p>
+<ul>
+<li>布图阶段，考虑将整个设计进行分割</li>
+<li>布线时用了快速近似的试验布线法</li>
+<li>在做RC提取时，可以用集总电容模型</li>
+</ul>
+<p><strong>层次化物理设计</strong></p>
+<blockquote>
+<p>芯片设计的最终检查标准之一为是否实现了时序收敛</p>
+</blockquote>
+<p>自上而下的层次化物理设计：将设计分为数个分割块，对每个分割块进行展品化处理（独立的布局布线），在顶层完成组装设计</p>
+<img src="/2024/08/09/Physical-design/03.png" class="">
+<p>优点：将很大的设计化成多个小设计，如果有时序问题可能存在于个别模块，再去重点解决，降低了复杂性。</p>
+<ul>
+<li><p>基于设计驱动时序图</p>
+<p>在顶层设计和模块设计之间建立一个连接的时序图桥梁，从而避免当模块设计完成后回到顶层无法收敛而造成大量的设计迭代。</p>
+<p>将模块级的实施分成多个阶段，如时钟树综合，详细布线阶段，布线优化阶段</p>
+</li>
+</ul>
+<h3 id="数字集成电路设计收敛"><a href="#数字集成电路设计收敛" class="headerlink" title="数字集成电路设计收敛"></a>数字集成电路设计收敛</h3><blockquote>
+<p>设计时序收敛任务通过三大部分工作来完成：数据系统，优化引擎，分析引擎</p>
+<p>数据系统：由读取、处理和存储</p>
+<p>优化引擎：基于算法去实现逻辑优化，布局优化，和布线优化</p>
+<p>分析引擎：由设计工程师借助EDA工具用于时序分析，功耗分析和噪声分析的EDA工具</p>
+</blockquote>
+<p><strong>时序收敛</strong></p>
+<p>静态时序分析最重要任务：寻找最长延时路径以及最坏情况下的延时</p>
+<p>总延时：由逻辑门延时和互连线延时组成</p>
+<p>静态时序路径：组合逻辑电路，时序逻辑电路形成的路径</p>
+<p><strong>功耗分析</strong></p>
+<ul>
+<li><p>静态功耗分析</p>
+<p>使用时序库提供的器件功耗可以计算</p>
+</li>
+<li><p>动态功耗分析</p>
+<p>需要提供设计仿真的数据</p>
+</li>
+</ul>
+<p>降低功耗的方式：多电源电压方法、门控电路方法、衬底电压偏执方法</p>
+<img src="/2024/08/09/Physical-design/04.png" class="">
+<h3 id="习题："><a href="#习题：" class="headerlink" title="习题："></a>习题：</h3><ul>
+<li><p>1、讨论什么是数字电路的物理设计和物理实施？</p>
+<p>集成电路的物理实施方法被概括为从RTL综合到最终完成GDSII数据的实现，RTL一种硬件描述语言，用于描述数字电路的逻辑功能和寄存器传输级别的行为。GDSII是一种电子设计自动化工具所使用的标准格式，用于描述芯片的物理布局和制造信息。</p>
+<p>将RTL转换为GDSII是一个多步骤的过程，通常包括以下几个主要阶段：</p>
+<ul>
+<li>1、逻辑综合：将RTL描述的电路转换为门级电路，生成门级网表。</li>
+<li>2、时序优化：对门级网表进行优化，以减少电路的面积、功耗或者时钟延迟等。</li>
+<li>3、布局：根据门级网表生成芯片的物理布局，包括各个组件的位置、尺寸和连线等。</li>
+<li>4、布线：根据布局信息进行连线，确保电路的信号可以正确传输。</li>
+<li>5、物理验证：对布局和布线结果进行物理验证，包括规则检查、电气特性分析等。<ul>
+<li>后面有一个提取阶段</li>
+</ul>
+</li>
+<li>6、转换为GDSII：将经过物理验证的布局和布线结果转化为GDSII格式，生成最终的物理设计数据</li>
+</ul>
+</li>
+<li><p>2、什么是硅虚拟原型SVP？为什么要提出硅虚拟模型设计方法？</p>
+<p>硅虚拟原型：是一种基于软件仿真和硬件加速的技术，用于验证和评估芯片设计的功能和新能。</p>
+<p>采用硅虚拟模型设计方法能够尽早预估该设计能否大致实现时序收敛，具有更快的设计迭代速度和更低的开发成本。</p>
+</li>
+<li><p>3、展平式物理设计与层次式物理设计的共同点和不同点是什么？</p>
+<p>基本流程都具备，但是步骤顺序可能存在偏差</p>
+<p>展平式设计是一种自下而上的模块化方法，从底层器件再到版图</p>
+<p>层次化设计是一种自上而下的物理设计方法，从版图再往下</p>
+</li>
+<li><p>4、设计收敛的实现与设计流程有关吗？</p>
+<p>有关，设计流程可以提供一种系统化的方法和框架，能够有效地引导和管理设计的各个阶段，以实现设计收敛，使得设计能够按照预期目标收敛。</p>
+</li>
+<li><p>5、当今EDA工具的设计所采用的主要的数据文件格式有哪些？数据库格式有哪些？常用的编程语言有哪些？</p>
+<p>RTL：硬件描述语言编写的RTL代码</p>
+<p>网表：描述芯片的逻辑电路结构和连接关系的文本文件</p>
+<p>GDSII：用于描述芯片的物理布局和制造信息的二进制格式</p>
+<p>LEF和DEF：用于描述芯片的物理布局和制造信息的二进制格式</p>
+<p>SDC：用于定义时序约束的文本文件，指定电路的时序要求和约束条件</p>
+</li>
+</ul>
+<h2 id="第二章、物理设计建库与验证"><a href="#第二章、物理设计建库与验证" class="headerlink" title="第二章、物理设计建库与验证"></a>第二章、物理设计建库与验证</h2><h3 id="集成电路工艺与版图"><a href="#集成电路工艺与版图" class="headerlink" title="集成电路工艺与版图"></a>集成电路工艺与版图</h3><p><strong>CMOS工艺流程</strong></p>
+<p>晶圆—形成制造晶体管所需的衬底和阱区—形成晶体管栅层图形—形成源漏、衬底和阱接触等其它有源区—通过接触孔将需要连接的地方与第一层金属互连—进行其它几层金属互连—添加钝化层与外界隔离开</p>
+<p><strong>工艺技术文件</strong></p>
+<blockquote>
+<p>晶体代工厂提供给设计者用于后端版图设计的技术文件，用于与EDA工具交互工艺信息，内容包括图形定义及显示信息，互连线工艺信息和通孔工艺信息</p>
+</blockquote>
+<h3 id="设计规则检查（DRC）"><a href="#设计规则检查（DRC）" class="headerlink" title="设计规则检查（DRC）"></a>设计规则检查（DRC）</h3><p>主要目的：检查版图中所有因违反设计规则而引起潜在断路，短路或不良效应的物理验证过程</p>
+<p><strong>版图设计规则</strong></p>
+<blockquote>
+<p>晶圆代工厂对不同工艺参数制定出满足芯片制造良率的同一工艺层以及不同工艺层之间几何尺寸的最小值，这些最小值规划的集合就是版图设计规则。</p>
+</blockquote>
+<ul>
+<li>逻辑运算<ul>
+<li>AND操作</li>
+<li>OR操作</li>
+<li>NOT操作，双目运算，A NOT B属于A，但不属于B的部分</li>
+</ul>
+</li>
+<li>拓扑运算<ul>
+<li>重叠</li>
+<li>包含</li>
+<li>相切</li>
+</ul>
+</li>
+<li>集合运算<ul>
+<li>面积</li>
+<li>周长</li>
+<li>间距</li>
+</ul>
+</li>
+</ul>
+<h3 id="电路规则检查"><a href="#电路规则检查" class="headerlink" title="电路规则检查"></a>电路规则检查</h3><blockquote>
+<p>1、所有信号的电气连接关系是否一致</p>
+<p>2、器件类型尺寸是否一致</p>
+<p>LVS文件：期间提前规则、电路比较规则、器件捆绑规则</p>
+</blockquote>
+<p><strong>电路提取与比较</strong></p>
+<p>步骤：更具LVS提取规则，从版图中抽取出版图所需要的网表文件。将抽取出的网表文件与电路网表文件做对比。</p>
+<p><strong>器件类型和数目及尺寸检查</strong></p>
+<ul>
+<li>器件类型检查：电阻、电容、电感、双极晶体管、MOS管、二极管<ul>
+<li>通过从版图与原理图中寻找名称相一致的器件实现</li>
+</ul>
+</li>
+<li>器件数目与尺寸检查<ul>
+<li>检查版图中对应节点上期间的数量以及每个器件的尺寸是否与原理图中对应结点的期间数量与尺寸一致</li>
+</ul>
+</li>
+</ul>
+<p><strong>LVS在数字IC中的检查</strong></p>
+<p>常用的解决LVS错误的方法</p>
+<ul>
+<li>检查器件数目</li>
+<li>检查器件类型</li>
+<li>检查节点数量</li>
+<li>检查电源线和地线的连接</li>
+<li>从关键点找起</li>
+</ul>
+<h3 id="版图寄生参数提取与设计仿真"><a href="#版图寄生参数提取与设计仿真" class="headerlink" title="版图寄生参数提取与设计仿真"></a><strong>版图寄生参数提取与设计仿真</strong></h3><p><strong>版图寄生参数提取</strong></p>
+<p>版图设计的完整寄生参数应当包括R（电阻）、C（电容）、L（电感）、K（互感）</p>
+<p>LPE（版图寄生参数提取）/PRE（寄生电阻提取）提取的主要参数包括MOS管源漏的周长、面积、电阻，沟道的长与宽，双极晶体管和二极管的结面积、结周长，以及结点寄生电容、互连线电容电阻、接触孔电阻等。</p>
+<p><strong>版图设计仿真</strong></p>
+<p>使用牛顿迭代法，用泰勒级数的前几项来寻找方程f(x)=0的根</p>
+<h3 id="逻辑单元库的建立"><a href="#逻辑单元库的建立" class="headerlink" title="逻辑单元库的建立"></a>逻辑单元库的建立</h3><blockquote>
+<p>逻辑单元的建库流程归纳为以下5步</p>
+<p>1、方案设计与论证</p>
+<p>2、电路设计</p>
+<p>3、版图设计与物流库生成</p>
+<p>4、标准单元特性及库模型生成</p>
+<p>5、设计验证</p>
+</blockquote>
+<p><strong>逻辑单元类别</strong></p>
+<p>完整的单元库根据在芯片中的应用可以分为三类</p>
+<ul>
+<li><p>标准单元(standard cell)</p>
+<p>放置于芯片的核心区起逻辑功能粘接作用</p>
+</li>
+<li><p>模块宏单元(macro block)</p>
+<p>放置于芯片核心区，至少包括嵌入式存储器（RAM和ROM）、IP、COT模块</p>
+<p>其它重要的宏单元模块：始终PLL模块，DSP模块</p>
+</li>
+<li><p>输入输出单元(I/O pad cell)</p>
+<p>放置于核区的周围，用于芯片信号的输入、输出和电源供给</p>
+</li>
+</ul>
+<img src="/2024/08/09/Physical-design/05.png" class="">
+<p><strong>逻辑单元电路</strong></p>
+<p>组合逻辑电路简称为组合电路包括</p>
+<ul>
+<li>反向逻辑电路：反向器、与非门、或非门</li>
+<li>非反向逻辑电路：缓冲器、与门、或门</li>
+<li>其它常用逻辑电路：数据选择门（MUX）、异或门、数据传输门（TBUF）、复合门（AOI）</li>
+<li>特殊功能的逻辑电路：加法器、乘法器、除法器</li>
+</ul>
+<p>时序逻辑电路也称为时序电路</p>
+<blockquote>
+<p>输出信号不但同但钱的输入相关还和上一时间的输出有关，具有记忆功能</p>
+</blockquote>
+<p>包括：</p>
+<ul>
+<li>锁存器（Latch）：专指电平敏感的时序电路</li>
+<li>寄存器类（flip flop）：时钟边沿出发</li>
+</ul>
+<p><strong>模块单元（宏单元模块）</strong></p>
+<p>存储单元ROM：NOR ROM、NAND ROM、EPROM、EEPROM、FAMOS ROM</p>
+<p>存储单元RAM：静态随机存储器SRAM、动态随机存储器DRAM</p>
+<p>专用模块：客户自由工具COT，专用标准产品ASSP，信号处理器DSP</p>
+<p>黑盒子商业IP模块：电路设计不公开</p>
+<p>模拟电路模块：时钟锁相环PLL模块</p>
+<p><strong>输入输出单元</strong></p>
+<blockquote>
+<p>包括输入信号、输出信号、三态门、双向、电源和接地单元</p>
+</blockquote>
+<p>对于输入单元要考虑静电放电的防护</p>
+<p>形成电阻的方法：n型扩散层、p型扩散层和多晶硅</p>
+<p>形成电容的方法：Poly、Mos栅电容</p>
+<p><strong>物理单元库与数据文件，LEF文件</strong></p>
+<img src="/2024/08/09/Physical-design/01.png" class="">
+<p>标准单元建库的规则</p>
+<ul>
+<li>所有单元都等高的矩形，或者是基本高度的整数倍</li>
+<li>所有版图都用预先定义的模板进行设计</li>
+<li>所有单元的端口位置、大小、形状都尽量满足网格间距的要求</li>
+<li>电源线和地线一般位于单元的上下边界</li>
+</ul>
+<p>模块单元建库</p>
+<ul>
+<li>先建立RAM和ROM的基本单元</li>
+<li>根据比特和字长，自底向上堆砌生成版图</li>
+</ul>
+<p>I/O单元</p>
+<ul>
+<li>IO拐角单元在芯LEF文档的单元类型中被定义为Endcap，分布在拐角处</li>
+</ul>
+<p><strong>时序单元建库与数据文件</strong></p>
+<p>器件延时：表示信号通过一个逻辑门时所经历的时间，反映了门对输入信号变化响应的快慢。通过输入信号电压变化的50%到输出信号电压变化的50%所需要的时间来定义门延时的大小。</p>
+<img src="/2024/08/09/Physical-design/06.png" class="">
+<p>用于DSM设计的器件延时模型</p>
+<ul>
+<li>开关线性RC模型</li>
+<li>经验推导公式（K-Factor方程）</li>
+<li>非线性延时模型</li>
+<li>可伸缩多项式模型</li>
+</ul>
+<p>时序库文件</p>
+<img src="/2024/08/09/Physical-design/07.png" class="">
+<p>EDA工具通常采用两种模型计算天线比率，一种时部分检查模型，另一种是积累检查模型</p>
+<h3 id="习题：-1"><a href="#习题：-1" class="headerlink" title="习题："></a>习题：</h3><ul>
+<li><p>1、什么是标准单元库？它主要包括哪几类单元？它们分别在电路中起什么作用？</p>
+<p>标准单元库是一种预先设计和验证的模块化的芯片单元集合，用于构建数字集成电路，包含了经过验证和优化的标准逻辑门和寄存器等基本单元，可以在芯片设计中重复使用，以节省设计时间和提高设计的可靠性。</p>
+<p>主要包括：逻辑门、寄存器、编码解码器、算术逻辑单元、存储器单元</p>
+<p>使用标准单元库可以提高设计的效率，降低设计风险，促进可重用性。</p>
+</li>
+<li><p>2、标准单元有几种不同抽象级别的描述？为什么要采用不同抽象层描述同一电路单元？</p>
+<p>逻辑级描述、电路级描述、物理级描述</p>
+<p>采用不同抽象层描述同一电路单元可以更好的管理设计的不同方面，优化设计的性能和可靠性，并在设计复杂性和效率之间进行权衡。</p>
+</li>
+<li><p>3、解释LEF库文件在物理实施布局布线中的作用和重要性，并说明它所定义的内容是如何知道EDA工具实现自动布局布线的。</p>
+<p>LEF库文件定义了标准单元的物理特性，包括尺寸大小方向以及引脚位置和功能等等</p>
+<p>EDA工具实现自动布局布线是通过读取和解析LEF库文件中的信息。工具可以根据LEF文件中定义的物理特性和约束，生成优化芯片的物理布局和连线。</p>
+</li>
+</ul>
+<h2 id="第三章、布图规划（芯片规划）和布局"><a href="#第三章、布图规划（芯片规划）和布局" class="headerlink" title="第三章、布图规划（芯片规划）和布局"></a>第三章、布图规划（芯片规划）和布局</h2><h3 id="布图规划"><a href="#布图规划" class="headerlink" title="布图规划"></a>布图规划</h3><p>布图规划开始时，首先要准备好各种基本设计数据和相应的物理库、时序库文件，并输入到不图规划的工具环境中来</p>
+<img src="/2024/08/09/Physical-design/08.png" class="">
+<p>布图规划主要内容包含对芯片大小的规划、芯片设计输入输出单元的规划、大量硬核或模块的规划</p>
+<p><strong>布图规划的主要目标</strong></p>
+<ul>
+<li>确定芯片的面积</li>
+<li>确保时序的收敛</li>
+<li>保证芯片的稳定</li>
+<li>满足布线的要求：保证布线通畅的同时，尽量缩短走线的长度</li>
+</ul>
+<p><strong>I/O接口单元的放置与供电</strong></p>
+<p>放置方式：1、pin点方式，2、pad条状方式，3、做成固定模块，将pad集成</p>
+<p>当芯片面积较大，芯片时序较为紧张时，I/O单元也可能均匀分布在芯片的内部</p>
+<p>I/O单元的供电：I/O单元分为信号接口和电源两种</p>
+<p>电源I/O单元分为3类：给模拟器件供电的I/O单元、给数字期间供电的、用于隔离数字供电和模拟供电</p>
+<p>数字I/O也分为两大组：一组是给I/O单元供电，一组是给核内的标准单元供电</p>
+<p>给I/O单元供电的供电单元数量由多种因素决定：I/O单元的消耗、输出I/O单元的驱动能力、同步开关噪声</p>
+<p><strong>布图规划方案与延迟预估</strong></p>
+<p>展平化设计</p>
+<p>因为还没有进入布线阶段，使用线负载模型预估当前布局的时序，展平式的方法会占用大量的内存，需要很长的运行时间。</p>
+<p>层次化设计</p>
+<blockquote>
+<p>思想是将大规模的顶层设计分解成多个子模块，每个子模块并行完成布局布线，最后在顶层组装。</p>
+<p>大致分为三个步骤：芯片顶层设计规划、子模块分割与实现、芯片顶层组装时序</p>
+</blockquote>
+<p>在层次化设计的过程中，需要在布图和布局规划中对时钟进行预估，流程图如下：</p>
+<blockquote>
+<p>根据子模块大小，和子模块中的元件数量以及复杂度来进行预估</p>
+</blockquote>
+<img src="/2024/08/09/Physical-design/09.png" class="">
+<p><strong>模块布放与布线通道</strong></p>
+<p>布线轨道：芯片内部专门用于布线的路径</p>
+<p>布线通道：每两条或多条布线轨道的空间，上面不可以摆放标准单元</p>
+<h3 id="电源规划"><a href="#电源规划" class="headerlink" title="电源规划"></a>电源规划</h3><blockquote>
+<p>给整个芯片的供电设计出一个均匀的网络，电源规划在芯片布图规划后或在布图规划过程中交叉完成。</p>
+<p>电源网络设置、数字模拟混合供电、单电源与多电源供电电压网络设置</p>
+</blockquote>
+<p>芯片供电是通过I/O单元来实现的，需要先完成电源预算，</p>
+<p><strong>电源网络设计</strong></p>
+<ul>
+<li>电源连接关系定义global net connect</li>
+<li>芯片核内部分的电源环设计power ring</li>
+<li>芯片内所包含的硬核（如 RAM、ROM以及IP、COT模块）的电源环设计</li>
+<li>芯片核内纵横交错的电源网络设计</li>
+<li>芯片的供电单元与电源环的连接</li>
+<li>芯片内部的电源网络与硬核电源环连接部分的设计</li>
+<li>将标准单元的供电网络和硬核电源环连接部分的设计</li>
+<li>I/O供电单元电源环的设计</li>
+</ul>
+<p>1、全局电源</p>
+<p>电源的定义主要包括：全局电源的定义以及连接关系的定义。</p>
+<ul>
+<li>电源和接地网络：通过wire定义</li>
+<li>接高电压和接低电压网络</li>
+<li>电压和接地端口</li>
+<li>填充单元网络</li>
+</ul>
+<p>2、电源环线</p>
+<p>为了能够均匀供电，包围在标准单元周围的环形供电金属，是连接供电I/O单元和标准单元的桥梁</p>
+<p>电源网格可以平均分布电流，缩短电流回路，在有效减少电压降的同时，避免由于电流分布不均时造成的热点现象以及电迁移问题。</p>
+<p>3、电源条线</p>
+<p>芯片内部纵横交错的电源网格和电源条线设计有专门的理论和算法。</p>
+<img src="/2024/08/09/Physical-design/10.png" class="">
+<p>纵向必须用偶数层走线，横向必须用奇数层走线。</p>
+<p><strong>数字与模拟混合供电</strong></p>
+<p>1、模拟模块的工作区域一般放置于芯片的某个角落</p>
+<p>2、模拟区域需要单独供电</p>
+<p>3、在模拟模块的周围布置保护隔离环，从而实现数字信号和模拟信号电源之间的隔离</p>
+<img src="/2024/08/09/Physical-design/11.png" class="">
+<p><strong>多电源供电</strong>（麻了，看不懂）</p>
+<h3 id="布局"><a href="#布局" class="headerlink" title="布局"></a>布局</h3><blockquote>
+<p>因为此时以及将芯片的各个部分规划好了，需要在具体规划的区域中填充详细的模块</p>
+</blockquote>
+<p><strong>展平式布局</strong></p>
+<p>模块的摆放与布局</p>
+<p>标准单元的摆放和优化</p>
+<p>简单来说：放置模块和标准单元·</p>
+<p><strong>层次化布局</strong></p>
+<blockquote>
+<p>先分配子模块、作子模块的布局、所有子模块完成后在顶层组装</p>
+</blockquote>
+<ul>
+<li><p>约束类型确定</p>
+<blockquote>
+<p>约束类型一般有三种：向导约束、区域约束和限制约束</p>
+</blockquote>
+</li>
+<li><p>子模块大小位置的制定</p>
+</li>
+</ul>
+<p><strong>布局目标预估</strong></p>
+<blockquote>
+<p>在标准单元布局优化完成后，需要对设计进行拥塞分析，静态时序分析，噪声分析，和电源分析以确定布局的好坏</p>
+</blockquote>
+<p>布局的目标</p>
+<ul>
+<li>各模块的位置相对确定</li>
+<li>满足设计规则的要求</li>
+<li>芯片的时序和供电较为良好</li>
+</ul>
+<p><strong>标准单元布局优化算法</strong></p>
+<blockquote>
+<p>布局优化的算法从步骤上可以分成三个阶段：结群布局、全局布局、详细布局</p>
+</blockquote>
+<p>1、布局优化的算法</p>
+<ul>
+<li><p>结群算法（clustering聚类算法）</p>
+<p>选择一个单元作为种子，以各个种子为原始群不断结合与其最紧密的单元。</p>
+</li>
+<li><p>模拟退火算法、KL算法、FM算法</p>
+</li>
+<li><p>全局布局：最小切割法、模拟退火算法、贪心算法、力向量算法、NRG算法、HALO算法</p>
+</li>
+<li><p>布局优化算法：纯标准单元布局算法、模块布局算法、混合单元布局算法</p>
+</li>
+</ul>
+<p>2、从优化目标上优化算法</p>
+<ul>
+<li>基于布线拥塞的布局优化算法</li>
+<li>基于时序的布局算法</li>
+<li>预防噪声的布局算法</li>
+</ul>
+<h3 id="扫描链重组"><a href="#扫描链重组" class="headerlink" title="扫描链重组"></a>扫描链重组</h3><blockquote>
+<p>扫描链是可测试性设计的重要内容，将芯片中所应用的普通寄存器替换成带扫描功能的多输入输出扫描寄存器，首位连接成串，从而实现附加的测试功能。</p>
+</blockquote>
+<p>将连接在扫描链上的在芯片内随机分布的扫描寄存器单元按照其物理位置，在不影响逻辑功能的前提下，重写进行连接，从而减少扫描链的走线长度。</p>
+<p>实现方法：</p>
+<ul>
+<li>本地化重组</li>
+<li>基于扫描DEF的扫描链重组方法</li>
+</ul>
+<h3 id="物理设计网表文件"><a href="#物理设计网表文件" class="headerlink" title="物理设计网表文件"></a>物理设计网表文件</h3><p>DEF(design exchange format)文件：设计交换给格式</p>
+<p>PDEF(physical DEF)：物理设计交换格式</p>
+<h2 id="第四章时钟树综合CTS"><a href="#第四章时钟树综合CTS" class="headerlink" title="第四章时钟树综合CTS"></a>第四章时钟树综合CTS</h2><h3 id="时钟信号"><a href="#时钟信号" class="headerlink" title="时钟信号"></a>时钟信号</h3><p><strong>时钟信号抖动</strong>：时钟抖动定义为信号时间与理想事件时间的偏差，抖动中含有确定抖动成分和随机抖动成分。</p>
+<ul>
+<li>确定抖动：串扰、电磁干扰、同时开关输出引起</li>
+<li>随即抖动：服从高斯分布，通常由半导体晶体结构的热振动和半导体掺杂密度不均匀中共价电子引起</li>
+</ul>
+<h3 id="时钟树综合的方法"><a href="#时钟树综合的方法" class="headerlink" title="时钟树综合的方法"></a>时钟树综合的方法</h3><blockquote>
+<p>芯片设计中的时钟分为两类：真实时钟（real clock）和虚拟时钟（virtual clock）</p>
+<p>真实时钟又有两种模式：时钟树综合前没有延时的理想时钟，时钟树综合后的传播时钟</p>
+</blockquote>
+<p><strong>时钟树综合与标准设计约束文件</strong>：SDC文件（时序约束文件）</p>
+<p>SDC文件三部分：时钟定义、输入延迟、输出延迟</p>
+<p>通过工艺文件来约束时钟信号的相关属性</p>
+<p>时钟的定义将通过时钟树综合来实现，时钟延迟和时钟抖动或不确定性将在静态时序分析时进行检查。</p>
+<p><strong>时钟树结构</strong></p>
+<figure class="highlight"><table><tr><td class="code"><pre><code class="hljs">时钟树：时钟信号在物理设计中的实现结果<br>根节点：时钟信号的起点<br>叶结点：时钟信号经过一系列分布结点最终到达寄存器时钟输入端或其它时钟终点<br>根单元、分布单元、叶单元：根节点、分布节点和叶结点都依附于的逻辑单元<br></code></pre></td></tr></table></figure>
+<p>时钟网络从根节点逐级插入驱动器，从而到达其叶结点，按照芯片始终网络的约束要求产生时钟树的过程叫做是中暑综合。</p>
+<img src="/2024/08/09/Physical-design/image-20230809095839094.png" class="" title="image-20230809095839094">
+<p>时钟树根据其在芯片内的分布特征，可分为多种结构：H树、 X树、平衡树、疏状或脊椎状时钟网</p>
+<h3 id="时钟树设计策略"><a href="#时钟树设计策略" class="headerlink" title="时钟树设计策略"></a>时钟树设计策略</h3><p><strong>时钟树综合策略</strong></p>
+<ul>
+<li>自我交叉</li>
+<li>相互交叉时钟</li>
+<li>有用偏差</li>
+</ul>
+<img src="/2024/08/09/Physical-design/image-20230809102800761.png" class="" title="image-20230809102800761">
+<ul>
+<li><p>OVC片上误差分析法与CPPR共同路径悲观去除的应用</p>
+</li>
+<li><p>与布局相结合的手动时钟树设计</p>
+</li>
+<li>对时钟插入多驱动的buffer</li>
+</ul>
+<p><strong>异步时钟树设计</strong></p>
+<p>实际的SoC设计中，是以异步时钟设计来实现的，从而降低功耗</p>
+<img src="/2024/08/09/Physical-design/image-20230809105341276.png" class="" title="image-20230809105341276">
+<p><strong>门控时钟</strong></p>
+<p>门控时钟是降低功耗最常用的方法，使用一个控制信号控制时钟的开启。</p>
+<h3 id="时钟树分析"><a href="#时钟树分析" class="headerlink" title="时钟树分析"></a>时钟树分析</h3><p><strong>时钟树与功耗分析</strong></p>
+<blockquote>
+<p>时钟树上的功耗由静态功耗、短路功耗和跳变功耗三部分组成</p>
+</blockquote>
+<ul>
+<li>静态功耗：各个buffer上静态功耗和，减少静态功耗的方法就是减少buffer的加权数</li>
+<li>短路功耗：与转换时间成正比，与阈值电压的3次方成反比</li>
+<li>跳变功耗：占比50%以上，由门的加权数值以及互连线总的电容决定</li>
+</ul>
+<p>降低功耗的方案</p>
+<ul>
+<li>1、减小时钟信号转换时间，信号从10%转化到90%所需要的时间</li>
+<li>2、降低结点电容</li>
+</ul>
+<h2 id="第五章、布线"><a href="#第五章、布线" class="headerlink" title="第五章、布线"></a>第五章、布线</h2><blockquote>
+<p>将分布在芯片核内的模块、标准单元和输入输出接口单元按逻辑关系进行互联</p>
+<p>要求百分百地完成它们之间的所有逻辑信号的互联，并为满足各种约束条件进行优化</p>
+</blockquote>
+<h3 id="全局布线"><a href="#全局布线" class="headerlink" title="全局布线"></a>全局布线</h3><p><strong>全局布线目标</strong></p>
+<ul>
+<li>1、使总连线最短</li>
+<li>2、布线分散均匀不至于引起局部拥塞</li>
+<li>3、使关键路径延时最小，遵守时序规则</li>
+<li>4、理解信号完整性要求，避免串扰</li>
+<li>5、保持将BUS总线聚集相连等</li>
+</ul>
+<p><strong>全局布线规划</strong></p>
+<h3 id="详细布线"><a href="#详细布线" class="headerlink" title="详细布线"></a>详细布线</h3><p><strong>详细布线的目标</strong></p>
+<ul>
+<li>1、理解所有的设计规则</li>
+<li>2、自动切换并综合利用多层金属作连线</li>
+<li>3、遵守时序规则，优先使关键路径的延时满足要求</li>
+<li>4、对总连线长度进行优化</li>
+</ul>
+<p><strong>详细布线与设计规则</strong></p>
+<ul>
+<li>设计规则</li>
+<li>通孔和最小面积要求</li>
+<li>密度要求</li>
+<li>掩膜光刻过程中的工艺天线效应</li>
+<li>串扰在布线中的预防和修复</li>
+<li>纳米布线规则</li>
+<li>对焦布线规则</li>
+</ul>
+<p><strong>布线修正</strong></p>
+<ul>
+<li>自动修正</li>
+<li>渐进修正</li>
+<li>局部修正</li>
+</ul>
+<h2 id="第六章、静态时序分析"><a href="#第六章、静态时序分析" class="headerlink" title="第六章、静态时序分析"></a>第六章、静态时序分析</h2><blockquote>
+<p>做时序分析前，首先要对芯片的物理版图设计进行包括电阻、电感、电容参数的提取，在进行延时计算。</p>
+</blockquote>
+<h3 id="延迟计算与布线参数提取"><a href="#延迟计算与布线参数提取" class="headerlink" title="延迟计算与布线参数提取"></a>延迟计算与布线参数提取</h3><p><strong>延迟计算模型</strong></p>
+<blockquote>
+<p>可以在布局之后进行，也可以在时钟树综合后进行。使用WLM区估算</p>
+</blockquote>
+<p>各种参数提取、各种物理公式：电阻电容电感</p>
+<h3 id="寄生参数与延迟格式文件"><a href="#寄生参数与延迟格式文件" class="headerlink" title="寄生参数与延迟格式文件"></a>寄生参数与延迟格式文件</h3><p>1、标准寄生参数格式文件</p>
+<ul>
+<li>SPF-Standard Parasistic Format（File），标准寄生参数格式文件</li>
+<li>DSPF-Detailed SPF，详细标准寄生参数格式文件</li>
+<li>RSPF-Reduced SPF，简化标准寄生参数格式文件</li>
+<li>SPEF-Standard Parasitic Exchange Format（File），标准寄生参数交换格式文件</li>
+</ul>
+<h3 id="静态时序分析"><a href="#静态时序分析" class="headerlink" title="静态时序分析"></a>静态时序分析</h3><blockquote>
+<p>进行时序分析时，简单的说就是将某一段路径的时序与时序约束的要求进行比较。根本目的是为了检查在时钟的控制和要求的约束下，与其相关的数据能够符合时序要求被记录存储下来，这种时序检查就是一对常说的建立时间时序和保持时间时序。</p>
+</blockquote>
+<p>Setup定义：在时钟作用前沿到达前，同步输入信号D必须保持稳定的那段时间以使信号不至于丢失。</p>
+<p>Hold定义：在时钟作用前沿到达后，同步输入信号D必须保持稳定的那段时间以使得信号不至于丢失。</p>
+<p>1、建立时序（Setup）的违例</p>
+<p>要求同步输入数据D必须在时钟信号前的某个时段到达且不发射变化，这样数据才会被成功的锁存。</p>
+<p>2、保存时序违例</p>
+<p>增长数据的路径延迟</p>
+<p><strong>时序分析与时钟特性</strong></p>
+<ul>
+<li>定义输入输出环境参数<ul>
+<li>1、确定驱动</li>
+<li>2、确定驱动单元</li>
+<li>3、确定负载</li>
+<li>4、确定删除</li>
+</ul>
+</li>
+</ul>
+<h3 id="时序优化"><a href="#时序优化" class="headerlink" title="时序优化"></a>时序优化</h3><p><strong>造成时序违例的因素</strong></p>
+<ul>
+<li>1、系统设计的复杂性和抽象性，存在不合理的约束</li>
+<li>2、逻辑综合时依据了不合理的WLM</li>
+<li>3、设计太大，互连线的相互牵制引起时序违例</li>
+<li>4、设计做了不合理的布局</li>
+</ul>
+<h3 id="习题"><a href="#习题" class="headerlink" title="习题"></a>习题</h3><p>1、什么是静态时序分析？描述它的分析步骤过程。</p>
+<ul>
+<li>静态时序分析是一种在设计和验证数字电路时用于评估电路时序特性的方法。主要用于分析电路中的时序路径，包括组合逻辑路径和时钟路径，以确保电路在给定的时钟频率下能够满足时序要求。是一种基于约束和路径分析的方法，用于评估电路的时序特性和性能。</li>
+</ul>
+<p>2、什么是建立时间和保持时间？什么是虚假路径、多周期路径？</p>
+<ul>
+<li>建立时间：在时钟上升沿到来之前，为了确保输入数据能够稳定的被采样，输入信号必须保持不变的最小时间。</li>
+<li>保持时间：在时钟上升沿到来之后，为了确保输入数据能够完整的写入，输入型号必须保持不变的最小时间。</li>
+<li>虚假路径：在时序分析中被认为不需要满足时序约束的路径。这些路径不会对电路的正常工作产生影响，因此可以被忽略。</li>
+<li>多周期路径：信号的传播时间可以超过一个周期。</li>
+</ul>
+<p>3、如何保证物理实施阶段的时序收敛？</p>
+<ul>
+<li>通过静态时序分析</li>
+</ul>
+<h2 id="第七章、功耗分析"><a href="#第七章、功耗分析" class="headerlink" title="第七章、功耗分析"></a>第七章、功耗分析</h2><blockquote>
+<p>动态分析：芯片工作过程中产生的功耗</p>
+<p>静态分析：芯片在待机状态时产生的平均功耗</p>
+</blockquote>
+<h3 id="静态功耗分析"><a href="#静态功耗分析" class="headerlink" title="静态功耗分析"></a>静态功耗分析</h3><blockquote>
+<p>反偏二极管泄漏电流</p>
+<p>门栅感应漏极泄漏电流</p>
+<p>亚阈值泄漏电流</p>
+<p>门栅泄漏电流</p>
+</blockquote>
+<h3 id="动态功耗分析"><a href="#动态功耗分析" class="headerlink" title="动态功耗分析"></a>动态功耗分析</h3><blockquote>
+<p>开关功耗+短路功耗</p>
+</blockquote>
+<h3 id="电压降分析与电迁移分析"><a href="#电压降分析与电迁移分析" class="headerlink" title="电压降分析与电迁移分析"></a><strong>电压降分析与电迁移分析</strong></h3><p>电迁移：在一定的制造工艺下，在它上面所能允许流过的最大电流是有一定限度的，否则过大的电流将会使金属连线断裂，导致芯片失效，这种由于电流引起的电路失效现象称为EM电迁移。</p>
+<p>电源网络的电迁移由平均电流密度、金属宽度以及孔的大小决定</p>
+<p>电迁移容限测量方法：漂移速度法、低频噪声法、电阻模型模拟、等，常用寿命测试法（测量一定数量的相同样品在规定条件下的失效时间）</p>
+<h3 id="功耗分析数据文件"><a href="#功耗分析数据文件" class="headerlink" title="功耗分析数据文件"></a>功耗分析数据文件</h3><blockquote>
+<p>功耗分析需要建立相应的数据库，并且借助于与功耗相关的文件来有效地控制和处理这些数据</p>
+</blockquote>
+<p>静态分析数据——TCF文件</p>
+<p>动态分析数据——输入多两个重要信息：电源凸点的位置分布信息和动态功耗仿真用的VCD文件+TWF文件</p>
+<p><strong>电源网格视图库</strong>——PGV(power grid view)</p>
+<blockquote>
+<p>用于分析芯片电压降效应的一种库文档格式</p>
+<p>使用PGV库计算功耗的精度不是很高</p>
+<p>根据供电网络分布，首先分别提取电源网络的电阻和电流节点处的平均结点阀门电流，再建立电源网络视图库</p>
+</blockquote>
 ]]></content>
       <categories>
-        <category>技术研究</category>
+        <category>学习笔记</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>VLSI超大规模集成电路物理设计</title>
+    <url>/2023/08/28/VLSI-Physical-Design/</url>
+    <content><![CDATA[<h2 id="第一章-绪论"><a href="#第一章-绪论" class="headerlink" title="第一章 绪论"></a>第一章 绪论</h2><h3 id="电子设计自动化（EDA）"><a href="#电子设计自动化（EDA）" class="headerlink" title="电子设计自动化（EDA）"></a>电子设计自动化（EDA）</h3><p>EDA（Electronic Design Automation），全称电子设计自动化，是用来辅助超大规模集成电路设计生产的工业软件，涵盖电路芯片设计、制造、封装、测试整个流程。随着芯片设计的复杂程度不断提升，基于先进工艺节点的集成电路规模可达到数十亿个半导体器件，不借助EDA已经无法完成芯片设计。</p>
+<p>EDA工具是集成电路设计和制造流程的支撑，是集成电路设计方法学的载体，也是连接设计和制造两个环节的纽带和桥梁。</p>
+<p>采用软件来实现自动化</p>
+<blockquote>
+<p>EDA将设计者的需求分为电子系统层次结构中的多个级别，包括集成电路、多芯片模块和印制电路板</p>
+</blockquote>
+<p>EDA工具总是面向整个设计过程的自动化，并将设计步骤链接成一个完整的设计流。</p>
+<h3 id="VLSI设计流程"><a href="#VLSI设计流程" class="headerlink" title="VLSI设计流程"></a>VLSI设计流程</h3><img src="/2023/08/28/VLSI-Physical-Design/image-20230817170808037.png" class="" title="image-20230817170808037">
+<p>系统规范—架构设计—功能和逻辑设计—电路设计—物理设计—物理验证和签收—制造—封装和测试—芯片</p>
+<p>物理设计关键步骤还可以细分</p>
+<p>划分—芯片规划—布局—时钟树综合—布线—时序收敛</p>
+<ul>
+<li><p>系统规范</p>
+<p>定义系统的总体目标和高级需求：功能、性能、物理尺寸、生产技术</p>
+</li>
+<li><p>架构设计</p>
+<p>模拟和混合信号模块集成</p>
+<p>存储管理——串行或者并行——寻址方案</p>
+<p>计算核的类型核数量（处理器，数字信号处理单元，特别的DSP算法）</p>
+<p>芯片内外的通信，对标准协议的支持</p>
+<p>硬、软IP模块的使用</p>
+<p>引脚分配、封装、管芯封装接口</p>
+<p>电源需求</p>
+<p>工艺技术核层堆栈的选择</p>
+</li>
+<li><p>功能和逻辑设计</p>
+<ul>
+<li><p>功能设计</p>
+<p>每个模块的输入、输出和时序行为</p>
+</li>
+<li><p>逻辑设计（用硬件描述语言HDL，如Verilog和VHDL定义芯片的功能和时序行为）</p>
+</li>
+<li><p>逻辑综合工具自动使HDL转变为底层的电路单元。即映射为信号网列表或网表和特定的电路单元</p>
+</li>
+</ul>
+</li>
+<li><p>电路设计</p>
+<p>一些关键的低端的单元必须在晶体管级来进行设计，这就是所谓的电路设计。</p>
+<p>包括：静态RAM模块、I/O、模拟电路、高速函数（乘法器）以及静电放电保护电路</p>
+</li>
+<li><p>物理设计</p>
+<p>所有的设计组件（宏模块、单元、门）都实例化为几何表示</p>
+<ul>
+<li>划分</li>
+<li>布线规划</li>
+<li>电源和地网布线</li>
+<li>布局</li>
+<li>时钟网综合</li>
+<li>总体布线</li>
+<li>详细布线</li>
+<li>时序收敛</li>
+</ul>
+</li>
+<li><p>物理验证</p>
+</li>
+<li><p>制造：fabrication</p>
+</li>
+<li><p>封装和测试</p>
+</li>
+</ul>
+<h3 id="VLSI设计模式"><a href="#VLSI设计模式" class="headerlink" title="VLSI设计模式"></a>VLSI设计模式</h3><blockquote>
+<p>全定制和半定制</p>
+</blockquote>
+<ul>
+<li><p>半定制标准设计模式：</p>
+<ul>
+<li>基于单元：通常采用标准单元和宏单元，包含许多预定义元件（从元件库复制而来）</li>
+<li>基于阵列：采用门阵列或者FPGA，包含若干制备好的元件，通过预布线相连</li>
+</ul>
+</li>
+<li><p>全制定设计</p>
+<p>需要有版图编辑器</p>
+</li>
+<li><p>标准单元设计，有固定的电源和接地端口</p>
+<p>布局的自由度较少，复杂度大大降低</p>
+</li>
+<li><p>宏单元</p>
+<p>较大块逻辑，执行可重用的功能</p>
+</li>
+<li><p>门阵列</p>
+<p>具有标准逻辑功能的硅片，但是没有链接</p>
+</li>
+<li><p>现场可编程门阵列（FPGA）</p>
+<p>逻辑单元和互连都是预先制造好，但是用户可以通过开关来配置</p>
+</li>
+<li><p>结构化ASIC（无通道门阵列）</p>
+</li>
+</ul>
+<h3 id="版图层和设计规则"><a href="#版图层和设计规则" class="headerlink" title="版图层和设计规则"></a>版图层和设计规则</h3><ul>
+<li><p>版图层</p>
+<p>硅作为扩散层，多晶硅、铝和铜作为互连层；多晶硅作称为poly层，其余曾称为Metal1层、Metal2层等。</p>
+<p>单元之间的布线是完全在金属层进行的。</p>
+</li>
+<li><p>设计规则</p>
+<p>大致分为三类</p>
+<ul>
+<li>尺寸规则：任何组件（形状）的尺寸</li>
+<li>间距规则：组件形状之间的间距</li>
+<li>覆盖规则：组件形状之间的覆盖量</li>
+</ul>
+</li>
+</ul>
+<h3 id="物理设计优化"><a href="#物理设计优化" class="headerlink" title="物理设计优化"></a>物理设计优化</h3><p>物理设计的目标：最小芯片面积、最小线长和最少过孔</p>
+<p>最优化的目标：提升电路性能，可靠性</p>
+<ul>
+<li><p>版图优化</p>
+<blockquote>
+<p>满足约束：工艺约束、电气约束、几何约束</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="EDA常用术语"><a href="#EDA常用术语" class="headerlink" title="EDA常用术语"></a>EDA常用术语</h3><p>逻辑设计：将HDL描述映射到电路门和门在网表级的连接的过程。</p>
+<ul>
+<li>结果通常是单元或其他基本电路元件和连接的网表。</li>
+</ul>
+<p>物理设计：决定单元（或者其他电路元件）和它们的连接在集成电路版图中几何布置的过程。连接拓扑从网表中得到。</p>
+<ul>
+<li>物理设计的结果是几何和功能都正确的表示，用标准文件格式，例如GDSII流。</li>
+</ul>
+<p>版图验证包括：</p>
+<ul>
+<li>设计规则检验（DRC）——遵守所有的技术需求</li>
+<li>版图和原理图一致性检验（LVS）——是否和原始网表一致</li>
+<li>天线规则检验——没有天线效应</li>
+<li>电气规则检验——遵守所有的电气需求</li>
+</ul>
+<figure class="highlight mipsasm"><table><tr><td class="code"><pre><code class="hljs mipsasm">组件：有基本功能的电路元件<br>模块：一个电路划分或者一部分构件的集合<br>块：具有形状的组件，有固定尺寸的电路划分<br>单元：用不同构建建立的逻辑或者功能单位。如：INV，NAND，<span class="hljs-keyword">NOR，常用来指标准单元和宏单元</span><br><span class="hljs-keyword"></span>标准单元：一种预先决定功能的单元，在标准单元里，逻辑设计是将标准单元排列在行里来实现的<br>宏单元：一种没有预先定义尺寸的单元。可以指大型物理版图，如<span class="hljs-keyword">SRAM，CPU核</span><br><span class="hljs-keyword"></span>引脚：一个电子终端，用于连接给定的构件到它的外部环境<br>层：制造工艺等级，在这个等几种，设计构件在芯片上成型。<br>接触层：硅核金属层之间的直接连接，接触层经常用在单元内<br>过孔：金属层之间的连接，通常用来连接不同层的布线结构<br>线网或信号：必须在相同电势下连接的引脚或终端的集合<br>供电网：提供电流给单元的电源（VDD）和地网（GND）<br>网表：设计中连接的所有信号网和构件的集合，或者是所有网和分段设计的连接引脚的列表。<br>网表可以组成：<span class="hljs-number">1</span>、面向引脚，每个设计构件都有一个相关线网的列表。<span class="hljs-number">2</span>、面向线网，每一个线网都有一个相关构件的列表。网表在逻辑综合中创建，是物理设计的关键输入。<br>线网权重（W）：用来表示线网的重要性或关键性<br><br>网表的表示方法：连接图和连接矩阵<br></code></pre></td></tr></table></figure>
+<h3 id="第一章总结"><a href="#第一章总结" class="headerlink" title="第一章总结"></a>第一章总结</h3><ul>
+<li><p>什么是EDA？</p>
+<p>EDA全称是Electrical Design Automation（电子设计自动化），是芯片设计中的辅助软件工具也是必不可少的一个工具，随着芯片中集成的半导体和电路规模越来越大，EDA工具也越来越重要。</p>
+</li>
+<li><p>超大规模集成电路（VLSI）的设计流程？</p>
+<p>系统规范—架构设计—逻辑功能设计—物理设计—物理验证—制造—封装—测试—芯片</p>
+</li>
+<li><p>其中物理设计包括哪些部分？</p>
+<p>物理设计包括：布图规划，布局规划，布线，时钟树综合，时序分析</p>
+</li>
+</ul>
+<h2 id="第二章-网表和系统划分"><a href="#第二章-网表和系统划分" class="headerlink" title="第二章 网表和系统划分"></a>第二章 网表和系统划分</h2><p>一般采用分治的策略进行芯片设计，先将模块进行布局，然后将结果转换为几何划分。</p>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><blockquote>
+<p>降低现代集成电路设计复杂度的方法是将它们划分为更小的模块。</p>
+</blockquote>
+<p>划分的主要目标是将电路进行划分，使得子电路之间的连接数最小化，且符合设计约束。</p>
+<h3 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h3><figure class="highlight mathematica"><table><tr><td class="code"><pre><code class="hljs mathematica">元胞：构成组件的任何逻辑或功能单元<br>划分或块是由元胞和组件构成的<br>多元划分的问题是将电路划分为<span class="hljs-built_in">K</span>个部分<br></code></pre></td></tr></table></figure>
+<h3 id="优化目标"><a href="#优化目标" class="headerlink" title="优化目标"></a>优化目标</h3><p>在平衡划分大小时，将所有割边数或割边的权重数最小化，称为最小割划分算法</p>
+<h3 id="划分算法"><a href="#划分算法" class="headerlink" title="划分算法"></a>划分算法</h3><blockquote>
+<p>Kernighan-Lin算法（KL）、KL拓展算法、Fiduccia-Mattheyses（FM）算法</p>
+<p><strong>模拟退火法</strong>、随机爬山算法</p>
+</blockquote>
+<p>KL算法：对于一个含有2*N个元胞且要划分的区域为N：N的，使用的是两个不同划分之间的元胞进行交换，通过计算能够是当前增益达到最大。</p>
+<p>FM算法：划分不平衡的算法，其中需要一个平衡因子来控制移动以后是否平衡。通过计算能够使得移动以后使得当前达到增益最大。可用于超图中。</p>
+<h3 id="多级划分框架"><a href="#多级划分框架" class="headerlink" title="多级划分框架"></a>多级划分框架</h3><blockquote>
+<p>从粗粒度网表，到细粒度网表</p>
+</blockquote>
+<p>为了提高网表划分的可扩展性，FM算法被嵌入到了一个多级框架中去，包含几个不同的步骤。</p>
+<p>1、原始的展平的网表被进行层次结群。</p>
+<p>2、将FM算法应用到这个结群网表中。</p>
+<p>3、部分网表在非粗粒度阶段被解开结群。</p>
+<p>4、在细粒度阶段，FM算法增量式应用到部分被解开结群的网表中。</p>
+<p>5、第3和第4一直继续知道所有网表解开结群为止。</p>
+<ul>
+<li><p>结群</p>
+<p>连接紧密的结点被结群，结群之外的连接保持原来网表的结构。通常结群的大小会受到限制，从而防止结群的退化。</p>
+<p>合并结点后，结群的权重是它所包含的成员结点的权重综合</p>
+</li>
+<li><p>多级划分</p>
+<p>当结构过多的时候，FM算法会收到一定的限制，复杂度会很高，所以通过多级划分的方式可以减小复杂度</p>
+</li>
+<li><p>基于多FPGA的系统划分</p>
+</li>
+</ul>
+<h2 id="第三章-芯片规划"><a href="#第三章-芯片规划" class="headerlink" title="第三章 芯片规划"></a>第三章 芯片规划</h2><p>芯片规划处理大规模模块：高速缓存、嵌入式内存及面积已知、形状固定或可变或集成电路IP核等。</p>
+<p><strong>芯片规划主要包括了三个主要阶段：布图规划、引脚分配、电源规划</strong></p>
+<p>布局规划：根据模块的面积和长宽比来优化芯片的大小、降低互连线长度和改善时延，从而确定了这些模型的位置和大小。</p>
+<p>引脚分配：通过输出信号线连接到块引脚。I/O布局为芯片的输入和输出引脚确定焊盘的位置，通常在芯片的边缘。这一步最理想在布局规划前进行。</p>
+<p>电源规划：建立电源供电网，电源网和底线网。</p>
+<h3 id="布图规划介绍"><a href="#布图规划介绍" class="headerlink" title="布图规划介绍"></a>布图规划介绍</h3><p>布图描述了模块之间的关系</p>
+<p>布局规划阶段确保：1、每个芯片模块被分配了一个形状或位置，便于进行门布局。2、每个有外部连接的引脚被分配了一个位置，这样内部和外部的线网都可以进行布线了。</p>
+<h3 id="布图规划的优化目标"><a href="#布图规划的优化目标" class="headerlink" title="布图规划的优化目标"></a>布图规划的优化目标</h3><p>每个模块的位置和它的长宽比</p>
+<ul>
+<li>全局边界框的面积和形状：影响电路性能、成品率、制造代价</li>
+<li>总线长，最小生成树</li>
+<li>面积和总线长的组合</li>
+<li>信号时延</li>
+</ul>
+<h3 id="术语-1"><a href="#术语-1" class="headerlink" title="术语"></a>术语</h3><figure class="highlight subunit"><table><tr><td class="code"><pre><code class="hljs subunit">矩形划分：将芯片面积划分为一组块或非重叠矩形的几何<br>布图规划二划分：通过不断对矩形进行划分得到的一个矩形划分，从整个芯片开始，反复用水平或垂直割线将其划分为两个小矩形。<br>二划分树或者二划分布图规划树：有k个叶子和k<span class="hljs-string">-1</span>个内部节点的二叉树，每个叶子代表一个块，每个内部节点代表一条水平或垂直割线。<br>布图树：一棵表示层次化布图的树。每个叶子节点代表一个块，每个内部节点代表一个水平分割或垂直分割。<br>约束图：对一个布图表示，包括两个有向图，垂直约束图和水平约束图，可以得到块之间的相对位置关系。<br>垂直约束图：节点权重表示块的高度。最长路径，相当于布局所需的最小垂直高度。<br>水平约束图：结点权重代表块的宽度。最长路径，相当于布局所需的最小水平宽度。<br>序列对：块排列的一个有序对。用S+和S-表示，用于区分序列是左右关系还是上下关系。<br></code></pre></td></tr></table></figure>
+<h3 id="布图的表示"><a href="#布图的表示" class="headerlink" title="布图的表示"></a>布图的表示</h3><blockquote>
+<p>布图的表示方法：1、约束图，2、序列对</p>
+</blockquote>
+<p>布图、约束图（垂直约束图，水平约束图）、序列对</p>
+<p>问题：</p>
+<p>如何将一个布图转化为一个约束图对（垂直&amp;水平）</p>
+<ul>
+<li>垂直约束图：从下到上，从左到右，先绘制所有的有向箭头，再删除不能直接相连的箭头</li>
+</ul>
+<p>如何将一个布图转化为一个序列对</p>
+<ul>
+<li>序列的规则，先考虑垂直方向，再考虑水平方向<ul>
+<li>a在b的左边，s1<a,b> s2<a,b></li>
+<li>a在b的上面，s1<a,b> s2<b,a></li>
+</ul>
+</li>
+</ul>
+<p>如何将一个序列对转化为一个布图</p>
+<blockquote>
+<p>已知布图的起始点，每个块的宽和高，布图的布局方向（一般是左下到右上）</p>
+</blockquote>
+<h3 id="布图规划算法"><a href="#布图规划算法" class="headerlink" title="布图规划算法"></a>布图规划算法</h3><blockquote>
+<p>布图优化算法：给定一个块的几何，布图尺寸的选择决定了布图面积的最小值，以及每个块的方向和大小。</p>
+<p><strong>群生长，模拟退火法</strong>：寻求1、在满足布图面积上限的条件下，最小化互连线总长度。2、同时优化总线长和面积。</p>
+</blockquote>
+<ul>
+<li><p>布局尺寸变化</p>
+<p>寻找最小面积布图的尺寸和相应的每个块的尺寸。</p>
+<ul>
+<li>构造所有块的形状函数</li>
+<li>确定顶层布图的形状函数</li>
+<li>找出布图和每个独立块的尺寸和位置</li>
+</ul>
+</li>
+</ul>
+<p>群生长</p>
+<p>基于群生长的方法中，布图是由迭代的增加块，直到所有块都被分配完。</p>
+<ul>
+<li><p>线性排序</p>
+<p>终端网：没有被其他没被安置的相关块</p>
+<p>新网：在部分构造排序的任何块上都没有引脚</p>
+<p>持续网：在部分构造排序上至少在块上有一个引脚，以及在无序块上至少有一个引脚</p>
+<p>以终端网减去新网的值作为增益，排序后每次都进行迭代，得到最终线性排序的序列</p>
+</li>
+<li><p>群生长</p>
+<p>按照线性排序的顺序，依次将最优块放置在布图上</p>
+</li>
+</ul>
+<p>模拟退火（SA）</p>
+<p>是一种迭代算法，从一个初始解开始，寻求目标函数解的不断改进。在每次迭代中，要考虑当前解的局部邻域解。</p>
+<h3 id="引脚分配"><a href="#引脚分配" class="headerlink" title="引脚分配"></a>引脚分配</h3><p>在引脚分配中，所有线网（信号）被分配到唯一的引脚位置，这样设计性能才是最优化的。优化目标包括块内外的最大化线网可布性和最小化电寄生参数。</p>
+<p>引脚分配可以用来连接功能或电等价的元胞引脚。</p>
+<p>优化目标：建立一个块和所有它与其他块的引脚的连接关系。</p>
+<h3 id="电源和地线布线"><a href="#电源和地线布线" class="headerlink" title="电源和地线布线"></a>电源和地线布线</h3><p>电源和地线网分布设计</p>
+<blockquote>
+<p>供电网VDD和GND，为每个元胞提供电源，每个元胞都必须与VDD和GND相连。</p>
+<p>供电网是：大型的、跨越整个芯片的、再信号布线之前布线</p>
+</blockquote>
+<p>电源和地线网的物理设计有两种方法：平面法，主要用于模拟电路或者定制块设计中。网格法，主要用于数字集成电路设计中。</p>
+<ul>
+<li>芯片规划的步骤：布图规划、引脚分配、电源和地线分配</li>
+<li>布图用什么来表示？</li>
+<li>布图规划有哪些算法？</li>
+</ul>
+<h2 id="第4章-全局和详细布局"><a href="#第4章-全局和详细布局" class="headerlink" title="第4章 全局和详细布局"></a>第4章 全局和详细布局</h2><p>将电路划分成小模块和对版图进行布局规划，从而确定块的轮廓线和引脚位置后，要求解优化目标（最小化元件间的总线长），布局要确定每个块中的标准单元或逻辑元件的位置。</p>
+<p>全局布局：分配大概的位置，给可变动的器件</p>
+<ul>
+<li>忽视可布目标的特殊形状和大小，不会试图去排列它们的位置到有效的行和列中去。</li>
+<li>进行全局定位和全局分布密度</li>
+</ul>
+<p>详细布局：明确器件的位置使其成为合理的元胞位置并确保没有重叠</p>
+<ul>
+<li>通过局部操作（交换两个元件）或移动一个行中的几个元件来为其他元件提供位置空间，从而增量式的改进每个标准单元的位置。</li>
+</ul>
+<p>合法化：将可布元件布置到行列中去，并消除重叠。</p>
+<h3 id="介绍-1"><a href="#介绍-1" class="headerlink" title="介绍"></a>介绍</h3><p>布局的目标：为了确定所有电路元件在一个（平面）版图中的位置和方向，给出解的约束（如没有元胞的重叠）和优化目标（如总线长最小化）</p>
+<h3 id="优化目标-1"><a href="#优化目标-1" class="headerlink" title="优化目标"></a>优化目标</h3><p>布局器通常优化目标是总线长。</p>
+<ul>
+<li><p>几种划线模型的选择</p>
+<ul>
+<li>单链模型</li>
+<li>星形模型</li>
+<li>最小生成树模型（克鲁斯卡尔）（RMST）</li>
+<li>直线最小树</li>
+</ul>
+</li>
+<li><p>带线网权重的总线长</p>
+<ul>
+<li>所有网络的线长与权重的乘积之和</li>
+</ul>
+</li>
+<li><p>最大割数</p>
+<p>最小化某一个布局总的割数</p>
+</li>
+<li><p>布线拥挤度（可以使用密度来表示：即布线所需要的轨道数与可提供的轨道数的比值）</p>
+<p>当所有穿过边的布线数小于最大的布线数时，则说明该布局是可布线的</p>
+</li>
+<li><p>信号延时</p>
+<p>对于给定的涉及，布局的总线长影响最大时钟频率，主要依赖于线网的时延和门时延。</p>
+<p>电路时序通常使用静态时序分析法（STA）进行验证，对线网和门时延进行估算。常见的术语包括实际到达时间（AAT）和需求到达时间（RAT），可对电路中每个结点v进行估算。</p>
+</li>
+</ul>
+<h3 id="全局布局"><a href="#全局布局" class="headerlink" title="全局布局"></a>全局布局</h3><blockquote>
+<p>全局布局确定布局的大致位置，详细布局消除重叠的因素</p>
+</blockquote>
+<p>最小割划分、二次布局、力矢量布局、模拟退火</p>
+<ul>
+<li><p>最小割布局：利用划分算法将网表和版图区域划分为较小的子网表和子区域。子网表和子区域重复划分到更小的部分，直到每个子区域包含少量的元胞。当实现最小割布局时，网表被划分为每个子区域拥有它自己唯一的子网表。</p>
+<p>版图划分的方向：割方向交替法（垂直割线和水平割线交替划分）、割方向重复法（先用单一方向划分，直到达到最小以后，在换方向）</p>
+<p>在版图划分的过程中，通常会将版图划分的方向和最小割划分算法结合起来，这样才能够在版图上最终定位某一个模块的位置。</p>
+<ul>
+<li><p>最小化割网的标准算法KL算法和FM算法</p>
+</li>
+<li><p>有外部链接的最小割布局</p>
+<p>假设每个元胞分别被布置在它们各自的区域中心。如果相关的i拦截接近下一个划分割线，在做下一个割线时则不用考虑这些结点。</p>
+</li>
+</ul>
+</li>
+<li><p>解析布局（最小化目标函数）</p>
+<ul>
+<li><strong>二次线长布局</strong>：分为两个阶段<ul>
+<li>第一阶段：依据元胞的中心对元胞进行布局，<strong>从而对二次线长函数最小化</strong>。</li>
+<li>第二阶段：将元胞中集中在许多元胞重叠的大的结群打散，从而使所有的单元原来的重叠消除。<strong>详细布局将所有元胞位置合法化并产生一个高质量的、无重叠的布局。</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>  第一阶段方法：迭代求解线性方程：共轭梯度法（CG）、逐次超松弛法（SOR）</p>
+<p>  第二阶段方法：详细布局：最小割布局、力矢量布局</p>
+<ul>
+<li><p>二次线长布局具体算法：</p>
+<figure class="highlight llvm"><table><tr><td class="code"><pre><code class="hljs llvm">已知线网的的连接，限制的版图区域，求不同元胞在版图中摆放的位置，使得所有元胞在版图中的连线最短。求：所有的元胞的<span class="hljs-keyword">x</span>坐标和y坐标。<br><br><span class="hljs-number">1</span>、列出所有连接的元胞线网的X的总线长L(p)：所有的<span class="hljs-keyword">x</span>距离的差的平方<br><span class="hljs-number">2</span>、分别对所有参数中的<span class="hljs-keyword">x</span>求偏导，并令偏导为<span class="hljs-number">0</span><br><span class="hljs-number">3</span>、列出方程组，解出来的<span class="hljs-keyword">x</span>阵列就是所需要求的解<br>对于Y方向也是同理<br><br>该算法只是以中心点作为元胞的坐标，所有没有考虑到不同元胞的大小，会存在重叠的问题<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>力矢量布局</strong></p>
+<p>用于在已经布置好的版图中，新加入一个元胞，通过找到让该元胞平衡的状态，来确定该元胞在版图中的位置。</p>
+<p>采用力学中的质点弹簧系统来建模，每个元胞运动吸引其他元胞，其中吸引力与距离成正比。如果所有元胞到达它们的平衡位置，线长将得到最小化。<strong>将目标转化为将所有的元胞放在一个力平衡的位置上。</strong>——<strong>称为零力目标</strong>（ZFT）</p>
+<ul>
+<li>对于每一个元胞，都有一个理想的最小ZFT位置。</li>
+<li>通过迭代的移动每个单元或者交换元胞到这个位置或相邻近位置，逐步改善布局结果</li>
+</ul>
+<blockquote>
+<p>个人认为：这个方法不能让每一个元胞都到达力的平衡状态，使用一次迭代或者交换，就会打乱原始平衡的元胞。</p>
+</blockquote>
+</li>
+<li><p>基本力矢量布局算法</p>
+<blockquote>
+<p>Loss为权重乘以坐标差的累计和</p>
+</blockquote>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-number">1</span>、任意初始布局<br><span class="hljs-number">2</span>、为每个布局中的元胞设定坐标，并标记为UNMOVED<br><span class="hljs-number">3</span>、对元胞按照元胞的连接数进行排序，该顺序就是元胞迭代的顺序<br><span class="hljs-number">4</span>、迭代的取出每一个元胞，并寻找它的ZFT位置，直到所有的都完成<br><span class="hljs-number">5</span>、若ZFT位置被占据，则移动到其他的位置<br><br>第<span class="hljs-number">5</span>步确定<span class="hljs-selector-tag">p</span>的ZFT时，若ZFT被元胞<span class="hljs-selector-tag">q</span>占据，则移动位置的确定<br><span class="hljs-number">1</span>、如果可能，将<span class="hljs-selector-tag">p</span>移动到靠近<span class="hljs-selector-tag">q</span>的位置<br><span class="hljs-number">2</span>、若交换<span class="hljs-selector-tag">p</span>，<span class="hljs-selector-tag">q</span>后，代价变小，则交换<br><span class="hljs-number">3</span>、链式移动，<span class="hljs-selector-tag">p</span>移动到<span class="hljs-selector-tag">q</span>，<span class="hljs-selector-tag">q</span>移动到下一个，以此类推<br><span class="hljs-number">4</span>、波状移动，<span class="hljs-selector-tag">p</span>移动到<span class="hljs-selector-tag">q</span>，再重新计算<span class="hljs-selector-tag">q</span>的ZFT<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>模拟退火算法</p>
+<p>列出损失函数，使用带动量的梯度下降，最终计算出使得损失函数最小的最优解</p>
+</li>
+<li><p>现代布局算法</p>
+</li>
+</ul>
+<h3 id="合法化和详细布局"><a href="#合法化和详细布局" class="headerlink" title="合法化和详细布局"></a>合法化和详细布局</h3><blockquote>
+<p>合法化：寻求合法的、没有重叠的布局，从而减少对线长、时序和其他设计目标的不利影响。</p>
+</blockquote>
+<p>目标：消除元胞中的重叠</p>
+<p>使用贪心算法</p>
+<ul>
+<li><p>按照x坐标进行排序，并进行贪心处理，贪心选择策略为移动到当前元胞最近的，可用的合法位置，但不能超出行的范围。</p>
+</li>
+<li><p>缺点</p>
+<ul>
+<li>没有对网表进行考虑</li>
+<li>产生了大量的空白区域</li>
+</ul>
+</li>
+</ul>
+<h2 id="第五章-总体布线"><a href="#第五章-总体布线" class="headerlink" title="第五章  总体布线"></a>第五章  总体布线</h2><p>在总体布线中，具有相同点位的引脚用线路相连。</p>
+<h3 id="介绍-2"><a href="#介绍-2" class="headerlink" title="介绍"></a>介绍</h3><p>给定一个布局和一个网表：确定必要的连接数</p>
+<p>需要优化的布线目标：最小化总线长，最大时序松弛</p>
+<p>总体布线可分为：固定的裸片布线（芯片外形和所有布线资源都是固定的），可变的裸片布线（可以根据需要添加新布线轨道）</p>
+<p>常见的几种布线算法</p>
+<ul>
+<li>总体布线：粗粒分配布线到<strong>布线区域</strong></li>
+<li>详细布线：细粒分配布线到<strong>布线轨道</strong>，包括线网排序，引脚排序。用于完善总体布线。</li>
+<li>时序驱动布线：线网拓扑优化和资源分配到关键线网</li>
+<li>大信号网布线：电源（VDD）和地线（GND）布线</li>
+<li>几何技术：非曼哈顿和时钟布线</li>
+</ul>
+<h3 id="术语和定义"><a href="#术语和定义" class="headerlink" title="术语和定义"></a>术语和定义</h3><figure class="highlight mathematica"><table><tr><td class="code"><pre><code class="hljs mathematica">布线轨道（列）：一条可用的水平（垂直）接线通路。<br>布线区域：包含了布线轨道的区域。<br>规格一致的布线区域：由均匀分布的水平和垂直网格线形成，产生芯片区域上规格一致的网格。<br>规格不一致的布线区域：由水平和垂直边界形成，与外部引脚连接或宏单元边界对齐。<br>通道：一个矩形不限区域，在两个相对边上由引脚，而在另两边则没有引脚。<br>水平通道：在顶端和低端边界上有引脚的通道。<br>垂直通道：在左右边界上有引脚的通道。<br>通道容量：代表了可用的布线轨道或者列的数量。<br>开关盒：水平和垂直通道的交集。<br><span class="hljs-number">2</span><span class="hljs-built_in">D</span>开关盒：四个边界都有端子的开关盒。<br><span class="hljs-number">3</span><span class="hljs-built_in">D</span>开关盒：六个边界都有端子的开关盒，包括顶部和底部。<br></code></pre></td></tr></table></figure>
+<p>优化目标</p>
+<blockquote>
+<p>最小总线长度，减少线网上的信号时延</p>
+</blockquote>
+<p>1、确定一个给定布局是否可布线。2、在可用布线区域中确定所有线网的一个粗略布线。</p>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>git</tag>
+        <tag>EDA</tag>
+        <tag>电子设计自动化</tag>
+        <tag>物理设计</tag>
+        <tag>VLSI</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>A-Star算法模拟实现</title>
+    <url>/2023/07/28/a-star-assignment/</url>
+    <content><![CDATA[<h2 id="A-star算法模拟实现"><a href="#A-star算法模拟实现" class="headerlink" title="A star算法模拟实现"></a>A star算法模拟实现</h2><h3 id="内容："><a href="#内容：" class="headerlink" title="内容："></a>内容：</h3><p>已知如下图地图，黑色表示障碍物无法通行，要求实现避障算法寻找从红色起点出发到达绿色终点的最优路径。</p>
+<img src="/2023/07/28/a-star-assignment/1.jpg" class="" title="img">
+<p>要求：</p>
+<p>（1） 对图中的地图进行建模，抽象成类，对数据进行封装；</p>
+<p>（2） 思考寻路算法的实现，对问题进行拆解，对算法实现也要求抽象接口类；</p>
+<p>（3） 使用给定的C++工程模板，按照模板编写CMakeLists.txt，以及Google Test单元测试，DoxyGen注释的使用。</p>
+<h3 id="数据结构设计"><a href="#数据结构设计" class="headerlink" title="数据结构设计"></a>数据结构设计</h3><blockquote>
+<p>拿到题目最开始的想法就是想静态的实现对地图的绘制，然后对Astar算法进行复习，通过思考过后，觉得map形状，起始点，终点以及障碍，都是可以由用户通过交互的方式来完成的，进而选择将一些必要的数据聚合在类里面封装起来，本次实验一共设计了两个类，分别为Point（用于存储点的信息），Map（用于存储地图的相关信息，同时前端界面的拓展）</p>
+</blockquote>
+<h4 id="1、点的坐标抽象成一个结构体"><a href="#1、点的坐标抽象成一个结构体" class="headerlink" title="1、点的坐标抽象成一个结构体"></a>1、点的坐标抽象成一个结构体</h4><p>Xy结构体存储的是点的位置坐标，x表示横坐标，y表示纵坐标，初始值都设置为0。</p>
+<figure class="highlight abnf"><table><tr><td class="code"><pre><code class="hljs abnf">struct Xy<br>&#123;<br>    int x <span class="hljs-operator">=</span> <span class="hljs-number">0</span><span class="hljs-comment">;</span><br>    int y <span class="hljs-operator">=</span> <span class="hljs-number">0</span><span class="hljs-comment">;</span><br>&#125;<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+<h4 id="2、地图上的每一个点抽象成一个Point类"><a href="#2、地图上的每一个点抽象成一个Point类" class="headerlink" title="2、地图上的每一个点抽象成一个Point类"></a>2、地图上的每一个点抽象成一个Point类</h4><ul>
+<li>Point类中含有的私有成员</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">成员名</th>
+<th style="text-align:center">具体含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Xy _xy</td>
+<td style="text-align:center">Xy结构体，存储当前Point的坐标信</td>
+</tr>
+<tr>
+<td style="text-align:center">int _value</td>
+<td style="text-align:center">状态码，用于标记当前的坐标的Point状态</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>Point类中含有的公有成员</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">成员名</th>
+<th style="text-align:center">具体含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">int _f</td>
+<td style="text-align:center">总代价</td>
+</tr>
+<tr>
+<td style="text-align:center">int _g</td>
+<td style="text-align:center">当前走过的代价</td>
+</tr>
+<tr>
+<td style="text-align:center">int _h</td>
+<td style="text-align:center">到终点的代价</td>
+</tr>
+<tr>
+<td style="text-align:center">Point* _parent;</td>
+<td style="text-align:center">存储上一个经过的Point保存路径信息</td>
+</tr>
+<tr>
+<td style="text-align:center">Point();</td>
+<td style="text-align:center">默认构造函数</td>
+</tr>
+<tr>
+<td style="text-align:center">Point(int m_x, int m_y, int m_value);</td>
+<td style="text-align:center">重载构造函数</td>
+</tr>
+<tr>
+<td style="text-align:center">~Point();</td>
+<td style="text-align:center">析构函数</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertAbs();</td>
+<td style="text-align:center">将当前Point设置为障碍</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertFirst();</td>
+<td style="text-align:center">将当前Point设置为起始点</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertFinal();</td>
+<td style="text-align:center">将当前Point设置为终点</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertNoAbs();</td>
+<td style="text-align:center">将当前Point设置成非障碍</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertPriority();</td>
+<td style="text-align:center">将当前Point设置为优先队列内</td>
+</tr>
+<tr>
+<td style="text-align:center">int getValue();</td>
+<td style="text-align:center">获取当前状态码</td>
+</tr>
+<tr>
+<td style="text-align:center">void updateF();</td>
+<td style="text-align:center">更新_f值</td>
+</tr>
+<tr>
+<td style="text-align:center">Xy getXy();</td>
+<td style="text-align:center">得到坐标信息</td>
+</tr>
+<tr>
+<td style="text-align:center">void setParent(Point&amp; p);</td>
+<td style="text-align:center">设置父节点</td>
+</tr>
+<tr>
+<td style="text-align:center">bool operator&lt;(const Point&amp; point1)const;</td>
+<td style="text-align:center">重载比较函数作为优先队列第三个参数</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>Point类的友元函数</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">成员名</th>
+<th style="text-align:center">具体含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, Point&amp; m_point);</td>
+<td style="text-align:center">重载输出运算符打印Point信息</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="3、将地图抽象程一个Map类"><a href="#3、将地图抽象程一个Map类" class="headerlink" title="3、将地图抽象程一个Map类"></a>3、将地图抽象程一个Map类</h4><ul>
+<li>Map类中含有的私有成员</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">成员名</th>
+<th style="text-align:center">具体含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">int _length;</td>
+<td style="text-align:center">地图的长度</td>
+</tr>
+<tr>
+<td style="text-align:center">int _weight;</td>
+<td style="text-align:center">地图的宽度</td>
+</tr>
+<tr>
+<td style="text-align:center">Xy _first;</td>
+<td style="text-align:center">起始点的坐标信息</td>
+</tr>
+<tr>
+<td style="text-align:center">Xy _final;</td>
+<td style="text-align:center">终点的坐标信息</td>
+</tr>
+<tr>
+<td style="text-align:center">std::vector&lt; std::vector&lt; Point  &gt; &gt; _map;</td>
+<td style="text-align:center">整个地图由二维的Point组成</td>
+</tr>
+<tr>
+<td style="text-align:center">std::priority_queue&lt; Point &gt; _point_open;</td>
+<td style="text-align:center">存放当前优先队列中的点</td>
+</tr>
+<tr>
+<td style="text-align:center">std::vector&lt; Xy &gt; _path;</td>
+<td style="text-align:center">寻路完毕过后的路径信息</td>
+</tr>
+<tr>
+<td style="text-align:center">bool _haveway = 1;</td>
+<td style="text-align:center">表示当前地图是否有通路</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>Map类中含有的公有成员</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">成员名</th>
+<th style="text-align:center">具体含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Map();</td>
+<td style="text-align:center">默认构造函数</td>
+</tr>
+<tr>
+<td style="text-align:center">Map(int m_length, int m_weight);</td>
+<td style="text-align:center">重载构造函数，通过地图的宽和高来初始化地图</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertAbs(int x, int y);</td>
+<td style="text-align:center">将当前点设置为障碍</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertFirst(int x, int y);</td>
+<td style="text-align:center">将当前点设置为起始点</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertFinal(int x, int y);</td>
+<td style="text-align:center">将当前点设置为终点</td>
+</tr>
+<tr>
+<td style="text-align:center">void deleteAbs(int x, int y);</td>
+<td style="text-align:center">删除当前障碍点</td>
+</tr>
+<tr>
+<td style="text-align:center">bool isOnBoard(Xy xy);</td>
+<td style="text-align:center">判断当前点是否越界</td>
+</tr>
+<tr>
+<td style="text-align:center">int twoPointDistance(Xy point1, Xy point2);</td>
+<td style="text-align:center">计算两点之间的斜线距离</td>
+</tr>
+<tr>
+<td style="text-align:center">int gAdd(Xy point1, Xy point2);</td>
+<td style="text-align:center">计算代价_g的增量距离</td>
+</tr>
+<tr>
+<td style="text-align:center">void aStar();</td>
+<td style="text-align:center">实现AStar算法</td>
+</tr>
+<tr>
+<td style="text-align:center">void getPath();</td>
+<td style="text-align:center">存储起点到终点的最短路径</td>
+</tr>
+<tr>
+<td style="text-align:center">void reStart();</td>
+<td style="text-align:center">刷新状态码和初始化操作</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>Map类的友元函数</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">成员名</th>
+<th style="text-align:center">具体含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, Map&amp; m_map);</td>
+<td style="text-align:center">重载输出运算符，用于整个地图的输出，输出的数据为各个坐标位置的状态码</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>拓展，用于前端的成员</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">成员名</th>
+<th style="text-align:center">具体含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">void paintEvent(QPaintEvent* event) override;</td>
+<td style="text-align:center">重写绘图画笔事件</td>
+</tr>
+<tr>
+<td style="text-align:center">void mousePressEvent(QMouseEvent* event);</td>
+<td style="text-align:center">重写鼠标监听事件</td>
+</tr>
+<tr>
+<td style="text-align:center">int start_x = 10;</td>
+<td style="text-align:center">基坐标x</td>
+</tr>
+<tr>
+<td style="text-align:center">int start_y = 10;</td>
+<td style="text-align:center">基坐标y</td>
+</tr>
+<tr>
+<td style="text-align:center">int gsize = 50;</td>
+<td style="text-align:center">网格大小</td>
+</tr>
+<tr>
+<td style="text-align:center">bool start_button = 0;<br/>bool final_button = 0;<br/>bool abs_button = 0;<br/>bool a_star_button = 0;<br/>bool clear_button = 1;<br/>bool restart_button = 0;</td>
+<td style="text-align:center">鼠标资源的控制符号</td>
+</tr>
+<tr>
+<td style="text-align:center">int last_x = 0;</td>
+<td style="text-align:center">记录上一次鼠标点击的坐标x</td>
+</tr>
+<tr>
+<td style="text-align:center">int last_y = 0;</td>
+<td style="text-align:center">记录上一次鼠标点击的坐标y</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h3><blockquote>
+<p>核心算法用到的是A-Star算法，这是一个启发式算法，属于贪心算法和bfs的结合，使用的贪心选择策略为当前预计的最小代价，通过代价函数来确定其下一步应该走的路径，每一次都记录上一次路过的结点，最终到达终点以后即可获得走过的路径。    </p>
+</blockquote>
+<figure class="highlight nsis"><table><tr><td class="code"><pre><code class="hljs nsis">算法描述<br><span class="hljs-number">1</span>、建一个优先队列，优先队列按照代价从低到高进行排序。<br><span class="hljs-number">2</span>、计算起始点的代价，将起始点<span class="hljs-keyword">push</span>到优先队列中。<br><span class="hljs-number">3</span>、不断从优先队列中取出<span class="hljs-literal">top</span>的元素，并将其周围的点<span class="hljs-keyword">push</span>到优先队列中，周围的点满足的条件，不是障碍，且不在当前的openlist中，若在其中则比较代价大小，代价小则更新。并将父节点的记录保存下来。<br><span class="hljs-number">4</span>、如果已经到了终点，则按照父节点寻找路径。<br><span class="hljs-number">5</span>、若优先队列为空以后，则说明起点到终点没有路径。<br></code></pre></td></tr></table></figure>
+<img src="/2023/07/28/a-star-assignment/image-20230803165730214.png" class="" title="image-20230803165730214">
+<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><ul>
+<li><p>地图的长和宽</p>
+<p>用户手动输入地图的长和宽，得到长和宽以后，会自动初始化地图大小</p>
+</li>
+<li><p>输入起始点</p>
+<p>选择地图上的某一空白处作为起始点</p>
+</li>
+<li><p>输入终点</p>
+<p>选择地图上的某一空白处作为终点</p>
+</li>
+<li><p>输入障碍</p>
+<p>选择地图上的空白处可以设置为障碍</p>
+</li>
+<li><p>清除障碍</p>
+<p>点击clear_abs可以将障碍清除</p>
+</li>
+<li><p>寻路</p>
+<p>点击a-star进行从起点到终点的寻路</p>
+</li>
+</ul>
+<h4 id="输入测试："><a href="#输入测试：" class="headerlink" title="输入测试："></a>输入测试：</h4><blockquote>
+<p>在本次实验中，一共设置了6个可以提供选择的按钮，当按钮处于灰色状态时，代表按钮处于未被激活状态，即该按钮不可点击，当按钮处于蓝色则说明按钮可点击。</p>
+<p>ADD_FIRST        设置起点</p>
+<p>ADD_FINAL        设置终点</p>
+<p>A_STAR                使用Astar开始寻路</p>
+<p>ADD_ABS            设置障碍</p>
+<p>CLEAR_ABS            清除障碍</p>
+<p>RESTART                重新开始，将一些状态清除</p>
+</blockquote>
+<ul>
+<li>测试一、5行10列</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/image-20230803171605818.png" class="" title="image-20230803171605818">
+<ul>
+<li>测试二、3行5列</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/image-20230803171645811.png" class="" title="image-20230803171645811">
+<h4 id="结果测试"><a href="#结果测试" class="headerlink" title="结果测试"></a>结果测试</h4><blockquote>
+<p>结果说明：</p>
+<p>绿色的网格代表设置的起点</p>
+<p>红色的网格代表设置的终点</p>
+<p>黑色的网格代表设置的障碍</p>
+<p>白色的网格代表可以通路</p>
+<p>灰色的网格代表寻路算法经过的搜索空间</p>
+</blockquote>
+<ul>
+<li>测试一、无障碍情况</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/image-20230803172210807.png" class="" title="image-20230803172210807">
+<img src="/2023/07/28/a-star-assignment/image-20230803173053255.png" class="" title="image-20230803173053255">
+<ul>
+<li>测试二、随机障碍情况</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/image-20230803173141837.png" class="" title="image-20230803173141837">
+<img src="/2023/07/28/a-star-assignment/image-20230803173212434.png" class="" title="image-20230803173212434">
+<img src="/2023/07/28/a-star-assignment/image-20230803173244879.png" class="" title="image-20230803173244879">
+<img src="/2023/07/28/a-star-assignment/image-20230803173329009.png" class="" title="image-20230803173329009">
+<ul>
+<li><p>测试三、无通路情况</p>
+<blockquote>
+<p>没有通路，则不会寻路，状态码为5的表示搜索到了的位置，从打印出的状态码中可以看出，搜索在障碍的边界处便中断了。</p>
+</blockquote>
+</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/image-20230803173754572.png" class="" title="image-20230803173754572">
+<img src="/2023/07/28/a-star-assignment/image-20230803173808529.png" class="" title="image-20230803173808529">
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><h4 id="遇到的一些问题"><a href="#遇到的一些问题" class="headerlink" title="遇到的一些问题"></a>遇到的一些问题</h4><ul>
+<li><p><strong>优先队列中比较函数的使用</strong></p>
+<p>最开始使用的是代价f值作为比较函数中的参数，这样会导致一种情况，如果有两个代价一样的结点插入优先队列的时候，在下一次弹出优先队列的过程中，代价一样的结点会按照进入队列的先后顺序来进行弹出，也就是说在代价相同的结点中是按照广度优先的方式来进行的。但是如果我们在f值相同的情况下，再对h值进行比较，每次优先选择h值最小即最接近终点的结点出队列，这样就会将解空间缩小很多，具体案例如下所示。</p>
+<ul>
+<li>使用两个参数的比较函数</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">bool</span> Point::<span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> Point&amp; point1)<span class="hljs-type">const</span> &#123;<br>    <span class="hljs-keyword">if</span> (_f == point1._f) <span class="hljs-keyword">return</span> _h &gt; point1._h;<br>    <span class="hljs-keyword">return</span> _f &gt; point1._f;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/image-20230803183655944.png" class="" title="image-20230803183655944">
+<ul>
+<li><ul>
+<li>使用一个参数的比较函数</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">bool</span> Point::<span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> Point&amp; point1)<span class="hljs-type">const</span> &#123;<br>    <span class="hljs-comment">// if (_f == point1._f) return _h &gt; point1._h;</span><br>    <span class="hljs-keyword">return</span> _f &gt; point1._f;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/image-20230803183939400.png" class="" title="image-20230803183939400">
+<ul>
+<li><p><strong>关于插入优先队列以后是否需要更新f值的问题</strong></p>
+<p>在起初的版本中，通过简单的分析认为不需要更新f值，因为最开始认为如果能够在之前就到达的位置，再后面再到达了，说明会绕一些弯路，所以这样的f值肯定会大于或等于最开始进入openlist的结点。但在运行过程中出现了下面的问题，问题就是因为没有更新f值造成的，因为在最优路径中第一次遍历的最优路径上的点，不一定是通过最优路径中的点遍历的，所以会存在有f更小的现象。</p>
+</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/%E9%97%AE%E9%A2%98%EF%BC%9A%E6%8F%92%E5%85%A5%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E4%BB%A5%E5%90%8E%E6%B2%A1%E6%9C%89%E6%9B%B4%E6%96%B0f%E5%80%BC.png" class="" title="问题：插入优先队列以后没有更新f值">
+<ul>
+<li><p><strong>在优先队列中查找元素的问题</strong></p>
+<p>优先队列是一个堆的结构，很适用于取出最大值或者最小值，但如果是想要从优先队列中找到某一个元素，就较为难办了，在实验中出现的场景便是，需要确认当前遍历的结点是否在优先队列中，如果在优先队列中，则需要进行比较，不在的话则插入。</p>
+<p>采用的方式是在Point类中加入了一个value参数，用于表示当前结点的状态码，当value为0时表示属于通路，1表示障碍，2表示起点，3表示终点，5表示在优先队列中，通过这样的方式便可以极大便利的获取当前结点的状态值，并达到随机访问结点状态的现象，如果某一个结点在优先队列中，只需要查看该节点的状态码即可。设置状态码还有一个好处，如果需要重新开始的话，只需要将该节点的状态码改为0即可。</p>
+</li>
+<li><p><strong>一个超级无脑的小bug</strong></p>
+<p>在调试过程中，发现无法进行多次寻路，找了将近一天，最后发现Point中使用指针存储的parent结点用于寻路，下意识的在析构函数中使用delete删除parent，因为没有给parent分配内存，是使用等号复制地址的。所以在使用界面交互进行多次寻路的过程中，出现内存被回收的问题，窗口强制退出。</p>
+</li>
+<li><p><strong>前端遇到的一些问题</strong></p>
+<p>前端需要解决的最主要的问题并不是绘图，而是资源状态的获取问题，获取鼠标事件，以及如何控制不同的点击执行不同的操作，最后使用一些bool值来进行组合完成。</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>算法实践</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>A*算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ Primer Plus学习笔记7-13章</title>
+    <url>/2023/07/21/c-primer-plus/</url>
+    <content><![CDATA[<h3 id="第七章-函数-C-的编程模块"><a href="#第七章-函数-C-的编程模块" class="headerlink" title="第七章 函数-C++的编程模块"></a>第七章 函数-C++的编程模块</h3><p>函数的基本概念和应用：</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><code class="hljs angelscript">具体应用<br>按值传递，按地址传递<br>函数在数组中的应用<br>函数在结构体中的应用<br>函数在<span class="hljs-built_in">string</span>中的应用<br></code></pre></td></tr></table></figure>
+<h4 id="1、使用C-函数三部曲"><a href="#1、使用C-函数三部曲" class="headerlink" title="1、使用C++函数三部曲"></a>1、使用C++函数三部曲</h4><p>提供函数定义：根据返回值来定义函数，在函数中用return返回（函数通过将返回值复制到指定的CPU寄存器或内存单元中将其返回）。</p>
+<p>提供函数原型：函数原型描述了函数到编译器的接口，将函数的返回值的类型以及参数的类型和数量告诉编译器。</p>
+<p>调用函数：传入实参调用函数。</p>
+<h4 id="2、在函数中声明的变量"><a href="#2、在函数中声明的变量" class="headerlink" title="2、在函数中声明的变量"></a>2、在函数中声明的变量</h4><p>在函数中声明的变量包括参数都是该函数私有的，在函数调用时，计算机为这些变量分配内存，函数结束时，计算机将释放这些变量使用的内存。</p>
+<h4 id="3、函数与数组"><a href="#3、函数与数组" class="headerlink" title="3、函数与数组"></a>3、函数与数组</h4><p>在将数组作为函数参数传递的时候，既可以用int arr[]，也可以用int * arr。</p>
+<h4 id="4、指针和const"><a href="#4、指针和const" class="headerlink" title="4、指针和const"></a>4、指针和const</h4><p>常量指针和指针常量</p>
+<p>方法1：让指针指向一个常量对象，防止该指针来修改所指向的值</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><code class="hljs angelscript"><span class="hljs-comment">// 防止pt修改指向的值，但不能防止修改pt指针</span><br><span class="hljs-comment">// 可以使用age来修改自身的值</span><br><span class="hljs-built_in">int</span> age = <span class="hljs-number">18</span>;<br><span class="hljs-keyword">const</span> <span class="hljs-built_in">int</span> * pt = &amp;age;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>const 变量的地址可以赋给指向const的指针，但是不能赋值给常规指针。</li>
+</ul>
+<p>方法2：将指针本身声明为常量</p>
+<h4 id="5、使用const的好处"><a href="#5、使用const的好处" class="headerlink" title="5、使用const的好处"></a>5、使用const的好处</h4><p>避免由于无意间修改数据而导致的编程错误。</p>
+<p>使得函数能够处理const和非const实参，否则将只能接受非const数据。</p>
+<p>例：在使用函数来对某一个数组进行显示时，可以在形参使用const修饰数组，以防止函数对原始数组的修改。</p>
+<h3 id="第八章-函数探幽"><a href="#第八章-函数探幽" class="headerlink" title="第八章 函数探幽"></a>第八章 函数探幽</h3><p>函数更深的应用</p>
+<figure class="highlight"><table><tr><td class="code"><pre><code class="hljs">内联函数<br></code></pre></td></tr></table></figure>
+<h4 id="内联函数"><a href="#内联函数" class="headerlink" title="内联函数"></a>内联函数</h4><p>常规函数和内联函数之间的区别在于C++编译器是如何将他们组合到程序中。对于常规函数的调用，会使用堆栈记录原始指令地址，随后跳转到目的函数中，执行结束后再返回原指令。对于内联函数的帝国用，编译器将使用相应的函数代码代替函数调用，在此过程并没有函数跳转调用的过程。</p>
+<p>相比之下，内联函数少去了函数跳转的时间，使用空间换时间。</p>
+<p>宏是通过文本替换来实现的。</p>
+<h4 id="引用变量"><a href="#引用变量" class="headerlink" title="引用变量"></a>引用变量</h4><p>引用时已定义变量的一个别名。引用必须在声明的时候将其初始化。</p>
+<p>引用作为参数传递可以使得被调用的函数访问调用函数中的变量。在传入参数中使用引用，就是为调用函数的变量新建了一个别名。</p>
+<p>什么情况下会生产临时变量：</p>
+<p>1、实参的类型正确，但不是左值</p>
+<figure class="highlight"><table><tr><td class="code"><pre><code class="hljs">左值：可以取地址的，有名字的，非临时的变量就是左值<br>右值：无法直接取到地址，没有名字的，临时变量就是右值<br><br>新增右值引用的目的<br>实现移动语义<br></code></pre></td></tr></table></figure>
+<p>2、实参类型不正确，但是可以转化为正确的类型</p>
+<p>使用引用变量的场景</p>
+<p>1、程序员能够修改调用函数中的数据对象</p>
+<p>2、通过传递引用而不是整个数据对象，可以提高程序的运行速度</p>
+<h4 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h4><p>原来仅仅是返回类型不一样是不能用作函数重载的。重载必须满足的是特征标不同，即传入的参数不一致。</p>
+<p>名称修饰：占位符</p>
+<h4 id="函数模板：使用泛型来定义函数（通用编程）"><a href="#函数模板：使用泛型来定义函数（通用编程）" class="headerlink" title="函数模板：使用泛型来定义函数（通用编程）"></a>函数模板：使用泛型来定义函数（通用编程）</h4><blockquote>
+<p>template <typename/class T>：定义模板以后使用模板定义数据</p>
+</blockquote>
+<p>当使用模板时，在调用模板函数的过程中，编译器会自动生成使用的模板类型的函数版本，但这一个过程对于程序员来说是透明的。</p>
+<h4 id="显示具体化"><a href="#显示具体化" class="headerlink" title="显示具体化"></a>显示具体化</h4><p>在模板和具体化函数调用匹配产生冲突的时候，将优先使用具体化的函数进行匹配。</p>
+<p>显式实例化：通过<type>在函数调用的时候显示的给出需要用到的模板类型，这样编译器在进行编译期间就不需要自己分析模板类型。</p>
+<h4 id="编译器选择函数版本过程"><a href="#编译器选择函数版本过程" class="headerlink" title="编译器选择函数版本过程"></a>编译器选择函数版本过程</h4><p>1、创建候选函数列表</p>
+<p>2、使用候选函数列表创建可行函数列表</p>
+<p>3、确定是否有最佳可行函数</p>
+<p>decltype：类型推导</p>
+<blockquote>
+<p>decltype(x+y) xpy = x + y</p>
+<p>自动推导x+y的数据类型，并将其类型用于定义xpy，适合和模板进行共同使用。</p>
+</blockquote>
+<p>C++11后置返回类型：使用-&gt;将返回类型后置</p>
+<p>sizeof和strlen之间的区别，指针变量是无法用sizeof统计出字符串长度的。</p>
+<h3 id="第九章-内存模块与名称空间"><a href="#第九章-内存模块与名称空间" class="headerlink" title="第九章  内存模块与名称空间"></a>第九章  内存模块与名称空间</h3><h4 id="单独编译"><a href="#单独编译" class="headerlink" title="单独编译"></a>单独编译</h4><figure class="highlight hsp"><table><tr><td class="code"><pre><code class="hljs hsp">头文件包含内容<br><span class="hljs-number">1</span>、函数原型<br><span class="hljs-number">2</span>、使用<span class="hljs-meta">#<span class="hljs-keyword">define</span> 或 <span class="hljs-keyword">const</span>定义的符号常量</span><br><span class="hljs-number">3</span>、结构声明<br><span class="hljs-number">4</span>、类声明<br><span class="hljs-number">5</span>、模板声明<br><span class="hljs-number">6</span>、内联函数<br></code></pre></td></tr></table></figure>
+<h4 id="存储持续性、作用域和链接性"><a href="#存储持续性、作用域和链接性" class="headerlink" title="存储持续性、作用域和链接性"></a>存储持续性、作用域和链接性</h4><p>数据存储方案</p>
+<ul>
+<li>自动存储持续性：函数参数，函数调用期间存在，函数执行结束释放</li>
+<li>静态存储持续性：整个程序运行过程中都存在，static变量</li>
+<li>线程存储持续性：生命周期和所属线程一样长</li>
+<li>动态存储持续性：new存在，delete释放，用户管理。</li>
+</ul>
+<p>作用域：名称在文件中的可见范围</p>
+<p>连接性：名称如何在不同单元中进行共享</p>
+<p>C++中的auto：自动类型推导</p>
+<p>变量只能定义一次，但可以多次应用，可以使用extern关键字对外部变量进行引用。</p>
+<ul>
+<li>说明符和限定符<ul>
+<li>auto：自动类型推导</li>
+<li>register：指示寄存器存储</li>
+<li>static：用在作用域在整个文件的声明中时，表示内部链接性</li>
+<li>extern：表明是引用声明，声明引用在其它地方的变量</li>
+<li>thread_local：与线程的关系类似于静态变量于整个程序</li>
+<li>mutable：可修改的const</li>
+</ul>
+</li>
+<li>cv-限定符<ul>
+<li>const</li>
+<li>volatile：告诉编译器不要进行编译器优化，比如一个for循环计数</li>
+</ul>
+</li>
+<li>mutable限定符<ul>
+<li>即使为const也可以修改</li>
+</ul>
+</li>
+</ul>
+<p>内部链接性意味着每个文件都有自己的一组常量，而不是所有文件共享一组常量。</p>
+<p>new定位运算符：能够指定要使用的位置，需要包含头文件new，</p>
+<h4 id="名称空间"><a href="#名称空间" class="headerlink" title="名称空间"></a>名称空间</h4><p>声明区域：参数在其在进行中所在的区域。</p>
+<p>潜在作用域：潜在作用域小于声明的区域。</p>
+<p>名称空间可以是全局的，也可以位于另一个名称空间中，但不能够位于代码块中。默认情况下，在名称空间中声明的名称的链接性为外部的。</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">namespace</span> <span class="hljs-symbol">Jack</span>&#123;<br>	<span class="hljs-comment">//名称空间用到的变量和函数，类似于封装</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>using 和 using namespace：using可以使得某一个名称空间里面的函数或变量可用，using namespace 使得整个名称空间内的变量和函数都可用。</p>
+<p>如果全局中含有某名称空间的同名的变量，引用该名称空间时将自动隐藏名称空间的该变量，而使用全局变量。</p>
+<h3 id="第十章-对象和类"><a href="#第十章-对象和类" class="headerlink" title="第十章 对象和类"></a>第十章 对象和类</h3><p>面向对象的特性：抽象、封装和数据隐藏、多态、继承、代码的可重用性</p>
+<h4 id="抽象和类"><a href="#抽象和类" class="headerlink" title="抽象和类"></a>抽象和类</h4><p>接口：接口是一个共享框架，供两个系统交互时使用。</p>
+<p>访问控制字：public、private、protected，公有、私有、保护</p>
+<p>结构体默认访问类型为public，类的默认访问类型为private</p>
+<h4 id="类的构造函数和析构函数"><a href="#类的构造函数和析构函数" class="headerlink" title="类的构造函数和析构函数"></a>类的构造函数和析构函数</h4><blockquote>
+<p>构造函数和析构函数都没有返回值类型</p>
+</blockquote>
+<p>构造函数</p>
+<p>显示调用和隐式调用，每一个对象在创建的时候会自动调用构造函数，构造函数可以由用户给出，也可以使用默认的构造函数（不做任何操作）。</p>
+<p>构造函数可以存在多个，能使用函数重载的方式来使用不同的构造函数。</p>
+<p>析构函数</p>
+<p>析构函数是在对象释放的时候自动调用的函数，用于释放新建的对象资源。</p>
+<ul>
+<li>C++11列表初始化方式</li>
+</ul>
+<figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino"><span class="hljs-built_in">Bozo</span>(<span class="hljs-type">const</span> <span class="hljs-type">char</span> * fname, <span class="hljs-type">const</span> <span class="hljs-type">char</span> * lname);<br><br>Bozo bozette = &#123;<span class="hljs-string">&quot;Bozetta&quot;</span>, <span class="hljs-string">&quot;Biggens&quot;</span>&#125;;<br>Bozo fufu&#123;<span class="hljs-string">&quot;Fufu&quot;</span>, <span class="hljs-string">&quot;O&#x27;Dweeb&quot;</span>&#125;;<br>Bozo *pc = <span class="hljs-keyword">new</span> Bozo&#123;<span class="hljs-string">&quot;Popo&quot;</span>, <span class="hljs-string">&quot;Le Peu&quot;</span>&#125;;<br></code></pre></td></tr></table></figure>
+<h4 id="this-指针"><a href="#this-指针" class="headerlink" title="this 指针"></a>this 指针</h4><p>this指针指向的是自身的地址，如果需要返回自身对象，需要使用*this，访问自身的成员也可以使用this-&gt;成员变量来进行访问。</p>
+<h3 id="第十一章-使用类"><a href="#第十一章-使用类" class="headerlink" title="第十一章 使用类"></a>第十一章 使用类</h3><h4 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h4><ul>
+<li><p>不能重载的运算符</p>
+<blockquote>
+<p>sizeof、.（成员运算符）、.*(成员指针运算符)、::（作用域运算符）、?:（条件运算符）、typeid、const_cast、dynamic_cast、reinterpret_cast、static_cast</p>
+</blockquote>
+</li>
+</ul>
+<p>运算符重载是面向对象多态的一种表现，使用运算符重载能够使得编程更加灵活，例如实现两个对象相加，可以使用+运算符重载。</p>
+<blockquote>
+<p>operator运算符（）</p>
+</blockquote>
+<figure class="highlight excel"><table><tr><td class="code"><pre><code class="hljs excel">class <span class="hljs-built_in">Time</span>&#123;<br>	<span class="hljs-built_in">int</span> a;<br>	<span class="hljs-built_in">int</span> b;<br>publ<span class="hljs-symbol">ic:</span><br>	<span class="hljs-built_in">Time</span>(<span class="hljs-built_in">int</span> m_a, <span class="hljs-built_in">int</span> m_b)&#123;<br>		a = m_a;<br>		b = m_b;<br>	&#125;<br>	<br>	// 对 + 运算符进行重载<br>	<span class="hljs-built_in">Time</span> operator+(<span class="hljs-built_in">Time</span>&amp; <span class="hljs-symbol">t2</span>)&#123;<br>		<span class="hljs-built_in">Time</span> <span class="hljs-built_in">time</span>;<br>		time.a = a + <span class="hljs-symbol">t2</span>.a;<br>		time.b = b + <span class="hljs-symbol">t2</span>.b;<br>		return <span class="hljs-built_in">time</span>;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="友元函数"><a href="#友元函数" class="headerlink" title="友元函数"></a>友元函数</h4><p>友元的三种类型：友元函数、友元类、友元成员函数。</p>
+<p>将函数、类、成员函数设置为类的友元，可以赋予该函数与类的成员函数相同的访问权限。</p>
+<ul>
+<li><p>创建友元函数</p>
+<p>将函数原型前面加上friend放在类声明中。</p>
+<p>如果要为类重载运算符，并将非类的项作为其第一个操作数，则可以使用友元函数来反转操作数的顺序。若不用友元函数访问，只能将一个参数传入到类的对象函数原型中，无法控制需要操作对象之间的顺序。</p>
+</li>
+</ul>
+<blockquote>
+<p>“&lt;&lt;” 运算符的重载</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><br><span class="hljs-comment">// 对&lt;&lt;运算符进行重载</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Time</span> &#123;<br>	<span class="hljs-keyword">friend</span> ostream&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(ostream&amp; os, <span class="hljs-type">const</span> Time&amp; t);<br>	<span class="hljs-type">int</span> hour;<br>	<span class="hljs-type">int</span> second;<br><br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">Time</span>(<span class="hljs-type">int</span> m_hour, <span class="hljs-type">int</span> m_second) &#123;<br>		hour = m_hour;<br>		second = m_second;<br>	&#125;<br>&#125;;<br><span class="hljs-comment">// 返回流对象，便于传递操作</span><br>ostream&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(ostream&amp; os, <span class="hljs-type">const</span> Time&amp; t) &#123;<br>	os &lt;&lt; t.hour &lt;&lt; <span class="hljs-string">&quot;   &quot;</span> &lt;&lt; t.second;<br>	<span class="hljs-keyword">return</span> os;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>	<span class="hljs-function">Time <span class="hljs-title">time</span><span class="hljs-params">(<span class="hljs-number">2</span>, <span class="hljs-number">40</span>)</span></span>;<br>	cout &lt;&lt; time &lt;&lt; endl;<br>	<span class="hljs-built_in">system</span>(<span class="hljs-string">&quot;PAUSE&quot;</span>);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>当重载的函数和目标对象不在一个作用域内时，需要使用域名控制符号来对其进行访问。</p>
+<p>运算符重载，还可以更具特征标的数量不同再次进行重载。</p>
+<h4 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h4><p>构造函数可以使用隐式转换：隐式构造函数必须不能存在二义性</p>
+<blockquote>
+<p>在下面程序中，使用Stonewt st = 12;将默认隐式调用了构造函数Stonewt(double lbs)，对Stonewt的成员进行初始化。</p>
+</blockquote>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><code class="hljs csharp"><span class="hljs-meta">#include&lt;iostream&gt;</span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-title">std</span>;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title">Stonewt</span> &#123;<br>	<span class="hljs-built_in">int</span> stone;<br>	<span class="hljs-built_in">double</span> pds;<br>	<span class="hljs-built_in">double</span> pounds;<br><br><span class="hljs-keyword">public</span>:<br>	Stonewt(<span class="hljs-built_in">double</span> lbs) &#123;<br>		stone = <span class="hljs-built_in">int</span>(lbs);<br>		pds = <span class="hljs-built_in">int</span>(lbs) % <span class="hljs-number">14</span> + lbs;<br>		pounds = lbs;<br>	&#125;<br>	Stonewt() &#123;<br>		stone = pds = pounds = <span class="hljs-number">0</span>;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">show</span>()</span> &#123;<br>		cout &lt;&lt; stone &lt;&lt; endl;<br>		cout &lt;&lt; pds &lt;&lt; endl;<br>		cout &lt;&lt; pounds &lt;&lt; endl;<br>	&#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-built_in">int</span> <span class="hljs-title">main</span>()</span> &#123;<br>	Stonewt st = <span class="hljs-number">12</span>;<br>	st.show();<br><br>	system(<span class="hljs-string">&quot;PAUSE&quot;</span>);<br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>如果关闭隐式构造函数则使用：explicit Stonewt(double lbs);</p>
+<h4 id="转换函数"><a href="#转换函数" class="headerlink" title="转换函数"></a>转换函数</h4><blockquote>
+<p>格式：operator typename();</p>
+<p>exp：operator double();</p>
+</blockquote>
+<p>如果在类里面定义了转化函数，可以将类强制转化成其它的数据类型。转化函数中返回需要进行转化的数据。</p>
+<h3 id="第十二章-类的动态内存分配"><a href="#第十二章-类的动态内存分配" class="headerlink" title="第十二章  类的动态内存分配"></a>第十二章  类的动态内存分配</h3><h4 id="动态内存和类"><a href="#动态内存和类" class="headerlink" title="动态内存和类"></a>动态内存和类</h4><p>再动态分配内存中，对象的析构函数是必不可少的，有的时候必须要重载赋值运算符。</p>
+<p>在类里面定义静态成员，意味着该类的所有对象能够共同享用这同一个静态成员变量。</p>
+<p>将对象作为函数参数来传递而不是使用引用来传递，容易造成函数结束以后对象自动释放并调用析构函数的现象。</p>
+<p>当使用一个对象初始化另一个对象的时候会调用拷贝构造函数。</p>
+<ul>
+<li><p>C++为一个对象自动提供的成员函数：</p>
+<ul>
+<li>默认构造函数：在对象创建时进行调用</li>
+<li>默认析构函数：在对象销毁时调用</li>
+<li><p>复制构造函数：用于将一个对象复制到新创建的对象中，默认复制构造函数用到的是浅拷贝。</p>
+</li>
+<li><p>赋值运算符重载：通常将一个对象使用等号赋值给另一个对象会用到，默认用的时浅拷贝</p>
+</li>
+<li>地址运算符重载</li>
+<li>移动构造函数</li>
+<li>移动赋值函数</li>
+</ul>
+</li>
+<li><p>浅拷贝和深拷贝</p>
+<p>在使用复制构造函数的过程中，默认进行的是浅拷贝，将一个对象的地址赋值给另一个需要初始化的对象。通过显性的修改复制构造函数的拷贝过程，可以实现深拷贝，即重新申请一块内存空间，将一个对象的数据放进去，让两个对象使用不同的两个地址空间。</p>
+</li>
+<li><p>C++11中引用nullptr表示空指针</p>
+</li>
+<li><p>可以将成员函数声明为静态的，声明过后</p>
+<ul>
+<li>不能通过对象调用静态成员函数，静态成员函数不能使用this指针</li>
+<li>静态成员函数只能够使用静态数据成员</li>
+</ul>
+</li>
+</ul>
+<h4 id="使用new注意事项"><a href="#使用new注意事项" class="headerlink" title="使用new注意事项"></a>使用new注意事项</h4><ul>
+<li>使用new后应该同样用delete进行释放</li>
+<li>new和delete必须相互兼容，new对应于delete，new[]对应与delete[]</li>
+<li>如果有多个构造函数，必须以相同的方式使用new</li>
+<li>应定义一个复制构造函数，深拷贝一个对象初始化为另一个对象</li>
+<li>应定义一个等号=运算符重载，通过深拷贝将一个对象赋值给另一个对象</li>
+</ul>
+<h4 id="有关返回对象的说明"><a href="#有关返回对象的说明" class="headerlink" title="有关返回对象的说明"></a>有关返回对象的说明</h4><ul>
+<li><p>返回对象的引用、返回指向对象的const引用和返回const对象的区别</p>
+<ul>
+<li>1、返回对象将调用赋值构造函数，返回引用不会</li>
+<li>2、引用指向的对象应该在调用函数执行时存在</li>
+</ul>
+</li>
+<li><p>返回指向非const对象引用</p>
+<blockquote>
+<p>非const则说明可以对对象进行修改，具有传递性的操作必须返回非const对象引用</p>
+</blockquote>
+</li>
+<li><p>当返回对象是被调用函数当中的局部变量，则不应该以引用来返回，而应该使用对象来返回，调用拷贝构造函数创建一个新的对象，比如算数运算符。</p>
+</li>
+</ul>
+<p>若方法要返回局部对象，则应返回对象</p>
+<p>若方法或函数要返回一个没有共有复制构造函数的类的对象，必须返回一个指向这种对象的引用</p>
+<h3 id="第十三章-类继承"><a href="#第十三章-类继承" class="headerlink" title="第十三章  类继承"></a>第十三章  类继承</h3><p>通过继承可以完成的一些工作：</p>
+<p>1、可以在已有类的基础上添加功能</p>
+<p>2、可以给类添加数据</p>
+<p>3、可以修改类的方法</p>
+<p>总结，对于父类的一些功能的拓展。一般情况下会遵守开闭原则。</p>
+<p>派生的类型：公有派生、私有派生、保护派生</p>
+<p>公有派生：基类的公有成员称为派生类的公有成员。基类的私有部分称为派生类的一部分，但是只能够通过基类的公有和保护方法来进行访问。</p>
+<p>父类指针指向子类对象， 通过这样的方式可以实现多态</p>
+<p>基类指针可以在不进行显示类型转换的情况下指向派生类对象；</p>
+<p>基类引用可以在不进行显示类型转化的情况下引用派生类对象；</p>
+<h4 id="多态公有继承"><a href="#多态公有继承" class="headerlink" title="多态公有继承"></a>多态公有继承</h4><p>方法1、在派生类中重新定义基类的方法，通过在父类对象和子类对象中定义同样的方法，分别使用父类和子类对象的实例来调用来实现不同对象对同一对象接口调用达到多态。</p>
+<p>方法2、使用虚方法，使用父类指针指向子类对象，在父类对象中使用虚函数，在子类对象中实现，通过一个父类指针指向子类对象来调用子类中的函数。</p>
+<ul>
+<li>虚析构函数的作用<ul>
+<li>使用虚析构函数可以确保正确的析构函数序列被调用。</li>
+</ul>
+</li>
+</ul>
+<h4 id="动态联编和静态联编"><a href="#动态联编和静态联编" class="headerlink" title="动态联编和静态联编"></a>动态联编和静态联编</h4><p>将源代码中的函数调用解释为执行特定的函数代码块被称为函数名联编。</p>
+<p>在编译过程中进行的联编称为静态联编。</p>
+<p>在程序运行时进行的联编称为动态联编，有虚函数的代码需要在函数运行过程中才能够确认虚函数中具体要执行和完成的任务。</p>
+<h4 id="虚函数的工作原理"><a href="#虚函数的工作原理" class="headerlink" title="虚函数的工作原理"></a>虚函数的工作原理</h4><p>编译器处理虚函数的方法是，为每个对象添加一个隐藏成员，隐藏成员中保存了一个指向函数地址数组的指针。这种数组称为虚函数表（vtbl）。虚函数表中存储了为类对象进行声明的虚函数的地址。</p>
+<p>基类对象中包含一个指针，指向基类中所有虚函数表的地址表。派生类对象将包含一个指向对立地址表的指针。如果派生类提供了虚函数的新定义，该虚函数表将保存新函数的地址，如果派生类没有定义虚函数，该虚函数表将保存函数原始版本的地址。</p>
+<h4 id="访问控制：protected"><a href="#访问控制：protected" class="headerlink" title="访问控制：protected"></a>访问控制：protected</h4><p>派生类的成员可以直接访问基类的保护成员，但不能访问基类的私有成员，对于外部世界来说，保护成员的行为与私有成员相似，对于派生类来说，保护车关于的行为与公有成员相似。</p>
+<h4 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h4><p>C++可以通过纯虚函数提供未实现的函数，纯虚函数声明的结尾处为=0。</p>
+<p>当类声明中包含纯虚函数时，则不能够创建该类的对象。因为需要通过继承的方式来实现纯虚函数中未定义的方法实现。</p>
+<h4 id="继承和动态内存分配"><a href="#继承和动态内存分配" class="headerlink" title="继承和动态内存分配"></a>继承和动态内存分配</h4><p>1、如果在派生类中没有用到动态内存分配，则无需进行操作，析构函数也不需要修改。</p>
+<p>2、如果派生类中有定义的指针需要动态分配内存的成员变量，则必须为派生类定义<strong>显式析构函数、复制（拷贝）构造函数和赋值（=重载）构造函数</strong>，在派生类的赋值构造函数和赋值构造函数中还必须显示的调用基类的构造函数。</p>
+<p>在派生类中重定义基类的方法不是重载，将直接覆盖基类的原始方法。</p>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>C++进阶</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Cmake学习笔记</title>
+    <url>/2023/07/26/cmake-study/</url>
+    <content><![CDATA[<h1 id="CMake"><a href="#CMake" class="headerlink" title="CMake"></a>CMake</h1><h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>cmake的定义  ——-高级编译配置工具</p>
+<p>当多个人用不同的语言或者编译器开发一个项目，最终要输出一个可执行文件或者共享库（dll，so等等）需要用到—-CMake</p>
+<p>所有操作都是通过编译CMakeLists.txt来完成的—简单</p>
+<p>官网 <a href="http://www.cmake.org/">www.cmake.org</a></p>
+<h1 id="CMake安装"><a href="#CMake安装" class="headerlink" title="CMake安装"></a>CMake安装</h1><p><a href="http://www.cmake.org/HTML/Download.html">http://www.cmake.org/HTML/Download.htm</a>l  可以下载安装</p>
+<h1 id="CMake一个HelloWord"><a href="#CMake一个HelloWord" class="headerlink" title="CMake一个HelloWord"></a>CMake一个HelloWord</h1><p>1、写一个HelloWord</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#main.cpp</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>std::cout &lt;&lt;  <span class="hljs-string">&quot;hello word&quot;</span> &lt;&lt; std::endl;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>2、写CMakeLists.txt</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">#CMakeLists.<span class="hljs-function">txt</span><br><span class="hljs-function"></span><br><span class="hljs-function"><span class="hljs-title">PROJECT</span> <span class="hljs-params">(HELLO)</span></span><br><span class="hljs-function"></span><br><span class="hljs-function"><span class="hljs-title">SET</span><span class="hljs-params">(SRC_LIST main.cpp)</span></span><br><span class="hljs-function"></span><br><span class="hljs-function"><span class="hljs-title">MESSAGE</span><span class="hljs-params">(STATUS <span class="hljs-string">&quot;This is BINARY dir &quot;</span> $&#123;HELLO_BINARY_DIR&#125;)</span></span><br><span class="hljs-function"></span><br><span class="hljs-function"><span class="hljs-title">MESSAGE</span><span class="hljs-params">(STATUS <span class="hljs-string">&quot;This is SOURCE dir &quot;</span>$&#123;HELLO_SOURCE_DIR&#125;)</span></span><br><span class="hljs-function"></span><br><span class="hljs-function"><span class="hljs-title">ADD_EXECUTABLE</span><span class="hljs-params">(hello $&#123;SRC_LIST&#125;)</span></span><br></code></pre></td></tr></table></figure>
+<p>3、使用cmake，生成makefile文件</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">cmake .<br><br>输出：<br>[root@localhost cmake]<span class="hljs-meta"># cmake .</span><br><span class="hljs-function">CMake <span class="hljs-title">Warning</span> <span class="hljs-params">(dev)</span> in CMakeLists.txt:</span><br><span class="hljs-function">  Syntax Warning in cmake code at</span><br><span class="hljs-function"></span><br><span class="hljs-function">    /root/cmake/CMakeLists.txt:<span class="hljs-number">7</span>:<span class="hljs-number">37</span></span><br><span class="hljs-function"></span><br><span class="hljs-function">  Argument not separated from preceding token by whitespace.</span><br><span class="hljs-function">This warning is for project developers.  Use -Wno-dev to suppress it.</span><br><span class="hljs-function"></span><br><span class="hljs-function">-- The C compiler identification is GNU <span class="hljs-number">10.2</span><span class="hljs-number">.1</span></span><br><span class="hljs-function">-- The CXX compiler identification is GNU <span class="hljs-number">10.2</span><span class="hljs-number">.1</span></span><br><span class="hljs-function">-- Check for working C compiler: /usr/bin/cc</span><br><span class="hljs-function">-- Check for working C compiler: /usr/bin/cc -- works</span><br><span class="hljs-function">-- Detecting C compiler ABI info</span><br><span class="hljs-function">-- Detecting C compiler ABI info - done</span><br><span class="hljs-function">-- Check for working CXX compiler: /usr/bin/c++</span><br><span class="hljs-function">-- Check for working CXX compiler: /usr/bin/c++ -- works</span><br><span class="hljs-function">-- Detecting CXX compiler ABI info</span><br><span class="hljs-function">-- Detecting CXX compiler ABI info - done</span><br><span class="hljs-function">-- This is BINARY dir /root/cmake</span><br><span class="hljs-function">-- This is SOURCE dir /root/cmake</span><br><span class="hljs-function">-- Configuring done</span><br><span class="hljs-function">-- Generating done</span><br><span class="hljs-function">-- Build files have been written to: /root/cmake</span><br></code></pre></td></tr></table></figure>
+<p>目录下就生成-CMakeFiles, CMakeCache.txt, cmake_install.cmake 等文件，并且生成了Makefile.</p>
+<p>4、使用make命令编译</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">root@localhost cmake]<span class="hljs-meta"># make</span><br>Scanning dependencies of target hello<br>[<span class="hljs-number">100</span>%] Building CXX object CMakeFiles/hello.dir/main.cpp.o<br>Linking CXX executable hello<br>[<span class="hljs-number">100</span>%] Built target hello<br></code></pre></td></tr></table></figure>
+<p>5、最终生成了Hello的可执行程序</p>
+<h1 id="CMake一个HelloWord-的语法介绍"><a href="#CMake一个HelloWord-的语法介绍" class="headerlink" title="CMake一个HelloWord-的语法介绍"></a>CMake一个HelloWord-的语法介绍</h1><h2 id="PROJECT关键字"><a href="#PROJECT关键字" class="headerlink" title="PROJECT关键字"></a>PROJECT关键字</h2><p>可以用来指定工程的名字和支持的语言，默认支持所有语言</p>
+<p>PROJECT (HELLO)   指定了工程的名字，并且支持所有语言—建议</p>
+<p>PROJECT (HELLO CXX)      指定了工程的名字，并且支持语言是C++</p>
+<p>PROJECT (HELLO C CXX)      指定了工程的名字，并且支持语言是C和C++</p>
+<p>该指定隐式定义了两个CMAKE的变量</p>
+<p><projectname>_BINARY_DIR，HELLO_BINARY_DIR</p>
+<p><projectname>_SOURCE_DIR，HELLO_SOURCE_DIR</p>
+<p>MESSAGE关键字就可以直接使用者两个变量，当前都指向当前的工作目录，后面会讲外部编译</p>
+<p>问题：如果改了工程名，这两个变量名也会改变</p>
+<p>解决：再定义两个预定义变量：PROJECT_BINARY_DIR和PROJECT_SOURCE_DIR，这两个变量和HELLO_BINARY_DIR，HELLO_SOURCE_DIR是一致的。所以改了工程名也没有关系</p>
+<h2 id="SET关键字"><a href="#SET关键字" class="headerlink" title="SET关键字"></a>SET关键字</h2><p>用来显示的指定变量的</p>
+<p>SET(SRC_LIST main.cpp)    SRC_LIST变量就包含了main.cpp</p>
+<p>也可以 SET(SRC_LIST main.cpp t1.cpp t2.cpp)</p>
+<h2 id="MESSAGE关键字"><a href="#MESSAGE关键字" class="headerlink" title="MESSAGE关键字"></a>MESSAGE关键字</h2><p>向终端输出用户自定义的信息</p>
+<p>主要包含三种信息：</p>
+<ul>
+<li>SEND_ERROR，产生错误，生成过程被跳过。</li>
+<li>SATUS，输出前缀为—的信息。</li>
+<li>FATAL_ERROR，立即终止所有 cmake 过程.</li>
+</ul>
+<h2 id="ADD-EXECUTABLE关键字"><a href="#ADD-EXECUTABLE关键字" class="headerlink" title="ADD_EXECUTABLE关键字"></a>ADD_EXECUTABLE关键字</h2><p>生成可执行文件</p>
+<p>ADD_EXECUTABLE(hello ${SRC_LIST})     生成的可执行文件名是hello，源文件读取变量SRC_LIST中的内容</p>
+<p>也可以直接写 ADD_EXECUTABLE(hello main.cpp)</p>
+<p>上述例子可以简化的写成</p>
+<p>PROJECT(HELLO)<br>ADD_EXECUTABLE(hello main.cpp)</p>
+<p>注意：工程名的 HELLO 和生成的可执行文件 hello 是没有任何关系的</p>
+<h1 id="语法的基本原则"><a href="#语法的基本原则" class="headerlink" title="语法的基本原则"></a>语法的基本原则</h1><ul>
+<li><p>变量使用${}方式取值，但是在 IF 控制语句中是直接使用变量名</p>
+</li>
+<li><p>指令(参数 1 参数 2…) 参数使用括弧括起，参数之间使用空格或分号分开。 以上面的 ADD_EXECUTABLE 指令为例，如果存在另外一个 func.cpp 源文件</p>
+<p>就要写成：ADD_EXECUTABLE(hello main.cpp func.cpp)或者ADD_EXECUTABLE(hello main.cpp;func.cpp)</p>
+</li>
+<li><p>指令是大小写无关的，参数和变量是大小写相关的。推荐全部使用大写指令</p>
+</li>
+</ul>
+<h2 id="语法注意事项"><a href="#语法注意事项" class="headerlink" title="语法注意事项"></a>语法注意事项</h2><ul>
+<li>SET(SRC_LIST main.cpp) 可以写成 SET(SRC_LIST “main.cpp”)，如果源文件名中含有空格，就必须要加双引号</li>
+<li>ADD_EXECUTABLE(hello main) 后缀可以不行，他会自动去找.c和.cpp，最好不要这样写，可能会有这两个文件main.cpp和main</li>
+</ul>
+<h1 id="内部构建和外部构建"><a href="#内部构建和外部构建" class="headerlink" title="内部构建和外部构建"></a>内部构建和外部构建</h1><ul>
+<li>上述例子就是内部构建，生产的临时文件特别多，不方便清理</li>
+<li>外部构建，就会把生成的临时文件放在build目录下，不会对源文件有任何影响强烈使用外部构建方式</li>
+</ul>
+<h2 id="外部构建方式举例"><a href="#外部构建方式举例" class="headerlink" title="外部构建方式举例"></a>外部构建方式举例</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">//例子目录，CMakeLists.txt和上面例子一致</span><br>[root@localhost cmake]<span class="hljs-meta"># pwd</span><br>/root/cmake<br>[root@localhost cmake]<span class="hljs-meta"># ll</span><br>total <span class="hljs-number">8</span><br>-rw-r--r--. <span class="hljs-number">1</span> root root <span class="hljs-number">198</span> Dec <span class="hljs-number">28</span> <span class="hljs-number">20</span>:<span class="hljs-number">59</span> CMakeLists.txt<br>-rw-r--r--. <span class="hljs-number">1</span> root root  <span class="hljs-number">76</span> Dec <span class="hljs-number">28</span> <span class="hljs-number">00</span>:<span class="hljs-number">18</span> main.cpp<br></code></pre></td></tr></table></figure>
+<p>1、建立一个build目录，可以在任何地方，建议在当前目录下</p>
+<p>2、进入build，运行cmake ..    当然..表示上一级目录，可以写CMakeLists.txt所在的绝对路径，生产的文件都在build目录下了</p>
+<p>3、在build目录下，运行make来构建工程</p>
+<p>注意外部构建的两个变量</p>
+<p>1、HELLO_SOURCE_DIR  还是工程路径</p>
+<p>2、HELLO_BINARY_DIR   编译路径 也就是 /root/cmake/bulid</p>
+<h1 id="让Hello-World看起来更像一个工程"><a href="#让Hello-World看起来更像一个工程" class="headerlink" title="让Hello World看起来更像一个工程"></a>让Hello World看起来更像一个工程</h1><ul>
+<li>为工程添加一个子目录 src，用来放置工程源代码</li>
+<li>添加一个子目录 doc，用来放置这个工程的文档 hello.txt</li>
+<li>在工程目录添加文本文件 COPYRIGHT, README</li>
+<li>在工程目录添加一个 <a href="http://runhello.sh/">runhello.sh</a> 脚本，用来调用 hello 二进制</li>
+<li>将构建后的目标文件放入构建目录的 bin 子目录</li>
+<li>将 doc 目录 的内容以及 COPYRIGHT/README 安装到/usr/share/doc/cmake/</li>
+</ul>
+<h2 id="将目标文件放入构建目录的-bin-子目录"><a href="#将目标文件放入构建目录的-bin-子目录" class="headerlink" title="将目标文件放入构建目录的 bin 子目录"></a>将目标文件放入构建目录的 bin 子目录</h2><p>每个目录下都要有一个CMakeLists.txt说明</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">[root@localhost cmake]<span class="hljs-meta"># tree</span><br>.<br>├── build<br>├── CMakeLists.txt<br>└── src<br>    ├── CMakeLists.txt<br>    └── main.cpp<br></code></pre></td></tr></table></figure>
+<p>外层CMakeLists.txt</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-built_in">PROJECT</span>(HELLO)<br><span class="hljs-built_in">ADD_SUBDIRECTORY</span>(src bin)<br></code></pre></td></tr></table></figure>
+<p>src下的CMakeLists.txt</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-built_in">ADD_EXECUTABLE</span>(hello main.cpp)<br></code></pre></td></tr></table></figure>
+<h3 id="ADD-SUBDIRECTORY-指令"><a href="#ADD-SUBDIRECTORY-指令" class="headerlink" title="ADD_SUBDIRECTORY 指令"></a>ADD_SUBDIRECTORY 指令</h3><p>ADD_SUBDIRECTORY(source_dir [binary_dir] [EXCLUDE_FROM_ALL])</p>
+<ul>
+<li><p>这个指令用于向当前工程添加存放源文件的子目录，并可以指定中间二进制和目标二进制存放的位置</p>
+</li>
+<li><p>EXCLUDE_FROM_ALL函数是将写的目录从编译中排除，如程序中的example</p>
+</li>
+<li><p>ADD_SUBDIRECTORY(src bin)</p>
+<p>将 src 子目录加入工程并指定编译输出(包含编译中间结果)路径为bin 目录</p>
+<p>如果不进行 bin 目录的指定，那么编译结果(包括中间结果)都将存放在build/src 目录</p>
+</li>
+</ul>
+<h3 id="更改二进制的保存路径"><a href="#更改二进制的保存路径" class="headerlink" title="更改二进制的保存路径"></a>更改二进制的保存路径</h3><p>SET 指令重新定义 EXECUTABLE_OUTPUT_PATH 和 LIBRARY_OUTPUT_PATH 变量 来指定最终的目标二进制的位置</p>
+<p>SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)<br>SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)</p>
+<p>思考：加载哪个CMakeLists.txt当中</p>
+<p>哪里要改变目标存放路径，就在哪里加入上述的定义，所以应该在src下的CMakeLists.txt下写</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><ul>
+<li>一种是从代码编译后直接 make install 安装</li>
+<li>一种是打包时的指定 目录安装。<ul>
+<li>简单的可以这样指定目录：make install DESTDIR=/tmp/test</li>
+<li>稍微复杂一点可以这样指定目录：./configure –prefix=/usr</li>
+</ul>
+</li>
+</ul>
+<h2 id="如何安装HelloWord"><a href="#如何安装HelloWord" class="headerlink" title="如何安装HelloWord"></a>如何安装HelloWord</h2><p>使用CMAKE一个新的指令：INSTALL</p>
+<p>INSTALL的安装可以包括：二进制、动态库、静态库以及文件、目录、脚本等</p>
+<p>使用CMAKE一个新的变量：CMAKE_INSTALL_PREFIX</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 目录树结构</span><br>[root@localhost cmake]<span class="hljs-meta"># tree</span><br>.<br>├── build<br>├── CMakeLists.txt<br>├── COPYRIGHT<br>├── doc<br>│   └── hello.txt<br>├── README<br>├── runhello.sh<br>└── src<br>    ├── CMakeLists.txt<br>    └── main.cpp<br><br><span class="hljs-number">3</span> directories, <span class="hljs-number">7</span> files<br></code></pre></td></tr></table></figure>
+<h3 id="安装文件COPYRIGHT和README"><a href="#安装文件COPYRIGHT和README" class="headerlink" title="安装文件COPYRIGHT和README"></a>安装文件COPYRIGHT和README</h3><p>INSTALL(FILES COPYRIGHT README DESTINATION share/doc/cmake/)</p>
+<p>FILES：文件</p>
+<p>DESTINATION：</p>
+<p>1、写绝对路径</p>
+<p>2、可以写相对路径，相对路径实际路径是：${CMAKE_INSTALL_PREFIX}/<DESTINATION 定义的路径></p>
+<p>CMAKE_INSTALL_PREFIX  默认是在 /usr/local/</p>
+<p>cmake -DCMAKE_INSTALL_PREFIX=/usr    在cmake的时候指定CMAKE_INSTALL_PREFIX变量的路径</p>
+<h3 id="安装脚本runhello-sh"><a href="#安装脚本runhello-sh" class="headerlink" title="安装脚本runhello.sh"></a>安装脚本runhello.sh</h3><p>PROGRAMS：非目标文件的可执行程序安装(比如脚本之类)</p>
+<p>INSTALL(PROGRAMS runhello.sh DESTINATION bin)</p>
+<p>说明：实际安装到的是 /usr/bin</p>
+<h3 id="安装-doc-中的-hello-txt"><a href="#安装-doc-中的-hello-txt" class="headerlink" title="安装 doc 中的 hello.txt"></a>安装 doc 中的 hello.txt</h3><ul>
+<li><p>一、是通过在 doc 目录建立CMakeLists.txt ，通过install下的file</p>
+</li>
+<li><p>二、是直接在工程目录通过</p>
+<p>INSTALL(DIRECTORY doc/ DESTINATION share/doc/cmake)</p>
+</li>
+</ul>
+<p>DIRECTORY 后面连接的是所在 Source 目录的相对路径</p>
+<p>注意：abc 和 abc/有很大的区别</p>
+<p>目录名不以/结尾：这个目录将被安装为目标路径下的</p>
+<p>目录名以/结尾：将这个目录中的内容安装到目标路径</p>
+<h3 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h3><p>cmake ..</p>
+<p>make</p>
+<p>make install</p>
+<h1 id="静态库和动态库的构建"><a href="#静态库和动态库的构建" class="headerlink" title="静态库和动态库的构建"></a>静态库和动态库的构建</h1><p>任务：</p>
+<p>１，建立一个静态库和动态库，提供 HelloFunc 函数供其他程序编程使用，HelloFunc 向终端输出 Hello World 字符串。 </p>
+<p>２，安装头文件与共享库。</p>
+<p>静态库和动态库的区别</p>
+<ul>
+<li>静态库的扩展名一般为“.a”或“.lib”；动态库的扩展名一般为“.so”或“.dll”。</li>
+<li>静态库在编译时会直接整合到目标程序中，编译成功的可执行文件可独立运行</li>
+<li>动态库在编译时不会放到连接的目标程序中，即可执行文件无法单独运行。</li>
+</ul>
+<h2 id="构建实例"><a href="#构建实例" class="headerlink" title="构建实例"></a>构建实例</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">[root@localhost cmake2]<span class="hljs-meta"># tree</span><br>.<br>├── build<br>├── CMakeLists.txt<br>└── lib<br>    ├── CMakeLists.txt<br>    ├── hello.cpp<br>    └── hello.h<br></code></pre></td></tr></table></figure>
+<p>hello.h中的内容</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> HELLO_H</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> Hello_H</span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">HelloFunc</span><span class="hljs-params">()</span></span>;<br><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br></code></pre></td></tr></table></figure>
+<p>hello.cpp中的内容</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;hello.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">HelloFunc</span><span class="hljs-params">()</span></span>&#123;<br>    std::cout &lt;&lt; <span class="hljs-string">&quot;Hello World&quot;</span> &lt;&lt; std::endl;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>项目中的cmake内容</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-built_in">PROJECT</span>(HELLO)<br><span class="hljs-built_in">ADD_SUBDIRECTORY</span>(lib bin)<br></code></pre></td></tr></table></figure>
+<p>lib中CMakeLists.txt中的内容</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-built_in">SET</span>(LIBHELLO_SRC hello.cpp)<br><span class="hljs-built_in">ADD_LIBRARY</span>(hello SHARED $&#123;LIBHELLO_SRC&#125;)<br></code></pre></td></tr></table></figure>
+<h3 id="ADD-LIBRARY"><a href="#ADD-LIBRARY" class="headerlink" title="ADD_LIBRARY"></a>ADD_LIBRARY</h3><p>ADD_LIBRARY(hello SHARED ${LIBHELLO_SRC})</p>
+<ul>
+<li>hello：就是正常的库名，生成的名字前面会加上lib，最终产生的文件是libhello.so</li>
+<li>SHARED，动态库    STATIC，静态库</li>
+<li>${LIBHELLO_SRC} ：源文件</li>
+</ul>
+<h3 id="同时构建静态和动态库"><a href="#同时构建静态和动态库" class="headerlink" title="同时构建静态和动态库"></a>同时构建静态和动态库</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 如果用这种方式，只会构建一个动态库，不会构建出静态库，虽然静态库的后缀是.a</span><br><span class="hljs-built_in">ADD_LIBRARY</span>(hello SHARED $&#123;LIBHELLO_SRC&#125;)<br><span class="hljs-built_in">ADD_LIBRARY</span>(hello STATIC $&#123;LIBHELLO_SRC&#125;)<br><br><span class="hljs-comment">// 修改静态库的名字，但是往往希望他们的名字是相同的，只是后缀不同</span><br><span class="hljs-built_in">ADD_LIBRARY</span>(hello SHARED $&#123;LIBHELLO_SRC&#125;)<br><span class="hljs-built_in">ADD_LIBRARY</span>(hello_static STATIC $&#123;LIBHELLO_SRC&#125;)<br></code></pre></td></tr></table></figure>
+<h3 id="SET-TARGET-PROPERTIES"><a href="#SET-TARGET-PROPERTIES" class="headerlink" title="SET_TARGET_PROPERTIES"></a>SET_TARGET_PROPERTIES</h3><p>这条指令可以用来设置输出的名称，对于动态库，还可以用来指定动态库版本和 API 版本</p>
+<p>同时构建静态和动态库</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-built_in">SET</span>(LIBHELLO_SRC hello.cpp)<br><br><span class="hljs-built_in">ADD_LIBRARY</span>(hello_static STATIC $&#123;LIBHELLO_SRC&#125;)<br><br><span class="hljs-comment">//对hello_static的重名为hello</span><br><span class="hljs-built_in">SET_TARGET_PROPERTIES</span>(hello_static PROPERTIES  OUTPUT_NAME <span class="hljs-string">&quot;hello&quot;</span>)<br><span class="hljs-comment">//cmake 在构建一个新的target 时，会尝试清理掉其他使用这个名字的库，因为，在构建 libhello.so 时， 就会清理掉 libhello.a</span><br><span class="hljs-built_in">SET_TARGET_PROPERTIES</span>(hello_static PROPERTIES CLEAN_DIRECT_OUTPUT <span class="hljs-number">1</span>)<br><br><span class="hljs-built_in">ADD_LIBRARY</span>(hello SHARED $&#123;LIBHELLO_SRC&#125;)<br><br><span class="hljs-built_in">SET_TARGET_PROPERTIES</span>(hello PROPERTIES  OUTPUT_NAME <span class="hljs-string">&quot;hello&quot;</span>)<br><span class="hljs-built_in">SET_TARGET_PROPERTIES</span>(hello PROPERTIES CLEAN_DIRECT_OUTPUT <span class="hljs-number">1</span>)<br><br></code></pre></td></tr></table></figure>
+<h3 id="动态库的版本号"><a href="#动态库的版本号" class="headerlink" title="动态库的版本号"></a>动态库的版本号</h3><p>一般动态库都有一个版本号的关联</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">libhello.so<span class="hljs-number">.1</span><span class="hljs-number">.2</span><br>libhello.so -&gt;libhello.so<span class="hljs-number">.1</span><br>libhello.so<span class="hljs-number">.1</span>-&gt;libhello.so<span class="hljs-number">.1</span><span class="hljs-number">.2</span><br></code></pre></td></tr></table></figure>
+<p>CMakeLists.txt 插入如下</p>
+<p><code>SET_TARGET_PROPERTIES(hello PROPERTIES VERSION 1.2 SOVERSION 1)</code></p>
+<p>VERSION 指代动态库版本，SOVERSION 指代 API 版本。</p>
+<h3 id="安装共享库和头文件"><a href="#安装共享库和头文件" class="headerlink" title="安装共享库和头文件"></a>安装共享库和头文件</h3><p>本例中将 hello 的共享库安装到<prefix>/lib目录，</p>
+<p>将 hello.h 安装到<prefix>/include/hello 目录</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">//文件放到该目录下</span><br><span class="hljs-built_in">INSTALL</span>(FILES hello.h DESTINATION include/hello)<br><br><span class="hljs-comment">//二进制，静态库，动态库安装都用TARGETS</span><br><span class="hljs-comment">//ARCHIVE 特指静态库，LIBRARY 特指动态库，RUNTIME 特指可执行目标二进制。</span><br><span class="hljs-built_in">INSTALL</span>(TARGETS hello hello_static LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)<br></code></pre></td></tr></table></figure>
+<p>注意：</p>
+<p>安装的时候，指定一下路径，放到系统下</p>
+<p><code>cmake -DCMAKE_INSTALL_PREFIX=/usr ..</code></p>
+<h3 id="使用外部共享库和头文件"><a href="#使用外部共享库和头文件" class="headerlink" title="使用外部共享库和头文件"></a>使用外部共享库和头文件</h3><p>准备工作，新建一个目录来使用外部共享库和头文件</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">[root@MiWiFi-R4CM-srv cmake3]<span class="hljs-meta"># tree</span><br>.<br>├── build<br>├── CMakeLists.txt<br>└── src<br>    ├── CMakeLists.txt<br>    └── main.cpp<br></code></pre></td></tr></table></figure>
+<p>main.cpp</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;hello.h&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>	<span class="hljs-built_in">HelloFunc</span>();<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="解决：make后头文件找不到的问题"><a href="#解决：make后头文件找不到的问题" class="headerlink" title="解决：make后头文件找不到的问题"></a>解决：make后头文件找不到的问题</h3><p>PS：include <hello/hello.h>  这样include是可以，这么做的话，就没啥好讲的了</p>
+<p>关键字：INCLUDE_DIRECTORIES    这条指令可以用来向工程添加多个特定的头文件搜索路径，路径之间用空格分割</p>
+<p>在CMakeLists.txt中加入头文件搜索路径</p>
+<p>INCLUDE_DIRECTORIES(/usr/include/hello)</p>
+<h3 id="解决：找到引用的函数问题"><a href="#解决：找到引用的函数问题" class="headerlink" title="解决：找到引用的函数问题"></a>解决：找到引用的函数问题</h3><p>报错信息：undefined reference to `HelloFunc()’</p>
+<p>关键字：LINK_DIRECTORIES     添加非标准的共享库搜索路径</p>
+<p>指定第三方库所在路径，LINK_DIRECTORIES(/home/myproject/libs)</p>
+<p>关键字：TARGET_LINK_LIBRARIES    添加需要链接的共享库</p>
+<p>TARGET_LINK_LIBRARIES的时候，只需要给出动态链接库的名字。</p>
+<p>在CMakeLists.txt中插入链接共享库，主要要插在executable的后面</p>
+<p>查看main的链接情况</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp">[root@MiWiFi-R4CM-srv bin]<span class="hljs-meta"># ldd main </span><br>	linux-vdso.so<span class="hljs-number">.1</span> =&gt;  (<span class="hljs-number">0x00007ffedfda4000</span>)<br>	libhello.so =&gt; /lib64/libhello.<span class="hljs-built_in">so</span> (<span class="hljs-number">0x00007f41c0d8f000</span>)<br>	libstdc++.so<span class="hljs-number">.6</span> =&gt; /lib64/libstdc++.so<span class="hljs-number">.6</span> (<span class="hljs-number">0x00007f41c0874000</span>)<br>	libm.so<span class="hljs-number">.6</span> =&gt; /lib64/libm.so<span class="hljs-number">.6</span> (<span class="hljs-number">0x00007f41c0572000</span>)<br>	libgcc_s.so<span class="hljs-number">.1</span> =&gt; /lib64/libgcc_s.so<span class="hljs-number">.1</span> (<span class="hljs-number">0x00007f41c035c000</span>)<br>	libc.so<span class="hljs-number">.6</span> =&gt; /lib64/libc.so<span class="hljs-number">.6</span> (<span class="hljs-number">0x00007f41bff8e000</span>)<br>	/lib64/ld-linux-x86<span class="hljs-number">-64.</span>so<span class="hljs-number">.2</span> (<span class="hljs-number">0x00007f41c0b7c000</span>)<br></code></pre></td></tr></table></figure>
+<p>链接静态库</p>
+<p><code>TARGET_LINK_LIBRARIES(main libhello.a)</code></p>
+<h3 id="特殊的环境变量-CMAKE-INCLUDE-PATH-和-CMAKE-LIBRARY-PATH"><a href="#特殊的环境变量-CMAKE-INCLUDE-PATH-和-CMAKE-LIBRARY-PATH" class="headerlink" title="特殊的环境变量 CMAKE_INCLUDE_PATH 和 CMAKE_LIBRARY_PATH"></a>特殊的环境变量 CMAKE_INCLUDE_PATH 和 CMAKE_LIBRARY_PATH</h3><p>注意：这两个是环境变量而不是 cmake 变量，可以在linux的bash中进行设置</p>
+<p>我们上面例子中使用了绝对路径INCLUDE_DIRECTORIES(/usr/include/hello)来指明include路径的位置</p>
+<p>还可以使用另外一种方式，使用环境变量export CMAKE_INCLUDE_PATH=/usr/include/hello</p>
+<p>补充：生产debug版本的方法：<br>cmake .. -DCMAKE_BUILD_TYPE=debug</p>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>Cmake</tag>
+        <tag>编译</tag>
       </tags>
   </entry>
   <entry>
@@ -1848,6 +3796,359 @@
       </tags>
   </entry>
   <entry>
+    <title>EDA基础知识总结</title>
+    <url>/2023/09/04/eda-summary/</url>
+    <content><![CDATA[<h3 id="一、布局"><a href="#一、布局" class="headerlink" title="一、布局"></a>一、布局</h3><h4 id="布局算法：二次线长布局算法-力矢量布局"><a href="#布局算法：二次线长布局算法-力矢量布局" class="headerlink" title="布局算法：二次线长布局算法+力矢量布局"></a><strong>布局算法：二次线长布局算法+力矢量布局</strong></h4><p>设计目标：调整不同元胞在元胞中的摆放位置，使得元胞在版图中的连线最短，同时确保在布局中没有重叠</p>
+<blockquote>
+<p>二次线长布局分为两个阶段</p>
+<p>第一阶段：依据元胞的中心对元胞进行布局，从而对二次线长函数最小化</p>
+<p>第二阶段：将元胞中集中在许多元胞重叠的大的结群打散，从而使所有单元原来的重叠消除</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs \">输入：线网连接，限制的版图区域<br>输出：所有元胞的x坐标和y坐标<br></code></pre></td></tr></table></figure>
+<h4 id="数据结构设计"><a href="#数据结构设计" class="headerlink" title="数据结构设计"></a>数据结构设计</h4><p>1、元胞可以抽象成一个含有x，y坐标的结构体</p>
+<p>2、网表抽象为二维map，记录不同元胞之间的连线情况，同时x，y代表元胞在map中所处的位置信息</p>
+<h4 id="算法主要思想"><a href="#算法主要思想" class="headerlink" title="算法主要思想"></a>算法主要思想</h4><p><strong>第一阶段：全局布局（二次线长布局）</strong></p>
+<blockquote>
+<p>在全局布局的过程中，将元胞的坐标抽象成为中心点的坐标，不考虑其面积、大小以及布局的合法化，仅仅是以最优化模块之间的线长为目标。</p>
+</blockquote>
+<figure class="highlight llvm"><table><tr><td class="code"><pre><code class="hljs llvm">已知线网的的连接，限制的版图区域，求不同元胞在版图中摆放的位置，使得所有元胞在版图中的连线最短。<br>求：所有的元胞的<span class="hljs-keyword">x</span>坐标和y坐标。<br><br><span class="hljs-number">1</span>、列出所有连接的元胞线网的X的总线长L(p)：所有的<span class="hljs-keyword">x</span>距离的差的平方<br><span class="hljs-number">2</span>、分别对所有参数中的<span class="hljs-keyword">x</span>求偏导，并令偏导为<span class="hljs-number">0</span><br><span class="hljs-number">3</span>、列出方程组，解出来的<span class="hljs-keyword">x</span>阵列就是所需要求的解<br>对于Y方向也是同理<br><br>该算法只是以中心点作为元胞的坐标，所有没有考虑到不同元胞的大小，会存在重叠的问题<br></code></pre></td></tr></table></figure>
+<p>距离计算代价函数</p>
+<img src="/2023/09/04/eda-summary/image-20230818160028154.png" class="" title="image-20230818160028154">
+<p>通过求偏导数，解出x和y。</p>
+<p><strong>第二阶段：详细布局（力矢量布局）</strong></p>
+<blockquote>
+<p>用于在已经布置好的版图中，新加入一个元胞，通过找到让该元胞平衡的状态，来确定该元胞在版图中的位置。</p>
+<p>采用力学中的质点弹簧系统来建模，每个元胞运动吸引其他元胞，其中吸引力与距离成正比。如果所有元胞到达它们的平衡位置，线长将得到最小化。<strong>将目标转化为将所有的元胞放在一个力平衡的位置上。</strong>——<strong>称为零力目标</strong>（ZFT）</p>
+</blockquote>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-number">1</span>、以二次线长布局过后的布局为初始布局<br><span class="hljs-number">2</span>、为每个布局中的元胞设定坐标，并标记为UNMOVED<br><span class="hljs-number">3</span>、对元胞按照元胞的连接数进行排序，该顺序就是元胞迭代的顺序<br><span class="hljs-number">4</span>、迭代的取出每一个元胞，并寻找它的ZFT位置，直到所有的都完成<br><span class="hljs-number">5</span>、若ZFT位置被占据，则移动到其他的位置<br><br>第<span class="hljs-number">5</span>步确定<span class="hljs-selector-tag">p</span>的ZFT时，若ZFT被元胞<span class="hljs-selector-tag">q</span>占据，则移动位置的确定<br><span class="hljs-number">1</span>、如果可能，将<span class="hljs-selector-tag">p</span>移动到靠近<span class="hljs-selector-tag">q</span>的位置<br><span class="hljs-number">2</span>、若交换<span class="hljs-selector-tag">p</span>，<span class="hljs-selector-tag">q</span>后，代价变小，则交换<br><span class="hljs-number">3</span>、链式移动，<span class="hljs-selector-tag">p</span>移动到<span class="hljs-selector-tag">q</span>，<span class="hljs-selector-tag">q</span>移动到下一个，以此类推<br><span class="hljs-number">4</span>、波状移动，<span class="hljs-selector-tag">p</span>移动到<span class="hljs-selector-tag">q</span>，再重新计算<span class="hljs-selector-tag">q</span>的ZFT<br></code></pre></td></tr></table></figure>
+<p>Loss为权重乘以坐标差的累计和</p>
+<p><strong>时间复杂度</strong></p>
+<p>假设元胞的数量为n</p>
+<p>二次线长布局的时间复杂度为：O(n^2)，需要遍历一遍map，找到各个节点之间的连线信息</p>
+<p>力矢量布局的时间复杂度为：O(n^2)</p>
+<h3 id="二、布线"><a href="#二、布线" class="headerlink" title="二、布线"></a>二、布线</h3><h4 id="布线算法：FLUTE算法"><a href="#布线算法：FLUTE算法" class="headerlink" title="布线算法：FLUTE算法"></a>布线算法：FLUTE算法</h4><p>设计目标：找到能将节点连接的最小斯坦纳生成树</p>
+<blockquote>
+<p>在EDA的布线中，各个板块的IO接口以及时钟接口之间，通常是走的斯坦纳线，而直接求斯坦纳最小树是NP完全问题，使用FLUTE算法可以将RSMT问题转化为查找表的问题</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="code"><pre><code class="hljs">输入：pin结点，以及结点的位置<br>输出：将所有结点连接起来的斯坦纳树<br></code></pre></td></tr></table></figure>
+<h4 id="算法数据结构设计"><a href="#算法数据结构设计" class="headerlink" title="算法数据结构设计"></a>算法数据结构设计</h4><p><strong>1、POWV（Potentially optimal wirelength vectors）</strong></p>
+<p>在FLUTE算法中，会使用一种带有信息（权重）的数据结构（向量）来表示一种斯坦纳树，任意一棵斯坦纳树都可以使用唯一的POWV来表示，一个POWV向量可以表示多棵不一样的斯坦纳树，如下图。</p>
+<blockquote>
+<p>前面三位表示x方向上的length</p>
+<p>后面三位表示y方向上的length</p>
+</blockquote>
+<img src="/2023/09/04/eda-summary/image-20230828141138808.png" class="" title="image-20230828141138808">
+<p><strong>2、POST（potentially optimal Steiner tree）</strong></p>
+<p>对每一个POWV都会对应存储一个POST，也就是说，不是存储所有的斯坦纳树，只是存储一个可能的斯坦纳树，因为同一个向量的所有斯坦纳树的代价总和总是一样的。POWV和POST会构建成一个映射关系，同时将其存入到一个Table中，表中还包含POWV的总权重。而此时，权重最小的则可代表一个最小斯坦纳生成树。</p>
+<p><strong>3、table可以使用哈希表来进行设计</strong></p>
+<p>使用POWV做表头，权重和POST作为value，给出节点后，生成所有的可能的POWV表，再通过权重对其进行排序，取其POST作为斯坦纳树结果。</p>
+<h4 id="算法主要思想-1"><a href="#算法主要思想-1" class="headerlink" title="算法主要思想"></a>算法主要思想</h4><figure class="highlight stata"><table><tr><td class="code"><pre><code class="hljs stata">总体流程：<br>所有<span class="hljs-keyword">N</span>点线网根据pin脚的位置都可以划分到<span class="hljs-keyword">n</span>！个group中，每个group中存有POWV，对于一个线网最优线长可由POWV来获得，FLUTE算法首先会预计算这些POWV形成一个查找表。<br>与POWV一起存储的还有<span class="hljs-keyword">POST</span>，一个POWV对应多个<span class="hljs-keyword">POST</span>，一个<span class="hljs-keyword">POST</span>只有一个POWV<br>基于此，要得到一棵RSMT，只需要计算线网所在的组对应的POWV的线长，然后返回对应的<span class="hljs-keyword">POST</span>即可<br>上述查找表算法最高支持9点线网，对于9点以上的需要递归的切分线网<br></code></pre></td></tr></table></figure>
+<ul>
+<li>生成查找表算法</li>
+</ul>
+<img src="/2023/09/04/eda-summary/image-20230828144127572.png" class="" title="image-20230828144127572">
+<h4 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h4><p>时间复杂度为：O(nlgn)</p>
+<h3 id="三、静态时序分析"><a href="#三、静态时序分析" class="headerlink" title="三、静态时序分析"></a>三、静态时序分析</h3><h4 id="单元库"><a href="#单元库" class="headerlink" title="单元库"></a>单元库</h4><p>在静态时序分析中，单元库（library）是指一个集合，其中包含了各种标准的逻辑元件、时序元件和组合元件的建模。单元库中的元件通常带有特定的时钟延迟和逻辑功能，以及电压和温度等方面的参数，通过使用单元库，可以在时序分析中模拟和评估设计的时序特性，以帮助发现和解决潜在的时序冲突和时序失效问题。</p>
+<h4 id="互连寄生"><a href="#互连寄生" class="headerlink" title="互连寄生"></a>互连寄生</h4><p>互连寄生是指在集成电路或电子系统中，由于导线或连接器的存在，引起的非理想的电特性和效果。主要包括电容和电阻，互连寄生会对电路的信号传输、功耗、噪声和时序等方面产生不良的影响。</p>
+<p>电阻寄生：互连导线的电阻会引起信号的衰减和功率损耗。较长的导线通常具有更大的电阻。</p>
+<p>电容寄生：互连导线的电容会引起信号的延迟和功耗。电容会存储和释放电荷，导致信号传输速度变慢。</p>
+<h4 id="单元时延（NLDM表格）"><a href="#单元时延（NLDM表格）" class="headerlink" title="单元时延（NLDM表格）"></a>单元时延（NLDM表格）</h4><p>单元时延（NLDM表格），全称为非线性延迟模型（Non-Linear Delay Model），是一种常用的静态时序分析中的时延模型。在数字电路设计中，时延模型用于描述逻辑元件（如门级电路或时序元件）的输出到输入之间的传播延迟。</p>
+<p>NLDM表格是一种常见的时延模型，它以表格的形式表示输入到输出之间的传播延迟。表格的输入是逻辑元件的输入端的不同组合，并且通常包括输入的电压和电流等参数。表格的输出是逻辑元件的输出端的延迟时间，通常以纳秒或皮秒为单位。</p>
+<p>NLDM表格通常由电路设计工具根据所用的逻辑元件和工艺库生成。基于这个模型，可以进行静态时序分析，以评估电路的时序性能，如时钟周期、信号传输延迟和时序失效等。</p>
+<h4 id="线网时延（Elmore计算）"><a href="#线网时延（Elmore计算）" class="headerlink" title="线网时延（Elmore计算）"></a>线网时延（Elmore计算）</h4><p>线网时延，也称为Elmore时延，是一种常用的近似计算方法，用于估计电路中导线上的传播延迟。它是一种简化的时延模型，适用于传输线上电压/电流从输入端到达输出端的时间。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><code class="hljs">Elmore计算基于以下假设和简化：<br>1、传输线上的时延主要由传播速度和传输线上的等效电容决定。<br>2、传播速度是恒定的，不考虑传输线上的阻抗匹配或反射等因素。<br>3、传输线被近似为一系列等效电容连接起来的节点。<br><br>根据这些假设，Elmore计算使用以下步骤来估计线网时延：<br>1、将电路中的传输线划分为一系列节点，每个节点对应于传输线上一个等效电容。<br>2、从输入端开始，依次计算每个节点的时延。每个节点的时延等于前一节点的时延加上当前节点的等效电容与前一节点电流之积。<br>3、在达到输出端后，最后一个节点的时延就是整个线网的传播延迟。<br></code></pre></td></tr></table></figure>
+<h4 id="串扰噪声的定义"><a href="#串扰噪声的定义" class="headerlink" title="串扰噪声的定义"></a>串扰噪声的定义</h4><p>噪声是指电路中任意节点上不希望出现的电压或电流的偏差。当噪声作用于某个电路节点上时，它可以瞬间破坏该节点上存储的逻辑信息。如果这一破坏状态被锁存到锁存器中，那么将会导致功能性错误。</p>
+<p>主要有毛刺和延时噪声。</p>
+<h4 id="时序检查（Setup-Hold）"><a href="#时序检查（Setup-Hold）" class="headerlink" title="时序检查（Setup/Hold）"></a>时序检查（Setup/Hold）</h4><p>时序检查是在数字电路设计中进行的一种重要时序分析，用于验证和确保输入信号在时钟边沿触发时的稳定性和正确性。</p>
+<p>Setup Time：是指在时钟边沿到达之前，输入信号必须稳定在其有效值的时间。如果输入信号在设置时间窗口内没有稳定，可能会导致电路中的逻辑冲突和错误。</p>
+<p>Hold Time：是指在时钟边沿到达之后，输入信号必须继续保持在其有效值的时间。如果输入信号在保持时间之前改变或不稳定，也会导致电路中的逻辑错误。</p>
+<h4 id="时序路径定义"><a href="#时序路径定义" class="headerlink" title="时序路径定义"></a>时序路径定义</h4><p>时序路径（Timing Path）是指信号从一个寄存器节点（如时钟触发器）通过逻辑路径传播到另一个寄存器节点的路径。它描述了数据在电路中的传输和处理过程，并对时序分析和时序优化提供了重要信息。</p>
+<p>通过分析时序路径，可以确定信号在路径中的传播延迟，包括设置时间和保持时间等重要时序要求。时序路径分析可用于预测时钟频率、检测时序冲突、优化时序性能，以及验证设计是否满足时序规约等。</p>
+<h4 id="时序约束命令"><a href="#时序约束命令" class="headerlink" title="时序约束命令"></a>时序约束命令</h4><img src="/2023/09/04/eda-summary/image-20230818170602715.png" class="" title="image-20230818170602715">
+<h3 id="四、EDA性能"><a href="#四、EDA性能" class="headerlink" title="四、EDA性能"></a>四、EDA性能</h3><ul>
+<li><p>解决EDA软件中的性能问题</p>
+<p>算法：优化数据结构，提高算法性能，降低算法的复杂度</p>
+<p>硬件：确保计算机的硬件资源重组，对于一些矩阵操作可以考虑使用GPU加速</p>
+<p>分布式：将问题拆解成可以并行计算的小问题，开发支持并行计算的EDA工具</p>
+</li>
+</ul>
+<h3 id="五、EDA后端"><a href="#五、EDA后端" class="headerlink" title="五、EDA后端"></a>五、EDA后端</h3><ul>
+<li>EDA后端软件开发的流程</li>
+</ul>
+<img src="/2023/09/04/eda-summary/EDA%E6%B5%81%E7%A8%8B.jpg" class="">
+<h3 id="六、EDA工具"><a href="#六、EDA工具" class="headerlink" title="六、EDA工具"></a>六、EDA工具</h3><ul>
+<li><p>常见的EDA仿真工具和Debug工具分别有哪些？它们有什么优势和不足？</p>
+<p>仿真工具：</p>
+<ul>
+<li>ModelSim/QuestaSim (Mentor)</li>
+<li>VCS (Synopsys)</li>
+<li>Xilinx Vivado Simulator (Xilinx)</li>
+<li>Incisive (Cadence)</li>
+<li>Icarus Verilog</li>
+</ul>
+<p>优势：</p>
+<ul>
+<li>高度准确和精确的模拟功能。</li>
+<li>可以模拟各种不同级别的设计，从门级仿真到系统级仿真。</li>
+<li>支持时序和功能仿真，可以检测和调试设计中的逻辑错误和时序问题。</li>
+</ul>
+<p>不足：</p>
+<ul>
+<li>仿真时间较长，尤其是对于大型和复杂的设计。</li>
+<li>需要大量的计算资源（CPU和内存）。</li>
+<li>对于某些特定的设计场景，可能需要针对特定工具进行配置和优化。</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>EDA</tag>
+        <tag>物理设计</tag>
+        <tag>布局</tag>
+        <tag>布线</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git常见用法</title>
+    <url>/2024/01/04/git/</url>
+    <content><![CDATA[<h4 id="怎样撤销一个已经push到远端的版本"><a href="#怎样撤销一个已经push到远端的版本" class="headerlink" title="怎样撤销一个已经push到远端的版本"></a>怎样撤销一个已经push到远端的版本</h4><figure class="highlight arcade"><table><tr><td class="code"><pre><code class="hljs arcade">每次<span class="hljs-built_in">push</span>之前线pull一下<br><br><span class="hljs-number">1</span>、查看当前提交的信息，找到需要撤回到的版本号复制，一串十六进制的数<br>git <span class="hljs-built_in">log</span><br><br><span class="hljs-number">2</span>、使用git reset<br>git reset --soft 复制的版本号<br><br><span class="hljs-number">3</span>、强制回退当前版本号<br><span class="hljs-comment">// 确认一下当前版本</span><br>git <span class="hljs-built_in">log</span><br><span class="hljs-comment">// 谨慎使用，强制使用本地仓库代码修改远程仓库</span><br>git <span class="hljs-built_in">push</span> orgin master --force<br></code></pre></td></tr></table></figure>
+<h4 id="新建分支并同步到远端的分支"><a href="#新建分支并同步到远端的分支" class="headerlink" title="新建分支并同步到远端的分支"></a>新建分支并同步到远端的分支</h4><figure class="highlight mipsasm"><table><tr><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># 在本地新建一个名字为branch_name的分支，并与远端的origin/branch_name同步</span><br>git checkout -<span class="hljs-keyword">b </span><span class="hljs-keyword">branch_name </span><span class="hljs-keyword">origin/branch_name</span><br></code></pre></td></tr></table></figure>
+<h4 id="解决git-clone超时的问题"><a href="#解决git-clone超时的问题" class="headerlink" title="解决git clone超时的问题"></a>解决git clone超时的问题</h4><p>从github上clone代码仓库报错<code>Failed to connect to github.com port 443 after 21038 ms: Couldn&#39;t connect to server</code>且尝试去ping一下github官网会丢包</p>
+<img src="/2024/01/04/git/image-20231204110955462.png" class="" title="image-20231204110955462">
+<p>解决方案</p>
+<p>修改系统的hosts，跳过域名解析的过程，直接用ip地址访问</p>
+<figure class="highlight accesslog"><table><tr><td class="code"><pre><code class="hljs accesslog"><span class="hljs-number">192.30.255.112</span> github.com git<br><span class="hljs-number">185.31.16.184</span> github.global.ssl.fastly.net<br></code></pre></td></tr></table></figure>
+<img src="/2024/01/04/git/image-20231204111125551.png" class="" title="image-20231204111125551">
+<p>修改hosts需要给文件更高的权限</p>
+<img src="/2024/01/04/git/image-20231204111350240.png" class="" title="image-20231204111350240">
+<h4 id="github中git-push出现超时的问题"><a href="#github中git-push出现超时的问题" class="headerlink" title="github中git push出现超时的问题"></a>github中git push出现超时的问题</h4><img src="/2024/01/04/git/image-20231204112945547.png" class="" title="image-20231204112945547">
+<p>解决方案</p>
+<p>1、打开本机的代理服务器</p>
+<img src="/2024/01/04/git/image-20231204113100512.png" class="" title="image-20231204113100512">
+<p>2、取消git config里面的http和https代理</p>
+<img src="/2024/01/04/git/image-20231204113208566.png" class="" title="image-20231204113208566">
+<p>3、设置http代理服务器</p>
+<img src="/2024/01/04/git/image-20231204113304822.png" class="" title="image-20231204113304822">
+<h4 id="linux中输出一个文件夹下面的所有文件名"><a href="#linux中输出一个文件夹下面的所有文件名" class="headerlink" title="linux中输出一个文件夹下面的所有文件名"></a>linux中输出一个文件夹下面的所有文件名</h4><ul>
+<li><strong><code>/path/to/directory</code></strong>: 替换为目标目录的路径。</li>
+<li><strong><code>-maxdepth 1</code></strong>: 限制<code>find</code>的搜索深度为1，即仅在指定的目录中搜索，而不会搜索其子目录。</li>
+<li><strong><code>-type f</code></strong>: 限制搜索结果为普通文件（不包括目录和其他类型的文件）。</li>
+<li><strong><code>-exec basename &#123;&#125; \;</code></strong>: 对每一个找到的文件执行<code>basename</code>命令，即输出文件的基本名称。<code>&#123;&#125;</code>是<code>find</code>命令的占位符，表示每个找到的文件的路径。<code>\;</code>表示命令结束。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">find /path/to/directory -maxdepth 1 -<span class="hljs-built_in">type</span> f -<span class="hljs-built_in">exec</span> <span class="hljs-built_in">basename</span> &#123;&#125; \;<br></code></pre></td></tr></table></figure>
+<h4 id="git查看远端仓库地址"><a href="#git查看远端仓库地址" class="headerlink" title="git查看远端仓库地址"></a>git查看远端仓库地址</h4><figure class="highlight dsconfig"><table><tr><td class="code"><pre><code class="hljs dsconfig"><span class="hljs-string">git</span> <span class="hljs-string">remote</span> -<span class="hljs-string">v</span><br><br><span class="hljs-comment"># 更改远程仓库</span><br><span class="hljs-string">git</span> <span class="hljs-string">remote</span> <span class="hljs-built_in">set-url</span> <span class="hljs-string">origin</span> 仓库地址<br></code></pre></td></tr></table></figure>
+<h4 id="查看代码贡献量"><a href="#查看代码贡献量" class="headerlink" title="查看代码贡献量"></a>查看代码贡献量</h4><blockquote>
+<p>按照各个作者的修改代码总数排序</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --pretty=<span class="hljs-string">&quot;%aN&quot;</span> | <span class="hljs-built_in">sort</span> | <span class="hljs-built_in">uniq</span> -c | <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> count author; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> -n <span class="hljs-string">&quot;<span class="hljs-variable">$author</span> &quot;</span>; git <span class="hljs-built_in">log</span> --author=<span class="hljs-string">&quot;<span class="hljs-variable">$author</span>&quot;</span> --pretty=tformat: --numstat | awk <span class="hljs-string">&#x27;&#123; add += $1; subs += $2 &#125; END &#123; total = add + subs; printf &quot;%d\n&quot;, total &#125;&#x27;</span>; <span class="hljs-keyword">done</span> | <span class="hljs-built_in">sort</span> -rnk2<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>技术研究</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>iEDA项目代码实践</title>
+    <url>/2023/09/10/iEDA-test/</url>
+    <content><![CDATA[<h2 id="iEDA工程代码实践—布局合法化（LG）"><a href="#iEDA工程代码实践—布局合法化（LG）" class="headerlink" title="iEDA工程代码实践—布局合法化（LG）"></a>iEDA工程代码实践—布局合法化（LG）</h2><blockquote>
+<p>开源项目iEDA链接:<a href="https://gitee.com/oscc-project/iEDA.git">https://gitee.com/oscc-project/iEDA.git</a></p>
+</blockquote>
+<h3 id="一、理论知识"><a href="#一、理论知识" class="headerlink" title="一、理论知识"></a>一、理论知识</h3><p>布局合法化是全局布局以后的一个过程，在全局布局过后，规划版图中的宏单元会放置在相应的位置并保持不再移动，于此同时，对于标准单元的规划，也会通过一些相关算法完成大致位置的摆放，这些摆放是基于相关优化目标下进行的，例如线长，面积等，但是在全局布局中并不会考虑标准单元之间的非法情况，即标准单元重叠的问题，因此在布局合法化中，需要完成的任务就是在尽可能的不破坏全局布局的布局结构的情况下，使得所有标准单元不再重叠。核心算法用到的是<code>Abacus</code>算法和<code>Tetris</code>算法。</p>
+<h3 id="二、Abacus算法"><a href="#二、Abacus算法" class="headerlink" title="二、Abacus算法"></a>二、Abacus算法</h3><blockquote>
+<p>同一时间只放置一个单元</p>
+</blockquote>
+<p><strong>算法伪代码</strong></p>
+<p><style>.eklvyhuxixwq{}</style><img src="/2023/09/10/iEDA-test/image-20230823094215828.png" class="eklvyhuxixwq" alt="image-20230823094215828"></p>
+<p><strong>核心代码</strong></p>
+<img src="/2023/09/10/iEDA-test/image-20230825151306959.png" class="" title="image-20230825151306959">
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><span class="hljs-number">1</span>、根据单元的x坐标进行排序<br><span class="hljs-number">2</span>、对于每一个排序好的单元，按照顺序取出每一个单元<br><span class="hljs-number">3</span>、遍历第一行，找出当前行中放置该单元后能够使得<span class="hljs-keyword">cost</span>最小的位置<br><span class="hljs-number">4</span>、按照第<span class="hljs-number">3</span>步的方式遍历每一行，找出全局中能够放置当前单元并使得<span class="hljs-keyword">cost</span>最小的位置<br><span class="hljs-number">5</span>、放置该单元<br></code></pre></td></tr></table></figure>
+<p><strong>placeRow解析</strong></p>
+<blockquote>
+<p>这个函数是<code>AbacusLegalizer</code>中的一个函数，它用于在布局合法化过程中放置一个实例（instance）到一个行（row）中。函数的输入参数包括一个<code>LGInstance</code>实例指针、行的索引<code>row_idx</code>和一个标志<code>is_trial</code>，用于指示是否是试验性放置。</p>
+</blockquote>
+<p>该函数主要完成了以下工作：</p>
+<ul>
+<li>在给定的行中找到合适的间隔来放置实例。</li>
+<li>计算放置实例的移动代价，包括实例在<code>x</code>和<code>y</code>方向上的移动代价以及超过最大移动约束的处罚。</li>
+<li>进行非试验性放置时，更新簇的信息和间隔的剩余长度。</li>
+</ul>
+<img src="/2023/09/10/iEDA-test/image-20230825154317023.png" class="" title="image-20230825154317023">
+<figure class="highlight markdown"><table><tr><td class="code"><pre><code class="hljs markdown">函数的主要步骤如下：<br><span class="hljs-bullet">1.</span> 获取实例的形状（inst<span class="hljs-emphasis">_shape）。</span><br><span class="hljs-emphasis">2. 从_</span>layout对象中获取指定行的间隔列表（interval<span class="hljs-emphasis">_list）。</span><br><span class="hljs-emphasis">3. 通过搜索找到最近的间隔，即与实例重叠的间隔（interval_</span>idx）。<br><span class="hljs-bullet">   -</span> 如果找不到重叠的间隔，则返回INT32<span class="hljs-emphasis">_MAX表示失败。</span><br><span class="hljs-emphasis">4. 检查选定的间隔是否能够容纳实例的宽度，如果不行，则查找最近的非满间隔，并重新选择。</span><br><span class="hljs-emphasis">   - 如果找不到合适的间隔，则返回INT32_</span>MAX表示失败。<br><span class="hljs-bullet">5.</span> 将实例安排到选定的间隔中，形成一个簇（target<span class="hljs-emphasis">_cluster）。</span><br><span class="hljs-emphasis">6. 计算移动代价（movement_</span>cost）：<br><span class="hljs-bullet">   -</span> 从簇中的每个实例计算到目标位置的x方向移动代价，并累加到movement<span class="hljs-emphasis">_cost中。</span><br><span class="hljs-emphasis">   - 计算实例在y方向上的移动代价。</span><br><span class="hljs-emphasis">   - 将实例在x和y方向上的移动代价相加，得到实例的位移代价（inst_</span>displacement）。<br><span class="hljs-bullet">   -</span> 将实例位移代价加到movement<span class="hljs-emphasis">_cost中。</span><br><span class="hljs-emphasis">7. 根据最大移动约束处罚超过最大移动约束的位移代价。</span><br><span class="hljs-emphasis">8. 如果is_</span>trial为false，即非试验性放置，则替换簇的信息（replaceClusterInfo）和更新间隔的剩余长度（updateRemainLength）。<br><span class="hljs-bullet">9.</span> 返回移动代价（movement<span class="hljs-emphasis">_cost）。</span><br></code></pre></td></tr></table></figure>
+<h3 id="三、Tetris算法"><a href="#三、Tetris算法" class="headerlink" title="三、Tetris算法"></a>三、Tetris算法</h3><p><code>Abacus</code>是在<code>Tetris</code>算法上的改进，在<code>Tetris</code>中，对于<code>placeRow</code>的选择是一个单次即可完成的过程，即在当前行中找到了能够合适的位置以后即将该<code>instance</code>放置到该行。因此整体算法流程相似，但复杂度会降低很多。</p>
+<figure class="highlight llvm"><table><tr><td class="code"><pre><code class="hljs llvm"><span class="hljs-number">1</span>、根据单元的<span class="hljs-keyword">x</span>坐标进行排序<br><span class="hljs-number">2</span>、对于每一个排序好的单元，按照顺序取出每一个单元<br><span class="hljs-number">3</span>、遍历第一行，找出当前行中放置该单元后能够使得cost最小的位置<br><span class="hljs-number">4</span>、放置该单元<br><br>若改行无法放置该单元，进行换行策略选择，重新执行，直到所有行都无法放置，返回<span class="hljs-keyword">false</span><br></code></pre></td></tr></table></figure>
+<p><style>.xoxcrdyngsvf{zoom: 67%;}</style><img src="/2023/09/10/iEDA-test/image-20230825163454933.png" class="xoxcrdyngsvf" alt="image-20230825163454933"></p>
+<p>因此对<code>iEDA</code>原始代码<code>Abacus</code>算法调整成<code>Tetris</code>只需要确定两个策略即可：1、如何选择当前<code>instance</code>初始行的策略。2、若初始行无法放置当前<code>instance</code>后，选择其它行的调整策略。</p>
+<ul>
+<li><p>选择初始行策略</p>
+<blockquote>
+<p>合法化是在全局布局过后的步骤，应尽可能的减少相关单元的移动，且尽可能地保证单元移动后和移动前地位置相近，因此最好是在该单元所在行的附近行进行移动</p>
+</blockquote>
+<p>1、加上<code>_row_height</code>后做除法</p>
+</li>
+</ul>
+<figure class="highlight gcode"><table><tr><td class="code"><pre><code class="hljs gcode">auto row_idx = i<span class="hljs-symbol">nt32</span>_t<span class="hljs-comment">((inst_shape.get_center()</span>.get_y<span class="hljs-comment">()</span>+float_t<span class="hljs-comment">(_row_height/2)</span>)/_row_height);<br><span class="hljs-keyword">if</span><span class="hljs-comment">(inst_shape.get_ll_y()</span> <span class="hljs-meta">%</span> _row_height == <span class="hljs-number">0</span>)&#123;<br>  row_idx -= <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>​        2、直接使用<code>y</code>坐标与<code>_row_height</code>做整数相除</p>
+<figure class="highlight abnf"><table><tr><td class="code"><pre><code class="hljs abnf">auto row_idx <span class="hljs-operator">=</span> inst_shape.get_center().get_y()/_row_height<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>换行策略</li>
+</ul>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><code class="hljs kotlin"><span class="hljs-keyword">if</span>(cost == INT32_MAX)&#123;<br>  <span class="hljs-comment">// 更新row_idx的策略</span><br>  auto i = <span class="hljs-number">1</span>;<br>  <span class="hljs-keyword">while</span>(cost == INT32_MAX)&#123;<br>    <span class="hljs-comment">// 使用向上向下的扫描线完成</span><br>    <span class="hljs-keyword">if</span>(row_idx + i &gt;= _database._lg_layout-&gt;get_row_num() &amp;&amp; row_idx - i &lt; <span class="hljs-number">0</span>)&#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br>    <span class="hljs-keyword">if</span>(row_idx + i &lt; _database._lg_layout-&gt;get_row_num())&#123;<br>      cost = placeRow(inst, row_idx + i, <span class="hljs-literal">false</span>);<br>      <span class="hljs-keyword">if</span>(cost != INT32_MAX)<span class="hljs-keyword">break</span>;<br>    &#125;<br>    <span class="hljs-keyword">if</span>(row_idx - i &gt;= <span class="hljs-number">0</span>)&#123;<br>      cost = placeRow(inst, row_idx - i, <span class="hljs-literal">false</span>);<br>      <span class="hljs-keyword">if</span>(cost != INT32_MAX)<span class="hljs-keyword">break</span>;<br>    &#125;<br>    i += <span class="hljs-number">1</span>;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="四、结果"><a href="#四、结果" class="headerlink" title="四、结果"></a>四、结果</h3><ul>
+<li>使用原始的<code>Abacus</code>算法</li>
+</ul>
+<img src="/2023/09/10/iEDA-test/image-20230825163939716.png" class="" title="image-20230825163939716">
+<ul>
+<li>初始行策略使用：加上<code>_row_height</code>后做除法</li>
+</ul>
+<img src="/2023/09/10/iEDA-test/image-20230825164152609.png" class="" title="image-20230825164152609">
+<ul>
+<li>初始行策略使用：直接使用<code>y</code>坐标与<code>_row_height</code>做整数相除</li>
+</ul>
+<img src="/2023/09/10/iEDA-test/image-20230825164459060.png" class="" title="image-20230825164459060">
+<ul>
+<li>使用手册上<code>Tetris</code>的方法</li>
+</ul>
+<img src="/2023/09/10/iEDA-test/image-20230830164032304.png" class="" title="image-20230830164032304">
+<img src="/2023/09/10/iEDA-test/image-20230830164051317.png" class="" title="image-20230830164051317">
+<ul>
+<li>对比</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">Abacus</th>
+<th style="text-align:center">1</th>
+<th style="text-align:center">2</th>
+<th style="text-align:center">Tetris</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">全局布局HPWL</td>
+<td style="text-align:center">8703921</td>
+<td style="text-align:center">8703921</td>
+<td style="text-align:center">8703921</td>
+<td style="text-align:center">8703921</td>
+</tr>
+<tr>
+<td style="text-align:center">合法化移动总Movement</td>
+<td style="text-align:center">781382</td>
+<td style="text-align:center">1410142</td>
+<td style="text-align:center">865332</td>
+<td style="text-align:center">11052260(14.144)</td>
+</tr>
+<tr>
+<td style="text-align:center">合法化运行时间</td>
+<td style="text-align:center">0.010062s</td>
+<td style="text-align:center">0.000919s</td>
+<td style="text-align:center">0.000944s</td>
+<td style="text-align:center">0.086068s</td>
+</tr>
+<tr>
+<td style="text-align:center">布局合法化HPWL</td>
+<td style="text-align:center">10798293</td>
+<td style="text-align:center">10786671</td>
+<td style="text-align:center">10749832</td>
+<td style="text-align:center">21674741（2.007）</td>
+</tr>
+<tr>
+<td style="text-align:center">详细布局HPWL</td>
+<td style="text-align:center">10069766</td>
+<td style="text-align:center">10105715</td>
+<td style="text-align:center">10070071</td>
+<td style="text-align:center">13192372</td>
+</tr>
+<tr>
+<td style="text-align:center">Average Congestion of Edges</td>
+<td style="text-align:center">0.728164</td>
+<td style="text-align:center">0.718681</td>
+<td style="text-align:center">0.713207</td>
+<td style="text-align:center">0.713207</td>
+</tr>
+<tr>
+<td style="text-align:center">Total Overflow</td>
+<td style="text-align:center">10.000000</td>
+<td style="text-align:center">10.000000</td>
+<td style="text-align:center">10.000000</td>
+<td style="text-align:center">10.000000</td>
+</tr>
+<tr>
+<td style="text-align:center">Maximal Overflow</td>
+<td style="text-align:center">2.000000</td>
+<td style="text-align:center">2.000000</td>
+<td style="text-align:center">2.000000</td>
+<td style="text-align:center">2.000000</td>
+</tr>
+<tr>
+<td style="text-align:center">Peak BinDensity</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">Total HPWL</td>
+<td style="text-align:center">10069766</td>
+<td style="text-align:center">10105715</td>
+<td style="text-align:center">10070071</td>
+<td style="text-align:center">13192372</td>
+</tr>
+<tr>
+<td style="text-align:center">Total STWL</td>
+<td style="text-align:center">10862347</td>
+<td style="text-align:center">10863122</td>
+<td style="text-align:center">10864139</td>
+<td style="text-align:center">14100332</td>
+</tr>
+<tr>
+<td style="text-align:center">Max STWL</td>
+<td style="text-align:center">437405</td>
+<td style="text-align:center">442445</td>
+<td style="text-align:center">460685</td>
+<td style="text-align:center">518305</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>结果分析</strong></p>
+<ul>
+<li><p>将<code>Abacus</code>换成<code>Tetris</code>后，在同样的全局布局的版图中</p>
+<ul>
+<li><p><code>Movement</code>会增加</p>
+<p>因为在<code>Abacus</code>中计算的是每一个单元在所有行中的最小<code>cost</code>，而<code>Tetris</code>中则是计算的是周围行内，会存在差异性，这样的差异性在<strong>较为密集</strong>的全局布局中体现更为明显。</p>
+</li>
+<li><p>合法化运行时间会减少</p>
+<p>很显然，<code>Abacus</code>算法能够降低<code>Movement</code>就是以牺牲时间复杂度作为代价的，每一次<code>instance</code>的放置，平摊下来都会多出<code>_row_nums-1</code>轮次</p>
+</li>
+<li><p>布局合法化<code>HPWL</code>存在不确定性</p>
+<p>在实验中表现出来的是减少的特性，但实际上是表现出的不确定性，因为<code>Abacus</code>算法中的<code>cost</code>仅仅是以当前能够移动的最少的<code>x</code>和<code>y</code>的总和作为基准，并没有将线长给加进去，所以对于线长来说使用<code>Abacus</code>算法仅仅是一个贪心策略，不一定能够达到全局最优的效果</p>
+</li>
+</ul>
+</li>
+<li><p>个人感觉<code>Abacus</code>算法还是有点暴力</p>
+</li>
+</ul>
+<h3 id="PS：在重新复盘Tetris算法过后"><a href="#PS：在重新复盘Tetris算法过后" class="headerlink" title="PS：在重新复盘Tetris算法过后"></a>PS：在重新复盘Tetris算法过后</h3><p>最开始并没有完全理解要求完成的任务所描述的<code>Tetris</code>算法，仅仅是在<code>Abacus</code>的基础上置换了一个选择初始行和换行的策略，所以在最开始的代码当中调用的依然是原始的<code>placeRow</code>函数，在这个函数中的操作依然选择的是距离当前<code>instance</code>当中最近的<code>internel</code>，所以能够达到在时间减小的情况之下能够使得<code>HPWL</code>也减小的情况，这样的结果显然是存在偶然性的，因为找到的解都不一定都是最优解，与全局布局的结果有关。</p>
+<p>当使用手册上描述的<code>Tetris</code>算法后，最终运行期间的<code>Movement</code>变为原来的14倍多，而<code>HPWL</code>也是原来的2倍左右。</p>
+]]></content>
+      <categories>
+        <category>算法实践</category>
+      </categories>
+      <tags>
+        <tag>EDA</tag>
+        <tag>布局</tag>
+        <tag>iEDA</tag>
+        <tag>开源项目</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>常见的排序算法</title>
     <url>/2024/02/21/sort-algrithon/</url>
     <content><![CDATA[<h2 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h2><blockquote>
@@ -1957,6 +4258,192 @@
       <tags>
         <tag>算法</tag>
         <tag>数学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>集成电路静态时序分析学习笔记</title>
+    <url>/2023/08/26/static-timing-analysis/</url>
+    <content><![CDATA[<h2 id="第一章-引论"><a href="#第一章-引论" class="headerlink" title="第一章 引论"></a>第一章 引论</h2><blockquote>
+<p>集成电路：在一块很小的硅单晶片上，利用半导体工艺制作出许多二极管、晶体管以及电阻、电容等，并连接成能完成特定电子技术功能的电子电路。</p>
+</blockquote>
+<h3 id="静态时序分析技术"><a href="#静态时序分析技术" class="headerlink" title="静态时序分析技术"></a>静态时序分析技术</h3><p>静态时序分析既要检验门级电路的最大延迟、以保证电路在指定的频率下能够满足建立时间的要求，同时要检验门级电路的最小延迟、以满足保持时间的需求。</p>
+<p><strong>静态时序分析优缺点</strong></p>
+<ul>
+<li>优点<ul>
+<li>分析执行速度快</li>
+<li>不需要测试向量</li>
+<li>对于有时序路径的时序，测试覆盖率可以近乎达到100%</li>
+<li>能够完成动态仿真所不能实现的复杂分析</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>不能验证设计的功能</li>
+<li>智能验证同步时序电路的时序特性</li>
+<li>不能自动识别设计中的特殊路基</li>
+</ul>
+</li>
+</ul>
+<h2 id="第二章-静态时序分析的基础知识"><a href="#第二章-静态时序分析的基础知识" class="headerlink" title="第二章 静态时序分析的基础知识"></a>第二章 静态时序分析的基础知识</h2><h3 id="逻辑门单元"><a href="#逻辑门单元" class="headerlink" title="逻辑门单元"></a>逻辑门单元</h3><img src="/2023/08/26/static-timing-analysis/image-20230810165634110.png" class="" title="image-20230810165634110">
+<p>反相器：根据输入数据的逻辑电平进行逻辑取反的求值运算，并通过输出导出求值结果。</p>
+<p>逻辑门延时：逻辑单元自身逻辑求值的时间。信号线延时：逻辑信号从逻辑门单元的输出端口开始在互连线上传播到下一级逻辑输入端口的延时。</p>
+<h3 id="门单元的时序计算参数"><a href="#门单元的时序计算参数" class="headerlink" title="门单元的时序计算参数"></a>门单元的时序计算参数</h3><p>组合逻辑门单元相关的时序参数主要包括信号转换延时和逻辑门延时</p>
+<p><strong>1、信号转换延时</strong></p>
+<blockquote>
+<p>输入端口或输出端口的信号电平由高到低或由低到高所需要的时间即为信号转换延时。</p>
+</blockquote>
+<p>可以调整上升沿和下降沿的阈值，来设置不同的上拉跨度和下降跨度</p>
+<p><strong>2、逻辑门延时</strong></p>
+<blockquote>
+<p>通过由晶体管组成的逻辑门可以使高、低电平输入信号进行逻辑求值并产生对应的高电平或者低电平信号输出。</p>
+</blockquote>
+<h3 id="时序单元相关约束"><a href="#时序单元相关约束" class="headerlink" title="时序单元相关约束"></a>时序单元相关约束</h3><p>时序单元相关约束信息包括：建立时间、保持时间、恢复时间、移除时间以及最小脉冲宽度</p>
+<p><strong>1、建立时间</strong></p>
+<p>在时钟信号到来之前需要保持的时间，一般是以50%为间隔</p>
+<img src="/2023/08/26/static-timing-analysis/image-20230811144505780.png" class="" title="image-20230811144505780">
+<p><strong>2、保持时间</strong></p>
+<p>时序单元要实现正确的逻辑功能，信号在时钟沿有效后必须保持的最小时间长度。</p>
+<p><strong>3、恢复时间</strong></p>
+<p>保证单元正常的逻辑功能，要求低电平复位信号或者高电平清零信号在时钟有效沿之前保持的最小时间长度。</p>
+<p><strong>4、移除时间</strong></p>
+<p>保证单元正确的逻辑功能，要求低电平复位信号或者高电平清零信号在时钟有效沿之后继续保持有效的最小时间长度。</p>
+<p><strong>5、最小脉冲宽度</strong></p>
+<p>脉冲波形的开始到结束之间的最小时间间隔。</p>
+<h3 id="时钟特性"><a href="#时钟特性" class="headerlink" title="时钟特性"></a>时钟特性</h3><blockquote>
+<p>时钟的时序特性</p>
+<p>时钟周期：时钟频率的倒数</p>
+<p>时钟占空比：时钟信号高电平在一个周期之内所占的时间比率</p>
+<p>时钟转换时间：时钟信号的电压从标准供电电源电压的10-90的时间间隔</p>
+<p>时钟延迟：时钟延迟是指时钟信号从时钟源输出端口到达时序单元时钟输入端口所需要的传播时间</p>
+<p>时钟偏斜</p>
+<p>时钟抖动</p>
+</blockquote>
+<h3 id="时序弧"><a href="#时序弧" class="headerlink" title="时序弧"></a>时序弧</h3><p>用于表达时序的一种数据</p>
+<blockquote>
+<p>静态时序分析是基于时序弧数据的时序分析。</p>
+<p>时序弧的信息一般分为连线延时和单元延时，单元延时中的时序弧分为基本时序弧和约束时序弧</p>
+</blockquote>
+<h3 id="PVT环境"><a href="#PVT环境" class="headerlink" title="PVT环境"></a>PVT环境</h3><p>工艺、工作电压、工作温度等参数设置的组合简称为PVT</p>
+<p>1、TYP（Typical）工艺<br>包括典型的工艺，典型的工艺温度、典型的有效电源电压</p>
+<p>2、BCF（Best-Case Fast）</p>
+<p>包括最快的工艺、最低的工艺温度、最高的有效电源电压</p>
+<p>3、WCS（Worst-Case Show）</p>
+<p>包括最慢的工艺、最高的工艺温度、最低的有效电源电压</p>
+<h3 id="时序计算单位"><a href="#时序计算单位" class="headerlink" title="时序计算单位"></a>时序计算单位</h3><p>基于温度、电压、电流、电阻、电容负载和时间等不同类型的变量银子进行计算</p>
+<h2 id="第三章-单元库时序模型"><a href="#第三章-单元库时序模型" class="headerlink" title="第三章 单元库时序模型"></a>第三章 单元库时序模型</h2><h3 id="基本时序模型简介"><a href="#基本时序模型简介" class="headerlink" title="基本时序模型简介"></a>基本时序模型简介</h3><p><strong>快速时序模型</strong></p>
+<blockquote>
+<p>通过时序信息库对应单元的时序弧信息，把需要建模的时序路径的时序弧近似为某些单元的时序弧组合</p>
+</blockquote>
+<p><strong>接口逻辑模型</strong></p>
+<p>使用一种结构化的方法，将原始电路简化为只包含接口逻辑的一个小电路。</p>
+<p><strong>抽取时序模型</strong></p>
+<p>从一个模块的门级网表中抽取模块的时序信息，可以隐藏单元的内部实现细节，有利于保护知识产权。</p>
+<h3 id="Synopsys工艺库模型"><a href="#Synopsys工艺库模型" class="headerlink" title="Synopsys工艺库模型"></a>Synopsys工艺库模型</h3><p>线性延时模型：通过线性方程来计算单元的门延时和输出端转换延时</p>
+<p>非线性延时模型：由驱动模型和接受模型组成</p>
+<p>复合电流源延时模型：指定输入信号转换时间和逻辑门的输出负载值，通过电路仿真模拟出逻辑门的延时和输出转换时间</p>
+<h3 id="延时计算模型"><a href="#延时计算模型" class="headerlink" title="延时计算模型"></a>延时计算模型</h3><p>1、CMOS通用延时计算模型</p>
+<p>逻辑门固有的本征延时、输入信号转换延时、信号连线延时、输出信号转换延时</p>
+<p>2、CMOS非线性延时计算模型</p>
+<p>逻辑门延时、信号互连线连线延时</p>
+<p>由输入信号转换时间与输出负载作为索引，时序分析时以一个二维查找表的形式来计算延时。</p>
+<p>计算过程：查找表中索引参数的某个采样点延时可直接查表得出，再通过插值算法来计算延时。</p>
+<h4 id="互连线计算模型"><a href="#互连线计算模型" class="headerlink" title="互连线计算模型"></a>互连线计算模型</h4><p>芯片内的互连线大致可以分为以下3种</p>
+<p>1、短线，局部互连线</p>
+<p>2、中长线，模块间互连线</p>
+<p>3、长线，全局互连线</p>
+<ul>
+<li><p>集总C模型</p>
+<p>当导线的电阻部分很小且驱动单元的转换频率在较低范围内，就可以很合理地只考虑导线地电容部分，并把分布的电容集总为单个电容。</p>
+</li>
+<li><p>集总RC模型</p>
+<p>当导线长度超过几微米后会有明显地电阻，因此采用电阻电容模型。</p>
+</li>
+<li><p>分布RC模型</p>
+</li>
+<li><p>传输线模型</p>
+</li>
+</ul>
+<h4 id="线负载时序模型"><a href="#线负载时序模型" class="headerlink" title="线负载时序模型"></a>线负载时序模型</h4><h3 id="引脚电容值计算"><a href="#引脚电容值计算" class="headerlink" title="引脚电容值计算"></a>引脚电容值计算</h3><p>每一个单元的时序模型除了延迟信息外，还包含输入引脚的电容信息</p>
+<ul>
+<li>方法一、对流入输入引脚的电流进行积分</li>
+<li>方法二、基于输出转换时间结果，通过查找表的方法来确定对应的输出电容负载</li>
+</ul>
+<h3 id="功耗模型计算"><a href="#功耗模型计算" class="headerlink" title="功耗模型计算"></a>功耗模型计算</h3><blockquote>
+<p>包括开关功耗，短路电流功耗，哑阈漏流功耗，开关功耗和短路电流功耗组成动态功耗</p>
+</blockquote>
+<p>动态功耗是单元在转换过程中电源电流的积分</p>
+<p>静态功耗（哑阈漏流）计算方法，设置单元的输入信号为固定电平，然后对单元的哑阈漏流进行瞬态分析，得到哑阈漏流功耗值。</p>
+<h3 id="时序信息建模基本方法"><a href="#时序信息建模基本方法" class="headerlink" title="时序信息建模基本方法"></a>时序信息建模基本方法</h3><blockquote>
+<p>考虑两方面的延迟信息</p>
+<p>1、输入端口到输出端口的延迟信息，即时序弧</p>
+<p>2、输入端口之间存在的时序约束信息，建立或保持时间约束</p>
+</blockquote>
+<h2 id="第四章、时序信息库文件"><a href="#第四章、时序信息库文件" class="headerlink" title="第四章、时序信息库文件"></a>第四章、时序信息库文件</h2><blockquote>
+<p>时序信息库文件中记录着逻辑门延时、输出信号转换延时和功耗等信息，这些信息在用于时序分析时被调用，来计算延时值和功耗值。时序文件的内容主要由组、属性、和因子组成。</p>
+</blockquote>
+<p>这一章是对一些库文件的介绍</p>
+<h2 id="第五章、静态时序分析的基本方法"><a href="#第五章、静态时序分析的基本方法" class="headerlink" title="第五章、静态时序分析的基本方法"></a>第五章、静态时序分析的基本方法</h2><h3 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h3><p>从逻辑电路图转化为时序图，需要标记中间的逻辑节点，生成中间结果后，再绘制时序图。</p>
+<h3 id="时序分析策略"><a href="#时序分析策略" class="headerlink" title="时序分析策略"></a>时序分析策略</h3><blockquote>
+<p>基于路径的时序分析策略和基于模块的时序分析策略</p>
+</blockquote>
+<p>1、基于路径的时序分析策略：基于时序图寻找从起点到终点的所有路径并进行时序分析</p>
+<p>2、基于模块的时序分析策略：基于图的时序分析策略，基于时序图找到从起点到终点的所有路径，在进行时序分析时只基于该路径下延迟最严重的结点进行计算。</p>
+<h3 id="时序路径延时计算方法"><a href="#时序路径延时计算方法" class="headerlink" title="时序路径延时计算方法"></a>时序路径延时计算方法</h3><p>1、组合逻辑之间路径延时计算方法</p>
+<p>把逻辑门延时和信号线延时逐一相加来实现</p>
+<p>2、时序逻辑之间路径延时计算方法</p>
+<p>通过逻辑路径的逻辑门延时和信号线延时逐一相加来实现</p>
+<h3 id="时序路径的分析方法"><a href="#时序路径的分析方法" class="headerlink" title="时序路径的分析方法"></a>时序路径的分析方法</h3><p>对建立时间和保持时间进行分析</p>
+<p>1、建立时间分析：在时钟捕获信号有效沿到来前，数据信号必须提前达到稳定状态的时间</p>
+<img src="/2023/08/26/static-timing-analysis/image-20230817160931612.png" class="" title="image-20230817160931612">
+<p>2、保持时间分析：为保证时序单元对数据读取正确，数据在时钟有效沿到来之后仍需要保持稳定的时间</p>
+<img src="/2023/08/26/static-timing-analysis/image-20230817160942849.png" class="" title="image-20230817160942849">
+<h2 id="第六章、时序约束"><a href="#第六章、时序约束" class="headerlink" title="第六章、时序约束"></a>第六章、时序约束</h2><h3 id="时钟约束"><a href="#时钟约束" class="headerlink" title="时钟约束"></a>时钟约束</h3><ul>
+<li><p>创建时钟</p>
+<p>时钟源点：根据情况定义为设计中的一个端口</p>
+<p>时钟周期：时钟振荡周期，频率的倒数</p>
+<p>时钟占空比：默认百分之50，高低电平在一个周期中的占比</p>
+<p>时钟转换延时：高低电平之间进行切换所需要的延时</p>
+<p>时钟不确定性：抖动、偏斜等</p>
+<p>时钟延迟：从时钟源输出端到达时序单元时钟输入端传播延时。</p>
+</li>
+<li><p>生成时钟</p>
+<blockquote>
+<p>基于主时钟并通过相关逻辑转换后，在相位、频率、占空比等方面和主时钟有一定变化的分支时钟。</p>
+</blockquote>
+</li>
+<li><p>虚拟时钟</p>
+</li>
+<li><p>最小时钟脉宽</p>
+</li>
+</ul>
+<h3 id="I-O延时约束"><a href="#I-O延时约束" class="headerlink" title="I/O延时约束"></a>I/O延时约束</h3><ul>
+<li>设置输入延时：在一个有效时钟周期内，外部逻辑的输出数据到达设计输入端口所占用的延时</li>
+<li>设置输出延时：在一个有效时钟周期内，输出端口数据到外部逻辑所占用的延时</li>
+</ul>
+<h3 id="I-O环境建模约束"><a href="#I-O环境建模约束" class="headerlink" title="I/O环境建模约束"></a>I/O环境建模约束</h3><blockquote>
+<p>主要包括：</p>
+<p>输入驱动建模</p>
+<p>输出负载建模</p>
+</blockquote>
+<h3 id="时序例外"><a href="#时序例外" class="headerlink" title="时序例外"></a>时序例外</h3><p>1、多周期路径设置</p>
+<p>2、伪路径设置：某些时序路径在某特定的工作状态下不工作，要求非常宽松，不会有真正的工作信号通过</p>
+<p>3、最大演示和最小延时设置</p>
+<h3 id="恒定状态约束"><a href="#恒定状态约束" class="headerlink" title="恒定状态约束"></a>恒定状态约束</h3><h3 id="屏蔽时序约束"><a href="#屏蔽时序约束" class="headerlink" title="屏蔽时序约束"></a>屏蔽时序约束</h3><blockquote>
+<p>针对单元具体端口内部的时序弧并且进行屏蔽，等价于移除该单元内部的时序弧，时序分析时，与该时序弧相关的所有时序路径都被移除</p>
+</blockquote>
+<h3 id="时序设计规则约束"><a href="#时序设计规则约束" class="headerlink" title="时序设计规则约束"></a>时序设计规则约束</h3><p>1、最大转换时间</p>
+<p>2、最大电容负载</p>
+<p>3、最大扇出</p>
+<blockquote>
+<p>扇出指逻辑单元输出端直接连接的下级逻辑单元输入端的个数。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>EDA</tag>
+        <tag>集成电路</tag>
+        <tag>静态时序分析</tag>
       </tags>
   </entry>
   <entry>
