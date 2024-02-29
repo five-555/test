@@ -33,7 +33,7 @@ code_word_wrap: false
 # formal:
 #   icon: link || the description || color
 social:
-  fab fa-github: https://github.com/five-555 || Github || '#24292e'
+  fab fa-github: https://gitee.com/wzd520 || Gitee || '#24292e'
   fas fa-envelope: mailto:wuzdon@qq.com || Email || '#4a7dbe'
 
 # Image (圖片設置)
@@ -237,7 +237,7 @@ aside:
       enable: true
       icon: fab fa-github
       text: Follow Me
-      link: https://github.com/five-555
+      link: https://gitee.com/wzd520
   card_announcement:
     enable: true
     content: This is my Blog
