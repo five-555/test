@@ -7,6 +7,44 @@ cover:
 top_img:
 ---
 
+
+
+印象比较深的问题
+
+1、对哈希表的扫描使用回调函数
+
+2、container_of的宏定义，从结构体中的对象找到这个结构体的地址
+
+3、渐进式的哈希存储理解更深刻
+
+改进
+
+功能上的该进，完善命令
+
+性能上的改进，智能指针管理内存，循环引用的问题，使用static
+
+
+
+## 实现的命令
+
+```
+// hashtable
+set key value	向哈希表中插入键值对
+get key			从哈希表中查找键对应的值
+del key			从哈希表中删除键
+keys			打印出哈希表中所有的keys
+
+// zset
+zadd key score name		向键为key中，插入name，score
+zscore key name			按照key和name查找score
+zrem					
+zscore
+zquery
+
+```
+
+
+
 ## Socket编程相关语法
 
 ### 服务端
@@ -440,6 +478,10 @@ bool ZSet::zset_add(const char *name, size_t len, double score) {
 ```
 
 
+
+事件循环和时间管理
+
+使用链表来控制连接的顺序，将conn加入到队列当中，每进入一个则设置好时间
 
 
 
