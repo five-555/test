@@ -1,0 +1,764 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>分布式系统学习笔记 | Zdon</title><meta name="author" content="Zdon"><meta name="copyright" content="Zdon"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="概述分布式系统的定义 分布式系统是若干独立计算机的集合，这些计算机对于用户来说，像是单个相关系统   重要特性 各种计算机之间的差别以及计算机之间的通信方式的差别对用户是隐藏的 用户看不到分布式系统的内部组织结构 用户和应用程序无论在何时何地都能够以一种一致和同意的方式与分布式系统进行交互 分布式系统的拓展或者升级应该时相对比较容易的    分布式系统的目标 使资源可访问（资源共享） 透明性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式系统学习笔记">
+<meta property="og:url" content="http://zdon.fun/2023/03/02/distributed-system/">
+<meta property="og:site_name" content="Zdon">
+<meta property="og:description" content="概述分布式系统的定义 分布式系统是若干独立计算机的集合，这些计算机对于用户来说，像是单个相关系统   重要特性 各种计算机之间的差别以及计算机之间的通信方式的差别对用户是隐藏的 用户看不到分布式系统的内部组织结构 用户和应用程序无论在何时何地都能够以一种一致和同意的方式与分布式系统进行交互 分布式系统的拓展或者升级应该时相对比较容易的    分布式系统的目标 使资源可访问（资源共享） 透明性">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zdon.fun/img/default_cover05.jpg">
+<meta property="article:published_time" content="2023-03-02T08:59:29.000Z">
+<meta property="article:modified_time" content="2024-03-02T09:02:11.557Z">
+<meta property="article:author" content="Zdon">
+<meta property="article:tag" content="分布式系统">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zdon.fun/img/default_cover05.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://zdon.fun/2023/03/02/distributed-system/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '分布式系统学习笔记',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-03-02 17:02:11'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">47</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/default_cover05.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Zdon"><span class="site-name">Zdon</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">分布式系统学习笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-02T08:59:29.000Z" title="发表于 2023-03-02 16:59:29">2023-03-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-02T09:02:11.557Z" title="更新于 2024-03-02 17:02:11">2024-03-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="分布式系统学习笔记"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="分布式系统的定义"><a href="#分布式系统的定义" class="headerlink" title="分布式系统的定义"></a>分布式系统的定义</h3><blockquote>
+<p>分布式系统是若干独立计算机的集合，这些计算机对于用户来说，像是单个相关系统</p>
+</blockquote>
+<ul>
+<li>重要特性<ul>
+<li>各种计算机之间的差别以及计算机之间的通信方式的差别对用户是隐藏的</li>
+<li>用户看不到分布式系统的内部组织结构</li>
+<li>用户和应用程序无论在何时何地都能够以一种一致和同意的方式与分布式系统进行交互</li>
+<li>分布式系统的拓展或者升级应该时相对比较容易的</li>
+</ul>
+</li>
+</ul>
+<h3 id="分布式系统的目标"><a href="#分布式系统的目标" class="headerlink" title="分布式系统的目标"></a>分布式系统的目标</h3><ul>
+<li>使资源可访问（资源共享）</li>
+<li>透明性</li>
+</ul>
+<img src="/2023/03/02/distributed-system/image-20221126155708747.png" class="" title="image-20221126155708747">
+<img src="/2023/03/02/distributed-system/image-20221126155754925.png" class="" title="image-20221126155754925">
+<ul>
+<li><p>开放性（openess）</p>
+<blockquote>
+<p>根据一系列准则来提供服务，这些准则描述了所提供服务的语义和语法。</p>
+<p>在分布式系统中，服务通常时通过接口指定的，接口时通过接口定义语言来描述的。</p>
+<p>开放的分布式系统应该时可扩展的。</p>
+</blockquote>
+<ul>
+<li>完整性：完成接口实现不可少的内容都已经规定好了</li>
+<li>中立性：开发人员能够添加针对特定实现的细节</li>
+<li>互操作性：来自不同厂商的系统或组件的两种实现能够在何种程度上共存并且协同工作</li>
+<li>可移植性：如果分布式系统A开发了某个应用，并且另一个分布式系统B与A具有相同的接口，该程序在不做修改在B上执行的可行程度</li>
+</ul>
+</li>
+<li><p>可扩展性（scale in distributed system）scalablity</p>
+<blockquote>
+<p>可扩展性通常可以从三个方面来度量，规模上可扩展（size）、地域上可扩展（geographical）、管理上可扩展（administrative）</p>
+</blockquote>
+<ul>
+<li><p>规模上可拓展存在的问题</p>
+<ul>
+<li>受集中式的服务、数据以及算法限制</li>
+<li>集中式算法与分布式算法的对比</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs">分布式算法不同特性<br>1、没有任何计算机拥有关于系统状态的完整信息<br>2、计算机只根据本地信息做出决策<br>3、某台计算机的故障不会使算法奔溃<br>4、没有全局性时钟，来统一设定时间<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>地域上可扩展存在的问题</p>
+<ul>
+<li>基于同步的通信，在请求服务的一方得到回应之前都是处于阻塞状态，在局域网中速度快，广域网中很慢</li>
+<li>广域网中的通信是不可靠的，都是点对点的</li>
+<li>如何对一个跨越多个独立管理域的分布式系统进行拓展</li>
+</ul>
+</li>
+<li><p>管理上可扩展存在的问题</p>
+<ul>
+<li>资源使用（以及付费）、管理和安全问题上，不同的管理域之间有着相互冲突的问题</li>
+</ul>
+</li>
+<li><p>拓展技术</p>
+<blockquote>
+<p>拓展技术基本上只有三种技术：隐藏通信等待时间、分布技术以及复制技术</p>
+</blockquote>
+<ul>
+<li>隐藏通信等待时间：尽量避免远程服务对请求的响应，实质上是异步通信。也可以将服务器上的部分任务交由客户端完成。</li>
+<li>分布技术： 把某个组件分割成多个部分，再将他们分散到系统中，如DNS。</li>
+<li>复制技术：会产生一致性问题。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="分布式系统的类型"><a href="#分布式系统的类型" class="headerlink" title="分布式系统的类型"></a>分布式系统的类型</h3><blockquote>
+<p>分布式计算系统、分布式信息系统、分布式嵌入系统</p>
+</blockquote>
+<ul>
+<li><p>分布式计算系统（高性能的分布式系统）</p>
+<ul>
+<li><p>集群计算系统</p>
+<blockquote>
+<p>同构性：集群中的计算机大多数是相同的。相同的操作系统，同一网络。</p>
+</blockquote>
+<ul>
+<li>单个主节点，多个从节点，主节点可访问控制群（从节点）</li>
+<li>主节点：负责对特定并行程序的结点定位，维护已经提交的工作队列，为系统用户提供接口</li>
+</ul>
+<img src="/2023/03/02/distributed-system/image-20221130091729650.png" class="" title="image-20221130091729650">
+</li>
+<li><p>网格计算系统</p>
+<blockquote>
+<p>具有高度的异构性：硬件，操作系统，网络，管理域和安全策略都不尽相同</p>
+</blockquote>
+<ul>
+<li>解决异构性的方式：虚拟组织</li>
+<li>光纤层：在特定站点提供对局部资源的接口</li>
+<li>连接层：由通信协议组成，用于支持网格事务处理</li>
+<li>资源层：负责管理单个资源</li>
+<li>汇集层：负责处理对多个资源的访问</li>
+<li>应用层：由应用程序组成，在虚拟组织中运行</li>
+</ul>
+<img src="/2023/03/02/distributed-system/image-20221130092344725.png" class="" title="image-20221130092344725">
+</li>
+</ul>
+</li>
+<li><p>分布式信息系统</p>
+</li>
+<li><p>分布式普适系统</p>
+</li>
+</ul>
+<h2 id="体系结构"><a href="#体系结构" class="headerlink" title="体系结构"></a>体系结构</h2><h3 id="体系结构的样式"><a href="#体系结构的样式" class="headerlink" title="体系结构的样式"></a>体系结构的样式</h3><blockquote>
+<p>体系结构样式是根据组件，组件之间互相连接方式、组件之间的数据交换以及这些元素如何集成到一个系统中来定义的。</p>
+</blockquote>
+<ul>
+<li><p>分层体系结构</p>
+</li>
+<li><p>基于对象的体系结构</p>
+<ul>
+<li>每个对象对应一个组件，组件通过远程过程调用机制来连接</li>
+</ul>
+<img src="/2023/03/02/distributed-system/image-20221130094553260.png" class="" title="image-20221130094553260">
+</li>
+<li><p>以数据为中心的体系结构</p>
+<ul>
+<li>进程通信需要通过一个公用仓库</li>
+</ul>
+</li>
+<li><p>基于事件的体系结构</p>
+<ul>
+<li>进程发布事件，中间件确保订阅了这些事件的进程接收它们。去耦合强。</li>
+</ul>
+<img src="/2023/03/02/distributed-system/image-20221130101949954.png" class="" title="image-20221130101949954">
+</li>
+</ul>
+<h3 id="系统体系结构"><a href="#系统体系结构" class="headerlink" title="系统体系结构"></a>系统体系结构</h3><ul>
+<li><p>集中式体系结构（客户—服务器）</p>
+<ul>
+<li><p>应用分层</p>
+<ul>
+<li>应用层：提供与用户交互的接口</li>
+<li>处理层：处理用户的请求，实现与数据的交互</li>
+<li>数据层：存储数据，如，文件系统，数据库</li>
+</ul>
+</li>
+<li><p>多层体系结构</p>
+<ul>
+<li>两层体系结构：客户机和服务器<ul>
+<li>根据将客户机和服务器实现的不同功能可以分为以下5种，d和e较为普遍</li>
+</ul>
+</li>
+</ul>
+<img src="/2023/03/02/distributed-system/image-20221130101048848.png" class="" title="image-20221130101048848">
+<ul>
+<li><p>三层体系结构：用户接口、应用程序服务器、数据库服务器</p>
+<img src="/2023/03/02/distributed-system/image-20221130102217372.png" class="" title="image-20221130102217372">
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>非集中式体系结构（回头听一听课）点对点</p>
+<p>垂直分布性（分层）：按逻辑把不同组件放在不同机器上</p>
+<p>水平分布性：客户和服务器可能在物理上被分割成逻辑上相等的几个部分，但每个部分都操作在整个数据集中自己共享的部分，从而实现负载均衡。例如点对点系统</p>
+<ul>
+<li><p>结构化的点对点体系结构</p>
+<ul>
+<li>Chord系统分布式哈希表（后面章节）理解加入和退出</li>
+</ul>
+<img src="/2023/03/02/distributed-system/image-20221130140722941.png" class="" title="image-20221130140722941">
+<ul>
+<li>CAN：上下文可编制网络（后面章节）</li>
+</ul>
+</li>
+<li><p>非结构化点对点体系结构</p>
+<blockquote>
+<p>主要依靠随机化算法来构造覆盖网络，每个节点维护一个邻接点列表，列表由随机的方法来构造。使用泛洪法来查找。</p>
+</blockquote>
+</li>
+<li><p>覆盖网络的拓扑管理</p>
+</li>
+<li><p>超级对等体</p>
+</li>
+</ul>
+</li>
+<li><p>混合体系结构</p>
+<blockquote>
+<p>特殊的分布式系统，将客户服务器体系结构和非集中式体系结构组合在一起</p>
+</blockquote>
+<ul>
+<li><p>边界服务器系统</p>
+</li>
+<li><p>协作分布式系统</p>
+<ul>
+<li><p>文件共享系统</p>
+<blockquote>
+<p>是一种点对点的文件下载系统，一个用户从其他用户下载文件块，知道所下载的文件块能够组装成完整的文件。一旦结点确定了从哪里可以下载文件块，下载结点将被强制为其他节点提供帮助。瓶颈期在于跟踪器。</p>
+</blockquote>
+</li>
+</ul>
+<img src="/2023/03/02/distributed-system/image-20221130143607842.png" class="" title="image-20221130143607842">
+<ul>
+<li>协作内容分布式网络Globule</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="体系结构与中间件"><a href="#体系结构与中间件" class="headerlink" title="体系结构与中间件"></a>体系结构与中间件</h3><blockquote>
+<p>中间件具有一定程度的透明性，一定程度上向应用程序隐藏了数据处理和控制的分布性</p>
+</blockquote>
+<ul>
+<li><p>中断器</p>
+<blockquote>
+<p>是一种软件结构，能中断正常的控制流，从而允许其他代码运行。</p>
+</blockquote>
+<ul>
+<li>请求级中断器：为每个副本调用invoke函数</li>
+<li>消息级中断器：协助把消息传递接口激活转移给目标对象</li>
+</ul>
+</li>
+<li><p>自适应软件常见方法（基本技术）</p>
+<ul>
+<li>要点分离</li>
+<li>计算映像：程序检查自己</li>
+<li>基于组件的设计：通过组件的不同组合来支持自适应</li>
+</ul>
+</li>
+</ul>
+<h3 id="分布式系统的自我管理"><a href="#分布式系统的自我管理" class="headerlink" title="分布式系统的自我管理"></a>分布式系统的自我管理</h3><blockquote>
+<p>以高级反馈控制系统的形式来组织分布式系统，允许自动自适应变化。称为自治计算或自主系统。</p>
+</blockquote>
+<p>自适应的多样性：自我管理、自我恢复、自我配置、自我优化</p>
+<ul>
+<li><p>反馈控制模型：通过反馈控制循环实现</p>
+<ul>
+<li>形成反馈控制循环的三个元素<ul>
+<li>系统本身需要被监视：对系统的各个方面进行测量（尺度预测组件）</li>
+<li>分析上述测量值：控制循环的核心部分，包含决定自适应的算法（反馈分析组件）</li>
+<li>其他组件</li>
+</ul>
+</li>
+</ul>
+<img src="/2023/03/02/distributed-system/image-20221130151005907.png" class="" title="image-20221130151005907">
+</li>
+</ul>
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><h3 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h3><blockquote>
+<p>就粒度而言，将每个进程细分为若干控制线程的形式更加合适，可以使构建分布式应用程序变得更加方便，并可获得更好的性能。</p>
+</blockquote>
+<ul>
+<li><p>线程简介</p>
+<blockquote>
+<p>线程上下文中一般值包含CPU上下文以及某些其他线程管理信息。</p>
+</blockquote>
+<ul>
+<li><p>非分布式系统中线程用法，好处</p>
+<ul>
+<li>多线程的系统中，线程阻塞不会造成进程阻塞</li>
+<li>在多处理系统上执行多线程程序时，可以使用并行操作技术</li>
+<li>线程之间的上下文切换小</li>
+</ul>
+</li>
+<li><p>线程的实现</p>
+<blockquote>
+<p>一般以线程包的形式提供，这种包中含有创建和销毁线程的操作。分为用户及线程和内核级线程。</p>
+</blockquote>
+<ul>
+<li>用户级线程的好处<ul>
+<li>创建和销毁线程开销小</li>
+<li>可以通过为数不多的几条指令实现线程上下文切换</li>
+</ul>
+</li>
+<li>用户及线程的缺陷<ul>
+<li>对引起阻塞的系统调用的调用将会立即阻塞该线程所属的整个进程</li>
+</ul>
+</li>
+<li>轻量级进程：使用用户及线程和内核级线程的混合形式</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>分布式系统中的线程</p>
+<ul>
+<li><p>多线程客户</p>
+<blockquote>
+<p>隐藏通信事件延迟的方法：启动通信后立即进行其他工作</p>
+</blockquote>
+<ul>
+<li>web浏览器显示HTML页面</li>
+</ul>
+</li>
+<li><p>多线程服务器</p>
+<ul>
+<li>能够保留顺序处理的思路，使用阻塞性的系统调用，并且仍能够达到并行处理的目的</li>
+</ul>
+<img src="/2023/03/02/distributed-system/image-20221201100317779.png" class="" title="image-20221201100317779">
+<p>分发器线程：读取文件操作请求</p>
+<p>工作者线程：处理请求</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="虚拟化"><a href="#虚拟化" class="headerlink" title="虚拟化"></a>虚拟化</h3><blockquote>
+<p>虚拟化的本质是拓展或替换一个现存界面来模仿另一个系统的行为。</p>
+</blockquote>
+<ul>
+<li><p>虚拟化在分布式系统中的作用</p>
+<ul>
+<li>旧有软件的维护，跟不上下层平台更新的步伐，硬件更新速度太快，需要软件兼容。通过移植旧有软件的底层接口到新平台，虚拟化可以帮助解决这个问题</li>
+<li>虚拟化便于减少服务器和硬件机器的种类和数目，提供了高度的移植性和灵活性</li>
+</ul>
+</li>
+<li><p>虚拟机体系结构</p>
+<figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs gauss">在四个不同层次提供四个不同界面<br>由机器指令组成，可由任何程序激起的硬件软件界面<br>由机器指令组成，只有特权程序才可激起的硬件软件界面<br>由操作系统提供的系统调用（<span class="hljs-keyword">system</span> <span class="hljs-keyword">call</span>）组成的界面<br>由库调用组成的界面，通常形成了所谓的应用程序编程接口（API）<br></code></pre></td></tr></table></figure>
+<img src="/2023/03/02/distributed-system/image-20221201101403269.png" class="" title="image-20221201101403269">
+</li>
+</ul>
+<ul>
+<li><p>虚拟化的两种方式</p>
+<img src="/2023/03/02/distributed-system/image-20221201101451311.png" class="" title="image-20221201101451311">
+<ul>
+<li>构建一个运行时的系统，提供一套抽象指令集来执行程序（进程虚拟机）</li>
+<li>提供一种系统，如VMware（虚拟机监视器）</li>
+</ul>
+</li>
+</ul>
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><ul>
+<li><p>客户端软件与分布式透明性</p>
+<blockquote>
+<p>理论上来说，客户端不应该察觉到它与远程进程的通信，而服务器来说，分布常常不那么透明</p>
+</blockquote>
+<ul>
+<li><p>许多分布式系统利用客户端解决方案来实现复制透明性</p>
+<ul>
+<li>调用请求转发给每一个服务器发送副本来达到复制透明性</li>
+</ul>
+<img src="/2023/03/02/distributed-system/image-20221201110722218.png" class="" title="image-20221201110722218">
+</li>
+<li><p>故障透明性，一般是通过客户中间件完成</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h3><ul>
+<li><p>常见的设计问题</p>
+<blockquote>
+<p>服务器的组织方式：等待来自客户的请求，随后负责处理该请求，等待下一个请求</p>
+</blockquote>
+<p>服务器的不同组织结构</p>
+<ul>
+<li><p>迭代服务器：自己处理请求，并且在必要的情况下将响应返回给发出请求的客户</p>
+</li>
+<li><p>并发服务器：并不自己处理请求，而是将请求传递给某个独立线程或其他进程来处理，只用于等待请求。如：多线程服务器。</p>
+</li>
+<li><p>超级服务器：用于负责监听所有与服务关联的端口，缓解了每一个服务器都要对端口监听的浪费。</p>
+<img src="/2023/03/02/distributed-system/image-20221201111903470.png" class="" title="image-20221201111903470">
+</li>
+<li><p>状态无关服务器：不保存客户的状态信息且不将自身状态告知客户</p>
+<ul>
+<li>好处<ul>
+<li>不需要采取任何特殊措施来使得奔溃的服务器恢复，重启即可</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>状态相关服务器：一直保存客户端的信息直到显式的删除</p>
+<ul>
+<li>好处：<ul>
+<li>性能能够提升</li>
+</ul>
+</li>
+<li>缺陷：<ul>
+<li>如果服务器崩溃，就必须恢复客户端的状态表</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>服务器集群</p>
+<blockquote>
+<p>服务器集群式一组经网络连接的机器，每台机器运行一个或多个服务器</p>
+</blockquote>
+<ul>
+<li><p>常见的组织</p>
+<ul>
+<li><p>多数情况下逻辑上由三层组成</p>
+<img src="/2023/03/02/distributed-system/image-20221201151303341.png" class="" title="image-20221201151303341">
+<ul>
+<li><p>（逻辑上的）交换机：分配客户请求给服务器</p>
+<ul>
+<li>作为服务器集群的入口，提供唯一的网络地址</li>
+</ul>
+<img src="/2023/03/02/distributed-system/image-20221201152139305.png" class="" title="image-20221201152139305">
+<ul>
+<li>交换机收到tcp连接请求，将请求分发给最佳服务器，服务器发送应答信号，并嵌入交换器的IP</li>
+</ul>
+</li>
+<li><p>专用的应用/计算处理服务器：提供高性能计算能力</p>
+</li>
+<li><p>文件和数据库服务器（数据存取是瓶颈）</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>分布式服务器</p>
+<blockquote>
+<p>分布式服务器是指可动态变化的集群，它的访问点也可以变化，但对外却表现为一台强有力的单台机器。</p>
+</blockquote>
+<ul>
+<li>基本思想：可靠、高性能、稳定</li>
+<li>如何实现一个稳定访问点<ul>
+<li>使用宿主代理（宿主网络的特别的路由器）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>管理服务器集群的方法</p>
+<ul>
+<li>通用方法<ul>
+<li>把传统的单台计算机管理功能拓展到服务器集群，从远程客户登录到集群的一个节点并执行本地管理命令</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="代码迁移"><a href="#代码迁移" class="headerlink" title="代码迁移"></a>代码迁移</h3><blockquote>
+<p>传递程序，甚至传递正在执行中的程序。</p>
+</blockquote>
+<ul>
+<li><p>代码迁移方案</p>
+<blockquote>
+<p>代码迁移是以进程迁移的形式进行的，代码迁移会带来巨大的开销</p>
+</blockquote>
+<ul>
+<li><p>进行代码迁移的好处</p>
+<ul>
+<li>如果把进程由负载较重的机器上转移负载较轻的机器上，能提升系统的整体性能</li>
+<li>灵活性，如果代码可以在不同的机器之间移动，就可以动态的配置分布式系统</li>
+</ul>
+</li>
+<li><p>代码迁移模型</p>
+<p>进程包含3段：代码段（包含正在运行程序的所有指令），资源段（包含外部资源的指针），执行段（存储进程当前状态）</p>
+<ul>
+<li>弱可移动性：只传输代码段以及初始化数据<ul>
+<li>传输的程序总是从预先定义的位置开始执行。较简单</li>
+</ul>
+</li>
+<li>强可移动性：可以传输执行段<ul>
+<li>可以先停止运行中的进程，然后将它移到另一台机器上去，再从中断的位置继续执行</li>
+</ul>
+</li>
+</ul>
+<p>另一种分类方式</p>
+<ul>
+<li>发送者启动迁移：由正在执行该代码的机器启动迁移</li>
+<li>接收者启动迁移：代码迁移主动权掌握在目标机器手里</li>
+</ul>
+<img src="/2023/03/02/distributed-system/image-20221201160233164.png" class="" title="image-20221201160233164">
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="通信"><a href="#通信" class="headerlink" title="通信"></a>通信</h2><blockquote>
+<p>四个广泛使用的通信模型：远程过程调用（RPC，remote procedure call）、远程方法调用（RMI，remote method invocation）、面向消息的中间件（MOM，message-oriented middleware）、流（stream）</p>
+<p>RPC的目的在于将消息传递的大部分复杂性隐藏起来，比较适合客户-服务器应用程序。</p>
+</blockquote>
+<ul>
+<li><p>基础知识</p>
+<ul>
+<li>分层协议<ul>
+<li>OSI七层模型：略</li>
+<li>中间件协议：中间件是一种应用程序，位于应用层中</li>
+</ul>
+</li>
+<li>通信类型<ul>
+<li>持久通信：提交传输的消息一直由通信中间件存储，直到消息被传送给接收方</li>
+<li>瞬时通信：通信系统只有在发送和接受应用程序正在运行时才能存储消息</li>
+<li>异步通信（asynchronous）：发送方在提交要传输的消息后立即往下进行</li>
+<li>同步通信（synchronous）：发送方将被阻塞，直到其请求被接受</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>远程过程调用</p>
+<blockquote>
+<p>当机器A上的进程调用机器B上的进程是，A上的调用进程被挂起，而B上的被调用的进程开始执行，调用方可以通过使用参数将信息传给被调用放，然后通过传回的结果得到信息。编程人员看不到任何消息传递过程，这种方法称为远程过程调用</p>
+</blockquote>
+<p>复杂性：地址空间不同、参数和结果的传递、机器如果发生崩溃</p>
+<ul>
+<li>基本的RPC操作</li>
+</ul>
+</li>
+</ul>
+<h2 id="命名系统-Naming"><a href="#命名系统-Naming" class="headerlink" title="命名系统 - Naming"></a>命名系统 - Naming</h2><blockquote>
+<p>命名是在分布式中表示这个实体，且要访问到这个实体。</p>
+</blockquote>
+<ul>
+<li>访问点：用来实体的一种特殊实体。</li>
+<li>地址：访问点的名称。</li>
+</ul>
+<p>所以<strong>访问点</strong>就是实体的<strong>地址</strong>。</p>
+<h3 id="DHT"><a href="#DHT" class="headerlink" title="DHT"></a>DHT</h3><p>全称是Distributed Hash Tables，是P2P环境下最经典的解决方案</p>
+<h3 id="Chord"><a href="#Chord" class="headerlink" title="Chord"></a>Chord</h3><p>使用一个m位的标识符空间，把<strong>随机选择</strong>的标识符赋给结点，并把键值赋值给特定实体（任意的东西，比如文件、进程）。</p>
+<p><strong>构造Finger table算法：</strong></p>
+<p>每个Chord结点维护一个最多有m个实体的指状表(Finger table)，如果用$FT_p[i]$表示结点$p$的指状表，那么有：</p>
+<script type="math/tex; mode=display">
+FT_p[i] = succ(p+2^{(i-1)})</script><p>$-p$是当前结点$-i$是指状表的$index-succ(k)$表示k（若结点k存在）或k的下一个<strong>存在</strong>的结点，即$succ(k)&gt;=k$</p>
+<p>例：</p>
+<img src="/2023/03/02/distributed-system/image-20240302163915592.png" class="" title="image-20240302163915592">
+<p>根据$FT_p[i] = succ(p+2^{(i-1)})$公式，构造结点p=4的Finger table：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">i</th>
+<th style="text-align:center">$FT_p[i]$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">succ(4+1)=9</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">succ(4+2)=9</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">succ(4+4)=9</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">succ(4+8)=14</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">succ(4+16)=20</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>解析算法：</strong></p>
+<p>目标：从节点p开始解析key=k的结点</p>
+<p>搜索节点p的Finger table，从上依次向下搜索，如果一个结点q满足：</p>
+<script type="math/tex; mode=display">
+q=FT_p[j]<=k<FT_p[j+1]</script><p>那么就将该请求转发给结点q；</p>
+<p>如果p的Finger table第一个结点就比k还大，即：</p>
+<script type="math/tex; mode=display">
+p<k<FT_p[1]</script><p>那么就转发给$FT_p[1]$结点，此节点负责结点k，将k的地址返回给结点p。</p>
+<p><strong>例：</strong></p>
+<p>还是上面那个图</p>
+<p>从结点1开始解析k=26：</p>
+<ol>
+<li>结点1的指状表里，$FT_1[5]$=18≤26，将请求转发给18；</li>
+<li>结点18的指状表里，$FT_{18}[2]$=20≤26&lt;$FT_{18}[3]$=28，将请求转发给20；</li>
+<li>结点20的指状表里，$FT_{20}[1]$=21≤26&lt;$FT_{20}[2]$=28，将请求转发给21；</li>
+<li>结点21的指状表里，21&lt;26&lt;$FT_{21}[1]$=28，将请求转发给28，该结点负责解析k=26；</li>
+</ol>
+<p>从结点28开始解析k=12：</p>
+<ol>
+<li>结点28的指状表里，$FT_{28}[4]$=4≤12&lt;$FT_{28}[5]$=14，将请求转发给4；</li>
+<li>结点4的指状表里，$FT_{4}[4]$=9≤12&lt;$FT_{4}[4]$=14，将请求转发给9；</li>
+<li>结点9的指状表里，$FT_{9}[2]$=11≤12&lt;$FT_{9}[3]$=14，将请求转发给11；</li>
+<li>结点11的指状表里，11&lt;12&lt;$FT_{11}[1]$=14，将请求转发给14，该结点负责解析k=12；</li>
+</ol>
+<h3 id="HLS"><a href="#HLS" class="headerlink" title="HLS"></a>HLS</h3><p>网络被划分为一组域。每个域D都有关联的目录节点dir(D)，dir(D)会跟踪域中的实体，形成一颗目录结点树。</p>
+<h3 id="HLS结构"><a href="#HLS结构" class="headerlink" title="HLS结构"></a>HLS结构</h3><p>看下面这个图来解释一下HLS吧：</p>
+<img src="/2023/03/02/distributed-system/image-20240302165702511.png" class="" title="image-20240302165702511">
+<p>为了跟踪实体E的位置，实体E位于域S中，所以域S的目录结点N含有E在该域中的位置信息。</p>
+<p>而在比域S更高一级的域T中，域T的目录结点N’也有实体E的位置信息，但是这个位置信息只有N的指针，也就是要找实体E，就先去找到其子域的目录结点N，然后通过目录节点N找到E。</p>
+<p>同理，在比域T更大的域中，那个域的目录节点也有实体E的位置信息，不过这个位置信息只有N’的指针，要找实体E，就要先找N’，然后找到N，最后找到E。</p>
+<p>所以顶级域的目录结点，即根（目录）节点，包括全部实体位置信息。</p>
+<h3 id="如果一个实体有多个地址"><a href="#如果一个实体有多个地址" class="headerlink" title="如果一个实体有多个地址"></a>如果一个实体有多个地址</h3><p>实体可以拥有多个地址，比如被复制了，实体在域D1和域D2中都有地址，那么同时包含D1和D2的最小域目录结点将有两个指针，每个指针都指向一个包含地址的子域。</p>
+<img src="/2023/03/02/distributed-system/image-20240302165713656.png" class="" title="image-20240302165713656">
+<h3 id="HLS查询操作"><a href="#HLS查询操作" class="headerlink" title="HLS查询操作"></a>HLS查询操作</h3><img src="/2023/03/02/distributed-system/image-20240302165721466.png" class="" title="image-20240302165721466">
+<p>现在希望能定位实体E的位置信息，那么就向当前域的目录结点发送查找请求：</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs actionscript"><span class="hljs-keyword">if</span> 目录结点找到了实体E的位置信息:<br>	<span class="hljs-keyword">if</span> 找到的是子域目录结点的地址<br>		把查找请求转发给子域的目录结点<br>	<span class="hljs-keyword">else</span> <br>		找到了叶节点，把地址返回给请求的客户<br><span class="hljs-keyword">else</span><br>	把查找请求转发给父节点<br></code></pre></td></tr></table></figure>
+<p>最差情况是一直找不到，向上转发直到根节点。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://zdon.fun">Zdon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://zdon.fun/2023/03/02/distributed-system/">http://zdon.fun/2023/03/02/distributed-system/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zdon.fun" target="_blank">Zdon</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/">分布式系统</a></div><div class="post_share"><div class="social-share" data-image="/img/default_cover05.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/07/21/c-primer-plus/" title="C++ Primer Plus学习笔记7-13章"><img class="cover" src="/img/default_cover02.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">C++ Primer Plus学习笔记7-13章</div></div></a></div><div class="next-post pull-right"><a href="/2023/02/18/AI-lab03/" title="人工智能实验-基于LSTM+CTC的验证码"><img class="cover" src="/img/default_cover.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">人工智能实验-基于LSTM+CTC的验证码</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Zdon</div><div class="author-info__description">我来自偶然，像一颗尘土。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">47</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://gitee.com/wzd520"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/wzd520" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:wuzdon@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.</span> <span class="toc-text">分布式系统的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%9B%AE%E6%A0%87"><span class="toc-number">1.2.</span> <span class="toc-text">分布式系统的目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">分布式系统的类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">2.</span> <span class="toc-text">体系结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E7%9A%84%E6%A0%B7%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">体系结构的样式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-number">2.2.</span> <span class="toc-text">系统体系结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="toc-number">2.3.</span> <span class="toc-text">体系结构与中间件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%87%AA%E6%88%91%E7%AE%A1%E7%90%86"><span class="toc-number">2.4.</span> <span class="toc-text">分布式系统的自我管理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">进程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B"><span class="toc-number">3.1.</span> <span class="toc-text">线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%8C%96"><span class="toc-number">3.2.</span> <span class="toc-text">虚拟化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">3.3.</span> <span class="toc-text">客户端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">3.4.</span> <span class="toc-text">服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E8%BF%81%E7%A7%BB"><span class="toc-number">3.5.</span> <span class="toc-text">代码迁移</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9A%E4%BF%A1"><span class="toc-number">4.</span> <span class="toc-text">通信</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E5%90%8D%E7%B3%BB%E7%BB%9F-Naming"><span class="toc-number">5.</span> <span class="toc-text">命名系统 - Naming</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DHT"><span class="toc-number">5.1.</span> <span class="toc-text">DHT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Chord"><span class="toc-number">5.2.</span> <span class="toc-text">Chord</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HLS"><span class="toc-number">5.3.</span> <span class="toc-text">HLS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HLS%E7%BB%93%E6%9E%84"><span class="toc-number">5.4.</span> <span class="toc-text">HLS结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BD%93%E6%9C%89%E5%A4%9A%E4%B8%AA%E5%9C%B0%E5%9D%80"><span class="toc-number">5.5.</span> <span class="toc-text">如果一个实体有多个地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HLS%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C"><span class="toc-number">5.6.</span> <span class="toc-text">HLS查询操作</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/03/02/pytorch-use/" title="PyTorch使用方法"><img src="/img/default_cover03.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="PyTorch使用方法"/></a><div class="content"><a class="title" href="/2024/03/02/pytorch-use/" title="PyTorch使用方法">PyTorch使用方法</a><time datetime="2024-03-02T09:11:36.000Z" title="发表于 2024-03-02 17:11:36">2024-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/02/21/sort-algrithon/" title="常见的排序算法"><img src="/img/default_cover05.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="常见的排序算法"/></a><div class="content"><a class="title" href="/2024/02/21/sort-algrithon/" title="常见的排序算法">常见的排序算法</a><time datetime="2024-02-21T08:53:53.000Z" title="发表于 2024-02-21 16:53:53">2024-02-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/02/10/15445-study-notes-01-04/" title="CMU15445数据库学习笔记01-04"><img src="/img/default_cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CMU15445数据库学习笔记01-04"/></a><div class="content"><a class="title" href="/2024/02/10/15445-study-notes-01-04/" title="CMU15445数据库学习笔记01-04">CMU15445数据库学习笔记01-04</a><time datetime="2024-02-10T08:08:56.000Z" title="发表于 2024-02-10 16:08:56">2024-02-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/02/10/database-mysql/" title="数据库-MySQL"><img src="/img/default_cover04.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="数据库-MySQL"/></a><div class="content"><a class="title" href="/2024/02/10/database-mysql/" title="数据库-MySQL">数据库-MySQL</a><time datetime="2024-02-10T08:00:39.000Z" title="发表于 2024-02-10 16:00:39">2024-02-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/01/30/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" title="进程间的通信方式"><img src="/img/default_cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="进程间的通信方式"/></a><div class="content"><a class="title" href="/2024/01/30/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" title="进程间的通信方式">进程间的通信方式</a><time datetime="2024-01-30T03:27:05.000Z" title="发表于 2024-01-30 11:27:05">2024-01-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/default_cover05.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By Zdon</div><div class="footer_custom_text">没有人是一座孤岛</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'QABC9cDUiFvfbJkVsG3I0mp1-gzGzoHsz',
+      appKey: '7s6lJmCCK7Bczu8Z93wTmEWb',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine@1.5.1/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="true" data-click="false"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.12.0"></script></div></div></body></html>

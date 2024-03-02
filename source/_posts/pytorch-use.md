@@ -1,7 +1,7 @@
 ---
 title: PyTorch使用方法
 categories: 技术研究
-date: 2024-03-02 17:11:36
+date: 2023-03-02 17:11:36
 tags: [PyTorch, DeepLearning, 神经网络, AI]
 cover:
 top_img:

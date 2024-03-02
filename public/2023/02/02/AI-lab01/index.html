@@ -1,0 +1,313 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>人工智能实验-基于tensorflow的猫狗分类 | Zdon</title><meta name="author" content="Zdon"><meta name="copyright" content="Zdon"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="实验三、基于tensorflow的猫狗分类一、实验目的 掌握如何使用tensorflow&#x2F;pytorch编程实现模型，并会使用JupyterNotebook或Pycharm完成项目  二、实验内容 完成猫狗分类的模型的编码实现和模型训练  三、实验步骤 导入需要的函数包 12345678910import numpy as npimport pandas as pdfrom tensorflow.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="人工智能实验-基于tensorflow的猫狗分类">
+<meta property="og:url" content="http://zdon.fun/2023/02/02/AI-lab01/">
+<meta property="og:site_name" content="Zdon">
+<meta property="og:description" content="实验三、基于tensorflow的猫狗分类一、实验目的 掌握如何使用tensorflow&#x2F;pytorch编程实现模型，并会使用JupyterNotebook或Pycharm完成项目  二、实验内容 完成猫狗分类的模型的编码实现和模型训练  三、实验步骤 导入需要的函数包 12345678910import numpy as npimport pandas as pdfrom tensorflow.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zdon.fun/img/default_cover03.jpg">
+<meta property="article:published_time" content="2023-02-02T11:02:41.000Z">
+<meta property="article:modified_time" content="2024-03-02T11:28:16.523Z">
+<meta property="article:author" content="Zdon">
+<meta property="article:tag" content="人工智能">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zdon.fun/img/default_cover03.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://zdon.fun/2023/02/02/AI-lab01/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '人工智能实验-基于tensorflow的猫狗分类',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-03-02 19:28:16'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">47</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/default_cover03.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Zdon"><span class="site-name">Zdon</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">人工智能实验-基于tensorflow的猫狗分类</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-02T11:02:41.000Z" title="发表于 2023-02-02 19:02:41">2023-02-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-02T11:28:16.523Z" title="更新于 2024-03-02 19:28:16">2024-03-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%AE%97%E6%B3%95%E5%AE%9E%E8%B7%B5/">算法实践</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="人工智能实验-基于tensorflow的猫狗分类"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="实验三、基于tensorflow的猫狗分类"><a href="#实验三、基于tensorflow的猫狗分类" class="headerlink" title="实验三、基于tensorflow的猫狗分类"></a>实验三、基于tensorflow的猫狗分类</h2><h3 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h3><ul>
+<li>掌握如何使用tensorflow/pytorch编程实现模型，并会使用JupyterNotebook或Pycharm完成项目</li>
+</ul>
+<h3 id="二、实验内容"><a href="#二、实验内容" class="headerlink" title="二、实验内容"></a>二、实验内容</h3><ul>
+<li>完成猫狗分类的模型的编码实现和模型训练</li>
+</ul>
+<h3 id="三、实验步骤"><a href="#三、实验步骤" class="headerlink" title="三、实验步骤"></a>三、实验步骤</h3><ul>
+<li><p>导入需要的函数包</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><br><span class="hljs-keyword">from</span> tensorflow.keras.preprocessing.image <span class="hljs-keyword">import</span> ImageDataGenerator, load_img<br><span class="hljs-keyword">from</span> tensorflow.keras.utils <span class="hljs-keyword">import</span> to_categorical<br><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split<br><br><span class="hljs-keyword">import</span> matplotlib.pylab <span class="hljs-keyword">as</span> plt<br><span class="hljs-keyword">import</span> random<br><span class="hljs-keyword">import</span> os<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>定义常量</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">FAST_RUN = <span class="hljs-literal">False</span><br>IMAGE_WIDTH = <span class="hljs-number">128</span><br>IMAGE_HEIGHT = <span class="hljs-number">128</span><br>IMAGE_SIZE = (IMAGE_WIDTH, IMAGE_HEIGHT)<br>IMAGE_CHANNELS = <span class="hljs-number">3</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>处理数据集文件夹</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 处理数据集</span><br>filenames = os.listdir(<span class="hljs-string">&#x27;train&#x27;</span>)<br>categories = []<br><span class="hljs-keyword">for</span> filename <span class="hljs-keyword">in</span> filenames:<br>    category = filename.split(<span class="hljs-string">&#x27;.&#x27;</span>)[<span class="hljs-number">0</span>]<br>    <span class="hljs-comment"># 将所有图片按照顺序打上标签，如果是dog标记为1，如果是cat标记为0</span><br>    <span class="hljs-keyword">if</span> category == <span class="hljs-string">&#x27;dog&#x27;</span>:<br>        categories.append(<span class="hljs-number">1</span>)<br>    <span class="hljs-keyword">else</span>:<br>        categories.append(<span class="hljs-number">0</span>)<br><br><span class="hljs-comment"># 将文件名与标签一一对应</span><br>df = pd.DataFrame(&#123;<br>    <span class="hljs-string">&#x27;filename&#x27;</span>:filenames,<br>    <span class="hljs-string">&#x27;category&#x27;</span>:categories<br>&#125;)<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>查看前十行数据内容</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 查看前十行内容</span><br>df.head(<span class="hljs-number">10</span>)<br></code></pre></td></tr></table></figure>
+<img src="/2023/02/02/AI-lab01/image-20230109194724331.png" class="" title="image-20230109194724331">
+</li>
+<li><p>随机打开一张图片样本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 随机打开一张图片样本</span><br>sample = random.choice(filenames)<br>image = load_img(<span class="hljs-string">&#x27;train/&#x27;</span>+sample)<br>plt.imshow(image)<br></code></pre></td></tr></table></figure>
+<img src="/2023/02/02/AI-lab01/image-20230109194800246.png" class="" title="image-20230109194800246">
+</li>
+<li><p>处理数据标签</p>
+<ul>
+<li>生成训练数据</li>
+<li>划分训练集和验证集</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">df[<span class="hljs-string">&#x27;category&#x27;</span>] = df[<span class="hljs-string">&#x27;category&#x27;</span>].replace(&#123;<span class="hljs-number">0</span>: <span class="hljs-string">&#x27;cat&#x27;</span>, <span class="hljs-number">1</span>: <span class="hljs-string">&#x27;dog&#x27;</span>&#125;)<br><span class="hljs-comment"># 划分训练集和验证集</span><br>df_train, df_valid = train_test_split(df, test_size=<span class="hljs-number">0.2</span>, random_state=<span class="hljs-number">42</span>)<br>df_train = df_train.reset_index(drop=<span class="hljs-literal">True</span>)<br>df_valid = df_valid.reset_index(drop=<span class="hljs-literal">True</span>)<br><br><span class="hljs-comment"># 设置Batch Size与训练和验证样本数</span><br>total_train = df_train.shape[<span class="hljs-number">0</span>]<br>total_valid = df_valid.shape[<span class="hljs-number">0</span>]<br>batch_size = <span class="hljs-number">128</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>数据生成器</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 训练集数据生成</span><br>train_datagen = ImageDataGenerator(<br>    rotation_range=<span class="hljs-number">5</span>,<br>    rescale=<span class="hljs-number">1.</span>/<span class="hljs-number">255</span>,<br>    shear_range=<span class="hljs-number">0.1</span>,<br>    zoom_range=<span class="hljs-number">0.2</span>,<br>    horizontal_flip=<span class="hljs-literal">True</span>,<br>    width_shift_range=<span class="hljs-number">0.1</span>,<br>    height_shift_range=<span class="hljs-number">0.1</span><br>)<br><br>train_generator = train_datagen.flow_from_dataframe(<br>    df_train,<br>    <span class="hljs-string">&#x27;train/&#x27;</span>,<br>    x_col=<span class="hljs-string">&#x27;filename&#x27;</span>,<br>    y_col=<span class="hljs-string">&#x27;category&#x27;</span>,<br>    target_size=IMAGE_SIZE,<br>    class_mode=<span class="hljs-string">&#x27;categorical&#x27;</span>,<br>    batch_size=batch_size<br>)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 验证机数据生成</span><br>valid_datagen = ImageDataGenerator(rescale=<span class="hljs-number">1.</span>/<span class="hljs-number">255</span>)<br>valid_generator = valid_datagen.flow_from_dataframe(<br>    df_valid,<br>    <span class="hljs-string">&#x27;train/&#x27;</span>,<br>    x_col=<span class="hljs-string">&#x27;filename&#x27;</span>,<br>    y_col=<span class="hljs-string">&#x27;category&#x27;</span>,<br>    target_size=IMAGE_SIZE,<br>    class_mode=<span class="hljs-string">&#x27;categorical&#x27;</span>,<br>    batch_size=batch_size<br>)<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>查看数据生成样本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 查看数据生成样例</span><br>df_example = df_train.sample(n=<span class="hljs-number">1</span>).reset_index(drop=<span class="hljs-literal">True</span>)<br>example_generator = train_datagen.flow_from_dataframe(<br>    df_example,<br>    <span class="hljs-string">&#x27;train/&#x27;</span>,<br>    x_col=<span class="hljs-string">&#x27;filename&#x27;</span>,<br>    y_col=<span class="hljs-string">&#x27;category&#x27;</span>,<br>    target_size=IMAGE_SIZE,<br>    class_mode=<span class="hljs-string">&#x27;categorical&#x27;</span><br>)<br><br>plt.figure(figsize=(<span class="hljs-number">12</span>,<span class="hljs-number">12</span>))<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">15</span>):<br>    plt.subplot(<span class="hljs-number">5</span>, <span class="hljs-number">3</span>, i+<span class="hljs-number">1</span>)<br>    <span class="hljs-keyword">for</span> X_batch, Y_batch <span class="hljs-keyword">in</span> example_generator:<br>        image = X_batch[<span class="hljs-number">0</span>]<br>        plt.imshow(image)<br>        <span class="hljs-keyword">break</span><br>plt.tight_layout()<br>plt.show()<br></code></pre></td></tr></table></figure>
+<img src="/2023/02/02/AI-lab01/image-20230109195226820.png" class="" title="image-20230109195226820">
+</li>
+<li><p>建立模型</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> tensorflow.keras.models <span class="hljs-keyword">import</span> Sequential<br><span class="hljs-keyword">from</span> tensorflow.keras.layers <span class="hljs-keyword">import</span> Conv2D, MaxPooling2D, Dropout, Flatten, Dense, Activation, BatchNormalization<br><br>model = Sequential()<br>model.add(Conv2D(<span class="hljs-number">32</span>, (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), activation=<span class="hljs-string">&#x27;relu&#x27;</span>, input_shape=(IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNELS), padding=<span class="hljs-string">&#x27;same&#x27;</span>))<br>model.add(BatchNormalization())<br>model.add(MaxPooling2D(pool_size=(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>)))<br><br>model.add(Conv2D(<span class="hljs-number">32</span>, (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), activation=<span class="hljs-string">&#x27;relu&#x27;</span>, padding=<span class="hljs-string">&#x27;same&#x27;</span>))<br>model.add(BatchNormalization())<br>model.add(MaxPooling2D(pool_size=(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>)))<br><br>model.add(Conv2D(<span class="hljs-number">32</span>, (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br>model.add(BatchNormalization())<br>model.add(MaxPooling2D(pool_size=(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>)))<br><br>model.add(Flatten())<br>model.add(Dense(<span class="hljs-number">512</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br>model.add(Dropout(<span class="hljs-number">0.1</span>))<br>model.add(Dense(<span class="hljs-number">2</span>, activation=<span class="hljs-string">&#x27;softmax&#x27;</span>))<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>定义损失函数</p>
+<blockquote>
+<p>使用交叉熵损失函数</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">model.<span class="hljs-built_in">compile</span>(loss=<span class="hljs-string">&#x27;categorical_crossentropy&#x27;</span>, optimizer=<span class="hljs-string">&#x27;sgd&#x27;</span>, metrics=[<span class="hljs-string">&#x27;accuracy&#x27;</span>])<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>查看深度学习网络</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">model.summary()<br></code></pre></td></tr></table></figure>
+<img src="/2023/02/02/AI-lab01/image-20230109195428838.png" class="" title="image-20230109195428838">
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 回调：在模型训练期间的某些点调用的实用程序</span><br><span class="hljs-keyword">from</span> tensorflow.keras.callbacks <span class="hljs-keyword">import</span> EarlyStopping, ReduceLROnPlateau<br><br>earlystop = EarlyStopping(patience=<span class="hljs-number">10</span>)<br>learning_rate_reduction = ReduceLROnPlateau(monitor = <span class="hljs-string">&#x27;val_accuracy&#x27;</span>,<br>                                            patience=<span class="hljs-number">5</span>,<br>                                            verbose=<span class="hljs-number">1</span>,<br>                                            factor=<span class="hljs-number">0.5</span>,<br>                                            min_lr=<span class="hljs-number">0.00001</span>)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">callbacks = [earlystop, learning_rate_reduction]<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>开始训练模型</p>
+<blockquote>
+<p>一共完成50个epoch训练，每个epoch含有156个steps</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 模型训练</span><br>FAST_RUN = <span class="hljs-literal">False</span><br>epochs = <span class="hljs-number">3</span> <span class="hljs-keyword">if</span> FAST_RUN <span class="hljs-keyword">else</span> <span class="hljs-number">50</span><br><br>history = model.fit(train_generator,<br>                   epochs=epochs,<br>                   validation_data=valid_generator,<br>                   validation_steps=total_valid//batch_size,<br>                   steps_per_epoch=total_train//batch_size,<br>                   callbacks=callbacks,<br>                   workers=<span class="hljs-number">12</span>)<br></code></pre></td></tr></table></figure>
+<img src="/2023/02/02/AI-lab01/image-20230109195525256.png" class="" title="image-20230109195525256">
+</li>
+<li><p>保存模型</p>
+<blockquote>
+<p>利用model.save_weights与model.load_weights先训练10个epoch，保存模型后，再次加载继续训练20个epoch</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 训练10个epoch并保存模型</span><br>FAST_RUN = <span class="hljs-literal">False</span><br>epochs = <span class="hljs-number">3</span> <span class="hljs-keyword">if</span> FAST_RUN <span class="hljs-keyword">else</span> <span class="hljs-number">50</span><br><br>history = model.fit(train_generator,<br>                   epochs=<span class="hljs-number">10</span>,<br>                   validation_data=valid_generator,<br>                   validation_steps=total_valid//batch_size,<br>                   steps_per_epoch=total_train//batch_size,<br>                   callbacks=callbacks,<br>                   workers=<span class="hljs-number">12</span>)<br><br>model.save_weights(<span class="hljs-string">&#x27;weights.ckpt&#x27;</span>)<br></code></pre></td></tr></table></figure>
+<img src="/2023/02/02/AI-lab01/image-20230109204708818.png" class="" title="image-20230109204708818">
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 重新加载模型</span><br>model.load_weights(<span class="hljs-string">&#x27;weights.ckpt&#x27;</span>)<br><span class="hljs-comment"># 继续训练20个epoch</span><br>history1 = model.fit(train_generator,<br>                   epochs=<span class="hljs-number">20</span>,<br>                   validation_data=valid_generator,<br>                   validation_steps=total_valid//batch_size,<br>                   steps_per_epoch=total_train//batch_size,<br>                   callbacks=callbacks,<br>                   workers=<span class="hljs-number">12</span>)<br></code></pre></td></tr></table></figure>
+<img src="/2023/02/02/AI-lab01/image-20230109214257445.png" class="" title="image-20230109214257445">
+</li>
+<li><p>对训练的结果进行可视化</p>
+<blockquote>
+<p>对存储的损失值和精度值拟合成曲线</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 可视化训练结果</span><br>fig, (ax1, ax2) = plt.subplots(<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, figsize=(<span class="hljs-number">12</span>, <span class="hljs-number">12</span>))<br>ax1.plot(history.history[<span class="hljs-string">&#x27;loss&#x27;</span>], color=<span class="hljs-string">&#x27;b&#x27;</span>, label=<span class="hljs-string">&#x27;Training loss&#x27;</span>)<br>ax1.plot(history.history[<span class="hljs-string">&#x27;val_loss&#x27;</span>], color=<span class="hljs-string">&#x27;r&#x27;</span>, label=<span class="hljs-string">&#x27;Validation loss&#x27;</span>)<br>ax1.set_xticks(np.arange(<span class="hljs-number">1</span>, epochs, <span class="hljs-number">1</span>))<br>ax1.set_yticks(np.arange(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0.1</span>))<br>ax1.legend(loc=<span class="hljs-string">&#x27;best&#x27;</span>, shadow=<span class="hljs-literal">True</span>)<br><br>ax2.plot(history.history[<span class="hljs-string">&#x27;accuracy&#x27;</span>], color=<span class="hljs-string">&#x27;b&#x27;</span>, label=<span class="hljs-string">&#x27;Training accuracy&#x27;</span>)<br>ax2.plot(history.history[<span class="hljs-string">&#x27;val_accuracy&#x27;</span>], color=<span class="hljs-string">&#x27;r&#x27;</span>, label=<span class="hljs-string">&#x27;Validation accuracy&#x27;</span>)<br>ax2.set_xticks(np.arange(<span class="hljs-number">1</span>, epochs, <span class="hljs-number">1</span>))<br><br>legend = plt.legend(loc=<span class="hljs-string">&#x27;best&#x27;</span>, shadow=<span class="hljs-literal">True</span>)<br>plt.tight_layout()<br>plt.show()<br></code></pre></td></tr></table></figure>
+<img src="/2023/02/02/AI-lab01/image-20230109205151944.png" class="" title="image-20230109205151944">
+</li>
+<li><p>准备测试集</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 准备测试集以及创建测试机</span><br>test_filenames = os.listdir(<span class="hljs-string">&#x27;test1&#x27;</span>)<br>df_test = pd.DataFrame(&#123;<br>    <span class="hljs-string">&#x27;filename&#x27;</span>:test_filenames<br>&#125;)<br>nb_samples = df_test.shape[<span class="hljs-number">0</span>]<br></code></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs routeros">test_datagen = ImageDataGenerator(<span class="hljs-attribute">rescale</span>=1./255)<br>test_generator = test_datagen.flow_from_dataframe(<br>    df_test,<br>    <span class="hljs-string">&#x27;test1/&#x27;</span>,<br>    <span class="hljs-attribute">x_col</span>=<span class="hljs-string">&#x27;filename&#x27;</span>,<br>    <span class="hljs-attribute">y_col</span>=None,<br>    <span class="hljs-attribute">class_mode</span>=None,<br>    <span class="hljs-attribute">target_size</span>=IMAGE_SIZE,<br>    <span class="hljs-attribute">batch_size</span>=batch_size,<br>    <span class="hljs-attribute">shuffle</span>=<span class="hljs-literal">False</span><br>)<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>预测</p>
+<blockquote>
+<p>通过神经网络，对测试集的数据进行预测</p>
+<p>选择输出概率最高的做为预测结果</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">predict = model.predict(test_generator,<br>                       steps=np.ceil(nb_samples/batch_size),<br>                       workers=<span class="hljs-number">12</span>)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python">df_test[<span class="hljs-string">&#x27;category&#x27;</span>] = np.argmax(predict, axis=-<span class="hljs-number">1</span>)<br><br>label_map = <span class="hljs-built_in">dict</span>((v,k) <span class="hljs-keyword">for</span> k,v <span class="hljs-keyword">in</span> train_generator.class_indices.items())<br>df_test[<span class="hljs-string">&#x27;category&#x27;</span>] = df_test[<span class="hljs-string">&#x27;category&#x27;</span>].replace(label_map)<br><br>df_test[<span class="hljs-string">&#x27;category&#x27;</span>] = df_test[<span class="hljs-string">&#x27;category&#x27;</span>].replace(&#123;<span class="hljs-string">&#x27;dog&#x27;</span>:<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;cat&#x27;</span>:<span class="hljs-number">0</span>&#125;)<br><br>df_test[<span class="hljs-string">&#x27;category&#x27;</span>].value_counts().plot.bar()<br></code></pre></td></tr></table></figure>
+<img src="/2023/02/02/AI-lab01/image-20230109205407961.png" class="" title="image-20230109205407961">
+</li>
+<li><p>查看预测结果</p>
+<blockquote>
+<p>可视化了前三十个预测结果，只有1002一张图片预测错误</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python">sample_test = df_test.head(<span class="hljs-number">30</span>)<br>sample_test.head()<br>dict_1 = &#123;<span class="hljs-number">1</span>:<span class="hljs-string">&#x27;dog&#x27;</span>, <span class="hljs-number">0</span>:<span class="hljs-string">&#x27;cat&#x27;</span>&#125;<br>plt.figure(figsize=(<span class="hljs-number">12</span>, <span class="hljs-number">24</span>))<br><span class="hljs-keyword">for</span> index, row <span class="hljs-keyword">in</span> sample_test.iterrows():<br>    filename = row[<span class="hljs-string">&#x27;filename&#x27;</span>]<br>    category = row[<span class="hljs-string">&#x27;category&#x27;</span>]<br>    img = load_img(<span class="hljs-string">&#x27;test1/&#x27;</span> + filename, target_size=IMAGE_SIZE)<br>    plt.subplot(<span class="hljs-number">10</span>, <span class="hljs-number">3</span>, index+<span class="hljs-number">1</span>)<br>    plt.imshow(img)<br>    plt.xlabel(filename + <span class="hljs-string">&#x27;(&#x27;</span> + <span class="hljs-string">&#x27;&#123;&#125;&#x27;</span>.<span class="hljs-built_in">format</span>(category) + <span class="hljs-string">&#x27;)&#x27;</span> + dict_1[category])<br>plt.tight_layout()<br>plt.show()<br></code></pre></td></tr></table></figure>
+<img src="/2023/02/02/AI-lab01/image-20230109205438300.png" class="" title="image-20230109205438300">
+<img src="/2023/02/02/AI-lab01/image-20230109205453040.png" class="" title="image-20230109205453040">
+</li>
+</ul>
+<h4 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h4><ul>
+<li><p>叙述从逻辑回归到神经元工作原理</p>
+<p>逻辑回归工作原理：逻辑回归用于二分类问题，将输入的数据进行处理过后得到一个输出数据，再通过sigmoid函数，通过阈值的设置来判断将输出的数据映射为0，或者是1.</p>
+<p>神经元工作原理：神经元的每一个输入都会对应一个相应的权值，通过神经元后，再经过激活函数，产生输出，常见的激活函数有sigmoid函数，relu函数。</p>
+</li>
+<li><p>两种常用的激活函数</p>
+<p>Sigmoid激活函数、Relu激活函数</p>
+</li>
+<li><p>两种池化方式</p>
+<p>最大池化：将输入的图像划分为若干个矩形区域，对每个子区域输出最大值。</p>
+<p>平均池化：将输入的图像划分为若干个矩形区域，对每个子区域输出所有元素的平均值</p>
+</li>
+<li><p>卷积神经网络要素：卷积核、池化、特征图</p>
+<p>卷积核：卷积核，是卷积层中用于与输入的矩阵进行卷积运算的单元，通过与卷积核的卷积运算能够提取出原始图像中的一些特征属性。</p>
+<p>池化：池化的重要的目的在于进一步降低网络的整体计算代价，同时也能够在一定程度上降低网络出现过拟合的风险，能够将原始图像矩阵通过一定的池化方式进行压缩。</p>
+<p>特征图：通过卷积层进行与卷积核运算过后所得到的图就称为提取特征后的特征图。</p>
+</li>
+<li><p>实验用到的模型图示，给出实验中的关键代码并解释</p>
+<img src="/2023/02/02/AI-lab01/image-20230109222224342.png" class="" title="image-20230109222224342">
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs python">model = Sequential()<br><span class="hljs-comment"># 卷积层1，卷积核的大小为（3，3），使用relu激活函数</span><br>model.add(Conv2D(<span class="hljs-number">32</span>, (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), activation=<span class="hljs-string">&#x27;relu&#x27;</span>, input_shape=(IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNELS), padding=<span class="hljs-string">&#x27;same&#x27;</span>))<br><br><span class="hljs-comment"># 对数据进行标准化，加快训练速度</span><br>model.add(BatchNormalization())<br><br><span class="hljs-comment"># 池化层1，使用最大池化的方法，池化尺寸为（2，2）</span><br>model.add(MaxPooling2D(pool_size=(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>)))<br><br><span class="hljs-comment"># 卷积层2，卷积核的大小为（3，3），使用relu激活函数</span><br>model.add(Conv2D(<span class="hljs-number">32</span>, (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), activation=<span class="hljs-string">&#x27;relu&#x27;</span>, padding=<span class="hljs-string">&#x27;same&#x27;</span>))<br>model.add(BatchNormalization())<br><span class="hljs-comment"># 池化层2，使用最大池化的方法，池化尺寸为（2，2）</span><br>model.add(MaxPooling2D(pool_size=(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>)))<br><br><span class="hljs-comment"># 卷积层3，卷积核的大小为（3，3），使用relu激活函数</span><br>model.add(Conv2D(<span class="hljs-number">32</span>, (<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br>model.add(BatchNormalization())<br><span class="hljs-comment"># 池化层3，使用最大池化的方法，池化尺寸为（2，2）</span><br>model.add(MaxPooling2D(pool_size=(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>)))<br><br><span class="hljs-comment"># 扁平层，将多维数据一维化</span><br>model.add(Flatten())<br><span class="hljs-comment"># 全连接层2，将输入的数据转化为512维度</span><br>model.add(Dense(<span class="hljs-number">512</span>, activation=<span class="hljs-string">&#x27;relu&#x27;</span>))<br><span class="hljs-comment"># 删除10%的神经元，将其置为0，防止过拟合</span><br>model.add(Dropout(<span class="hljs-number">0.1</span>))<br><span class="hljs-comment"># 全连接层2，将数据最终转化为2为数据，通过softmax映射成概率值</span><br>model.add(Dense(<span class="hljs-number">2</span>, activation=<span class="hljs-string">&#x27;softmax&#x27;</span>))<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>问答</p>
+<p>问题：在训练过程中，学习率是怎样进行调整的？</p>
+<p>回答：使用ReduceLROnPlateau和EarlyStopping配合动态调整学习率，ReduceLRonPlateau函数中有一些列参数可以搭配使用来动态调整学习率。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">monitor：监测的值，可以是accuracy，val_loss,val_accuracy<br>factor：缩放学习率的值，学习率将以lr = lr*factor的形式被减少<br>patience：当patience个epoch过去而模型性能不提升时，学习率减少的动作会被触发<br>mode：‘auto’，‘<span class="hljs-built_in">min</span>’，‘<span class="hljs-built_in">max</span>’之一 默认‘auto’就行<br>epsilon：阈值，用来确定是否进入检测值的“平原区”<br>cooldown：学习率减少后，会经过cooldown个epoch才重新进行正常操作<br>min_lr：学习率最小值，能缩小到的下限<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://zdon.fun">Zdon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://zdon.fun/2023/02/02/AI-lab01/">http://zdon.fun/2023/02/02/AI-lab01/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zdon.fun" target="_blank">Zdon</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/">人工智能</a><a class="post-meta__tags" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></div><div class="post_share"><div class="social-share" data-image="/img/default_cover03.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/02/12/AI-lab02/" title="人工智能实验-花卉图像分类实验"><img class="cover" src="/img/default_cover05.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">人工智能实验-花卉图像分类实验</div></div></a></div><div class="next-post pull-right"><a href="/2023/02/02/pytorch-install/" title="PyTorch安装使用"><img class="cover" src="/img/default_cover01.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">PyTorch安装使用</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/02/12/AI-lab02/" title="人工智能实验-花卉图像分类实验"><img class="cover" src="/img/default_cover05.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-12</div><div class="title">人工智能实验-花卉图像分类实验</div></div></a></div><div><a href="/2023/02/18/AI-lab03/" title="人工智能实验-基于LSTM+CTC的验证码"><img class="cover" src="/img/default_cover.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-18</div><div class="title">人工智能实验-基于LSTM+CTC的验证码</div></div></a></div><div><a href="/2023/01/03/deep-learning-test01/" title="深度学习实践实验-线性回归"><img class="cover" src="/img/default_cover04.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-03</div><div class="title">深度学习实践实验-线性回归</div></div></a></div><div><a href="/2023/01/15/deep-learning-test04/" title="深度学习实践实验-卷积神经网络"><img class="cover" src="/img/default_cover.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-15</div><div class="title">深度学习实践实验-卷积神经网络</div></div></a></div><div><a href="/2023/01/08/deep-learning-test03/" title="深度学习实践实验-SoftMax回归"><img class="cover" src="/img/default_cover.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-08</div><div class="title">深度学习实践实验-SoftMax回归</div></div></a></div><div><a href="/2023/01/21/deep-learning-test05/" title="深度学习实践实验-LSTM与迁移学习"><img class="cover" src="/img/default_cover05.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-21</div><div class="title">深度学习实践实验-LSTM与迁移学习</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Zdon</div><div class="author-info__description">我来自偶然，像一颗尘土。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">47</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://gitee.com/wzd520"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/wzd520" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:wuzdon@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E4%B8%89%E3%80%81%E5%9F%BA%E4%BA%8Etensorflow%E7%9A%84%E7%8C%AB%E7%8B%97%E5%88%86%E7%B1%BB"><span class="toc-number">1.</span> <span class="toc-text">实验三、基于tensorflow的猫狗分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%AE%9E%E9%AA%8C%E7%9B%AE%E7%9A%84"><span class="toc-number">1.1.</span> <span class="toc-text">一、实验目的</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AE%9E%E9%AA%8C%E5%86%85%E5%AE%B9"><span class="toc-number">1.2.</span> <span class="toc-text">二、实验内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%9E%E9%AA%8C%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.3.</span> <span class="toc-text">三、实验步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.1.</span> <span class="toc-text">四、总结</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/03/02/pytorch-use/" title="PyTorch使用方法"><img src="/img/default_cover03.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="PyTorch使用方法"/></a><div class="content"><a class="title" href="/2024/03/02/pytorch-use/" title="PyTorch使用方法">PyTorch使用方法</a><time datetime="2024-03-02T09:11:36.000Z" title="发表于 2024-03-02 17:11:36">2024-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/02/21/sort-algrithon/" title="常见的排序算法"><img src="/img/default_cover05.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="常见的排序算法"/></a><div class="content"><a class="title" href="/2024/02/21/sort-algrithon/" title="常见的排序算法">常见的排序算法</a><time datetime="2024-02-21T08:53:53.000Z" title="发表于 2024-02-21 16:53:53">2024-02-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/02/10/15445-study-notes-01-04/" title="CMU15445数据库学习笔记01-04"><img src="/img/default_cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CMU15445数据库学习笔记01-04"/></a><div class="content"><a class="title" href="/2024/02/10/15445-study-notes-01-04/" title="CMU15445数据库学习笔记01-04">CMU15445数据库学习笔记01-04</a><time datetime="2024-02-10T08:08:56.000Z" title="发表于 2024-02-10 16:08:56">2024-02-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/02/10/database-mysql/" title="数据库-MySQL"><img src="/img/default_cover04.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="数据库-MySQL"/></a><div class="content"><a class="title" href="/2024/02/10/database-mysql/" title="数据库-MySQL">数据库-MySQL</a><time datetime="2024-02-10T08:00:39.000Z" title="发表于 2024-02-10 16:00:39">2024-02-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/01/30/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" title="进程间的通信方式"><img src="/img/default_cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="进程间的通信方式"/></a><div class="content"><a class="title" href="/2024/01/30/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" title="进程间的通信方式">进程间的通信方式</a><time datetime="2024-01-30T03:27:05.000Z" title="发表于 2024-01-30 11:27:05">2024-01-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/default_cover03.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By Zdon</div><div class="footer_custom_text">没有人是一座孤岛</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'QABC9cDUiFvfbJkVsG3I0mp1-gzGzoHsz',
+      appKey: '7s6lJmCCK7Bczu8Z93wTmEWb',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine@1.5.1/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="true" data-click="false"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.12.0"></script></div></div></body></html>

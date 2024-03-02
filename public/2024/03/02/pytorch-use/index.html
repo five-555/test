@@ -1,0 +1,249 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>PyTorch使用方法 | Zdon</title><meta name="author" content="Zdon"><meta name="copyright" content="Zdon"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="PyTorch基础语法Pytorch是Facebook主导开发的，基于Python的科学计算包，主要有一下两个特点： 比NumPy更灵活，可以使用GPU的强大计算能力 开源高效的深度学习研究平台  张量 PyTorch中的Tensors可以使用GPU计算    12345678910111213141516171819202122232425import torch# 可以返回填充了未初始化数据的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PyTorch使用方法">
+<meta property="og:url" content="http://zdon.fun/2024/03/02/pytorch-use/">
+<meta property="og:site_name" content="Zdon">
+<meta property="og:description" content="PyTorch基础语法Pytorch是Facebook主导开发的，基于Python的科学计算包，主要有一下两个特点： 比NumPy更灵活，可以使用GPU的强大计算能力 开源高效的深度学习研究平台  张量 PyTorch中的Tensors可以使用GPU计算    12345678910111213141516171819202122232425import torch# 可以返回填充了未初始化数据的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zdon.fun/img/default_cover03.jpg">
+<meta property="article:published_time" content="2024-03-02T09:11:36.000Z">
+<meta property="article:modified_time" content="2024-03-02T09:13:02.338Z">
+<meta property="article:author" content="Zdon">
+<meta property="article:tag" content="神经网络">
+<meta property="article:tag" content="PyTorch">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="DeepLearning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zdon.fun/img/default_cover03.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://zdon.fun/2024/03/02/pytorch-use/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'PyTorch使用方法',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-03-02 17:13:02'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">47</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/default_cover03.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Zdon"><span class="site-name">Zdon</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">PyTorch使用方法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-03-02T09:11:36.000Z" title="发表于 2024-03-02 17:11:36">2024-03-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-02T09:13:02.338Z" title="更新于 2024-03-02 17:13:02">2024-03-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/">技术研究</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="PyTorch使用方法"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="PyTorch基础语法"><a href="#PyTorch基础语法" class="headerlink" title="PyTorch基础语法"></a>PyTorch基础语法</h2><p>Pytorch是Facebook主导开发的，基于Python的科学计算包，主要有一下两个特点：</p>
+<p>比NumPy更灵活，可以使用GPU的强大计算能力</p>
+<p>开源高效的深度学习研究平台</p>
+<ul>
+<li><h3 id="张量"><a href="#张量" class="headerlink" title="张量"></a>张量</h3><blockquote>
+<p>PyTorch中的Tensors可以使用GPU计算</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> torch<br><br><span class="hljs-comment"># 可以返回填充了未初始化数据的张量</span><br>torch.empty(<span class="hljs-number">5</span>, <span class="hljs-number">3</span>)<br><br><span class="hljs-comment"># 创建一个随机初始化矩阵</span><br>torch.rand(<span class="hljs-number">5</span>, <span class="hljs-number">3</span>)<br><br><span class="hljs-comment"># 创建一个0填充的矩阵，指定数据类型为long：</span><br>torch.zeros(<span class="hljs-number">5</span>, <span class="hljs-number">3</span>, dtype=torch.long)<br><br><span class="hljs-comment"># 创建 Tensor 并使用现有数据初始化：</span><br>x = torch.tensor([<span class="hljs-number">5.5</span>, <span class="hljs-number">3</span>])<br>x<br><br><span class="hljs-comment">#根据现有张量创建新张量。这些方法将重用输入张量的属性，除非设置新的值进行覆盖</span><br>x = x.new_ones(<span class="hljs-number">5</span>, <span class="hljs-number">3</span>, dtype=torch.double)  <span class="hljs-comment"># new_* 方法来创建对象</span><br>x<br><br><span class="hljs-comment"># 覆盖 dtype，对象的 size 是相同的，只是值和类型发生了变化</span><br>x = torch.randn_like(x, dtype=torch.<span class="hljs-built_in">float</span>)<br>x<br><br><span class="hljs-comment"># 获得张量的size，返回值为tuple</span><br>x.size()<br></code></pre></td></tr></table></figure>
+<ul>
+<li><h3 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h3></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#加法操作</span><br>y = torch.rand(<span class="hljs-number">5</span>, <span class="hljs-number">3</span>)<br>x + y<br><br>torch.add(x, y)<br><br><span class="hljs-comment"># 提供输出Tensor作为参数</span><br>result = torch.empty(<span class="hljs-number">5</span>, <span class="hljs-number">3</span>)<br>torch.add(x, y, out=result)<br>result<br><br><span class="hljs-comment"># 替换，将x加到y</span><br>y.add_(x)<br>y<br></code></pre></td></tr></table></figure>
+<p>任何以下划线结尾的操作都会用结果替换原变量</p>
+<p>可以使用与Numpy索引方式相同的操作来对张量进行操作</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># torch.view可以改变张量的维度和大小</span><br>x = torch.randn(<span class="hljs-number">4</span>, <span class="hljs-number">4</span>)<br>y = x.view(<span class="hljs-number">16</span>)<br>z = x.view(-<span class="hljs-number">1</span>, <span class="hljs-number">8</span>)  <span class="hljs-comment"># size -1 从其他维度推断</span><br><br>x.size(), y.size(), z.size()<br><br><span class="hljs-comment"># 如果张量只有一个元素，使用 .item() 来得到 Python 数据类型的数值</span><br>x = torch.randn(<span class="hljs-number">1</span>)<br><br>x, x.item()<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>官方文档：<a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/torch.html">torch — PyTorch 1.12 documentation</a></p>
+</blockquote>
+<ul>
+<li><h3 id="NumPy转换"><a href="#NumPy转换" class="headerlink" title="NumPy转换"></a>NumPy转换</h3></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># PyTorch张量转换为NumPy数组</span><br>a = torch.ones(<span class="hljs-number">5</span>)<br>a<br>b = a.numpy()<br>b<br><br><span class="hljs-comment"># 了解 NumPy 数组的值如何变化，a和b的数值都会加1</span><br>a.add_(<span class="hljs-number">1</span>)<br>a, b<br><br><span class="hljs-comment"># NumPy 数组转换成 PyTorch 张量时，可以使用 from_numpy 完成</span><br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><br>a = np.ones(<span class="hljs-number">5</span>)<br>b = torch.from_numpy(a)<br>np.add(a, <span class="hljs-number">1</span>, out=a)<br>a, b<br></code></pre></td></tr></table></figure>
+<p>所有的 Tensor 类型默认都是基于 CPU， CharTensor 类型不支持到 NumPy 的转换</p>
+<ul>
+<li><h3 id="CUDA张量"><a href="#CUDA张量" class="headerlink" title="CUDA张量"></a>CUDA张量</h3></li>
+</ul>
+<p>CUDA张量是能够再GPU设备在运算的张量。使用.to方法可以将Tensor移动到GPU设备中去</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># is_available 函数判断是否有 GPU 可以使用</span><br><span class="hljs-keyword">if</span> torch.cuda.is_available():<br>    device = torch.device(<span class="hljs-string">&quot;cuda&quot;</span>)          <span class="hljs-comment"># torch.device 将张量移动到指定的设备中</span><br>    y = torch.ones_like(x, device=device)  <span class="hljs-comment"># 直接从 GPU 创建张量</span><br>    x = x.to(device)                       <span class="hljs-comment"># 或者直接使用 .to(&quot;cuda&quot;) 将张量移动到 cuda 中</span><br>    z = x + y<br>    <span class="hljs-built_in">print</span>(z)<br>    <span class="hljs-built_in">print</span>(z.to(<span class="hljs-string">&quot;cpu&quot;</span>, torch.double))       <span class="hljs-comment"># .to 也会对变量的类型做更改</span><br></code></pre></td></tr></table></figure>
+<h2 id="Autograd自动求导"><a href="#Autograd自动求导" class="headerlink" title="Autograd自动求导"></a>Autograd自动求导</h2><blockquote>
+<p>PyTorch中所有神经网络的核心是autograd</p>
+</blockquote>
+<p><code>autograd</code>为张量上的所有操作提供了自动求导。它是一个在运行时定义的框架，这意味着反向传播是根据你的代码来确定如何运行。</p>
+<p><code>torch.Tensor</code> 是这个包的核心类。如果设置<code>.requires_grad</code>为<code>True</code>，那么将会追踪所有对于该张量的操作。当完成计算后通过调用<code>.backward()</code>会自动计算所有的梯度，这个张量的所有梯度将自动积累到<code>.grad</code>属性。这也就完成了自动求导的过程。</p>
+<p>要组织张量追踪历史记录，可以调用<code>.detach()</code>方法将其与计算历史记录分离。为了防止跟踪历史记录（和使用内存），可以将代码块包装在<code>with tirch.no_grad():</code>语句中。这一点在评估模型时特别有用，因为模型可能具有<code>requires_grad=True</code>的可训练参数，但是并不需要计算梯度。</p>
+<p>自动求导还有另一个重要的类<code>Function</code>。<code>Tensor</code>和<code>Function</code>互相连接并生成一个非循环图，存储了完整的计算历史。</p>
+<p>如果需要计算导数，可以在<code>Tensor</code>上调用<code>.backward()</code>。如果<code>Tensor</code>是一个标量（即它只包含一个元素数据）则不需要为<code>backward()</code>指定任何参数。但是如果他又多个元素，则需要指定一个<code>gradient</code>参数来匹配张量的形状。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 创建一个张量并设置 requires_grad=True 用来追踪他的计算历史</span><br>x = torch.ones(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>, requires_grad=<span class="hljs-literal">True</span>)<br>x<br><br><span class="hljs-comment"># 对张量进行操作，也就是计算过程</span><br>y = x + <span class="hljs-number">2</span><br>y<br><br><span class="hljs-comment"># 结果 y 已经被计算出来了，所以，grad_fn 已经被自动生成了</span><br>y.grad_fn<br><br><span class="hljs-comment"># 然后，再对 y 进行操作</span><br>z = y * y * <span class="hljs-number">3</span><br>out = z.mean()<br><br>z, out<br><br><span class="hljs-comment"># .requires_grad_( ... ) 可以改变现有张量的 requires_grad 属性。 如果没有指定的话，默认输入的 flag 是 False</span><br>a = torch.randn(<span class="hljs-number">2</span>, <span class="hljs-number">2</span>)<br>a = ((a * <span class="hljs-number">3</span>) / (a - <span class="hljs-number">1</span>))<br><span class="hljs-built_in">print</span>(a.requires_grad)<br>a.requires_grad_(<span class="hljs-literal">True</span>)<br><span class="hljs-built_in">print</span>(a.requires_grad)<br>b = (a * a).<span class="hljs-built_in">sum</span>()<br><span class="hljs-built_in">print</span>(b.grad_fn)<br></code></pre></td></tr></table></figure>
+<ul>
+<li><h3 id="梯度"><a href="#梯度" class="headerlink" title="梯度"></a>梯度</h3></li>
+</ul>
+<p>通过反向传播打印对应结点的梯度，因为<code>out</code>是一个纯量Scalar，<code>out.backward()</code>等于<code>out.backward(torch.tensor(1))</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">out.backward()<br><br><span class="hljs-comment"># 打印其梯度</span><br>x.grad<br></code></pre></td></tr></table></figure>
+<p>关于Autograd的更多操作</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python">x = torch.randn(<span class="hljs-number">3</span>, requires_grad=<span class="hljs-literal">True</span>)<br><br>y = x * <span class="hljs-number">2</span><br><span class="hljs-keyword">while</span> y.data.norm() &lt; <span class="hljs-number">1000</span>:<br>    y = y * <span class="hljs-number">2</span><br><br>y<br><br>gradients = torch.tensor([<span class="hljs-number">0.1</span>, <span class="hljs-number">1.0</span>, <span class="hljs-number">0.0001</span>], dtype=torch.<span class="hljs-built_in">float</span>)<br>y.backward(gradients)<br><br>x.grad<br><br><span class="hljs-comment"># 如果 .requires_grad=True 但是你又不希望进行 Autograd 的计算，那么可以将变量包裹在 with torch.no_grad() 中</span><br><span class="hljs-built_in">print</span>(x.requires_grad)<br><span class="hljs-built_in">print</span>((x ** <span class="hljs-number">2</span>).requires_grad)<br><br><span class="hljs-keyword">with</span> torch.no_grad():<br>    <span class="hljs-built_in">print</span>((x ** <span class="hljs-number">2</span>).requires_grad)<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p><code>autograd</code>和<code>Function</code>的官方文档：<a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/autograd.html">Automatic differentiation package - torch.autograd — PyTorch 1.12 documentation</a></p>
+</blockquote>
+<h2 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h2><p>PyTorch中，我们可以使用<code>torch.nn</code>来构建神经网络</p>
+<p><code>torch.nn</code>依赖<code>autograd</code>来定义模型并求导。<code>nn.Module</code>中包含了构建神经网络所需的各个层和<code>forward(input)</code>方法，该方法返回神经网络的输出。</p>
+<p>​    神经网络的典型训练过程如下</p>
+<p>1、定义包含可学习参数（权重）的神经网络模型</p>
+<p>2、在数据集上迭代</p>
+<p>3、通过神经网络处理输入</p>
+<p>4、计算损失</p>
+<p>5、将梯度反向传播回网络结点</p>
+<p>6、更新网络的参数，一般可以使用梯度下降等最优化方法</p>
+<p>​    PyTorch的<code>nn.Conv2d()</code>详解，该类作为二维卷积的实现</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">in_channels		<span class="hljs-comment"># 输入张量的channels数</span><br>out_channels	<span class="hljs-comment"># 期望的四维输出张量的channels数</span><br>kernel_size		<span class="hljs-comment"># 卷积核的大小，一般用5×5、3×3</span><br>stride=<span class="hljs-number">1</span>		<span class="hljs-comment"># 卷积核在图像窗口上每次平移的间隔，步长</span><br>padding=<span class="hljs-number">0</span>		<br></code></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://zdon.fun">Zdon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://zdon.fun/2024/03/02/pytorch-use/">http://zdon.fun/2024/03/02/pytorch-use/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zdon.fun" target="_blank">Zdon</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">神经网络</a><a class="post-meta__tags" href="/tags/PyTorch/">PyTorch</a><a class="post-meta__tags" href="/tags/AI/">AI</a><a class="post-meta__tags" href="/tags/DeepLearning/">DeepLearning</a></div><div class="post_share"><div class="social-share" data-image="/img/default_cover03.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/02/21/sort-algrithon/" title="常见的排序算法"><img class="cover" src="/img/default_cover05.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">常见的排序算法</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/02/02/pytorch-install/" title="PyTorch安装使用"><img class="cover" src="/img/default_cover01.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-02</div><div class="title">PyTorch安装使用</div></div></a></div><div><a href="/2023/01/15/deep-learning-test04/" title="深度学习实践实验-卷积神经网络"><img class="cover" src="/img/default_cover.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-01-15</div><div class="title">深度学习实践实验-卷积神经网络</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Zdon</div><div class="author-info__description">我来自偶然，像一颗尘土。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">47</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://gitee.com/wzd520"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/wzd520" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:wuzdon@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#PyTorch%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">PyTorch基础语法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%A0%E9%87%8F"><span class="toc-number">1.1.</span> <span class="toc-text">张量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C"><span class="toc-number">1.2.</span> <span class="toc-text">操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NumPy%E8%BD%AC%E6%8D%A2"><span class="toc-number">1.3.</span> <span class="toc-text">NumPy转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CUDA%E5%BC%A0%E9%87%8F"><span class="toc-number">1.4.</span> <span class="toc-text">CUDA张量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Autograd%E8%87%AA%E5%8A%A8%E6%B1%82%E5%AF%BC"><span class="toc-number">2.</span> <span class="toc-text">Autograd自动求导</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A2%AF%E5%BA%A6"><span class="toc-number">2.1.</span> <span class="toc-text">梯度</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C"><span class="toc-number">3.</span> <span class="toc-text">神经网络</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/03/02/pytorch-use/" title="PyTorch使用方法"><img src="/img/default_cover03.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="PyTorch使用方法"/></a><div class="content"><a class="title" href="/2024/03/02/pytorch-use/" title="PyTorch使用方法">PyTorch使用方法</a><time datetime="2024-03-02T09:11:36.000Z" title="发表于 2024-03-02 17:11:36">2024-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/02/21/sort-algrithon/" title="常见的排序算法"><img src="/img/default_cover05.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="常见的排序算法"/></a><div class="content"><a class="title" href="/2024/02/21/sort-algrithon/" title="常见的排序算法">常见的排序算法</a><time datetime="2024-02-21T08:53:53.000Z" title="发表于 2024-02-21 16:53:53">2024-02-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/02/10/15445-study-notes-01-04/" title="CMU15445数据库学习笔记01-04"><img src="/img/default_cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CMU15445数据库学习笔记01-04"/></a><div class="content"><a class="title" href="/2024/02/10/15445-study-notes-01-04/" title="CMU15445数据库学习笔记01-04">CMU15445数据库学习笔记01-04</a><time datetime="2024-02-10T08:08:56.000Z" title="发表于 2024-02-10 16:08:56">2024-02-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/02/10/database-mysql/" title="数据库-MySQL"><img src="/img/default_cover04.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="数据库-MySQL"/></a><div class="content"><a class="title" href="/2024/02/10/database-mysql/" title="数据库-MySQL">数据库-MySQL</a><time datetime="2024-02-10T08:00:39.000Z" title="发表于 2024-02-10 16:00:39">2024-02-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/01/30/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" title="进程间的通信方式"><img src="/img/default_cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="进程间的通信方式"/></a><div class="content"><a class="title" href="/2024/01/30/%E8%BF%9B%E7%A8%8B%E9%97%B4%E7%9A%84%E9%80%9A%E4%BF%A1%E6%96%B9%E5%BC%8F/" title="进程间的通信方式">进程间的通信方式</a><time datetime="2024-01-30T03:27:05.000Z" title="发表于 2024-01-30 11:27:05">2024-01-30</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/default_cover03.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By Zdon</div><div class="footer_custom_text">没有人是一座孤岛</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'QABC9cDUiFvfbJkVsG3I0mp1-gzGzoHsz',
+      appKey: '7s6lJmCCK7Bczu8Z93wTmEWb',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine@1.5.1/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="true" data-click="false"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.12.0"></script></div></div></body></html>

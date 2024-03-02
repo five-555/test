@@ -1,6 +1,6 @@
 ---
 title: PyTorch安装使用
-categories: 技术研究 算法实践 学习笔记
+categories: 技术研究
 date: 2023-02-02 17:05:09
 tags: [PyTorch, 人工智能, AI]
 cover:
