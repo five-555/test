@@ -583,6 +583,32 @@
       </tags>
   </entry>
   <entry>
+    <title>C++使用zlib库来压缩文件</title>
+    <url>/2024/01/26/C-%E4%BD%BF%E7%94%A8zlib%E5%BA%93%E6%9D%A5%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<h2 id="C-使用zlib库来压缩文件"><a href="#C-使用zlib库来压缩文件" class="headerlink" title="C++使用zlib库来压缩文件"></a>C++使用zlib库来压缩文件</h2><p>zlib压缩库提供内存压缩和解压缩功能，包括对未压缩的完整性检查数据，提供支持的压缩方法为：deflation，默认使用压缩数据格式为zlib格式。</p>
+<p>zlib库支持读取和写入gzip(.gz)格式的文件，zlib格式旨在紧凑且快速，可用于内存和通信渠道。gzip格式设计用于文件系统上的单文件压缩，比zlib具有更大的头部以维护目录信息，并且使用与zlib不同且更慢的检查方法。</p>
+<p>该库不安装任何信号处理程序。解码器检查压缩数据的一致性，因此即使在输入损坏的情况下，库也不应崩溃。</p>
+<h3 id="数据流结构"><a href="#数据流结构" class="headerlink" title="数据流结构"></a>数据流结构</h3><figure class="highlight angelscript"><table><tr><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">typedef</span> <span class="hljs-built_in">void</span>pf (*alloc_func)(<span class="hljs-built_in">void</span>pf opaque, uInt items, uInt size);<br><span class="hljs-keyword">typedef</span> <span class="hljs-built_in">void</span>   (*free_func)(<span class="hljs-built_in">void</span>pf opaque, <span class="hljs-built_in">void</span>pf address);<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>typedef voidpf (*alloc_func)(voidpf opaque, uInt items, uInt size);</code>这个函数指针通常用于内存分配，允许用户自定义的内存分配函数</li>
+<li><code>typedef void   (*free_func)(voidpf opaque, voidpf address);</code>这个函数指针通常用于内存释放，允许用户自定义的内存释放函数</li>
+</ul>
+<h3 id="基本功能"><a href="#基本功能" class="headerlink" title="基本功能"></a>基本功能</h3><figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino"><span class="hljs-function">ZEXTERN <span class="hljs-type">int</span> ZEXPORT <span class="hljs-title">deflateInit</span><span class="hljs-params">(z_streamp strm, <span class="hljs-type">int</span> level)</span></span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>level</code>表示压缩级别，要么为<code>Z_DEFAULT_COMPRESSION</code>，要么介于0-9之间，1表示最佳速度，9表示最佳压缩，0表示没有压缩，<code>Z_DEFAULT_COMPRESSION</code>默认在6级别。</li>
+<li><code>deflateInit</code> 返回 <code>Z_OK</code> 如果成功，则返回 <code>Z_MEM_ERROR</code> 如果没有 足够的内存，<code>Z_STREAM_ERROR</code> <code>level</code> 不是有效的压缩级别，<code>Z_VERSION_ERROR</code> <em>zlib</em> 库版本 （<code>zlib_version</code>） 不兼容 替换为调用方 （<code>ZLIB_VERSION</code>） 假定的版本。如果没有错误消息，<code>则 msg</code> 设置为 null。<code>deflateInit</code> 不 执行任何压缩：这将由 <code>deflate（）</code> 完成。</li>
+</ul>
+<figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino"><span class="hljs-function">ZEXTERN <span class="hljs-type">int</span> ZEXPORT <span class="hljs-title">deflate</span><span class="hljs-params">(z_streamp strm, <span class="hljs-type">int</span> flush)</span></span>;<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>技术研究</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>zlib</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>人工智能实验-基于LSTM+CTC的验证码</title>
     <url>/2023/02/18/AI-lab03/</url>
     <content><![CDATA[<h2 id="实验4-基于LSTM-CTC的验证码"><a href="#实验4-基于LSTM-CTC的验证码" class="headerlink" title="实验4-基于LSTM+CTC的验证码"></a>实验4-基于LSTM+CTC的验证码</h2><h3 id="1、实验目的"><a href="#1、实验目的" class="headerlink" title="1、实验目的"></a>1、实验目的</h3><ul>
@@ -724,32 +750,6 @@
       <tags>
         <tag>人工智能</tag>
         <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++使用zlib库来压缩文件</title>
-    <url>/2024/01/26/C-%E4%BD%BF%E7%94%A8zlib%E5%BA%93%E6%9D%A5%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<h2 id="C-使用zlib库来压缩文件"><a href="#C-使用zlib库来压缩文件" class="headerlink" title="C++使用zlib库来压缩文件"></a>C++使用zlib库来压缩文件</h2><p>zlib压缩库提供内存压缩和解压缩功能，包括对未压缩的完整性检查数据，提供支持的压缩方法为：deflation，默认使用压缩数据格式为zlib格式。</p>
-<p>zlib库支持读取和写入gzip(.gz)格式的文件，zlib格式旨在紧凑且快速，可用于内存和通信渠道。gzip格式设计用于文件系统上的单文件压缩，比zlib具有更大的头部以维护目录信息，并且使用与zlib不同且更慢的检查方法。</p>
-<p>该库不安装任何信号处理程序。解码器检查压缩数据的一致性，因此即使在输入损坏的情况下，库也不应崩溃。</p>
-<h3 id="数据流结构"><a href="#数据流结构" class="headerlink" title="数据流结构"></a>数据流结构</h3><figure class="highlight angelscript"><table><tr><td class="code"><pre><code class="hljs angelscript"><span class="hljs-keyword">typedef</span> <span class="hljs-built_in">void</span>pf (*alloc_func)(<span class="hljs-built_in">void</span>pf opaque, uInt items, uInt size);<br><span class="hljs-keyword">typedef</span> <span class="hljs-built_in">void</span>   (*free_func)(<span class="hljs-built_in">void</span>pf opaque, <span class="hljs-built_in">void</span>pf address);<br></code></pre></td></tr></table></figure>
-<ul>
-<li><code>typedef voidpf (*alloc_func)(voidpf opaque, uInt items, uInt size);</code>这个函数指针通常用于内存分配，允许用户自定义的内存分配函数</li>
-<li><code>typedef void   (*free_func)(voidpf opaque, voidpf address);</code>这个函数指针通常用于内存释放，允许用户自定义的内存释放函数</li>
-</ul>
-<h3 id="基本功能"><a href="#基本功能" class="headerlink" title="基本功能"></a>基本功能</h3><figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino"><span class="hljs-function">ZEXTERN <span class="hljs-type">int</span> ZEXPORT <span class="hljs-title">deflateInit</span><span class="hljs-params">(z_streamp strm, <span class="hljs-type">int</span> level)</span></span>;<br></code></pre></td></tr></table></figure>
-<ul>
-<li><code>level</code>表示压缩级别，要么为<code>Z_DEFAULT_COMPRESSION</code>，要么介于0-9之间，1表示最佳速度，9表示最佳压缩，0表示没有压缩，<code>Z_DEFAULT_COMPRESSION</code>默认在6级别。</li>
-<li><code>deflateInit</code> 返回 <code>Z_OK</code> 如果成功，则返回 <code>Z_MEM_ERROR</code> 如果没有 足够的内存，<code>Z_STREAM_ERROR</code> <code>level</code> 不是有效的压缩级别，<code>Z_VERSION_ERROR</code> <em>zlib</em> 库版本 （<code>zlib_version</code>） 不兼容 替换为调用方 （<code>ZLIB_VERSION</code>） 假定的版本。如果没有错误消息，<code>则 msg</code> 设置为 null。<code>deflateInit</code> 不 执行任何压缩：这将由 <code>deflate（）</code> 完成。</li>
-</ul>
-<figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino"><span class="hljs-function">ZEXTERN <span class="hljs-type">int</span> ZEXPORT <span class="hljs-title">deflate</span><span class="hljs-params">(z_streamp strm, <span class="hljs-type">int</span> flush)</span></span>;<br></code></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>技术研究</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>zlib</tag>
       </tags>
   </entry>
   <entry>
@@ -2036,437 +2036,6 @@
       </tags>
   </entry>
   <entry>
-    <title>A-Star算法模拟实现</title>
-    <url>/2023/07/28/a-star-assignment/</url>
-    <content><![CDATA[<h2 id="A-star算法模拟实现"><a href="#A-star算法模拟实现" class="headerlink" title="A star算法模拟实现"></a>A star算法模拟实现</h2><h3 id="内容："><a href="#内容：" class="headerlink" title="内容："></a>内容：</h3><p>已知如下图地图，黑色表示障碍物无法通行，要求实现避障算法寻找从红色起点出发到达绿色终点的最优路径。</p>
-<img src="/2023/07/28/a-star-assignment/1.jpg" class="" title="img">
-<p>要求：</p>
-<p>（1） 对图中的地图进行建模，抽象成类，对数据进行封装；</p>
-<p>（2） 思考寻路算法的实现，对问题进行拆解，对算法实现也要求抽象接口类；</p>
-<p>（3） 使用给定的C++工程模板，按照模板编写CMakeLists.txt，以及Google Test单元测试，DoxyGen注释的使用。</p>
-<h3 id="数据结构设计"><a href="#数据结构设计" class="headerlink" title="数据结构设计"></a>数据结构设计</h3><blockquote>
-<p>拿到题目最开始的想法就是想静态的实现对地图的绘制，然后对Astar算法进行复习，通过思考过后，觉得map形状，起始点，终点以及障碍，都是可以由用户通过交互的方式来完成的，进而选择将一些必要的数据聚合在类里面封装起来，本次实验一共设计了两个类，分别为Point（用于存储点的信息），Map（用于存储地图的相关信息，同时前端界面的拓展）</p>
-</blockquote>
-<h4 id="1、点的坐标抽象成一个结构体"><a href="#1、点的坐标抽象成一个结构体" class="headerlink" title="1、点的坐标抽象成一个结构体"></a>1、点的坐标抽象成一个结构体</h4><p>Xy结构体存储的是点的位置坐标，x表示横坐标，y表示纵坐标，初始值都设置为0。</p>
-<figure class="highlight abnf"><table><tr><td class="code"><pre><code class="hljs abnf">struct Xy<br>&#123;<br>    int x <span class="hljs-operator">=</span> <span class="hljs-number">0</span><span class="hljs-comment">;</span><br>    int y <span class="hljs-operator">=</span> <span class="hljs-number">0</span><span class="hljs-comment">;</span><br>&#125;<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
-<h4 id="2、地图上的每一个点抽象成一个Point类"><a href="#2、地图上的每一个点抽象成一个Point类" class="headerlink" title="2、地图上的每一个点抽象成一个Point类"></a>2、地图上的每一个点抽象成一个Point类</h4><ul>
-<li>Point类中含有的私有成员</li>
-</ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">成员名</th>
-<th style="text-align:center">具体含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">Xy _xy</td>
-<td style="text-align:center">Xy结构体，存储当前Point的坐标信</td>
-</tr>
-<tr>
-<td style="text-align:center">int _value</td>
-<td style="text-align:center">状态码，用于标记当前的坐标的Point状态</td>
-</tr>
-</tbody>
-</table>
-</div>
-<ul>
-<li>Point类中含有的公有成员</li>
-</ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">成员名</th>
-<th style="text-align:center">具体含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">int _f</td>
-<td style="text-align:center">总代价</td>
-</tr>
-<tr>
-<td style="text-align:center">int _g</td>
-<td style="text-align:center">当前走过的代价</td>
-</tr>
-<tr>
-<td style="text-align:center">int _h</td>
-<td style="text-align:center">到终点的代价</td>
-</tr>
-<tr>
-<td style="text-align:center">Point* _parent;</td>
-<td style="text-align:center">存储上一个经过的Point保存路径信息</td>
-</tr>
-<tr>
-<td style="text-align:center">Point();</td>
-<td style="text-align:center">默认构造函数</td>
-</tr>
-<tr>
-<td style="text-align:center">Point(int m_x, int m_y, int m_value);</td>
-<td style="text-align:center">重载构造函数</td>
-</tr>
-<tr>
-<td style="text-align:center">~Point();</td>
-<td style="text-align:center">析构函数</td>
-</tr>
-<tr>
-<td style="text-align:center">void insertAbs();</td>
-<td style="text-align:center">将当前Point设置为障碍</td>
-</tr>
-<tr>
-<td style="text-align:center">void insertFirst();</td>
-<td style="text-align:center">将当前Point设置为起始点</td>
-</tr>
-<tr>
-<td style="text-align:center">void insertFinal();</td>
-<td style="text-align:center">将当前Point设置为终点</td>
-</tr>
-<tr>
-<td style="text-align:center">void insertNoAbs();</td>
-<td style="text-align:center">将当前Point设置成非障碍</td>
-</tr>
-<tr>
-<td style="text-align:center">void insertPriority();</td>
-<td style="text-align:center">将当前Point设置为优先队列内</td>
-</tr>
-<tr>
-<td style="text-align:center">int getValue();</td>
-<td style="text-align:center">获取当前状态码</td>
-</tr>
-<tr>
-<td style="text-align:center">void updateF();</td>
-<td style="text-align:center">更新_f值</td>
-</tr>
-<tr>
-<td style="text-align:center">Xy getXy();</td>
-<td style="text-align:center">得到坐标信息</td>
-</tr>
-<tr>
-<td style="text-align:center">void setParent(Point&amp; p);</td>
-<td style="text-align:center">设置父节点</td>
-</tr>
-<tr>
-<td style="text-align:center">bool operator&lt;(const Point&amp; point1)const;</td>
-<td style="text-align:center">重载比较函数作为优先队列第三个参数</td>
-</tr>
-</tbody>
-</table>
-</div>
-<ul>
-<li>Point类的友元函数</li>
-</ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">成员名</th>
-<th style="text-align:center">具体含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, Point&amp; m_point);</td>
-<td style="text-align:center">重载输出运算符打印Point信息</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h4 id="3、将地图抽象程一个Map类"><a href="#3、将地图抽象程一个Map类" class="headerlink" title="3、将地图抽象程一个Map类"></a>3、将地图抽象程一个Map类</h4><ul>
-<li>Map类中含有的私有成员</li>
-</ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">成员名</th>
-<th style="text-align:center">具体含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">int _length;</td>
-<td style="text-align:center">地图的长度</td>
-</tr>
-<tr>
-<td style="text-align:center">int _weight;</td>
-<td style="text-align:center">地图的宽度</td>
-</tr>
-<tr>
-<td style="text-align:center">Xy _first;</td>
-<td style="text-align:center">起始点的坐标信息</td>
-</tr>
-<tr>
-<td style="text-align:center">Xy _final;</td>
-<td style="text-align:center">终点的坐标信息</td>
-</tr>
-<tr>
-<td style="text-align:center">std::vector&lt; std::vector&lt; Point  &gt; &gt; _map;</td>
-<td style="text-align:center">整个地图由二维的Point组成</td>
-</tr>
-<tr>
-<td style="text-align:center">std::priority_queue&lt; Point &gt; _point_open;</td>
-<td style="text-align:center">存放当前优先队列中的点</td>
-</tr>
-<tr>
-<td style="text-align:center">std::vector&lt; Xy &gt; _path;</td>
-<td style="text-align:center">寻路完毕过后的路径信息</td>
-</tr>
-<tr>
-<td style="text-align:center">bool _haveway = 1;</td>
-<td style="text-align:center">表示当前地图是否有通路</td>
-</tr>
-</tbody>
-</table>
-</div>
-<ul>
-<li>Map类中含有的公有成员</li>
-</ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">成员名</th>
-<th style="text-align:center">具体含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">Map();</td>
-<td style="text-align:center">默认构造函数</td>
-</tr>
-<tr>
-<td style="text-align:center">Map(int m_length, int m_weight);</td>
-<td style="text-align:center">重载构造函数，通过地图的宽和高来初始化地图</td>
-</tr>
-<tr>
-<td style="text-align:center">void insertAbs(int x, int y);</td>
-<td style="text-align:center">将当前点设置为障碍</td>
-</tr>
-<tr>
-<td style="text-align:center">void insertFirst(int x, int y);</td>
-<td style="text-align:center">将当前点设置为起始点</td>
-</tr>
-<tr>
-<td style="text-align:center">void insertFinal(int x, int y);</td>
-<td style="text-align:center">将当前点设置为终点</td>
-</tr>
-<tr>
-<td style="text-align:center">void deleteAbs(int x, int y);</td>
-<td style="text-align:center">删除当前障碍点</td>
-</tr>
-<tr>
-<td style="text-align:center">bool isOnBoard(Xy xy);</td>
-<td style="text-align:center">判断当前点是否越界</td>
-</tr>
-<tr>
-<td style="text-align:center">int twoPointDistance(Xy point1, Xy point2);</td>
-<td style="text-align:center">计算两点之间的斜线距离</td>
-</tr>
-<tr>
-<td style="text-align:center">int gAdd(Xy point1, Xy point2);</td>
-<td style="text-align:center">计算代价_g的增量距离</td>
-</tr>
-<tr>
-<td style="text-align:center">void aStar();</td>
-<td style="text-align:center">实现AStar算法</td>
-</tr>
-<tr>
-<td style="text-align:center">void getPath();</td>
-<td style="text-align:center">存储起点到终点的最短路径</td>
-</tr>
-<tr>
-<td style="text-align:center">void reStart();</td>
-<td style="text-align:center">刷新状态码和初始化操作</td>
-</tr>
-</tbody>
-</table>
-</div>
-<ul>
-<li>Map类的友元函数</li>
-</ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">成员名</th>
-<th style="text-align:center">具体含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, Map&amp; m_map);</td>
-<td style="text-align:center">重载输出运算符，用于整个地图的输出，输出的数据为各个坐标位置的状态码</td>
-</tr>
-</tbody>
-</table>
-</div>
-<ul>
-<li>拓展，用于前端的成员</li>
-</ul>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">成员名</th>
-<th style="text-align:center">具体含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">void paintEvent(QPaintEvent* event) override;</td>
-<td style="text-align:center">重写绘图画笔事件</td>
-</tr>
-<tr>
-<td style="text-align:center">void mousePressEvent(QMouseEvent* event);</td>
-<td style="text-align:center">重写鼠标监听事件</td>
-</tr>
-<tr>
-<td style="text-align:center">int start_x = 10;</td>
-<td style="text-align:center">基坐标x</td>
-</tr>
-<tr>
-<td style="text-align:center">int start_y = 10;</td>
-<td style="text-align:center">基坐标y</td>
-</tr>
-<tr>
-<td style="text-align:center">int gsize = 50;</td>
-<td style="text-align:center">网格大小</td>
-</tr>
-<tr>
-<td style="text-align:center">bool start_button = 0;<br/>bool final_button = 0;<br/>bool abs_button = 0;<br/>bool a_star_button = 0;<br/>bool clear_button = 1;<br/>bool restart_button = 0;</td>
-<td style="text-align:center">鼠标资源的控制符号</td>
-</tr>
-<tr>
-<td style="text-align:center">int last_x = 0;</td>
-<td style="text-align:center">记录上一次鼠标点击的坐标x</td>
-</tr>
-<tr>
-<td style="text-align:center">int last_y = 0;</td>
-<td style="text-align:center">记录上一次鼠标点击的坐标y</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h3><blockquote>
-<p>核心算法用到的是A-Star算法，这是一个启发式算法，属于贪心算法和bfs的结合，使用的贪心选择策略为当前预计的最小代价，通过代价函数来确定其下一步应该走的路径，每一次都记录上一次路过的结点，最终到达终点以后即可获得走过的路径。    </p>
-</blockquote>
-<figure class="highlight nsis"><table><tr><td class="code"><pre><code class="hljs nsis">算法描述<br><span class="hljs-number">1</span>、建一个优先队列，优先队列按照代价从低到高进行排序。<br><span class="hljs-number">2</span>、计算起始点的代价，将起始点<span class="hljs-keyword">push</span>到优先队列中。<br><span class="hljs-number">3</span>、不断从优先队列中取出<span class="hljs-literal">top</span>的元素，并将其周围的点<span class="hljs-keyword">push</span>到优先队列中，周围的点满足的条件，不是障碍，且不在当前的openlist中，若在其中则比较代价大小，代价小则更新。并将父节点的记录保存下来。<br><span class="hljs-number">4</span>、如果已经到了终点，则按照父节点寻找路径。<br><span class="hljs-number">5</span>、若优先队列为空以后，则说明起点到终点没有路径。<br></code></pre></td></tr></table></figure>
-<img src="/2023/07/28/a-star-assignment/image-20230803165730214.png" class="" title="image-20230803165730214">
-<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><ul>
-<li><p>地图的长和宽</p>
-<p>用户手动输入地图的长和宽，得到长和宽以后，会自动初始化地图大小</p>
-</li>
-<li><p>输入起始点</p>
-<p>选择地图上的某一空白处作为起始点</p>
-</li>
-<li><p>输入终点</p>
-<p>选择地图上的某一空白处作为终点</p>
-</li>
-<li><p>输入障碍</p>
-<p>选择地图上的空白处可以设置为障碍</p>
-</li>
-<li><p>清除障碍</p>
-<p>点击clear_abs可以将障碍清除</p>
-</li>
-<li><p>寻路</p>
-<p>点击a-star进行从起点到终点的寻路</p>
-</li>
-</ul>
-<h4 id="输入测试："><a href="#输入测试：" class="headerlink" title="输入测试："></a>输入测试：</h4><blockquote>
-<p>在本次实验中，一共设置了6个可以提供选择的按钮，当按钮处于灰色状态时，代表按钮处于未被激活状态，即该按钮不可点击，当按钮处于蓝色则说明按钮可点击。</p>
-<p>ADD_FIRST        设置起点</p>
-<p>ADD_FINAL        设置终点</p>
-<p>A_STAR                使用Astar开始寻路</p>
-<p>ADD_ABS            设置障碍</p>
-<p>CLEAR_ABS            清除障碍</p>
-<p>RESTART                重新开始，将一些状态清除</p>
-</blockquote>
-<ul>
-<li>测试一、5行10列</li>
-</ul>
-<img src="/2023/07/28/a-star-assignment/image-20230803171605818.png" class="" title="image-20230803171605818">
-<ul>
-<li>测试二、3行5列</li>
-</ul>
-<img src="/2023/07/28/a-star-assignment/image-20230803171645811.png" class="" title="image-20230803171645811">
-<h4 id="结果测试"><a href="#结果测试" class="headerlink" title="结果测试"></a>结果测试</h4><blockquote>
-<p>结果说明：</p>
-<p>绿色的网格代表设置的起点</p>
-<p>红色的网格代表设置的终点</p>
-<p>黑色的网格代表设置的障碍</p>
-<p>白色的网格代表可以通路</p>
-<p>灰色的网格代表寻路算法经过的搜索空间</p>
-</blockquote>
-<ul>
-<li>测试一、无障碍情况</li>
-</ul>
-<img src="/2023/07/28/a-star-assignment/image-20230803172210807.png" class="" title="image-20230803172210807">
-<img src="/2023/07/28/a-star-assignment/image-20230803173053255.png" class="" title="image-20230803173053255">
-<ul>
-<li>测试二、随机障碍情况</li>
-</ul>
-<img src="/2023/07/28/a-star-assignment/image-20230803173141837.png" class="" title="image-20230803173141837">
-<img src="/2023/07/28/a-star-assignment/image-20230803173212434.png" class="" title="image-20230803173212434">
-<img src="/2023/07/28/a-star-assignment/image-20230803173244879.png" class="" title="image-20230803173244879">
-<img src="/2023/07/28/a-star-assignment/image-20230803173329009.png" class="" title="image-20230803173329009">
-<ul>
-<li><p>测试三、无通路情况</p>
-<blockquote>
-<p>没有通路，则不会寻路，状态码为5的表示搜索到了的位置，从打印出的状态码中可以看出，搜索在障碍的边界处便中断了。</p>
-</blockquote>
-</li>
-</ul>
-<img src="/2023/07/28/a-star-assignment/image-20230803173754572.png" class="" title="image-20230803173754572">
-<img src="/2023/07/28/a-star-assignment/image-20230803173808529.png" class="" title="image-20230803173808529">
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><h4 id="遇到的一些问题"><a href="#遇到的一些问题" class="headerlink" title="遇到的一些问题"></a>遇到的一些问题</h4><ul>
-<li><p><strong>优先队列中比较函数的使用</strong></p>
-<p>最开始使用的是代价f值作为比较函数中的参数，这样会导致一种情况，如果有两个代价一样的结点插入优先队列的时候，在下一次弹出优先队列的过程中，代价一样的结点会按照进入队列的先后顺序来进行弹出，也就是说在代价相同的结点中是按照广度优先的方式来进行的。但是如果我们在f值相同的情况下，再对h值进行比较，每次优先选择h值最小即最接近终点的结点出队列，这样就会将解空间缩小很多，具体案例如下所示。</p>
-<ul>
-<li>使用两个参数的比较函数</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">bool</span> Point::<span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> Point&amp; point1)<span class="hljs-type">const</span> &#123;<br>    <span class="hljs-keyword">if</span> (_f == point1._f) <span class="hljs-keyword">return</span> _h &gt; point1._h;<br>    <span class="hljs-keyword">return</span> _f &gt; point1._f;<br>&#125;<br></code></pre></td></tr></table></figure>
-</li>
-</ul>
-<img src="/2023/07/28/a-star-assignment/image-20230803183655944.png" class="" title="image-20230803183655944">
-<ul>
-<li><ul>
-<li>使用一个参数的比较函数</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">bool</span> Point::<span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> Point&amp; point1)<span class="hljs-type">const</span> &#123;<br>    <span class="hljs-comment">// if (_f == point1._f) return _h &gt; point1._h;</span><br>    <span class="hljs-keyword">return</span> _f &gt; point1._f;<br>&#125;<br></code></pre></td></tr></table></figure>
-</li>
-</ul>
-<img src="/2023/07/28/a-star-assignment/image-20230803183939400.png" class="" title="image-20230803183939400">
-<ul>
-<li><p><strong>关于插入优先队列以后是否需要更新f值的问题</strong></p>
-<p>在起初的版本中，通过简单的分析认为不需要更新f值，因为最开始认为如果能够在之前就到达的位置，再后面再到达了，说明会绕一些弯路，所以这样的f值肯定会大于或等于最开始进入openlist的结点。但在运行过程中出现了下面的问题，问题就是因为没有更新f值造成的，因为在最优路径中第一次遍历的最优路径上的点，不一定是通过最优路径中的点遍历的，所以会存在有f更小的现象。</p>
-</li>
-</ul>
-<img src="/2023/07/28/a-star-assignment/%E9%97%AE%E9%A2%98%EF%BC%9A%E6%8F%92%E5%85%A5%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E4%BB%A5%E5%90%8E%E6%B2%A1%E6%9C%89%E6%9B%B4%E6%96%B0f%E5%80%BC.png" class="" title="问题：插入优先队列以后没有更新f值">
-<ul>
-<li><p><strong>在优先队列中查找元素的问题</strong></p>
-<p>优先队列是一个堆的结构，很适用于取出最大值或者最小值，但如果是想要从优先队列中找到某一个元素，就较为难办了，在实验中出现的场景便是，需要确认当前遍历的结点是否在优先队列中，如果在优先队列中，则需要进行比较，不在的话则插入。</p>
-<p>采用的方式是在Point类中加入了一个value参数，用于表示当前结点的状态码，当value为0时表示属于通路，1表示障碍，2表示起点，3表示终点，5表示在优先队列中，通过这样的方式便可以极大便利的获取当前结点的状态值，并达到随机访问结点状态的现象，如果某一个结点在优先队列中，只需要查看该节点的状态码即可。设置状态码还有一个好处，如果需要重新开始的话，只需要将该节点的状态码改为0即可。</p>
-</li>
-<li><p><strong>一个超级无脑的小bug</strong></p>
-<p>在调试过程中，发现无法进行多次寻路，找了将近一天，最后发现Point中使用指针存储的parent结点用于寻路，下意识的在析构函数中使用delete删除parent，因为没有给parent分配内存，是使用等号复制地址的。所以在使用界面交互进行多次寻路的过程中，出现内存被回收的问题，窗口强制退出。</p>
-</li>
-<li><p><strong>前端遇到的一些问题</strong></p>
-<p>前端需要解决的最主要的问题并不是绘图，而是资源状态的获取问题，获取鼠标事件，以及如何控制不同的点击执行不同的操作，最后使用一些bool值来进行组合完成。</p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>算法实践</category>
-      </categories>
-      <tags>
-        <tag>C++</tag>
-        <tag>A*算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C++ Primer Plus学习笔记7-13章</title>
     <url>/2023/07/21/c-primer-plus/</url>
     <content><![CDATA[<h3 id="第七章-函数-C-的编程模块"><a href="#第七章-函数-C-的编程模块" class="headerlink" title="第七章 函数-C++的编程模块"></a>第七章 函数-C++的编程模块</h3><p>函数的基本概念和应用：</p>
@@ -2906,6 +2475,787 @@
         <tag>C++</tag>
         <tag>Cmake</tag>
         <tag>编译</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>A-Star算法模拟实现</title>
+    <url>/2023/07/28/a-star-assignment/</url>
+    <content><![CDATA[<h2 id="A-star算法模拟实现"><a href="#A-star算法模拟实现" class="headerlink" title="A star算法模拟实现"></a>A star算法模拟实现</h2><h3 id="内容："><a href="#内容：" class="headerlink" title="内容："></a>内容：</h3><p>已知如下图地图，黑色表示障碍物无法通行，要求实现避障算法寻找从红色起点出发到达绿色终点的最优路径。</p>
+<img src="/2023/07/28/a-star-assignment/1.jpg" class="" title="img">
+<p>要求：</p>
+<p>（1） 对图中的地图进行建模，抽象成类，对数据进行封装；</p>
+<p>（2） 思考寻路算法的实现，对问题进行拆解，对算法实现也要求抽象接口类；</p>
+<p>（3） 使用给定的C++工程模板，按照模板编写CMakeLists.txt，以及Google Test单元测试，DoxyGen注释的使用。</p>
+<h3 id="数据结构设计"><a href="#数据结构设计" class="headerlink" title="数据结构设计"></a>数据结构设计</h3><blockquote>
+<p>拿到题目最开始的想法就是想静态的实现对地图的绘制，然后对Astar算法进行复习，通过思考过后，觉得map形状，起始点，终点以及障碍，都是可以由用户通过交互的方式来完成的，进而选择将一些必要的数据聚合在类里面封装起来，本次实验一共设计了两个类，分别为Point（用于存储点的信息），Map（用于存储地图的相关信息，同时前端界面的拓展）</p>
+</blockquote>
+<h4 id="1、点的坐标抽象成一个结构体"><a href="#1、点的坐标抽象成一个结构体" class="headerlink" title="1、点的坐标抽象成一个结构体"></a>1、点的坐标抽象成一个结构体</h4><p>Xy结构体存储的是点的位置坐标，x表示横坐标，y表示纵坐标，初始值都设置为0。</p>
+<figure class="highlight abnf"><table><tr><td class="code"><pre><code class="hljs abnf">struct Xy<br>&#123;<br>    int x <span class="hljs-operator">=</span> <span class="hljs-number">0</span><span class="hljs-comment">;</span><br>    int y <span class="hljs-operator">=</span> <span class="hljs-number">0</span><span class="hljs-comment">;</span><br>&#125;<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+<h4 id="2、地图上的每一个点抽象成一个Point类"><a href="#2、地图上的每一个点抽象成一个Point类" class="headerlink" title="2、地图上的每一个点抽象成一个Point类"></a>2、地图上的每一个点抽象成一个Point类</h4><ul>
+<li>Point类中含有的私有成员</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">成员名</th>
+<th style="text-align:center">具体含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Xy _xy</td>
+<td style="text-align:center">Xy结构体，存储当前Point的坐标信</td>
+</tr>
+<tr>
+<td style="text-align:center">int _value</td>
+<td style="text-align:center">状态码，用于标记当前的坐标的Point状态</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>Point类中含有的公有成员</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">成员名</th>
+<th style="text-align:center">具体含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">int _f</td>
+<td style="text-align:center">总代价</td>
+</tr>
+<tr>
+<td style="text-align:center">int _g</td>
+<td style="text-align:center">当前走过的代价</td>
+</tr>
+<tr>
+<td style="text-align:center">int _h</td>
+<td style="text-align:center">到终点的代价</td>
+</tr>
+<tr>
+<td style="text-align:center">Point* _parent;</td>
+<td style="text-align:center">存储上一个经过的Point保存路径信息</td>
+</tr>
+<tr>
+<td style="text-align:center">Point();</td>
+<td style="text-align:center">默认构造函数</td>
+</tr>
+<tr>
+<td style="text-align:center">Point(int m_x, int m_y, int m_value);</td>
+<td style="text-align:center">重载构造函数</td>
+</tr>
+<tr>
+<td style="text-align:center">~Point();</td>
+<td style="text-align:center">析构函数</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertAbs();</td>
+<td style="text-align:center">将当前Point设置为障碍</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertFirst();</td>
+<td style="text-align:center">将当前Point设置为起始点</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertFinal();</td>
+<td style="text-align:center">将当前Point设置为终点</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertNoAbs();</td>
+<td style="text-align:center">将当前Point设置成非障碍</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertPriority();</td>
+<td style="text-align:center">将当前Point设置为优先队列内</td>
+</tr>
+<tr>
+<td style="text-align:center">int getValue();</td>
+<td style="text-align:center">获取当前状态码</td>
+</tr>
+<tr>
+<td style="text-align:center">void updateF();</td>
+<td style="text-align:center">更新_f值</td>
+</tr>
+<tr>
+<td style="text-align:center">Xy getXy();</td>
+<td style="text-align:center">得到坐标信息</td>
+</tr>
+<tr>
+<td style="text-align:center">void setParent(Point&amp; p);</td>
+<td style="text-align:center">设置父节点</td>
+</tr>
+<tr>
+<td style="text-align:center">bool operator&lt;(const Point&amp; point1)const;</td>
+<td style="text-align:center">重载比较函数作为优先队列第三个参数</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>Point类的友元函数</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">成员名</th>
+<th style="text-align:center">具体含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, Point&amp; m_point);</td>
+<td style="text-align:center">重载输出运算符打印Point信息</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="3、将地图抽象程一个Map类"><a href="#3、将地图抽象程一个Map类" class="headerlink" title="3、将地图抽象程一个Map类"></a>3、将地图抽象程一个Map类</h4><ul>
+<li>Map类中含有的私有成员</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">成员名</th>
+<th style="text-align:center">具体含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">int _length;</td>
+<td style="text-align:center">地图的长度</td>
+</tr>
+<tr>
+<td style="text-align:center">int _weight;</td>
+<td style="text-align:center">地图的宽度</td>
+</tr>
+<tr>
+<td style="text-align:center">Xy _first;</td>
+<td style="text-align:center">起始点的坐标信息</td>
+</tr>
+<tr>
+<td style="text-align:center">Xy _final;</td>
+<td style="text-align:center">终点的坐标信息</td>
+</tr>
+<tr>
+<td style="text-align:center">std::vector&lt; std::vector&lt; Point  &gt; &gt; _map;</td>
+<td style="text-align:center">整个地图由二维的Point组成</td>
+</tr>
+<tr>
+<td style="text-align:center">std::priority_queue&lt; Point &gt; _point_open;</td>
+<td style="text-align:center">存放当前优先队列中的点</td>
+</tr>
+<tr>
+<td style="text-align:center">std::vector&lt; Xy &gt; _path;</td>
+<td style="text-align:center">寻路完毕过后的路径信息</td>
+</tr>
+<tr>
+<td style="text-align:center">bool _haveway = 1;</td>
+<td style="text-align:center">表示当前地图是否有通路</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>Map类中含有的公有成员</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">成员名</th>
+<th style="text-align:center">具体含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Map();</td>
+<td style="text-align:center">默认构造函数</td>
+</tr>
+<tr>
+<td style="text-align:center">Map(int m_length, int m_weight);</td>
+<td style="text-align:center">重载构造函数，通过地图的宽和高来初始化地图</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertAbs(int x, int y);</td>
+<td style="text-align:center">将当前点设置为障碍</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertFirst(int x, int y);</td>
+<td style="text-align:center">将当前点设置为起始点</td>
+</tr>
+<tr>
+<td style="text-align:center">void insertFinal(int x, int y);</td>
+<td style="text-align:center">将当前点设置为终点</td>
+</tr>
+<tr>
+<td style="text-align:center">void deleteAbs(int x, int y);</td>
+<td style="text-align:center">删除当前障碍点</td>
+</tr>
+<tr>
+<td style="text-align:center">bool isOnBoard(Xy xy);</td>
+<td style="text-align:center">判断当前点是否越界</td>
+</tr>
+<tr>
+<td style="text-align:center">int twoPointDistance(Xy point1, Xy point2);</td>
+<td style="text-align:center">计算两点之间的斜线距离</td>
+</tr>
+<tr>
+<td style="text-align:center">int gAdd(Xy point1, Xy point2);</td>
+<td style="text-align:center">计算代价_g的增量距离</td>
+</tr>
+<tr>
+<td style="text-align:center">void aStar();</td>
+<td style="text-align:center">实现AStar算法</td>
+</tr>
+<tr>
+<td style="text-align:center">void getPath();</td>
+<td style="text-align:center">存储起点到终点的最短路径</td>
+</tr>
+<tr>
+<td style="text-align:center">void reStart();</td>
+<td style="text-align:center">刷新状态码和初始化操作</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>Map类的友元函数</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">成员名</th>
+<th style="text-align:center">具体含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, Map&amp; m_map);</td>
+<td style="text-align:center">重载输出运算符，用于整个地图的输出，输出的数据为各个坐标位置的状态码</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>拓展，用于前端的成员</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">成员名</th>
+<th style="text-align:center">具体含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">void paintEvent(QPaintEvent* event) override;</td>
+<td style="text-align:center">重写绘图画笔事件</td>
+</tr>
+<tr>
+<td style="text-align:center">void mousePressEvent(QMouseEvent* event);</td>
+<td style="text-align:center">重写鼠标监听事件</td>
+</tr>
+<tr>
+<td style="text-align:center">int start_x = 10;</td>
+<td style="text-align:center">基坐标x</td>
+</tr>
+<tr>
+<td style="text-align:center">int start_y = 10;</td>
+<td style="text-align:center">基坐标y</td>
+</tr>
+<tr>
+<td style="text-align:center">int gsize = 50;</td>
+<td style="text-align:center">网格大小</td>
+</tr>
+<tr>
+<td style="text-align:center">bool start_button = 0;<br/>bool final_button = 0;<br/>bool abs_button = 0;<br/>bool a_star_button = 0;<br/>bool clear_button = 1;<br/>bool restart_button = 0;</td>
+<td style="text-align:center">鼠标资源的控制符号</td>
+</tr>
+<tr>
+<td style="text-align:center">int last_x = 0;</td>
+<td style="text-align:center">记录上一次鼠标点击的坐标x</td>
+</tr>
+<tr>
+<td style="text-align:center">int last_y = 0;</td>
+<td style="text-align:center">记录上一次鼠标点击的坐标y</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h3><blockquote>
+<p>核心算法用到的是A-Star算法，这是一个启发式算法，属于贪心算法和bfs的结合，使用的贪心选择策略为当前预计的最小代价，通过代价函数来确定其下一步应该走的路径，每一次都记录上一次路过的结点，最终到达终点以后即可获得走过的路径。    </p>
+</blockquote>
+<figure class="highlight nsis"><table><tr><td class="code"><pre><code class="hljs nsis">算法描述<br><span class="hljs-number">1</span>、建一个优先队列，优先队列按照代价从低到高进行排序。<br><span class="hljs-number">2</span>、计算起始点的代价，将起始点<span class="hljs-keyword">push</span>到优先队列中。<br><span class="hljs-number">3</span>、不断从优先队列中取出<span class="hljs-literal">top</span>的元素，并将其周围的点<span class="hljs-keyword">push</span>到优先队列中，周围的点满足的条件，不是障碍，且不在当前的openlist中，若在其中则比较代价大小，代价小则更新。并将父节点的记录保存下来。<br><span class="hljs-number">4</span>、如果已经到了终点，则按照父节点寻找路径。<br><span class="hljs-number">5</span>、若优先队列为空以后，则说明起点到终点没有路径。<br></code></pre></td></tr></table></figure>
+<img src="/2023/07/28/a-star-assignment/image-20230803165730214.png" class="" title="image-20230803165730214">
+<h3 id="输入描述"><a href="#输入描述" class="headerlink" title="输入描述"></a>输入描述</h3><ul>
+<li><p>地图的长和宽</p>
+<p>用户手动输入地图的长和宽，得到长和宽以后，会自动初始化地图大小</p>
+</li>
+<li><p>输入起始点</p>
+<p>选择地图上的某一空白处作为起始点</p>
+</li>
+<li><p>输入终点</p>
+<p>选择地图上的某一空白处作为终点</p>
+</li>
+<li><p>输入障碍</p>
+<p>选择地图上的空白处可以设置为障碍</p>
+</li>
+<li><p>清除障碍</p>
+<p>点击clear_abs可以将障碍清除</p>
+</li>
+<li><p>寻路</p>
+<p>点击a-star进行从起点到终点的寻路</p>
+</li>
+</ul>
+<h4 id="输入测试："><a href="#输入测试：" class="headerlink" title="输入测试："></a>输入测试：</h4><blockquote>
+<p>在本次实验中，一共设置了6个可以提供选择的按钮，当按钮处于灰色状态时，代表按钮处于未被激活状态，即该按钮不可点击，当按钮处于蓝色则说明按钮可点击。</p>
+<p>ADD_FIRST        设置起点</p>
+<p>ADD_FINAL        设置终点</p>
+<p>A_STAR                使用Astar开始寻路</p>
+<p>ADD_ABS            设置障碍</p>
+<p>CLEAR_ABS            清除障碍</p>
+<p>RESTART                重新开始，将一些状态清除</p>
+</blockquote>
+<ul>
+<li>测试一、5行10列</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/image-20230803171605818.png" class="" title="image-20230803171605818">
+<ul>
+<li>测试二、3行5列</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/image-20230803171645811.png" class="" title="image-20230803171645811">
+<h4 id="结果测试"><a href="#结果测试" class="headerlink" title="结果测试"></a>结果测试</h4><blockquote>
+<p>结果说明：</p>
+<p>绿色的网格代表设置的起点</p>
+<p>红色的网格代表设置的终点</p>
+<p>黑色的网格代表设置的障碍</p>
+<p>白色的网格代表可以通路</p>
+<p>灰色的网格代表寻路算法经过的搜索空间</p>
+</blockquote>
+<ul>
+<li>测试一、无障碍情况</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/image-20230803172210807.png" class="" title="image-20230803172210807">
+<img src="/2023/07/28/a-star-assignment/image-20230803173053255.png" class="" title="image-20230803173053255">
+<ul>
+<li>测试二、随机障碍情况</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/image-20230803173141837.png" class="" title="image-20230803173141837">
+<img src="/2023/07/28/a-star-assignment/image-20230803173212434.png" class="" title="image-20230803173212434">
+<img src="/2023/07/28/a-star-assignment/image-20230803173244879.png" class="" title="image-20230803173244879">
+<img src="/2023/07/28/a-star-assignment/image-20230803173329009.png" class="" title="image-20230803173329009">
+<ul>
+<li><p>测试三、无通路情况</p>
+<blockquote>
+<p>没有通路，则不会寻路，状态码为5的表示搜索到了的位置，从打印出的状态码中可以看出，搜索在障碍的边界处便中断了。</p>
+</blockquote>
+</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/image-20230803173754572.png" class="" title="image-20230803173754572">
+<img src="/2023/07/28/a-star-assignment/image-20230803173808529.png" class="" title="image-20230803173808529">
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><h4 id="遇到的一些问题"><a href="#遇到的一些问题" class="headerlink" title="遇到的一些问题"></a>遇到的一些问题</h4><ul>
+<li><p><strong>优先队列中比较函数的使用</strong></p>
+<p>最开始使用的是代价f值作为比较函数中的参数，这样会导致一种情况，如果有两个代价一样的结点插入优先队列的时候，在下一次弹出优先队列的过程中，代价一样的结点会按照进入队列的先后顺序来进行弹出，也就是说在代价相同的结点中是按照广度优先的方式来进行的。但是如果我们在f值相同的情况下，再对h值进行比较，每次优先选择h值最小即最接近终点的结点出队列，这样就会将解空间缩小很多，具体案例如下所示。</p>
+<ul>
+<li>使用两个参数的比较函数</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">bool</span> Point::<span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> Point&amp; point1)<span class="hljs-type">const</span> &#123;<br>    <span class="hljs-keyword">if</span> (_f == point1._f) <span class="hljs-keyword">return</span> _h &gt; point1._h;<br>    <span class="hljs-keyword">return</span> _f &gt; point1._f;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/image-20230803183655944.png" class="" title="image-20230803183655944">
+<ul>
+<li><ul>
+<li>使用一个参数的比较函数</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">bool</span> Point::<span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> Point&amp; point1)<span class="hljs-type">const</span> &#123;<br>    <span class="hljs-comment">// if (_f == point1._f) return _h &gt; point1._h;</span><br>    <span class="hljs-keyword">return</span> _f &gt; point1._f;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/image-20230803183939400.png" class="" title="image-20230803183939400">
+<ul>
+<li><p><strong>关于插入优先队列以后是否需要更新f值的问题</strong></p>
+<p>在起初的版本中，通过简单的分析认为不需要更新f值，因为最开始认为如果能够在之前就到达的位置，再后面再到达了，说明会绕一些弯路，所以这样的f值肯定会大于或等于最开始进入openlist的结点。但在运行过程中出现了下面的问题，问题就是因为没有更新f值造成的，因为在最优路径中第一次遍历的最优路径上的点，不一定是通过最优路径中的点遍历的，所以会存在有f更小的现象。</p>
+</li>
+</ul>
+<img src="/2023/07/28/a-star-assignment/%E9%97%AE%E9%A2%98%EF%BC%9A%E6%8F%92%E5%85%A5%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E4%BB%A5%E5%90%8E%E6%B2%A1%E6%9C%89%E6%9B%B4%E6%96%B0f%E5%80%BC.png" class="" title="问题：插入优先队列以后没有更新f值">
+<ul>
+<li><p><strong>在优先队列中查找元素的问题</strong></p>
+<p>优先队列是一个堆的结构，很适用于取出最大值或者最小值，但如果是想要从优先队列中找到某一个元素，就较为难办了，在实验中出现的场景便是，需要确认当前遍历的结点是否在优先队列中，如果在优先队列中，则需要进行比较，不在的话则插入。</p>
+<p>采用的方式是在Point类中加入了一个value参数，用于表示当前结点的状态码，当value为0时表示属于通路，1表示障碍，2表示起点，3表示终点，5表示在优先队列中，通过这样的方式便可以极大便利的获取当前结点的状态值，并达到随机访问结点状态的现象，如果某一个结点在优先队列中，只需要查看该节点的状态码即可。设置状态码还有一个好处，如果需要重新开始的话，只需要将该节点的状态码改为0即可。</p>
+</li>
+<li><p><strong>一个超级无脑的小bug</strong></p>
+<p>在调试过程中，发现无法进行多次寻路，找了将近一天，最后发现Point中使用指针存储的parent结点用于寻路，下意识的在析构函数中使用delete删除parent，因为没有给parent分配内存，是使用等号复制地址的。所以在使用界面交互进行多次寻路的过程中，出现内存被回收的问题，窗口强制退出。</p>
+</li>
+<li><p><strong>前端遇到的一些问题</strong></p>
+<p>前端需要解决的最主要的问题并不是绘图，而是资源状态的获取问题，获取鼠标事件，以及如何控制不同的点击执行不同的操作，最后使用一些bool值来进行组合完成。</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>算法实践</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>A*算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习实践实验-线性回归</title>
+    <url>/2023/01/03/deep-learning-test01/</url>
+    <content><![CDATA[<h1 id="实验一、线性回归"><a href="#实验一、线性回归" class="headerlink" title="实验一、线性回归"></a>实验一、线性回归</h1><ul>
+<li>已知模型y = a*x + b</li>
+<li>生成带噪声的数据拟合线性函数</li>
+<li>绘制图像拟合效果</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 导入相关包</span><br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br>%matplotlib inline<br><span class="hljs-keyword">from</span> matplotlib <span class="hljs-keyword">import</span> pyplot <span class="hljs-keyword">as</span> plt<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 生成y = a*x + b的噪声数据200个</span><br><span class="hljs-comment"># 定义a = 3， b = 2</span><br>a, b = <span class="hljs-number">3</span>, <span class="hljs-number">2</span><br><br>x_datas = torch.linspace(<span class="hljs-number">1</span>,<span class="hljs-number">20</span>,<span class="hljs-number">200</span>)<br>rand_noise = torch.randn(<span class="hljs-number">200</span>)*<span class="hljs-number">3</span><br>y_lables = a*x_datas + b + rand_noise<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 绘制散点图</span><br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.scatter(x_datas, y_lables)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​<br><img src="/2023/01/03/deep-learning-test01/output_3_0.png" class="" title="png"><br>​    </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 将数据划分为训练集和测试集，按照180，20进行划分</span><br><span class="hljs-comment"># 每十个数据中，分层抽取出一个数据作为测试集</span><br><br>test_index = [<span class="hljs-number">10</span>*i + np.random.randint(<span class="hljs-number">10</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">20</span>)]<br>train_index = [i <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">200</span>) <span class="hljs-keyword">if</span> i <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> test_index]<br><br>X_train1, X_test1, y_train1, y_test1 = x_datas[train_index], x_datas[test_index], y_lables[train_index], y_lables[test_index]<br>y_train1<br></code></pre></td></tr></table></figure>
+<pre><code>tensor([ 3.6945,  4.7438,  7.9504,  5.5705,  5.6000,  9.5666,  8.5461,  4.9789,
+         0.6976,  5.6866,  4.2295, 10.9321, 11.2976,  7.9842, 12.1275,  8.0943,
+        10.5445, 13.4849, 18.5069, 11.6880, 16.8814, 12.7575, 10.7111, 12.1603,
+        14.7055, 14.3254, 11.4367, 17.6528, 18.5793, 17.8409, 13.8733, 16.6622,
+        18.6143, 14.5482, 16.6509, 17.4552, 20.0250, 20.3924, 20.6348, 18.2929,
+        16.6831, 20.4449, 17.3773, 18.3895, 18.2360, 24.1661, 18.2511, 16.6143,
+        20.3642, 16.5544, 19.0061, 25.6141, 20.1254, 21.4796, 23.3279, 20.1736,
+        25.3058, 26.7936, 24.8702, 23.0888, 24.2360, 26.3334, 26.8100, 22.9726,
+        25.0721, 28.1969, 27.3128, 28.3941, 27.2811, 25.5293, 29.3596, 30.8378,
+        29.3787, 30.2246, 28.6970, 19.3994, 31.6431, 35.1937, 26.6844, 31.5928,
+        32.8604, 31.2751, 26.1607, 26.1867, 27.4753, 28.5589, 32.5150, 35.3546,
+        29.3716, 30.2867, 34.1565, 36.8429, 32.5876, 41.2268, 32.7979, 35.0479,
+        38.0979, 34.0405, 35.0074, 40.8656, 39.9885, 37.4418, 37.3445, 33.4271,
+        40.4349, 41.4754, 36.4292, 41.2385, 41.1300, 39.4304, 39.1217, 40.2641,
+        41.4882, 36.4677, 45.3880, 41.7064, 46.0084, 42.7886, 48.2276, 48.9552,
+        45.7761, 46.6802, 49.1144, 47.0020, 41.9040, 47.4266, 48.3905, 51.4273,
+        46.7154, 49.9467, 45.0021, 50.9472, 55.9469, 49.3655, 44.3413, 47.9426,
+        45.9358, 54.3920, 49.9636, 53.2459, 50.3228, 46.5756, 50.2442, 54.3946,
+        50.2086, 49.6290, 50.5312, 54.7947, 47.7757, 50.7428, 52.6791, 55.2901,
+        55.9978, 57.0760, 50.6741, 53.8824, 58.6424, 53.3195, 57.1432, 54.2989,
+        49.9915, 55.4631, 56.1260, 55.4143, 54.0111, 56.7517, 59.6828, 57.2633,
+        56.1236, 63.1750, 59.2744, 54.7133, 54.5091, 57.9472, 64.0721, 63.9801,
+        61.2980, 61.6411, 62.6100, 59.2035])
+</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 将训练集转化为张量，使用梯度下降法进行训练</span><br><span class="hljs-comment"># 迭代次数 10000，学习率：0.001</span><br><br>a = torch.rand(<span class="hljs-number">1</span>, requires_grad=<span class="hljs-literal">True</span>)<br>b = torch.rand(<span class="hljs-number">1</span>, requires_grad=<span class="hljs-literal">True</span>)<br>loss = []<br>theta = <span class="hljs-number">0.00001</span><br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">10000</span>+<span class="hljs-number">1</span>):<br>    y_p = a.expand_as(X_train1)*X_train1 + b.expand_as(X_train1)<br>    loss_tmp = torch.mean((y_p - y_train1)**<span class="hljs-number">2</span>)<br>    <span class="hljs-keyword">if</span> i%<span class="hljs-number">500</span> == <span class="hljs-number">0</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;迭代&quot;</span> , i , <span class="hljs-string">&quot;次，损失值为：&quot;</span>,loss_tmp.data.numpy())<br>    <br>    loss.append(loss_tmp.data.numpy())<br>    loss_tmp.backward()<br>    a.data = a.data - theta*a.grad.data<br>    b.data = b.data - theta*b.grad.data<br>    a.grad.data.zero_()<br>    b.grad.data.zero_()<br>    <br><span class="hljs-built_in">print</span>(a, b)<br></code></pre></td></tr></table></figure>
+<pre><code>迭代 0 次，损失值为： 1019.3526
+迭代 500 次，损失值为： 68.77335
+迭代 1000 次，损失值为： 12.962891
+迭代 1500 次，损失值为： 9.682995
+迭代 2000 次，损失值为： 9.4870615
+迭代 2500 次，损失值为： 9.47218
+迭代 3000 次，损失值为： 9.467946
+迭代 3500 次，损失值为： 9.46435
+迭代 4000 次，损失值为： 9.460806
+迭代 4500 次，损失值为： 9.457279
+迭代 5000 次，损失值为： 9.453774
+迭代 5500 次，损失值为： 9.450276
+迭代 6000 次，损失值为： 9.446788
+迭代 6500 次，损失值为： 9.44333
+迭代 7000 次，损失值为： 9.439879
+迭代 7500 次，损失值为： 9.436436
+迭代 8000 次，损失值为： 9.433018
+迭代 8500 次，损失值为： 9.429613
+迭代 9000 次，损失值为： 9.426218
+迭代 9500 次，损失值为： 9.422838
+迭代 10000 次，损失值为： 9.419481
+tensor([3.1121], requires_grad=True) tensor([0.9682], requires_grad=True)
+</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.scatter(X_test1, y_test1)<br><br>plt.plot(X_test1.data.numpy(), a.data.numpy()*X_test1.data.numpy() + b.data.numpy())<br><br>plt.show()<br></code></pre></td></tr></table></figure>
+<img src="/2023/01/03/deep-learning-test01/output_6_0.png" class="" title="png">
+<ul>
+<li>已知模型y = a<em>x^3 + b</em>x^2 + c*x + d</li>
+<li>生成带噪声的数据拟合三次函数</li>
+<li>绘制图像拟合效果</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 生成200个噪声数据</span><br><span class="hljs-comment"># 参数设置，a=0.005, b=0.01, c=0.1, d=1</span><br><br>a, b, c, d = <span class="hljs-number">0.005</span>, <span class="hljs-number">0.01</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">1</span><br><br>rand = torch.randn(<span class="hljs-number">200</span>)*<span class="hljs-number">1.5</span><br>X_trains = torch.linspace(<span class="hljs-number">1</span>, <span class="hljs-number">20</span>, <span class="hljs-number">200</span>)<br>Y_labels = a*(X_trains**<span class="hljs-number">3</span>) + b*(X_trains**<span class="hljs-number">2</span>) + c*X_trains + d + rand<br><br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.scatter(X_trains, Y_labels)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​<br><img src="/2023/01/03/deep-learning-test01/output_8_0.png" class="" title="png"><br>​    </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 构造数据集和训练集标签</span><br><br>test_index = [<span class="hljs-number">10</span>*i + np.random.randint(<span class="hljs-number">10</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">20</span>)]<br>train_index = [i <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">200</span>) <span class="hljs-keyword">if</span> i <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> test_index]<br><br>X_train2, X_test2, y_train2, y_test2 = X_trains[train_index], X_trains[test_index], Y_labels[train_index], Y_labels[test_index]<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 开始训练</span><br>a = torch.rand(<span class="hljs-number">1</span>, requires_grad=<span class="hljs-literal">True</span>)<br>b = torch.rand(<span class="hljs-number">1</span>, requires_grad=<span class="hljs-literal">True</span>)<br>c = torch.rand(<span class="hljs-number">1</span>, requires_grad=<span class="hljs-literal">True</span>)<br>d = torch.rand(<span class="hljs-number">1</span>, requires_grad=<span class="hljs-literal">True</span>)<br>theta = <span class="hljs-number">0.0000001</span><br>times = <span class="hljs-number">50000</span><br>loss = []<br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(times+<span class="hljs-number">1</span>):<br>    loss_tmp = torch.mean(((a.expand_as(X_train2) * (X_train2**<span class="hljs-number">3</span>) + <br>                           b.expand_as(X_train2) * (X_train2**<span class="hljs-number">2</span>) + c.expand_as(X_train2) * X_train2 + <br>                           d.expand_as(X_train2) - y_train2))**<span class="hljs-number">2</span>)<br>    <span class="hljs-keyword">if</span> i%<span class="hljs-number">2500</span> == <span class="hljs-number">0</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;迭代&quot;</span>, i,<span class="hljs-string">&quot;次，损失值为：&quot;</span>, loss_tmp.data.numpy())<br>    <br>    loss_tmp.backward()<br>    a.data = a.data - a.grad.data * theta<br>    b.data = b.data - b.grad.data * theta<br>    c.data = c.data - c.grad.data * theta<br>    d.data = d.data - d.grad.data * theta<br>    <br>    a.grad.data.zero_()<br>    b.grad.data.zero_()<br>    c.grad.data.zero_()<br>    d.grad.data.zero_()<br>    <br></code></pre></td></tr></table></figure>
+<pre><code>迭代 0 次，损失值为： 3153.991
+迭代 2500 次，损失值为： 11.566195
+迭代 5000 次，损失值为： 5.8502893
+迭代 7500 次，损失值为： 3.6634474
+迭代 10000 次，损失值为： 2.8267233
+迭代 12500 次，损失值为： 2.506517
+迭代 15000 次，损失值为： 2.3839154
+迭代 17500 次，损失值为： 2.3369095
+迭代 20000 次，损失值为： 2.318825
+迭代 22500 次，损失值为： 2.3118067
+迭代 25000 次，损失值为： 2.3090246
+迭代 27500 次，损失值为： 2.307857
+迭代 30000 次，损失值为： 2.307303
+迭代 32500 次，损失值为： 2.3069975
+迭代 35000 次，损失值为： 2.3067696
+迭代 37500 次，损失值为： 2.306577
+迭代 40000 次，损失值为： 2.3063998
+迭代 42500 次，损失值为： 2.3062305
+迭代 45000 次，损失值为： 2.3060641
+迭代 47500 次，损失值为： 2.3058996
+迭代 50000 次，损失值为： 2.3057368
+</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 对测试集进行预测拟合</span><br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.scatter(X_test2, y_test2)<br><br>plt.plot(X_test2.data.numpy(), a.data.numpy()*(X_test2.data.numpy()**<span class="hljs-number">3</span>) + b.data.numpy()*(X_test2.data.numpy()**<span class="hljs-number">2</span>) + c.data.numpy()*X_test2.data.numpy() + d.data.numpy())<br><br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​<br><img src="/2023/01/03/deep-learning-test01/output_11_0.png" class="" title="png"><br>​    </p>
+<h2 id="设计神经网络对前面的数据进行拟合"><a href="#设计神经网络对前面的数据进行拟合" class="headerlink" title="设计神经网络对前面的数据进行拟合"></a>设计神经网络对前面的数据进行拟合</h2><ul>
+<li>记录误差，绘制拟合效果</li>
+<li>直线拟合数据为：X_train1, y_train1, X_test1, y_test1</li>
+<li>曲线拟合数据为：X_train2, y_train2, X_test2, y_test2</li>
+</ul>
+<h3 id="一、拟合直线"><a href="#一、拟合直线" class="headerlink" title="一、拟合直线"></a>一、拟合直线</h3><figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 使用网络拟合直线</span><br><span class="hljs-comment"># 直线拟合只需要一个神经元就能完成拟合</span><br><br><span class="hljs-comment"># 定义网络</span><br>net = torch.nn.Sequential(<br>    torch.nn.Linear(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>),<br>)<br><span class="hljs-comment"># 定义损失函数</span><br>loss_fn = torch.nn.MSELoss()<br><span class="hljs-comment"># 梯度下降方法，随机梯度下降</span><br>opt = torch.optim.SGD(net.parameters(), lr=<span class="hljs-number">0.0001</span>)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 训练数据</span><br>losses = []<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1000</span>):<br>    pred = net(X_train1.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))<br>    loss = loss_fn(pred, y_train1.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))<br>    <span class="hljs-keyword">if</span> i%<span class="hljs-number">200</span>==<span class="hljs-number">0</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;loss:&#x27;</span>, loss.data)<br>        losses.append(loss.data)<br>    <br>    opt.zero_grad()<br>    loss.backward()<br>    opt.step()<br>    <br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.plot(X_train1.data.numpy(), y_train1.data.numpy(), <span class="hljs-string">&#x27;o&#x27;</span>)<br>plt.plot(X_train1.data.numpy(), net(X_train1.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)).data.numpy())<br>plt.show()<br></code></pre></td></tr></table></figure>
+<pre><code>loss: tensor(999.4984)
+loss: tensor(10.4790)
+loss: tensor(10.4377)
+loss: tensor(10.4070)
+loss: tensor(10.3768)
+</code></pre><img src="/2023/01/03/deep-learning-test01/output_15_1.png" class="" title="png">
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 对测试集进行预测验证</span><br>pred = net(X_test1.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))<br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.plot(X_test1.data.numpy(), y_test1.data.numpy(), <span class="hljs-string">&#x27;o&#x27;</span>)<br>plt.plot(X_test1.data.numpy(), pred.data.numpy())<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​<br><img src="/2023/01/03/deep-learning-test01/output_16_0.png" class="" title="png"><br>​    </p>
+<h3 id="二、拟合多项式函数"><a href="#二、拟合多项式函数" class="headerlink" title="二、拟合多项式函数"></a>二、拟合多项式函数</h3><ul>
+<li>单层神经网络只能够拟合直线</li>
+<li>对多项式函数的拟合需要多层神经网络，且需要激活函数</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 定义model类</span><br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> torch.nn.functional <span class="hljs-keyword">as</span> F<br><br><span class="hljs-comment"># 继承nn.Module</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">model</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-built_in">super</span>().__init__()<br>        <span class="hljs-comment"># 第一个隐藏层</span><br>        self.hidden1=nn.Linear(<span class="hljs-number">1</span>,<span class="hljs-number">4</span>)<br>        <span class="hljs-comment"># 第二个隐藏层</span><br>        self.hidden2=nn.Linear(<span class="hljs-number">4</span>,<span class="hljs-number">4</span>)<br>        <span class="hljs-comment"># 第三个隐藏层</span><br>        self.hidden3=nn.Linear(<span class="hljs-number">4</span>,<span class="hljs-number">4</span>)<br>        <span class="hljs-comment"># 输出层</span><br>        self.out=nn.Linear(<span class="hljs-number">4</span>,<span class="hljs-number">1</span>)<br>    <br>    <span class="hljs-comment"># 定义网络前向运算</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = self.hidden1(x)<br>        x = F.sigmoid(x)<br>        x = self.hidden2(x)<br>        x = F.sigmoid(x)<br>        x = self.hidden3(x)<br>        x = F.sigmoid(x)<br>        x = self.out(x)<br>        <span class="hljs-keyword">return</span> x<br>    <br>net = model()<br><span class="hljs-built_in">print</span>(net)<br></code></pre></td></tr></table></figure>
+<pre><code>model(
+  (hidden1): Linear(in_features=1, out_features=4, bias=True)
+  (hidden2): Linear(in_features=4, out_features=4, bias=True)
+  (hidden3): Linear(in_features=4, out_features=4, bias=True)
+  (out): Linear(in_features=4, out_features=1, bias=True)
+)
+</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 定义损失函数</span><br>loss_fn = torch.nn.MSELoss()<br>opt = torch.optim.SGD(net.parameters(), lr=<span class="hljs-number">0.001</span>)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 训练数据</span><br>losses2 = []<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">50000</span>):<br>    pred = net(X_train2.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))<br>    loss = loss_fn(pred, y_train2.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))<br>    <span class="hljs-keyword">if</span> i%<span class="hljs-number">2500</span>==<span class="hljs-number">0</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;loss:&#x27;</span>, loss.data)<br>        losses2.append(loss)<br>    <br>    opt.zero_grad()<br>    loss.backward()<br>    opt.step()<br><br><span class="hljs-comment"># 绘制图像</span><br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.plot(X_train2.data.numpy(), y_train2.data.numpy(), <span class="hljs-string">&#x27;o&#x27;</span>)<br>plt.plot(X_train2.data.numpy(), net(X_train2.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)).data.numpy())<br>plt.show()<br></code></pre></td></tr></table></figure>
+<pre><code>loss: tensor(357.9143)
+
+
+D:\02_soft\anaconda3\envs\pytorch\lib\site-packages\torch\nn\functional.py:1960: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
+  warnings.warn(&quot;nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.&quot;)
+
+
+loss: tensor(146.0952)
+loss: tensor(23.4380)
+loss: tensor(16.6693)
+loss: tensor(12.3312)
+loss: tensor(10.4051)
+loss: tensor(8.9617)
+loss: tensor(7.7465)
+loss: tensor(6.7640)
+loss: tensor(5.9918)
+loss: tensor(5.4033)
+loss: tensor(4.9512)
+loss: tensor(4.5902)
+loss: tensor(4.2906)
+loss: tensor(4.0353)
+loss: tensor(3.8134)
+loss: tensor(3.6182)
+loss: tensor(3.4456)
+loss: tensor(3.2944)
+loss: tensor(3.1646)
+</code></pre><img src="/2023/01/03/deep-learning-test01/output_20_3.png" class="" title="png">
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 使用训练的模型对测试集进行预测</span><br>pred2 = net(X_test2.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))<br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.plot(X_test2.data.numpy(), y_test2.data.numpy(), <span class="hljs-string">&#x27;o&#x27;</span>)<br>plt.plot(X_test2.data.numpy(), pred2.data.numpy())<br>plt.show()<br></code></pre></td></tr></table></figure>
+<img src="/2023/01/03/deep-learning-test01/output_21_0.png" class="" title="png">
+]]></content>
+      <categories>
+        <category>算法实践</category>
+      </categories>
+      <tags>
+        <tag>人工智能</tag>
+        <tag>深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>深度学习实践实验-共享单车预测</title>
+    <url>/2023/01/04/deep-learning-test02/</url>
+    <content><![CDATA[<h1 id="实验二、共享单车预测"><a href="#实验二、共享单车预测" class="headerlink" title="实验二、共享单车预测"></a>实验二、共享单车预测</h1><h3 id="内容"><a href="#内容" class="headerlink" title="内容"></a><strong>内容</strong></h3><p>1、通过历史数据预测某一地区接下来一段时间内的共享单车的数量。数据保存在文件bikes.csv中，请按11：1的比例划分训练集和测试集，首先对数据进行预处理，然后在训练集上训练，并在测试集上验证模型。</p>
+<p>2、设计神经网络对数据进行拟合，利用训练后的模型对数据拟合并进行预测，记录误差，并绘制拟合效果。</p>
+<h3 id="完成情况"><a href="#完成情况" class="headerlink" title="完成情况"></a><strong>完成情况</strong></h3><p>1、数据预处理</p>
+<p>完成程度：使用pandas读取原始数据bikes.csv，对离散数据使用one-hot编码处理，对连续数据进行标准化处理，将数据划分成11训练集：1测试集。删除某些处理过后的列，将标签列于数据分离。</p>
+<p>2、设计神经网络拟合</p>
+<p>完成程度：搭建神经网络，隐藏层包含10个Linear，通过Sigmoid函数进行非线性化处理，再通过输出层对数据进行输出。使用MSELoss损失误差，采用随机梯度下降的方法，设置学习率为0.01，batch_size=128。对训练集进行训练，用得到的模型对测试集进行测试，通过绘制图像进行对比分析。</p>
+<h2 id="读取原始数据，进行数据预处理"><a href="#读取原始数据，进行数据预处理" class="headerlink" title="读取原始数据，进行数据预处理"></a>读取原始数据，进行数据预处理</h2><figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 导入相关包和函数</span><br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><span class="hljs-keyword">import</span> torch.optim <span class="hljs-keyword">as</span> optim<br><span class="hljs-keyword">from</span> matplotlib <span class="hljs-keyword">import</span> pyplot <span class="hljs-keyword">as</span> plt<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 读入数据并进行数据处理</span><br>data = pd.read_csv(<span class="hljs-string">&#x27;bikes.csv&#x27;</span>)<br>col_titles = [<span class="hljs-string">&#x27;season&#x27;</span>, <span class="hljs-string">&#x27;weathersit&#x27;</span>, <span class="hljs-string">&#x27;mnth&#x27;</span>, <span class="hljs-string">&#x27;hr&#x27;</span>, <span class="hljs-string">&#x27;weekday&#x27;</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> col_titles:<br>    dummies = pd.get_dummies(data[i], prefix=i)<br>    data = pd.concat([data, dummies], axis=<span class="hljs-number">1</span>)<br><br>col_titles_to_drop = [<span class="hljs-string">&#x27;instant&#x27;</span>, <span class="hljs-string">&#x27;dteday&#x27;</span>] + col_titles<br><span class="hljs-built_in">print</span>(col_titles_to_drop)<br>data = data.drop(col_titles_to_drop, axis=<span class="hljs-number">1</span>)<br>data.head()<br></code></pre></td></tr></table></figure>
+<pre><code>[&#39;instant&#39;, &#39;dteday&#39;, &#39;season&#39;, &#39;weathersit&#39;, &#39;mnth&#39;, &#39;hr&#39;, &#39;weekday&#39;]
+</code></pre><p><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>holiday</th>
+      <th>workingday</th>
+      <th>temp</th>
+      <th>hum</th>
+      <th>windspeed</th>
+      <th>cnt</th>
+      <th>season_1</th>
+      <th>season_2</th>
+      <th>season_3</th>
+      <th>season_4</th>
+      <th>...</th>
+      <th>hr_21</th>
+      <th>hr_22</th>
+      <th>hr_23</th>
+      <th>weekday_0</th>
+      <th>weekday_1</th>
+      <th>weekday_2</th>
+      <th>weekday_3</th>
+      <th>weekday_4</th>
+      <th>weekday_5</th>
+      <th>weekday_6</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.24</td>
+      <td>0.81</td>
+      <td>0.0</td>
+      <td>16</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.22</td>
+      <td>0.80</td>
+      <td>0.0</td>
+      <td>40</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.22</td>
+      <td>0.80</td>
+      <td>0.0</td>
+      <td>32</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.24</td>
+      <td>0.75</td>
+      <td>0.0</td>
+      <td>13</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0.24</td>
+      <td>0.75</td>
+      <td>0.0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table></p>
+<p>5 rows × 57 columns</p>
+
+<p>&lt;/div&gt;</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 对连续数据进行标准化处理</span><br>col_titles = [<span class="hljs-string">&#x27;cnt&#x27;</span>, <span class="hljs-string">&#x27;temp&#x27;</span>, <span class="hljs-string">&#x27;hum&#x27;</span>, <span class="hljs-string">&#x27;windspeed&#x27;</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> col_titles:<br>    mean, std = data[i].mean(), data[i].std()<br>    <span class="hljs-keyword">if</span> i == <span class="hljs-string">&#x27;cnt&#x27;</span>:<br>        mean_cnt, std_cnt = mean, std<br>    <br>    data[i] = (data[i] - mean)/std<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 数据集处理</span><br>test_data = data[-<span class="hljs-number">30</span>*<span class="hljs-number">24</span>:]<br>train_data = data[:-<span class="hljs-number">30</span>*<span class="hljs-number">24</span>]<br><br><span class="hljs-comment"># 删除标签类</span><br>X = train_data.drop([<span class="hljs-string">&#x27;cnt&#x27;</span>], axis=<span class="hljs-number">1</span>)<br>X = X.values<br>Y = train_data[<span class="hljs-string">&#x27;cnt&#x27;</span>]<br>Y = Y.values.astype(<span class="hljs-built_in">float</span>)<br>Y = np.reshape(Y, [<span class="hljs-built_in">len</span>(Y), <span class="hljs-number">1</span>])<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 搭建神经网络</span><br>input_size = X.shape[<span class="hljs-number">1</span>]<br>hidden_size = <span class="hljs-number">10</span><br>output_size = <span class="hljs-number">1</span><br>batch_size = <span class="hljs-number">128</span><br><br>neu = torch.nn.Sequential(<br>    torch.nn.Linear(input_size, hidden_size),<br>    torch.nn.Sigmoid(),<br>    torch.nn.Linear(hidden_size, output_size)<br>)<br>loss_fn = torch.nn.MSELoss()<br>opt = torch.optim.SGD(neu.parameters(), lr=<span class="hljs-number">0.01</span>)<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 训练模型</span><br>losses = []<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1000</span>):<br>    batch_loss = []<br>    <span class="hljs-keyword">for</span> start <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-built_in">len</span>(X), batch_size):<br>        <span class="hljs-keyword">if</span> start+batch_size&lt;<span class="hljs-built_in">len</span>(X):<br>            end = start+batch_size<br>        <span class="hljs-keyword">else</span>:<br>            end = <span class="hljs-built_in">len</span>(X)<br><br>        <span class="hljs-comment"># 生成一个batch的训练数据</span><br>        x = torch.FloatTensor(X[start:end])<br>        y = torch.FloatTensor(Y[start:end])<br><br>        pred = neu(x)<br>        loss = loss_fn(pred, y)<br>        opt.zero_grad()<br>        loss.backward()<br>        opt.step()<br>        batch_loss.append(loss.data.numpy())<br>    <span class="hljs-keyword">if</span> i%<span class="hljs-number">100</span>==<span class="hljs-number">0</span>:<br>        losses.append(np.mean(batch_loss))<br>        <span class="hljs-built_in">print</span>(i, np.mean(batch_loss))<br>        <br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.plot(np.arange(<span class="hljs-built_in">len</span>(losses))*<span class="hljs-number">100</span>, losses)<br>plt.xlabel(<span class="hljs-string">&#x27;batch&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&#x27;MSE&#x27;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<pre><code>0 0.8939656
+100 0.30960146
+200 0.26964802
+300 0.18884033
+400 0.14483929
+500 0.1316976
+600 0.12759094
+700 0.12547289
+800 0.12405107
+900 0.12297937
+</code></pre><img src="/2023/01/04/deep-learning-test02/output_7_1.png" class="" title="png">
+<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 测试，验证</span><br>X = test_data.drop([<span class="hljs-string">&#x27;cnt&#x27;</span>], axis=<span class="hljs-number">1</span>)<br>Y = test_data[<span class="hljs-string">&#x27;cnt&#x27;</span>]<br>Y = Y.values.reshape([<span class="hljs-built_in">len</span>(Y), <span class="hljs-number">1</span>])<br>X = torch.FloatTensor(X.values)<br>Y = torch.FloatTensor(Y)<br>pred = neu(X)<br><br>Y = Y.data.numpy()*std_cnt+mean_cnt<br>pred = pred.data.numpy()*std_cnt+mean_cnt<br><br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>xplot, = plt.plot(np.arange(X.size(<span class="hljs-number">0</span>)), Y)<br>yplot, = plt.plot(np.arange(X.size(<span class="hljs-number">0</span>)), pred, <span class="hljs-string">&#x27;:&#x27;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
+<p>​<br><img src="/2023/01/04/deep-learning-test02/output_8_0.png" class="" title="png"><br>​    </p>
+]]></content>
+      <categories>
+        <category>算法实践</category>
+      </categories>
+      <tags>
+        <tag>人工智能</tag>
+        <tag>深度学习</tag>
       </tags>
   </entry>
   <entry>
@@ -4200,356 +4550,6 @@
       </tags>
   </entry>
   <entry>
-    <title>深度学习实践实验-线性回归</title>
-    <url>/2023/01/03/deep-learning-test01/</url>
-    <content><![CDATA[<h1 id="实验一、线性回归"><a href="#实验一、线性回归" class="headerlink" title="实验一、线性回归"></a>实验一、线性回归</h1><ul>
-<li>已知模型y = a*x + b</li>
-<li>生成带噪声的数据拟合线性函数</li>
-<li>绘制图像拟合效果</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 导入相关包</span><br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br>%matplotlib inline<br><span class="hljs-keyword">from</span> matplotlib <span class="hljs-keyword">import</span> pyplot <span class="hljs-keyword">as</span> plt<br></code></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 生成y = a*x + b的噪声数据200个</span><br><span class="hljs-comment"># 定义a = 3， b = 2</span><br>a, b = <span class="hljs-number">3</span>, <span class="hljs-number">2</span><br><br>x_datas = torch.linspace(<span class="hljs-number">1</span>,<span class="hljs-number">20</span>,<span class="hljs-number">200</span>)<br>rand_noise = torch.randn(<span class="hljs-number">200</span>)*<span class="hljs-number">3</span><br>y_lables = a*x_datas + b + rand_noise<br></code></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 绘制散点图</span><br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.scatter(x_datas, y_lables)<br>plt.show()<br></code></pre></td></tr></table></figure>
-<p>​<br><img src="/2023/01/03/deep-learning-test01/output_3_0.png" class="" title="png"><br>​    </p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 将数据划分为训练集和测试集，按照180，20进行划分</span><br><span class="hljs-comment"># 每十个数据中，分层抽取出一个数据作为测试集</span><br><br>test_index = [<span class="hljs-number">10</span>*i + np.random.randint(<span class="hljs-number">10</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">20</span>)]<br>train_index = [i <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">200</span>) <span class="hljs-keyword">if</span> i <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> test_index]<br><br>X_train1, X_test1, y_train1, y_test1 = x_datas[train_index], x_datas[test_index], y_lables[train_index], y_lables[test_index]<br>y_train1<br></code></pre></td></tr></table></figure>
-<pre><code>tensor([ 3.6945,  4.7438,  7.9504,  5.5705,  5.6000,  9.5666,  8.5461,  4.9789,
-         0.6976,  5.6866,  4.2295, 10.9321, 11.2976,  7.9842, 12.1275,  8.0943,
-        10.5445, 13.4849, 18.5069, 11.6880, 16.8814, 12.7575, 10.7111, 12.1603,
-        14.7055, 14.3254, 11.4367, 17.6528, 18.5793, 17.8409, 13.8733, 16.6622,
-        18.6143, 14.5482, 16.6509, 17.4552, 20.0250, 20.3924, 20.6348, 18.2929,
-        16.6831, 20.4449, 17.3773, 18.3895, 18.2360, 24.1661, 18.2511, 16.6143,
-        20.3642, 16.5544, 19.0061, 25.6141, 20.1254, 21.4796, 23.3279, 20.1736,
-        25.3058, 26.7936, 24.8702, 23.0888, 24.2360, 26.3334, 26.8100, 22.9726,
-        25.0721, 28.1969, 27.3128, 28.3941, 27.2811, 25.5293, 29.3596, 30.8378,
-        29.3787, 30.2246, 28.6970, 19.3994, 31.6431, 35.1937, 26.6844, 31.5928,
-        32.8604, 31.2751, 26.1607, 26.1867, 27.4753, 28.5589, 32.5150, 35.3546,
-        29.3716, 30.2867, 34.1565, 36.8429, 32.5876, 41.2268, 32.7979, 35.0479,
-        38.0979, 34.0405, 35.0074, 40.8656, 39.9885, 37.4418, 37.3445, 33.4271,
-        40.4349, 41.4754, 36.4292, 41.2385, 41.1300, 39.4304, 39.1217, 40.2641,
-        41.4882, 36.4677, 45.3880, 41.7064, 46.0084, 42.7886, 48.2276, 48.9552,
-        45.7761, 46.6802, 49.1144, 47.0020, 41.9040, 47.4266, 48.3905, 51.4273,
-        46.7154, 49.9467, 45.0021, 50.9472, 55.9469, 49.3655, 44.3413, 47.9426,
-        45.9358, 54.3920, 49.9636, 53.2459, 50.3228, 46.5756, 50.2442, 54.3946,
-        50.2086, 49.6290, 50.5312, 54.7947, 47.7757, 50.7428, 52.6791, 55.2901,
-        55.9978, 57.0760, 50.6741, 53.8824, 58.6424, 53.3195, 57.1432, 54.2989,
-        49.9915, 55.4631, 56.1260, 55.4143, 54.0111, 56.7517, 59.6828, 57.2633,
-        56.1236, 63.1750, 59.2744, 54.7133, 54.5091, 57.9472, 64.0721, 63.9801,
-        61.2980, 61.6411, 62.6100, 59.2035])
-</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 将训练集转化为张量，使用梯度下降法进行训练</span><br><span class="hljs-comment"># 迭代次数 10000，学习率：0.001</span><br><br>a = torch.rand(<span class="hljs-number">1</span>, requires_grad=<span class="hljs-literal">True</span>)<br>b = torch.rand(<span class="hljs-number">1</span>, requires_grad=<span class="hljs-literal">True</span>)<br>loss = []<br>theta = <span class="hljs-number">0.00001</span><br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">10000</span>+<span class="hljs-number">1</span>):<br>    y_p = a.expand_as(X_train1)*X_train1 + b.expand_as(X_train1)<br>    loss_tmp = torch.mean((y_p - y_train1)**<span class="hljs-number">2</span>)<br>    <span class="hljs-keyword">if</span> i%<span class="hljs-number">500</span> == <span class="hljs-number">0</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;迭代&quot;</span> , i , <span class="hljs-string">&quot;次，损失值为：&quot;</span>,loss_tmp.data.numpy())<br>    <br>    loss.append(loss_tmp.data.numpy())<br>    loss_tmp.backward()<br>    a.data = a.data - theta*a.grad.data<br>    b.data = b.data - theta*b.grad.data<br>    a.grad.data.zero_()<br>    b.grad.data.zero_()<br>    <br><span class="hljs-built_in">print</span>(a, b)<br></code></pre></td></tr></table></figure>
-<pre><code>迭代 0 次，损失值为： 1019.3526
-迭代 500 次，损失值为： 68.77335
-迭代 1000 次，损失值为： 12.962891
-迭代 1500 次，损失值为： 9.682995
-迭代 2000 次，损失值为： 9.4870615
-迭代 2500 次，损失值为： 9.47218
-迭代 3000 次，损失值为： 9.467946
-迭代 3500 次，损失值为： 9.46435
-迭代 4000 次，损失值为： 9.460806
-迭代 4500 次，损失值为： 9.457279
-迭代 5000 次，损失值为： 9.453774
-迭代 5500 次，损失值为： 9.450276
-迭代 6000 次，损失值为： 9.446788
-迭代 6500 次，损失值为： 9.44333
-迭代 7000 次，损失值为： 9.439879
-迭代 7500 次，损失值为： 9.436436
-迭代 8000 次，损失值为： 9.433018
-迭代 8500 次，损失值为： 9.429613
-迭代 9000 次，损失值为： 9.426218
-迭代 9500 次，损失值为： 9.422838
-迭代 10000 次，损失值为： 9.419481
-tensor([3.1121], requires_grad=True) tensor([0.9682], requires_grad=True)
-</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python">plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.scatter(X_test1, y_test1)<br><br>plt.plot(X_test1.data.numpy(), a.data.numpy()*X_test1.data.numpy() + b.data.numpy())<br><br>plt.show()<br></code></pre></td></tr></table></figure>
-<img src="/2023/01/03/deep-learning-test01/output_6_0.png" class="" title="png">
-<ul>
-<li>已知模型y = a<em>x^3 + b</em>x^2 + c*x + d</li>
-<li>生成带噪声的数据拟合三次函数</li>
-<li>绘制图像拟合效果</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 生成200个噪声数据</span><br><span class="hljs-comment"># 参数设置，a=0.005, b=0.01, c=0.1, d=1</span><br><br>a, b, c, d = <span class="hljs-number">0.005</span>, <span class="hljs-number">0.01</span>, <span class="hljs-number">0.1</span>, <span class="hljs-number">1</span><br><br>rand = torch.randn(<span class="hljs-number">200</span>)*<span class="hljs-number">1.5</span><br>X_trains = torch.linspace(<span class="hljs-number">1</span>, <span class="hljs-number">20</span>, <span class="hljs-number">200</span>)<br>Y_labels = a*(X_trains**<span class="hljs-number">3</span>) + b*(X_trains**<span class="hljs-number">2</span>) + c*X_trains + d + rand<br><br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.scatter(X_trains, Y_labels)<br>plt.show()<br></code></pre></td></tr></table></figure>
-<p>​<br><img src="/2023/01/03/deep-learning-test01/output_8_0.png" class="" title="png"><br>​    </p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 构造数据集和训练集标签</span><br><br>test_index = [<span class="hljs-number">10</span>*i + np.random.randint(<span class="hljs-number">10</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">20</span>)]<br>train_index = [i <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">200</span>) <span class="hljs-keyword">if</span> i <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> test_index]<br><br>X_train2, X_test2, y_train2, y_test2 = X_trains[train_index], X_trains[test_index], Y_labels[train_index], Y_labels[test_index]<br></code></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 开始训练</span><br>a = torch.rand(<span class="hljs-number">1</span>, requires_grad=<span class="hljs-literal">True</span>)<br>b = torch.rand(<span class="hljs-number">1</span>, requires_grad=<span class="hljs-literal">True</span>)<br>c = torch.rand(<span class="hljs-number">1</span>, requires_grad=<span class="hljs-literal">True</span>)<br>d = torch.rand(<span class="hljs-number">1</span>, requires_grad=<span class="hljs-literal">True</span>)<br>theta = <span class="hljs-number">0.0000001</span><br>times = <span class="hljs-number">50000</span><br>loss = []<br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(times+<span class="hljs-number">1</span>):<br>    loss_tmp = torch.mean(((a.expand_as(X_train2) * (X_train2**<span class="hljs-number">3</span>) + <br>                           b.expand_as(X_train2) * (X_train2**<span class="hljs-number">2</span>) + c.expand_as(X_train2) * X_train2 + <br>                           d.expand_as(X_train2) - y_train2))**<span class="hljs-number">2</span>)<br>    <span class="hljs-keyword">if</span> i%<span class="hljs-number">2500</span> == <span class="hljs-number">0</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;迭代&quot;</span>, i,<span class="hljs-string">&quot;次，损失值为：&quot;</span>, loss_tmp.data.numpy())<br>    <br>    loss_tmp.backward()<br>    a.data = a.data - a.grad.data * theta<br>    b.data = b.data - b.grad.data * theta<br>    c.data = c.data - c.grad.data * theta<br>    d.data = d.data - d.grad.data * theta<br>    <br>    a.grad.data.zero_()<br>    b.grad.data.zero_()<br>    c.grad.data.zero_()<br>    d.grad.data.zero_()<br>    <br></code></pre></td></tr></table></figure>
-<pre><code>迭代 0 次，损失值为： 3153.991
-迭代 2500 次，损失值为： 11.566195
-迭代 5000 次，损失值为： 5.8502893
-迭代 7500 次，损失值为： 3.6634474
-迭代 10000 次，损失值为： 2.8267233
-迭代 12500 次，损失值为： 2.506517
-迭代 15000 次，损失值为： 2.3839154
-迭代 17500 次，损失值为： 2.3369095
-迭代 20000 次，损失值为： 2.318825
-迭代 22500 次，损失值为： 2.3118067
-迭代 25000 次，损失值为： 2.3090246
-迭代 27500 次，损失值为： 2.307857
-迭代 30000 次，损失值为： 2.307303
-迭代 32500 次，损失值为： 2.3069975
-迭代 35000 次，损失值为： 2.3067696
-迭代 37500 次，损失值为： 2.306577
-迭代 40000 次，损失值为： 2.3063998
-迭代 42500 次，损失值为： 2.3062305
-迭代 45000 次，损失值为： 2.3060641
-迭代 47500 次，损失值为： 2.3058996
-迭代 50000 次，损失值为： 2.3057368
-</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 对测试集进行预测拟合</span><br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.scatter(X_test2, y_test2)<br><br>plt.plot(X_test2.data.numpy(), a.data.numpy()*(X_test2.data.numpy()**<span class="hljs-number">3</span>) + b.data.numpy()*(X_test2.data.numpy()**<span class="hljs-number">2</span>) + c.data.numpy()*X_test2.data.numpy() + d.data.numpy())<br><br>plt.show()<br></code></pre></td></tr></table></figure>
-<p>​<br><img src="/2023/01/03/deep-learning-test01/output_11_0.png" class="" title="png"><br>​    </p>
-<h2 id="设计神经网络对前面的数据进行拟合"><a href="#设计神经网络对前面的数据进行拟合" class="headerlink" title="设计神经网络对前面的数据进行拟合"></a>设计神经网络对前面的数据进行拟合</h2><ul>
-<li>记录误差，绘制拟合效果</li>
-<li>直线拟合数据为：X_train1, y_train1, X_test1, y_test1</li>
-<li>曲线拟合数据为：X_train2, y_train2, X_test2, y_test2</li>
-</ul>
-<h3 id="一、拟合直线"><a href="#一、拟合直线" class="headerlink" title="一、拟合直线"></a>一、拟合直线</h3><figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 使用网络拟合直线</span><br><span class="hljs-comment"># 直线拟合只需要一个神经元就能完成拟合</span><br><br><span class="hljs-comment"># 定义网络</span><br>net = torch.nn.Sequential(<br>    torch.nn.Linear(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>),<br>)<br><span class="hljs-comment"># 定义损失函数</span><br>loss_fn = torch.nn.MSELoss()<br><span class="hljs-comment"># 梯度下降方法，随机梯度下降</span><br>opt = torch.optim.SGD(net.parameters(), lr=<span class="hljs-number">0.0001</span>)<br></code></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 训练数据</span><br>losses = []<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1000</span>):<br>    pred = net(X_train1.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))<br>    loss = loss_fn(pred, y_train1.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))<br>    <span class="hljs-keyword">if</span> i%<span class="hljs-number">200</span>==<span class="hljs-number">0</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;loss:&#x27;</span>, loss.data)<br>        losses.append(loss.data)<br>    <br>    opt.zero_grad()<br>    loss.backward()<br>    opt.step()<br>    <br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.plot(X_train1.data.numpy(), y_train1.data.numpy(), <span class="hljs-string">&#x27;o&#x27;</span>)<br>plt.plot(X_train1.data.numpy(), net(X_train1.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)).data.numpy())<br>plt.show()<br></code></pre></td></tr></table></figure>
-<pre><code>loss: tensor(999.4984)
-loss: tensor(10.4790)
-loss: tensor(10.4377)
-loss: tensor(10.4070)
-loss: tensor(10.3768)
-</code></pre><img src="/2023/01/03/deep-learning-test01/output_15_1.png" class="" title="png">
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 对测试集进行预测验证</span><br>pred = net(X_test1.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))<br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.plot(X_test1.data.numpy(), y_test1.data.numpy(), <span class="hljs-string">&#x27;o&#x27;</span>)<br>plt.plot(X_test1.data.numpy(), pred.data.numpy())<br>plt.show()<br></code></pre></td></tr></table></figure>
-<p>​<br><img src="/2023/01/03/deep-learning-test01/output_16_0.png" class="" title="png"><br>​    </p>
-<h3 id="二、拟合多项式函数"><a href="#二、拟合多项式函数" class="headerlink" title="二、拟合多项式函数"></a>二、拟合多项式函数</h3><ul>
-<li>单层神经网络只能够拟合直线</li>
-<li>对多项式函数的拟合需要多层神经网络，且需要激活函数</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 定义model类</span><br><span class="hljs-keyword">import</span> torch.nn <span class="hljs-keyword">as</span> nn<br><span class="hljs-keyword">import</span> torch.nn.functional <span class="hljs-keyword">as</span> F<br><br><span class="hljs-comment"># 继承nn.Module</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">model</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-built_in">super</span>().__init__()<br>        <span class="hljs-comment"># 第一个隐藏层</span><br>        self.hidden1=nn.Linear(<span class="hljs-number">1</span>,<span class="hljs-number">4</span>)<br>        <span class="hljs-comment"># 第二个隐藏层</span><br>        self.hidden2=nn.Linear(<span class="hljs-number">4</span>,<span class="hljs-number">4</span>)<br>        <span class="hljs-comment"># 第三个隐藏层</span><br>        self.hidden3=nn.Linear(<span class="hljs-number">4</span>,<span class="hljs-number">4</span>)<br>        <span class="hljs-comment"># 输出层</span><br>        self.out=nn.Linear(<span class="hljs-number">4</span>,<span class="hljs-number">1</span>)<br>    <br>    <span class="hljs-comment"># 定义网络前向运算</span><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        x = self.hidden1(x)<br>        x = F.sigmoid(x)<br>        x = self.hidden2(x)<br>        x = F.sigmoid(x)<br>        x = self.hidden3(x)<br>        x = F.sigmoid(x)<br>        x = self.out(x)<br>        <span class="hljs-keyword">return</span> x<br>    <br>net = model()<br><span class="hljs-built_in">print</span>(net)<br></code></pre></td></tr></table></figure>
-<pre><code>model(
-  (hidden1): Linear(in_features=1, out_features=4, bias=True)
-  (hidden2): Linear(in_features=4, out_features=4, bias=True)
-  (hidden3): Linear(in_features=4, out_features=4, bias=True)
-  (out): Linear(in_features=4, out_features=1, bias=True)
-)
-</code></pre><figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 定义损失函数</span><br>loss_fn = torch.nn.MSELoss()<br>opt = torch.optim.SGD(net.parameters(), lr=<span class="hljs-number">0.001</span>)<br></code></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 训练数据</span><br>losses2 = []<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">50000</span>):<br>    pred = net(X_train2.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))<br>    loss = loss_fn(pred, y_train2.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))<br>    <span class="hljs-keyword">if</span> i%<span class="hljs-number">2500</span>==<span class="hljs-number">0</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;loss:&#x27;</span>, loss.data)<br>        losses2.append(loss)<br>    <br>    opt.zero_grad()<br>    loss.backward()<br>    opt.step()<br><br><span class="hljs-comment"># 绘制图像</span><br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.plot(X_train2.data.numpy(), y_train2.data.numpy(), <span class="hljs-string">&#x27;o&#x27;</span>)<br>plt.plot(X_train2.data.numpy(), net(X_train2.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>)).data.numpy())<br>plt.show()<br></code></pre></td></tr></table></figure>
-<pre><code>loss: tensor(357.9143)
-
-
-D:\02_soft\anaconda3\envs\pytorch\lib\site-packages\torch\nn\functional.py:1960: UserWarning: nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.
-  warnings.warn(&quot;nn.functional.sigmoid is deprecated. Use torch.sigmoid instead.&quot;)
-
-
-loss: tensor(146.0952)
-loss: tensor(23.4380)
-loss: tensor(16.6693)
-loss: tensor(12.3312)
-loss: tensor(10.4051)
-loss: tensor(8.9617)
-loss: tensor(7.7465)
-loss: tensor(6.7640)
-loss: tensor(5.9918)
-loss: tensor(5.4033)
-loss: tensor(4.9512)
-loss: tensor(4.5902)
-loss: tensor(4.2906)
-loss: tensor(4.0353)
-loss: tensor(3.8134)
-loss: tensor(3.6182)
-loss: tensor(3.4456)
-loss: tensor(3.2944)
-loss: tensor(3.1646)
-</code></pre><img src="/2023/01/03/deep-learning-test01/output_20_3.png" class="" title="png">
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 使用训练的模型对测试集进行预测</span><br>pred2 = net(X_test2.view(-<span class="hljs-number">1</span>,<span class="hljs-number">1</span>))<br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.plot(X_test2.data.numpy(), y_test2.data.numpy(), <span class="hljs-string">&#x27;o&#x27;</span>)<br>plt.plot(X_test2.data.numpy(), pred2.data.numpy())<br>plt.show()<br></code></pre></td></tr></table></figure>
-<img src="/2023/01/03/deep-learning-test01/output_21_0.png" class="" title="png">
-]]></content>
-      <categories>
-        <category>算法实践</category>
-      </categories>
-      <tags>
-        <tag>人工智能</tag>
-        <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>深度学习实践实验-共享单车预测</title>
-    <url>/2023/01/04/deep-learning-test02/</url>
-    <content><![CDATA[<h1 id="实验二、共享单车预测"><a href="#实验二、共享单车预测" class="headerlink" title="实验二、共享单车预测"></a>实验二、共享单车预测</h1><h3 id="内容"><a href="#内容" class="headerlink" title="内容"></a><strong>内容</strong></h3><p>1、通过历史数据预测某一地区接下来一段时间内的共享单车的数量。数据保存在文件bikes.csv中，请按11：1的比例划分训练集和测试集，首先对数据进行预处理，然后在训练集上训练，并在测试集上验证模型。</p>
-<p>2、设计神经网络对数据进行拟合，利用训练后的模型对数据拟合并进行预测，记录误差，并绘制拟合效果。</p>
-<h3 id="完成情况"><a href="#完成情况" class="headerlink" title="完成情况"></a><strong>完成情况</strong></h3><p>1、数据预处理</p>
-<p>完成程度：使用pandas读取原始数据bikes.csv，对离散数据使用one-hot编码处理，对连续数据进行标准化处理，将数据划分成11训练集：1测试集。删除某些处理过后的列，将标签列于数据分离。</p>
-<p>2、设计神经网络拟合</p>
-<p>完成程度：搭建神经网络，隐藏层包含10个Linear，通过Sigmoid函数进行非线性化处理，再通过输出层对数据进行输出。使用MSELoss损失误差，采用随机梯度下降的方法，设置学习率为0.01，batch_size=128。对训练集进行训练，用得到的模型对测试集进行测试，通过绘制图像进行对比分析。</p>
-<h2 id="读取原始数据，进行数据预处理"><a href="#读取原始数据，进行数据预处理" class="headerlink" title="读取原始数据，进行数据预处理"></a>读取原始数据，进行数据预处理</h2><figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 导入相关包和函数</span><br><span class="hljs-keyword">import</span> torch<br><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<br><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd<br><span class="hljs-keyword">import</span> torch.optim <span class="hljs-keyword">as</span> optim<br><span class="hljs-keyword">from</span> matplotlib <span class="hljs-keyword">import</span> pyplot <span class="hljs-keyword">as</span> plt<br></code></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 读入数据并进行数据处理</span><br>data = pd.read_csv(<span class="hljs-string">&#x27;bikes.csv&#x27;</span>)<br>col_titles = [<span class="hljs-string">&#x27;season&#x27;</span>, <span class="hljs-string">&#x27;weathersit&#x27;</span>, <span class="hljs-string">&#x27;mnth&#x27;</span>, <span class="hljs-string">&#x27;hr&#x27;</span>, <span class="hljs-string">&#x27;weekday&#x27;</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> col_titles:<br>    dummies = pd.get_dummies(data[i], prefix=i)<br>    data = pd.concat([data, dummies], axis=<span class="hljs-number">1</span>)<br><br>col_titles_to_drop = [<span class="hljs-string">&#x27;instant&#x27;</span>, <span class="hljs-string">&#x27;dteday&#x27;</span>] + col_titles<br><span class="hljs-built_in">print</span>(col_titles_to_drop)<br>data = data.drop(col_titles_to_drop, axis=<span class="hljs-number">1</span>)<br>data.head()<br></code></pre></td></tr></table></figure>
-<pre><code>[&#39;instant&#39;, &#39;dteday&#39;, &#39;season&#39;, &#39;weathersit&#39;, &#39;mnth&#39;, &#39;hr&#39;, &#39;weekday&#39;]
-</code></pre><p><table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>holiday</th>
-      <th>workingday</th>
-      <th>temp</th>
-      <th>hum</th>
-      <th>windspeed</th>
-      <th>cnt</th>
-      <th>season_1</th>
-      <th>season_2</th>
-      <th>season_3</th>
-      <th>season_4</th>
-      <th>...</th>
-      <th>hr_21</th>
-      <th>hr_22</th>
-      <th>hr_23</th>
-      <th>weekday_0</th>
-      <th>weekday_1</th>
-      <th>weekday_2</th>
-      <th>weekday_3</th>
-      <th>weekday_4</th>
-      <th>weekday_5</th>
-      <th>weekday_6</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0.24</td>
-      <td>0.81</td>
-      <td>0.0</td>
-      <td>16</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0.22</td>
-      <td>0.80</td>
-      <td>0.0</td>
-      <td>40</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0.22</td>
-      <td>0.80</td>
-      <td>0.0</td>
-      <td>32</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0.24</td>
-      <td>0.75</td>
-      <td>0.0</td>
-      <td>13</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0.24</td>
-      <td>0.75</td>
-      <td>0.0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>...</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-    </tr>
-  </tbody>
-</table></p>
-<p>5 rows × 57 columns</p>
-
-<p>&lt;/div&gt;</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 对连续数据进行标准化处理</span><br>col_titles = [<span class="hljs-string">&#x27;cnt&#x27;</span>, <span class="hljs-string">&#x27;temp&#x27;</span>, <span class="hljs-string">&#x27;hum&#x27;</span>, <span class="hljs-string">&#x27;windspeed&#x27;</span>]<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> col_titles:<br>    mean, std = data[i].mean(), data[i].std()<br>    <span class="hljs-keyword">if</span> i == <span class="hljs-string">&#x27;cnt&#x27;</span>:<br>        mean_cnt, std_cnt = mean, std<br>    <br>    data[i] = (data[i] - mean)/std<br></code></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 数据集处理</span><br>test_data = data[-<span class="hljs-number">30</span>*<span class="hljs-number">24</span>:]<br>train_data = data[:-<span class="hljs-number">30</span>*<span class="hljs-number">24</span>]<br><br><span class="hljs-comment"># 删除标签类</span><br>X = train_data.drop([<span class="hljs-string">&#x27;cnt&#x27;</span>], axis=<span class="hljs-number">1</span>)<br>X = X.values<br>Y = train_data[<span class="hljs-string">&#x27;cnt&#x27;</span>]<br>Y = Y.values.astype(<span class="hljs-built_in">float</span>)<br>Y = np.reshape(Y, [<span class="hljs-built_in">len</span>(Y), <span class="hljs-number">1</span>])<br></code></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 搭建神经网络</span><br>input_size = X.shape[<span class="hljs-number">1</span>]<br>hidden_size = <span class="hljs-number">10</span><br>output_size = <span class="hljs-number">1</span><br>batch_size = <span class="hljs-number">128</span><br><br>neu = torch.nn.Sequential(<br>    torch.nn.Linear(input_size, hidden_size),<br>    torch.nn.Sigmoid(),<br>    torch.nn.Linear(hidden_size, output_size)<br>)<br>loss_fn = torch.nn.MSELoss()<br>opt = torch.optim.SGD(neu.parameters(), lr=<span class="hljs-number">0.01</span>)<br></code></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 训练模型</span><br>losses = []<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1000</span>):<br>    batch_loss = []<br>    <span class="hljs-keyword">for</span> start <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-built_in">len</span>(X), batch_size):<br>        <span class="hljs-keyword">if</span> start+batch_size&lt;<span class="hljs-built_in">len</span>(X):<br>            end = start+batch_size<br>        <span class="hljs-keyword">else</span>:<br>            end = <span class="hljs-built_in">len</span>(X)<br><br>        <span class="hljs-comment"># 生成一个batch的训练数据</span><br>        x = torch.FloatTensor(X[start:end])<br>        y = torch.FloatTensor(Y[start:end])<br><br>        pred = neu(x)<br>        loss = loss_fn(pred, y)<br>        opt.zero_grad()<br>        loss.backward()<br>        opt.step()<br>        batch_loss.append(loss.data.numpy())<br>    <span class="hljs-keyword">if</span> i%<span class="hljs-number">100</span>==<span class="hljs-number">0</span>:<br>        losses.append(np.mean(batch_loss))<br>        <span class="hljs-built_in">print</span>(i, np.mean(batch_loss))<br>        <br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>plt.plot(np.arange(<span class="hljs-built_in">len</span>(losses))*<span class="hljs-number">100</span>, losses)<br>plt.xlabel(<span class="hljs-string">&#x27;batch&#x27;</span>)<br>plt.ylabel(<span class="hljs-string">&#x27;MSE&#x27;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
-<pre><code>0 0.8939656
-100 0.30960146
-200 0.26964802
-300 0.18884033
-400 0.14483929
-500 0.1316976
-600 0.12759094
-700 0.12547289
-800 0.12405107
-900 0.12297937
-</code></pre><img src="/2023/01/04/deep-learning-test02/output_7_1.png" class="" title="png">
-<figure class="highlight python"><table><tr><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 测试，验证</span><br>X = test_data.drop([<span class="hljs-string">&#x27;cnt&#x27;</span>], axis=<span class="hljs-number">1</span>)<br>Y = test_data[<span class="hljs-string">&#x27;cnt&#x27;</span>]<br>Y = Y.values.reshape([<span class="hljs-built_in">len</span>(Y), <span class="hljs-number">1</span>])<br>X = torch.FloatTensor(X.values)<br>Y = torch.FloatTensor(Y)<br>pred = neu(X)<br><br>Y = Y.data.numpy()*std_cnt+mean_cnt<br>pred = pred.data.numpy()*std_cnt+mean_cnt<br><br>plt.figure(figsize=(<span class="hljs-number">10</span>, <span class="hljs-number">8</span>))<br>xplot, = plt.plot(np.arange(X.size(<span class="hljs-number">0</span>)), Y)<br>yplot, = plt.plot(np.arange(X.size(<span class="hljs-number">0</span>)), pred, <span class="hljs-string">&#x27;:&#x27;</span>)<br>plt.show()<br></code></pre></td></tr></table></figure>
-<p>​<br><img src="/2023/01/04/deep-learning-test02/output_8_0.png" class="" title="png"><br>​    </p>
-]]></content>
-      <categories>
-        <category>算法实践</category>
-      </categories>
-      <tags>
-        <tag>人工智能</tag>
-        <tag>深度学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>深度学习实践实验-SoftMax回归</title>
     <url>/2023/01/08/deep-learning-test03/</url>
     <content><![CDATA[<h1 id="SoftMax回归"><a href="#SoftMax回归" class="headerlink" title="SoftMax回归"></a>SoftMax回归</h1><h3 id="1、聚类和分类"><a href="#1、聚类和分类" class="headerlink" title="1、聚类和分类"></a>1、聚类和分类</h3><p>通过sklearn库提供的聚类算法生成K类数据，以这些数据做为数据集训练神经网络，利用softmax层和交叉熵损失函数对数据进行分类。聚类参数要求K&gt;3，数据样本不少于1000，其他参数参考课件。对聚类后的数据按9：1的原则划分训练集和测试集，利用在训练集上训练得到的模型对测试集上的数据进行验证，要求模型的准确率不低于99%。</p>
@@ -5248,6 +5248,45 @@ label 0
       </tags>
   </entry>
   <entry>
+    <title>数字图像处理实验-图像去噪</title>
+    <url>/2022/10/19/digital-image-test04/</url>
+    <content><![CDATA[<h3 id="1、均值滤波"><a href="#1、均值滤波" class="headerlink" title="1、均值滤波"></a>1、均值滤波</h3><p>具体内容: 利用 OpenCV 对灰度图像像素进行操作，分别利用算术均值滤波器、几何均值滤波器、谐波和逆谐波均值滤波器进行图像去噪。模板大小为5*5。（注：请分别为图像添加高斯噪声、胡椒噪声、盐噪声和椒盐噪声，并观察滤波效果）</p>
+<p>完成程度：读入灰度图像，分别为图像加入椒噪声、盐噪声、椒盐噪声以及高斯噪声，并使用5*5的模板分别对不同的噪声图像进行处理，处理的过程是用模板中的像素取平均值后赋值给中心像素，最终得到处理结果。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 1、均值滤波</span><br><span class="hljs-function">Mat <span class="hljs-title">average_filter</span><span class="hljs-params">(Mat image1, string s)</span> </span>&#123;<br>	<span class="hljs-comment">// 构建均值滤波模板</span><br><br>	Mat image = image1.<span class="hljs-built_in">clone</span>();<br>	<span class="hljs-type">int</span> size = <span class="hljs-number">5</span>;<br>	image.<span class="hljs-built_in">convertTo</span>(image, CV_8U);<br>	Mat meta = Mat::<span class="hljs-built_in">ones</span>(size, size, CV_8U);<br><br>	<span class="hljs-type">int</span> count_size = size * size;<br><br>	<span class="hljs-comment">// 对原始图像进行填充操作</span><br>	image = <span class="hljs-built_in">fill_zero</span>(image, size);<br>	<span class="hljs-type">int</span> row = image.rows;<br>	<span class="hljs-type">int</span> col = image.cols;<br>	<span class="hljs-comment">// 输出图像保存在res中</span><br>	<span class="hljs-function">Mat <span class="hljs-title">res</span><span class="hljs-params">(row - size + <span class="hljs-number">1</span>, col - size + <span class="hljs-number">1</span>, CV_8U)</span></span>;<br>	<span class="hljs-comment">// 使用meta模板对图像进行处理</span><br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; row - size + <span class="hljs-number">1</span>; ++i) &#123;<br><br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; col - size + <span class="hljs-number">1</span>; ++j) &#123;<br><br>			<span class="hljs-type">int</span> sum_ = <span class="hljs-number">0</span>;<br>			<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> s = <span class="hljs-number">0</span>; s &lt; size; ++s) &#123;<br>				<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> t = <span class="hljs-number">0</span>; t &lt; size; ++t) &#123;<br>					sum_ += image.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i + s, j + t) * meta.<span class="hljs-built_in">at</span>&lt;uchar&gt;(s, t);<br>				&#125;<br>			&#125;<br>			res.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j) = sum_ / count_size;<br>		&#125;<br>	&#125;<br><br><br><br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;均值滤波处理&quot;</span> + s, res);<br><br>	<span class="hljs-keyword">return</span> res;<br><br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">junzhi_quzao</span><span class="hljs-params">(Mat image)</span> </span>&#123;<br><br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;原图&quot;</span>, image);<br><br>	<span class="hljs-built_in">average_filter</span>(<span class="hljs-built_in">guassion</span>(image), <span class="hljs-string">&quot;高斯噪声&quot;</span>);<br>	<span class="hljs-built_in">average_filter</span>(<span class="hljs-built_in">jiao_salty</span>(image), <span class="hljs-string">&quot;椒盐噪声&quot;</span>);<br>	<span class="hljs-built_in">average_filter</span>(<span class="hljs-built_in">salty</span>(image), <span class="hljs-string">&quot;盐噪声&quot;</span>);<br>	<span class="hljs-built_in">average_filter</span>(<span class="hljs-built_in">jiao</span>(image), <span class="hljs-string">&quot;椒噪声&quot;</span>);<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<p>添加噪声</p>
+<img src="/2022/10/19/digital-image-test04/image-20240302185557410.png" class="" title="image-20240302185557410">
+<img src="/2022/10/19/digital-image-test04/image-20240302185602980.png" class="" title="image-20240302185602980">
+<img src="/2022/10/19/digital-image-test04/image-20240302185608155.png" class="" title="image-20240302185608155">
+<p>均值滤波</p>
+<img src="/2022/10/19/digital-image-test04/image-20240302185735104.png" class="" title="image-20240302185735104">
+<img src="/2022/10/19/digital-image-test04/image-20240302185739084.png" class="" title="image-20240302185739084">
+<h3 id="2、中值滤波"><a href="#2、中值滤波" class="headerlink" title="2、中值滤波"></a>2、中值滤波</h3><p>具体内容: 利用 OpenCV 对灰度图像像素进行操作，分别利用 5<em>5 和 9</em>9尺寸的模板对图像进行中值滤波。（注：请分别为图像添加胡椒噪声、盐噪声和椒盐噪声，并观察滤波效果） </p>
+<p>完成程度：分别为图像加入椒噪声、盐噪声、椒盐噪声以及高斯噪声，并使用5*5的模板分别对不同的噪声图像进行处理，处理的过程是，将模板内的像素灰度进行排序，取排序后的中间灰度值作为模板中心像素的灰度值，最终得到处理结果。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 2、中值滤波</span><br><span class="hljs-comment">// 将窗口中的点按照从小到大的排序，取中间的值作为窗口中心的值</span><br><span class="hljs-function">Mat <span class="hljs-title">median_filter</span><span class="hljs-params">(Mat image1, <span class="hljs-type">int</span> size, string s1)</span> </span>&#123;<br>	<span class="hljs-comment">// 构建均值滤波模板</span><br>	Mat image = image1.<span class="hljs-built_in">clone</span>();<br>	image.<span class="hljs-built_in">convertTo</span>(image, CV_8U);<br><br>	<span class="hljs-comment">// 对原始图像进行填充操作</span><br>	image = <span class="hljs-built_in">fill_zero</span>(image, size);<br>	<span class="hljs-type">int</span> row = image.rows;<br>	<span class="hljs-type">int</span> col = image.cols;<br>	<span class="hljs-comment">// 输出图像保存在res中</span><br>	<span class="hljs-function">Mat <span class="hljs-title">res</span><span class="hljs-params">(row - size + <span class="hljs-number">1</span>, col - size + <span class="hljs-number">1</span>, CV_8U)</span></span>;<br>	<span class="hljs-comment">// 使用meta模板对图像进行处理</span><br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; row - size + <span class="hljs-number">1</span>; ++i) &#123;<br><br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; col - size + <span class="hljs-number">1</span>; ++j) &#123;<br>			vector&lt;<span class="hljs-type">int</span>&gt; num;<br>			<span class="hljs-type">int</span> sum_ = <span class="hljs-number">0</span>;<br>			<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> s = <span class="hljs-number">0</span>; s &lt; size; ++s) &#123;<br>				<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> t = <span class="hljs-number">0</span>; t &lt; size; ++t) &#123;<br>					<span class="hljs-type">int</span> k = image.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i + s, j + t);<br>					num.<span class="hljs-built_in">push_back</span>(k);<br>				&#125;<br>			&#125;<br>			<span class="hljs-built_in">sort</span>(num.<span class="hljs-built_in">begin</span>(), num.<span class="hljs-built_in">end</span>());<br>			res.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j) = num[<span class="hljs-built_in">int</span>(num.<span class="hljs-built_in">size</span>() / <span class="hljs-number">2</span>)];<br>		&#125;<br>	&#125;<br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;中值滤波处理&quot;</span> + s1, res);<br><br>	<span class="hljs-keyword">return</span> res;<br><br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">zhongzhi_quzao</span><span class="hljs-params">(Mat image)</span> </span>&#123;<br><br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;原图&quot;</span>, image);<br><br>	<span class="hljs-built_in">median_filter</span>(<span class="hljs-built_in">guassion</span>(image), <span class="hljs-number">5</span>, <span class="hljs-string">&quot;高斯噪声&quot;</span>);<br>	<span class="hljs-built_in">median_filter</span>(<span class="hljs-built_in">jiao_salty</span>(image), <span class="hljs-number">5</span>, <span class="hljs-string">&quot;椒盐噪声&quot;</span>);<br>	<span class="hljs-built_in">median_filter</span>(<span class="hljs-built_in">salty</span>(image), <span class="hljs-number">5</span>, <span class="hljs-string">&quot;盐噪声&quot;</span>);<br>	<span class="hljs-built_in">median_filter</span>(<span class="hljs-built_in">jiao</span>(image), <span class="hljs-number">5</span>, <span class="hljs-string">&quot;椒噪声&quot;</span>);<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<img src="/2022/10/19/digital-image-test04/image-20240302185751435.png" class="" title="image-20240302185751435">
+<img src="/2022/10/19/digital-image-test04/image-20240302185800747.png" class="" title="image-20240302185800747">
+<h3 id="3、自适应均值滤波"><a href="#3、自适应均值滤波" class="headerlink" title="3、自适应均值滤波"></a>3、自适应均值滤波</h3><p>具体内容:利用 OpenCV 对灰度图像像素进行操作，设计自适应局部降低噪声滤波器去噪算法。模板大小 7*7（对比该算法的效果和均值滤波器的效果） </p>
+<p>完成程度：自适应的均值滤波，可以通过局部的均值方差，以及噪声的均值方差之间的关系，来自动的调整对噪声处理强的大小，将原始图片的方差作为分子，将局部图片的方差作为分母，用7*7的模板对加入高斯噪声的图像进行了处理。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 3、自适应均值滤波</span><br><span class="hljs-comment">// 计算图像全局的方差</span><br><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">quare_sub</span><span class="hljs-params">(Mat image)</span> </span>&#123;<br>	<span class="hljs-comment">// 统计不同灰度的概率密度</span><br>	<span class="hljs-type">double</span> midu[<span class="hljs-number">256</span>] = &#123; <span class="hljs-number">0</span> &#125;;<br><br>	<span class="hljs-type">int</span> col = image.cols;<br>	<span class="hljs-type">int</span> row = image.rows;<br><br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; row; ++i) &#123;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; col; ++j) &#123;<br>			midu[image.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j)] += <span class="hljs-number">1</span>;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-type">int</span> size = col * row;<br><br>	<span class="hljs-comment">// 计算均值</span><br>	<span class="hljs-type">double</span> med = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">256</span>; ++i) &#123;<br>		med += i * (midu[i] / size);<br>	&#125;<br><br>	<span class="hljs-comment">// 计算方差</span><br>	<span class="hljs-type">double</span> quare = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">256</span>; ++i) &#123;<br>		quare += <span class="hljs-built_in">pow</span>((i - med), <span class="hljs-number">2</span>) * (midu[i] / size);<br>	&#125;<br><br>	<span class="hljs-keyword">return</span> quare;<br>&#125;<br><br><span class="hljs-comment">// 自适应均值滤波</span><br><span class="hljs-function">Mat <span class="hljs-title">self_adapt_mean_filter</span><span class="hljs-params">(Mat image, <span class="hljs-type">int</span> self_adapt_mean_filter_size)</span> </span>&#123;<br>	<span class="hljs-comment">// 滤波窗口尺寸必须为奇数</span><br>	Mat pScr, dst;<br>	<span class="hljs-comment">// 1为加载图像的颜色类型,1为原图返回,0为灰度返回</span><br>	pScr = image.<span class="hljs-built_in">clone</span>();<br>	<span class="hljs-type">int</span> row = pScr.rows;<br>	<span class="hljs-type">int</span> col = pScr.cols;<br>	<span class="hljs-built_in">blur</span>(pScr, dst, <span class="hljs-built_in">Size</span>(<span class="hljs-number">7</span>, <span class="hljs-number">7</span>));<br>	<span class="hljs-type">int</span> pos = (self_adapt_mean_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>;<br>	<span class="hljs-type">double</span> Sn = <span class="hljs-number">100.0</span>;<br>	<span class="hljs-comment">// 每个滤波窗口中心位置都计算滤波窗口内通道值的平均值</span><br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> m = pos; m &lt; row - pos; m++) &#123;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> n = pos; n &lt; col - pos; n++) &#123;<br>			<span class="hljs-type">int</span> Zxy = <span class="hljs-built_in">int</span>(pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(m, n));<br>			<span class="hljs-type">int</span> Zmed = <span class="hljs-built_in">int</span>(dst.<span class="hljs-built_in">at</span>&lt;uchar&gt;(m, n));<br>			<span class="hljs-type">double</span> Sl = <span class="hljs-number">0.0</span>;<br>			<span class="hljs-type">int</span> count = <span class="hljs-number">0</span>;<br>			<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = m - (self_adapt_mean_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; i &lt;= m + (self_adapt_mean_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; i++) &#123;<br>				<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = n - (self_adapt_mean_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; j &lt;= n + (self_adapt_mean_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; j++) &#123;<br>					<span class="hljs-type">int</span> Sxy = pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j);<br>					Sl += <span class="hljs-built_in">pow</span>(Sxy - Zmed, <span class="hljs-number">2</span>);<br>					count++;<br>				&#125;<br>			&#125;<br>			Sl = Sl / count;<br>			pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(m, n) = (<span class="hljs-type">int</span>)(Zxy - Sn / Sl * (Zxy - Zmed));<br><br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> pScr;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">self_adapt</span><span class="hljs-params">(Mat image, <span class="hljs-type">int</span> size)</span> </span>&#123;<br>	Mat res = image.<span class="hljs-built_in">clone</span>();<br>	<br>	res = <span class="hljs-built_in">guassion</span>(res);<br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;加入高斯噪声后图片&quot;</span>, res);<br>	res = <span class="hljs-built_in">self_adapt_mean_filter</span>(res, size);<br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;使用自适应均值滤波&quot;</span>, res);<br>&#125;<br></code></pre></td></tr></table></figure>
+<img src="/2022/10/19/digital-image-test04/image-20240302185819182.png" class="" title="image-20240302185819182">
+<h3 id="4、自适应中值滤波"><a href="#4、自适应中值滤波" class="headerlink" title="4、自适应中值滤波"></a>4、自适应中值滤波</h3><p>具体内容: 利用 OpenCV 对灰度图像像素进行操作，设计自适应中值滤波算法对椒盐图像进行去噪。模板大小 7*7（对比中值滤波器的效果） </p>
+<p>完成程度：自适应的中值滤波和自适应的均值滤波具有相似的原理，与均值滤波不同的便是，中值滤波适应的是模板的大小，而均值滤波适应的是去噪比例大小。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//4、自适应中值滤波</span><br><span class="hljs-comment">// 自适应中值滤波</span><br><span class="hljs-function">Mat <span class="hljs-title">self_adapt_median_filter</span><span class="hljs-params">(Mat image, <span class="hljs-type">int</span> self_adapt_median_filter_size)</span> </span>&#123;<br>	<span class="hljs-comment">// 滤波窗口尺寸必须为奇数</span><br>	Mat pScr = image.<span class="hljs-built_in">clone</span>();<br>	<span class="hljs-comment">// 1为加载图像的颜色类型,1为原图返回,0为灰度返回</span><br>	<span class="hljs-type">int</span> row = pScr.rows;<br>	<span class="hljs-type">int</span> col = pScr.cols;<br>	<span class="hljs-type">int</span> channel = pScr.<span class="hljs-built_in">channels</span>();<br>	<span class="hljs-comment">// 滤波器窗口的起始尺寸</span><br>	<span class="hljs-type">int</span> pos = (self_adapt_median_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>;<br>	<span class="hljs-comment">// 每个滤波窗口中心位置都计算滤波窗口内通道值的平均值</span><br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> m = pos; m &lt; row - pos; m++) &#123;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> n = pos; n &lt; col - pos; n++) &#123;<br>			<span class="hljs-type">int</span> minValue = <span class="hljs-number">255</span>;<br>			<span class="hljs-type">int</span> maxValue = <span class="hljs-number">0</span>;<br>			<span class="hljs-type">int</span> medValue = <span class="hljs-number">0</span>;<br>			vector&lt;<span class="hljs-type">int</span>&gt; filter_value;<br>			<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = m - (self_adapt_median_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; i &lt;= m + (self_adapt_median_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; i++) &#123;<br>				<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = n - (self_adapt_median_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; j &lt;= n + (self_adapt_median_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; j++) &#123;<br>					filter_value.<span class="hljs-built_in">push_back</span>(<span class="hljs-built_in">int</span>(pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j)));<br>					<span class="hljs-keyword">if</span> (<span class="hljs-built_in">int</span>(pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j)) &gt; maxValue)<br>						maxValue = <span class="hljs-built_in">int</span>(pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j));<br>					<span class="hljs-keyword">if</span> (<span class="hljs-built_in">int</span>(pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j)) &lt; minValue)<br>						minValue = <span class="hljs-built_in">int</span>(pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j));<br>				&#125;<br>			&#125;<br>			<span class="hljs-built_in">sort</span>(filter_value.<span class="hljs-built_in">begin</span>(), filter_value.<span class="hljs-built_in">end</span>());<br>			medValue = filter_value[<span class="hljs-built_in">int</span>(self_adapt_median_filter_size * self_adapt_median_filter_size / <span class="hljs-number">2</span>)];<br>			<span class="hljs-type">int</span> fxy = <span class="hljs-built_in">int</span>(pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(m, n));<br>			<span class="hljs-keyword">if</span> (medValue &gt; minValue &amp;&amp; medValue &lt; maxValue)<br>				<span class="hljs-keyword">if</span> (fxy &lt;= minValue || fxy &gt;= maxValue)<br>					pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(m, n) = medValue;<br>				<span class="hljs-keyword">else</span><br>					pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(m, n) = medValue;<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-keyword">return</span> pScr;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">self_median</span><span class="hljs-params">(Mat image, <span class="hljs-type">int</span> size)</span> </span>&#123;<br><br>	Mat res = image.<span class="hljs-built_in">clone</span>();<br>	res = <span class="hljs-built_in">guassion</span>(res);<br>	res = <span class="hljs-built_in">self_adapt_median_filter</span>(image, <span class="hljs-number">7</span>);<br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;使用自适应中值滤波&quot;</span>, res);<br>	<br>&#125;<br></code></pre></td></tr></table></figure>
+<img src="/2022/10/19/digital-image-test04/image-20240302185829105.png" class="" title="image-20240302185829105">
+<h3 id="5、彩色图像均值滤波"><a href="#5、彩色图像均值滤波" class="headerlink" title="5、彩色图像均值滤波"></a>5、彩色图像均值滤波</h3><p>具体内容: 利用 OpenCV 对彩色图像 RGB 三个通道的像素进行操作，利用算术均值滤波器和几何均值滤波器进行彩色图像去噪。模板大小为 5*5。</p>
+<p>完成程度：分别对彩色图像的三个通道加入高斯噪声，然后再合并三个通道，得到的便是加入有高斯噪声的彩色图像。通过对带有噪声的彩色图像进行通道分离，再分别使用自适应的均值滤波对三个通道进行处理，最终合并以后便是，处理的结果。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//5、彩色图像均值滤波</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">color_quzao</span><span class="hljs-params">(Mat image, <span class="hljs-type">int</span> size)</span> </span>&#123;<br>	vector&lt;Mat&gt;channels;<br>	vector&lt;Mat&gt;channels1;<br>	<span class="hljs-built_in">split</span>(image, channels);<br>	channels1 = channels;<br><br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; ++i) &#123;<br>		channels[i] = <span class="hljs-built_in">guassion</span>(channels[i]);<br>	&#125;<br>	Mat res;<br>	Mat res1;<br>	<span class="hljs-built_in">merge</span>(channels, res);<br><br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;彩色图像加入高斯噪声&quot;</span>, res);<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; ++i) &#123;<br>		channels[i] = <span class="hljs-built_in">self_adapt_mean_filter</span>(channels[i].<span class="hljs-built_in">clone</span>(), <span class="hljs-number">7</span>);<br><br>		channels1[i] = <span class="hljs-built_in">self_adapt_median_filter</span>(channels[i].<span class="hljs-built_in">clone</span>(), <span class="hljs-number">7</span>);<br>	&#125;<br><br>	<span class="hljs-built_in">merge</span>(channels, res);<br>	<span class="hljs-built_in">merge</span>(channels1, res1);<br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;自适应均值滤波处理彩色图像&quot;</span>, res);<br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;自适应中值滤波处理彩色图像&quot;</span>, res1);<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<img src="/2022/10/19/digital-image-test04/image-20240302185837682.png" class="" title="image-20240302185837682">
+<img src="/2022/10/19/digital-image-test04/image-20240302185841933.png" class="" title="image-20240302185841933">]]></content>
+      <categories>
+        <category>算法实践</category>
+      </categories>
+      <tags>
+        <tag>数字图像</tag>
+        <tag>OpenCV</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>数字图像处理实验-空域滤波</title>
     <url>/2022/10/02/digital-image-test03/</url>
     <content><![CDATA[<h3 id="1、利用均值模板平滑灰度图像"><a href="#1、利用均值模板平滑灰度图像" class="headerlink" title="1、利用均值模板平滑灰度图像"></a>1、利用均值模板平滑灰度图像</h3><p>具体内容: 利用 OpenCV 对图像像素进行操作，分别利用 3<em>3、5</em>5 和 9*9 尺寸的均值模板平滑灰度图像。</p>
@@ -5297,6 +5336,122 @@ label 0
       <tags>
         <tag>数字图像</tag>
         <tag>OpenCV</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>EDA基础知识总结</title>
+    <url>/2023/09/04/eda-summary/</url>
+    <content><![CDATA[<h3 id="一、布局"><a href="#一、布局" class="headerlink" title="一、布局"></a>一、布局</h3><h4 id="布局算法：二次线长布局算法-力矢量布局"><a href="#布局算法：二次线长布局算法-力矢量布局" class="headerlink" title="布局算法：二次线长布局算法+力矢量布局"></a><strong>布局算法：二次线长布局算法+力矢量布局</strong></h4><p>设计目标：调整不同元胞在元胞中的摆放位置，使得元胞在版图中的连线最短，同时确保在布局中没有重叠</p>
+<blockquote>
+<p>二次线长布局分为两个阶段</p>
+<p>第一阶段：依据元胞的中心对元胞进行布局，从而对二次线长函数最小化</p>
+<p>第二阶段：将元胞中集中在许多元胞重叠的大的结群打散，从而使所有单元原来的重叠消除</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs \">输入：线网连接，限制的版图区域<br>输出：所有元胞的x坐标和y坐标<br></code></pre></td></tr></table></figure>
+<h4 id="数据结构设计"><a href="#数据结构设计" class="headerlink" title="数据结构设计"></a>数据结构设计</h4><p>1、元胞可以抽象成一个含有x，y坐标的结构体</p>
+<p>2、网表抽象为二维map，记录不同元胞之间的连线情况，同时x，y代表元胞在map中所处的位置信息</p>
+<h4 id="算法主要思想"><a href="#算法主要思想" class="headerlink" title="算法主要思想"></a>算法主要思想</h4><p><strong>第一阶段：全局布局（二次线长布局）</strong></p>
+<blockquote>
+<p>在全局布局的过程中，将元胞的坐标抽象成为中心点的坐标，不考虑其面积、大小以及布局的合法化，仅仅是以最优化模块之间的线长为目标。</p>
+</blockquote>
+<figure class="highlight llvm"><table><tr><td class="code"><pre><code class="hljs llvm">已知线网的的连接，限制的版图区域，求不同元胞在版图中摆放的位置，使得所有元胞在版图中的连线最短。<br>求：所有的元胞的<span class="hljs-keyword">x</span>坐标和y坐标。<br><br><span class="hljs-number">1</span>、列出所有连接的元胞线网的X的总线长L(p)：所有的<span class="hljs-keyword">x</span>距离的差的平方<br><span class="hljs-number">2</span>、分别对所有参数中的<span class="hljs-keyword">x</span>求偏导，并令偏导为<span class="hljs-number">0</span><br><span class="hljs-number">3</span>、列出方程组，解出来的<span class="hljs-keyword">x</span>阵列就是所需要求的解<br>对于Y方向也是同理<br><br>该算法只是以中心点作为元胞的坐标，所有没有考虑到不同元胞的大小，会存在重叠的问题<br></code></pre></td></tr></table></figure>
+<p>距离计算代价函数</p>
+<img src="/2023/09/04/eda-summary/image-20230818160028154.png" class="" title="image-20230818160028154">
+<p>通过求偏导数，解出x和y。</p>
+<p><strong>第二阶段：详细布局（力矢量布局）</strong></p>
+<blockquote>
+<p>用于在已经布置好的版图中，新加入一个元胞，通过找到让该元胞平衡的状态，来确定该元胞在版图中的位置。</p>
+<p>采用力学中的质点弹簧系统来建模，每个元胞运动吸引其他元胞，其中吸引力与距离成正比。如果所有元胞到达它们的平衡位置，线长将得到最小化。<strong>将目标转化为将所有的元胞放在一个力平衡的位置上。</strong>——<strong>称为零力目标</strong>（ZFT）</p>
+</blockquote>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-number">1</span>、以二次线长布局过后的布局为初始布局<br><span class="hljs-number">2</span>、为每个布局中的元胞设定坐标，并标记为UNMOVED<br><span class="hljs-number">3</span>、对元胞按照元胞的连接数进行排序，该顺序就是元胞迭代的顺序<br><span class="hljs-number">4</span>、迭代的取出每一个元胞，并寻找它的ZFT位置，直到所有的都完成<br><span class="hljs-number">5</span>、若ZFT位置被占据，则移动到其他的位置<br><br>第<span class="hljs-number">5</span>步确定<span class="hljs-selector-tag">p</span>的ZFT时，若ZFT被元胞<span class="hljs-selector-tag">q</span>占据，则移动位置的确定<br><span class="hljs-number">1</span>、如果可能，将<span class="hljs-selector-tag">p</span>移动到靠近<span class="hljs-selector-tag">q</span>的位置<br><span class="hljs-number">2</span>、若交换<span class="hljs-selector-tag">p</span>，<span class="hljs-selector-tag">q</span>后，代价变小，则交换<br><span class="hljs-number">3</span>、链式移动，<span class="hljs-selector-tag">p</span>移动到<span class="hljs-selector-tag">q</span>，<span class="hljs-selector-tag">q</span>移动到下一个，以此类推<br><span class="hljs-number">4</span>、波状移动，<span class="hljs-selector-tag">p</span>移动到<span class="hljs-selector-tag">q</span>，再重新计算<span class="hljs-selector-tag">q</span>的ZFT<br></code></pre></td></tr></table></figure>
+<p>Loss为权重乘以坐标差的累计和</p>
+<p><strong>时间复杂度</strong></p>
+<p>假设元胞的数量为n</p>
+<p>二次线长布局的时间复杂度为：O(n^2)，需要遍历一遍map，找到各个节点之间的连线信息</p>
+<p>力矢量布局的时间复杂度为：O(n^2)</p>
+<h3 id="二、布线"><a href="#二、布线" class="headerlink" title="二、布线"></a>二、布线</h3><h4 id="布线算法：FLUTE算法"><a href="#布线算法：FLUTE算法" class="headerlink" title="布线算法：FLUTE算法"></a>布线算法：FLUTE算法</h4><p>设计目标：找到能将节点连接的最小斯坦纳生成树</p>
+<blockquote>
+<p>在EDA的布线中，各个板块的IO接口以及时钟接口之间，通常是走的斯坦纳线，而直接求斯坦纳最小树是NP完全问题，使用FLUTE算法可以将RSMT问题转化为查找表的问题</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="code"><pre><code class="hljs">输入：pin结点，以及结点的位置<br>输出：将所有结点连接起来的斯坦纳树<br></code></pre></td></tr></table></figure>
+<h4 id="算法数据结构设计"><a href="#算法数据结构设计" class="headerlink" title="算法数据结构设计"></a>算法数据结构设计</h4><p><strong>1、POWV（Potentially optimal wirelength vectors）</strong></p>
+<p>在FLUTE算法中，会使用一种带有信息（权重）的数据结构（向量）来表示一种斯坦纳树，任意一棵斯坦纳树都可以使用唯一的POWV来表示，一个POWV向量可以表示多棵不一样的斯坦纳树，如下图。</p>
+<blockquote>
+<p>前面三位表示x方向上的length</p>
+<p>后面三位表示y方向上的length</p>
+</blockquote>
+<img src="/2023/09/04/eda-summary/image-20230828141138808.png" class="" title="image-20230828141138808">
+<p><strong>2、POST（potentially optimal Steiner tree）</strong></p>
+<p>对每一个POWV都会对应存储一个POST，也就是说，不是存储所有的斯坦纳树，只是存储一个可能的斯坦纳树，因为同一个向量的所有斯坦纳树的代价总和总是一样的。POWV和POST会构建成一个映射关系，同时将其存入到一个Table中，表中还包含POWV的总权重。而此时，权重最小的则可代表一个最小斯坦纳生成树。</p>
+<p><strong>3、table可以使用哈希表来进行设计</strong></p>
+<p>使用POWV做表头，权重和POST作为value，给出节点后，生成所有的可能的POWV表，再通过权重对其进行排序，取其POST作为斯坦纳树结果。</p>
+<h4 id="算法主要思想-1"><a href="#算法主要思想-1" class="headerlink" title="算法主要思想"></a>算法主要思想</h4><figure class="highlight stata"><table><tr><td class="code"><pre><code class="hljs stata">总体流程：<br>所有<span class="hljs-keyword">N</span>点线网根据pin脚的位置都可以划分到<span class="hljs-keyword">n</span>！个group中，每个group中存有POWV，对于一个线网最优线长可由POWV来获得，FLUTE算法首先会预计算这些POWV形成一个查找表。<br>与POWV一起存储的还有<span class="hljs-keyword">POST</span>，一个POWV对应多个<span class="hljs-keyword">POST</span>，一个<span class="hljs-keyword">POST</span>只有一个POWV<br>基于此，要得到一棵RSMT，只需要计算线网所在的组对应的POWV的线长，然后返回对应的<span class="hljs-keyword">POST</span>即可<br>上述查找表算法最高支持9点线网，对于9点以上的需要递归的切分线网<br></code></pre></td></tr></table></figure>
+<ul>
+<li>生成查找表算法</li>
+</ul>
+<img src="/2023/09/04/eda-summary/image-20230828144127572.png" class="" title="image-20230828144127572">
+<h4 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h4><p>时间复杂度为：O(nlgn)</p>
+<h3 id="三、静态时序分析"><a href="#三、静态时序分析" class="headerlink" title="三、静态时序分析"></a>三、静态时序分析</h3><h4 id="单元库"><a href="#单元库" class="headerlink" title="单元库"></a>单元库</h4><p>在静态时序分析中，单元库（library）是指一个集合，其中包含了各种标准的逻辑元件、时序元件和组合元件的建模。单元库中的元件通常带有特定的时钟延迟和逻辑功能，以及电压和温度等方面的参数，通过使用单元库，可以在时序分析中模拟和评估设计的时序特性，以帮助发现和解决潜在的时序冲突和时序失效问题。</p>
+<h4 id="互连寄生"><a href="#互连寄生" class="headerlink" title="互连寄生"></a>互连寄生</h4><p>互连寄生是指在集成电路或电子系统中，由于导线或连接器的存在，引起的非理想的电特性和效果。主要包括电容和电阻，互连寄生会对电路的信号传输、功耗、噪声和时序等方面产生不良的影响。</p>
+<p>电阻寄生：互连导线的电阻会引起信号的衰减和功率损耗。较长的导线通常具有更大的电阻。</p>
+<p>电容寄生：互连导线的电容会引起信号的延迟和功耗。电容会存储和释放电荷，导致信号传输速度变慢。</p>
+<h4 id="单元时延（NLDM表格）"><a href="#单元时延（NLDM表格）" class="headerlink" title="单元时延（NLDM表格）"></a>单元时延（NLDM表格）</h4><p>单元时延（NLDM表格），全称为非线性延迟模型（Non-Linear Delay Model），是一种常用的静态时序分析中的时延模型。在数字电路设计中，时延模型用于描述逻辑元件（如门级电路或时序元件）的输出到输入之间的传播延迟。</p>
+<p>NLDM表格是一种常见的时延模型，它以表格的形式表示输入到输出之间的传播延迟。表格的输入是逻辑元件的输入端的不同组合，并且通常包括输入的电压和电流等参数。表格的输出是逻辑元件的输出端的延迟时间，通常以纳秒或皮秒为单位。</p>
+<p>NLDM表格通常由电路设计工具根据所用的逻辑元件和工艺库生成。基于这个模型，可以进行静态时序分析，以评估电路的时序性能，如时钟周期、信号传输延迟和时序失效等。</p>
+<h4 id="线网时延（Elmore计算）"><a href="#线网时延（Elmore计算）" class="headerlink" title="线网时延（Elmore计算）"></a>线网时延（Elmore计算）</h4><p>线网时延，也称为Elmore时延，是一种常用的近似计算方法，用于估计电路中导线上的传播延迟。它是一种简化的时延模型，适用于传输线上电压/电流从输入端到达输出端的时间。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><code class="hljs">Elmore计算基于以下假设和简化：<br>1、传输线上的时延主要由传播速度和传输线上的等效电容决定。<br>2、传播速度是恒定的，不考虑传输线上的阻抗匹配或反射等因素。<br>3、传输线被近似为一系列等效电容连接起来的节点。<br><br>根据这些假设，Elmore计算使用以下步骤来估计线网时延：<br>1、将电路中的传输线划分为一系列节点，每个节点对应于传输线上一个等效电容。<br>2、从输入端开始，依次计算每个节点的时延。每个节点的时延等于前一节点的时延加上当前节点的等效电容与前一节点电流之积。<br>3、在达到输出端后，最后一个节点的时延就是整个线网的传播延迟。<br></code></pre></td></tr></table></figure>
+<h4 id="串扰噪声的定义"><a href="#串扰噪声的定义" class="headerlink" title="串扰噪声的定义"></a>串扰噪声的定义</h4><p>噪声是指电路中任意节点上不希望出现的电压或电流的偏差。当噪声作用于某个电路节点上时，它可以瞬间破坏该节点上存储的逻辑信息。如果这一破坏状态被锁存到锁存器中，那么将会导致功能性错误。</p>
+<p>主要有毛刺和延时噪声。</p>
+<h4 id="时序检查（Setup-Hold）"><a href="#时序检查（Setup-Hold）" class="headerlink" title="时序检查（Setup/Hold）"></a>时序检查（Setup/Hold）</h4><p>时序检查是在数字电路设计中进行的一种重要时序分析，用于验证和确保输入信号在时钟边沿触发时的稳定性和正确性。</p>
+<p>Setup Time：是指在时钟边沿到达之前，输入信号必须稳定在其有效值的时间。如果输入信号在设置时间窗口内没有稳定，可能会导致电路中的逻辑冲突和错误。</p>
+<p>Hold Time：是指在时钟边沿到达之后，输入信号必须继续保持在其有效值的时间。如果输入信号在保持时间之前改变或不稳定，也会导致电路中的逻辑错误。</p>
+<h4 id="时序路径定义"><a href="#时序路径定义" class="headerlink" title="时序路径定义"></a>时序路径定义</h4><p>时序路径（Timing Path）是指信号从一个寄存器节点（如时钟触发器）通过逻辑路径传播到另一个寄存器节点的路径。它描述了数据在电路中的传输和处理过程，并对时序分析和时序优化提供了重要信息。</p>
+<p>通过分析时序路径，可以确定信号在路径中的传播延迟，包括设置时间和保持时间等重要时序要求。时序路径分析可用于预测时钟频率、检测时序冲突、优化时序性能，以及验证设计是否满足时序规约等。</p>
+<h4 id="时序约束命令"><a href="#时序约束命令" class="headerlink" title="时序约束命令"></a>时序约束命令</h4><img src="/2023/09/04/eda-summary/image-20230818170602715.png" class="" title="image-20230818170602715">
+<h3 id="四、EDA性能"><a href="#四、EDA性能" class="headerlink" title="四、EDA性能"></a>四、EDA性能</h3><ul>
+<li><p>解决EDA软件中的性能问题</p>
+<p>算法：优化数据结构，提高算法性能，降低算法的复杂度</p>
+<p>硬件：确保计算机的硬件资源重组，对于一些矩阵操作可以考虑使用GPU加速</p>
+<p>分布式：将问题拆解成可以并行计算的小问题，开发支持并行计算的EDA工具</p>
+</li>
+</ul>
+<h3 id="五、EDA后端"><a href="#五、EDA后端" class="headerlink" title="五、EDA后端"></a>五、EDA后端</h3><ul>
+<li>EDA后端软件开发的流程</li>
+</ul>
+<img src="/2023/09/04/eda-summary/EDA%E6%B5%81%E7%A8%8B.jpg" class="">
+<h3 id="六、EDA工具"><a href="#六、EDA工具" class="headerlink" title="六、EDA工具"></a>六、EDA工具</h3><ul>
+<li><p>常见的EDA仿真工具和Debug工具分别有哪些？它们有什么优势和不足？</p>
+<p>仿真工具：</p>
+<ul>
+<li>ModelSim/QuestaSim (Mentor)</li>
+<li>VCS (Synopsys)</li>
+<li>Xilinx Vivado Simulator (Xilinx)</li>
+<li>Incisive (Cadence)</li>
+<li>Icarus Verilog</li>
+</ul>
+<p>优势：</p>
+<ul>
+<li>高度准确和精确的模拟功能。</li>
+<li>可以模拟各种不同级别的设计，从门级仿真到系统级仿真。</li>
+<li>支持时序和功能仿真，可以检测和调试设计中的逻辑错误和时序问题。</li>
+</ul>
+<p>不足：</p>
+<ul>
+<li>仿真时间较长，尤其是对于大型和复杂的设计。</li>
+<li>需要大量的计算资源（CPU和内存）。</li>
+<li>对于某些特定的设计场景，可能需要针对特定工具进行配置和优化。</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>物理设计</tag>
+        <tag>EDA</tag>
+        <tag>布局</tag>
+        <tag>布线</tag>
       </tags>
   </entry>
   <entry>
@@ -5889,45 +6044,6 @@ p<k<FT_p[1]</script><p>那么就转发给$FT_p[1]$结点，此节点负责结点
       </tags>
   </entry>
   <entry>
-    <title>数字图像处理实验-图像去噪</title>
-    <url>/2022/10/19/digital-image-test04/</url>
-    <content><![CDATA[<h3 id="1、均值滤波"><a href="#1、均值滤波" class="headerlink" title="1、均值滤波"></a>1、均值滤波</h3><p>具体内容: 利用 OpenCV 对灰度图像像素进行操作，分别利用算术均值滤波器、几何均值滤波器、谐波和逆谐波均值滤波器进行图像去噪。模板大小为5*5。（注：请分别为图像添加高斯噪声、胡椒噪声、盐噪声和椒盐噪声，并观察滤波效果）</p>
-<p>完成程度：读入灰度图像，分别为图像加入椒噪声、盐噪声、椒盐噪声以及高斯噪声，并使用5*5的模板分别对不同的噪声图像进行处理，处理的过程是用模板中的像素取平均值后赋值给中心像素，最终得到处理结果。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 1、均值滤波</span><br><span class="hljs-function">Mat <span class="hljs-title">average_filter</span><span class="hljs-params">(Mat image1, string s)</span> </span>&#123;<br>	<span class="hljs-comment">// 构建均值滤波模板</span><br><br>	Mat image = image1.<span class="hljs-built_in">clone</span>();<br>	<span class="hljs-type">int</span> size = <span class="hljs-number">5</span>;<br>	image.<span class="hljs-built_in">convertTo</span>(image, CV_8U);<br>	Mat meta = Mat::<span class="hljs-built_in">ones</span>(size, size, CV_8U);<br><br>	<span class="hljs-type">int</span> count_size = size * size;<br><br>	<span class="hljs-comment">// 对原始图像进行填充操作</span><br>	image = <span class="hljs-built_in">fill_zero</span>(image, size);<br>	<span class="hljs-type">int</span> row = image.rows;<br>	<span class="hljs-type">int</span> col = image.cols;<br>	<span class="hljs-comment">// 输出图像保存在res中</span><br>	<span class="hljs-function">Mat <span class="hljs-title">res</span><span class="hljs-params">(row - size + <span class="hljs-number">1</span>, col - size + <span class="hljs-number">1</span>, CV_8U)</span></span>;<br>	<span class="hljs-comment">// 使用meta模板对图像进行处理</span><br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; row - size + <span class="hljs-number">1</span>; ++i) &#123;<br><br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; col - size + <span class="hljs-number">1</span>; ++j) &#123;<br><br>			<span class="hljs-type">int</span> sum_ = <span class="hljs-number">0</span>;<br>			<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> s = <span class="hljs-number">0</span>; s &lt; size; ++s) &#123;<br>				<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> t = <span class="hljs-number">0</span>; t &lt; size; ++t) &#123;<br>					sum_ += image.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i + s, j + t) * meta.<span class="hljs-built_in">at</span>&lt;uchar&gt;(s, t);<br>				&#125;<br>			&#125;<br>			res.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j) = sum_ / count_size;<br>		&#125;<br>	&#125;<br><br><br><br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;均值滤波处理&quot;</span> + s, res);<br><br>	<span class="hljs-keyword">return</span> res;<br><br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">junzhi_quzao</span><span class="hljs-params">(Mat image)</span> </span>&#123;<br><br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;原图&quot;</span>, image);<br><br>	<span class="hljs-built_in">average_filter</span>(<span class="hljs-built_in">guassion</span>(image), <span class="hljs-string">&quot;高斯噪声&quot;</span>);<br>	<span class="hljs-built_in">average_filter</span>(<span class="hljs-built_in">jiao_salty</span>(image), <span class="hljs-string">&quot;椒盐噪声&quot;</span>);<br>	<span class="hljs-built_in">average_filter</span>(<span class="hljs-built_in">salty</span>(image), <span class="hljs-string">&quot;盐噪声&quot;</span>);<br>	<span class="hljs-built_in">average_filter</span>(<span class="hljs-built_in">jiao</span>(image), <span class="hljs-string">&quot;椒噪声&quot;</span>);<br><br>&#125;<br></code></pre></td></tr></table></figure>
-<p>添加噪声</p>
-<img src="/2022/10/19/digital-image-test04/image-20240302185557410.png" class="" title="image-20240302185557410">
-<img src="/2022/10/19/digital-image-test04/image-20240302185602980.png" class="" title="image-20240302185602980">
-<img src="/2022/10/19/digital-image-test04/image-20240302185608155.png" class="" title="image-20240302185608155">
-<p>均值滤波</p>
-<img src="/2022/10/19/digital-image-test04/image-20240302185735104.png" class="" title="image-20240302185735104">
-<img src="/2022/10/19/digital-image-test04/image-20240302185739084.png" class="" title="image-20240302185739084">
-<h3 id="2、中值滤波"><a href="#2、中值滤波" class="headerlink" title="2、中值滤波"></a>2、中值滤波</h3><p>具体内容: 利用 OpenCV 对灰度图像像素进行操作，分别利用 5<em>5 和 9</em>9尺寸的模板对图像进行中值滤波。（注：请分别为图像添加胡椒噪声、盐噪声和椒盐噪声，并观察滤波效果） </p>
-<p>完成程度：分别为图像加入椒噪声、盐噪声、椒盐噪声以及高斯噪声，并使用5*5的模板分别对不同的噪声图像进行处理，处理的过程是，将模板内的像素灰度进行排序，取排序后的中间灰度值作为模板中心像素的灰度值，最终得到处理结果。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 2、中值滤波</span><br><span class="hljs-comment">// 将窗口中的点按照从小到大的排序，取中间的值作为窗口中心的值</span><br><span class="hljs-function">Mat <span class="hljs-title">median_filter</span><span class="hljs-params">(Mat image1, <span class="hljs-type">int</span> size, string s1)</span> </span>&#123;<br>	<span class="hljs-comment">// 构建均值滤波模板</span><br>	Mat image = image1.<span class="hljs-built_in">clone</span>();<br>	image.<span class="hljs-built_in">convertTo</span>(image, CV_8U);<br><br>	<span class="hljs-comment">// 对原始图像进行填充操作</span><br>	image = <span class="hljs-built_in">fill_zero</span>(image, size);<br>	<span class="hljs-type">int</span> row = image.rows;<br>	<span class="hljs-type">int</span> col = image.cols;<br>	<span class="hljs-comment">// 输出图像保存在res中</span><br>	<span class="hljs-function">Mat <span class="hljs-title">res</span><span class="hljs-params">(row - size + <span class="hljs-number">1</span>, col - size + <span class="hljs-number">1</span>, CV_8U)</span></span>;<br>	<span class="hljs-comment">// 使用meta模板对图像进行处理</span><br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; row - size + <span class="hljs-number">1</span>; ++i) &#123;<br><br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; col - size + <span class="hljs-number">1</span>; ++j) &#123;<br>			vector&lt;<span class="hljs-type">int</span>&gt; num;<br>			<span class="hljs-type">int</span> sum_ = <span class="hljs-number">0</span>;<br>			<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> s = <span class="hljs-number">0</span>; s &lt; size; ++s) &#123;<br>				<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> t = <span class="hljs-number">0</span>; t &lt; size; ++t) &#123;<br>					<span class="hljs-type">int</span> k = image.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i + s, j + t);<br>					num.<span class="hljs-built_in">push_back</span>(k);<br>				&#125;<br>			&#125;<br>			<span class="hljs-built_in">sort</span>(num.<span class="hljs-built_in">begin</span>(), num.<span class="hljs-built_in">end</span>());<br>			res.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j) = num[<span class="hljs-built_in">int</span>(num.<span class="hljs-built_in">size</span>() / <span class="hljs-number">2</span>)];<br>		&#125;<br>	&#125;<br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;中值滤波处理&quot;</span> + s1, res);<br><br>	<span class="hljs-keyword">return</span> res;<br><br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">zhongzhi_quzao</span><span class="hljs-params">(Mat image)</span> </span>&#123;<br><br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;原图&quot;</span>, image);<br><br>	<span class="hljs-built_in">median_filter</span>(<span class="hljs-built_in">guassion</span>(image), <span class="hljs-number">5</span>, <span class="hljs-string">&quot;高斯噪声&quot;</span>);<br>	<span class="hljs-built_in">median_filter</span>(<span class="hljs-built_in">jiao_salty</span>(image), <span class="hljs-number">5</span>, <span class="hljs-string">&quot;椒盐噪声&quot;</span>);<br>	<span class="hljs-built_in">median_filter</span>(<span class="hljs-built_in">salty</span>(image), <span class="hljs-number">5</span>, <span class="hljs-string">&quot;盐噪声&quot;</span>);<br>	<span class="hljs-built_in">median_filter</span>(<span class="hljs-built_in">jiao</span>(image), <span class="hljs-number">5</span>, <span class="hljs-string">&quot;椒噪声&quot;</span>);<br><br>&#125;<br></code></pre></td></tr></table></figure>
-<img src="/2022/10/19/digital-image-test04/image-20240302185751435.png" class="" title="image-20240302185751435">
-<img src="/2022/10/19/digital-image-test04/image-20240302185800747.png" class="" title="image-20240302185800747">
-<h3 id="3、自适应均值滤波"><a href="#3、自适应均值滤波" class="headerlink" title="3、自适应均值滤波"></a>3、自适应均值滤波</h3><p>具体内容:利用 OpenCV 对灰度图像像素进行操作，设计自适应局部降低噪声滤波器去噪算法。模板大小 7*7（对比该算法的效果和均值滤波器的效果） </p>
-<p>完成程度：自适应的均值滤波，可以通过局部的均值方差，以及噪声的均值方差之间的关系，来自动的调整对噪声处理强的大小，将原始图片的方差作为分子，将局部图片的方差作为分母，用7*7的模板对加入高斯噪声的图像进行了处理。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 3、自适应均值滤波</span><br><span class="hljs-comment">// 计算图像全局的方差</span><br><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">quare_sub</span><span class="hljs-params">(Mat image)</span> </span>&#123;<br>	<span class="hljs-comment">// 统计不同灰度的概率密度</span><br>	<span class="hljs-type">double</span> midu[<span class="hljs-number">256</span>] = &#123; <span class="hljs-number">0</span> &#125;;<br><br>	<span class="hljs-type">int</span> col = image.cols;<br>	<span class="hljs-type">int</span> row = image.rows;<br><br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; row; ++i) &#123;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt; col; ++j) &#123;<br>			midu[image.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j)] += <span class="hljs-number">1</span>;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-type">int</span> size = col * row;<br><br>	<span class="hljs-comment">// 计算均值</span><br>	<span class="hljs-type">double</span> med = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">256</span>; ++i) &#123;<br>		med += i * (midu[i] / size);<br>	&#125;<br><br>	<span class="hljs-comment">// 计算方差</span><br>	<span class="hljs-type">double</span> quare = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">256</span>; ++i) &#123;<br>		quare += <span class="hljs-built_in">pow</span>((i - med), <span class="hljs-number">2</span>) * (midu[i] / size);<br>	&#125;<br><br>	<span class="hljs-keyword">return</span> quare;<br>&#125;<br><br><span class="hljs-comment">// 自适应均值滤波</span><br><span class="hljs-function">Mat <span class="hljs-title">self_adapt_mean_filter</span><span class="hljs-params">(Mat image, <span class="hljs-type">int</span> self_adapt_mean_filter_size)</span> </span>&#123;<br>	<span class="hljs-comment">// 滤波窗口尺寸必须为奇数</span><br>	Mat pScr, dst;<br>	<span class="hljs-comment">// 1为加载图像的颜色类型,1为原图返回,0为灰度返回</span><br>	pScr = image.<span class="hljs-built_in">clone</span>();<br>	<span class="hljs-type">int</span> row = pScr.rows;<br>	<span class="hljs-type">int</span> col = pScr.cols;<br>	<span class="hljs-built_in">blur</span>(pScr, dst, <span class="hljs-built_in">Size</span>(<span class="hljs-number">7</span>, <span class="hljs-number">7</span>));<br>	<span class="hljs-type">int</span> pos = (self_adapt_mean_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>;<br>	<span class="hljs-type">double</span> Sn = <span class="hljs-number">100.0</span>;<br>	<span class="hljs-comment">// 每个滤波窗口中心位置都计算滤波窗口内通道值的平均值</span><br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> m = pos; m &lt; row - pos; m++) &#123;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> n = pos; n &lt; col - pos; n++) &#123;<br>			<span class="hljs-type">int</span> Zxy = <span class="hljs-built_in">int</span>(pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(m, n));<br>			<span class="hljs-type">int</span> Zmed = <span class="hljs-built_in">int</span>(dst.<span class="hljs-built_in">at</span>&lt;uchar&gt;(m, n));<br>			<span class="hljs-type">double</span> Sl = <span class="hljs-number">0.0</span>;<br>			<span class="hljs-type">int</span> count = <span class="hljs-number">0</span>;<br>			<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = m - (self_adapt_mean_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; i &lt;= m + (self_adapt_mean_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; i++) &#123;<br>				<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = n - (self_adapt_mean_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; j &lt;= n + (self_adapt_mean_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; j++) &#123;<br>					<span class="hljs-type">int</span> Sxy = pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j);<br>					Sl += <span class="hljs-built_in">pow</span>(Sxy - Zmed, <span class="hljs-number">2</span>);<br>					count++;<br>				&#125;<br>			&#125;<br>			Sl = Sl / count;<br>			pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(m, n) = (<span class="hljs-type">int</span>)(Zxy - Sn / Sl * (Zxy - Zmed));<br><br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> pScr;<br>&#125;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">self_adapt</span><span class="hljs-params">(Mat image, <span class="hljs-type">int</span> size)</span> </span>&#123;<br>	Mat res = image.<span class="hljs-built_in">clone</span>();<br>	<br>	res = <span class="hljs-built_in">guassion</span>(res);<br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;加入高斯噪声后图片&quot;</span>, res);<br>	res = <span class="hljs-built_in">self_adapt_mean_filter</span>(res, size);<br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;使用自适应均值滤波&quot;</span>, res);<br>&#125;<br></code></pre></td></tr></table></figure>
-<img src="/2022/10/19/digital-image-test04/image-20240302185819182.png" class="" title="image-20240302185819182">
-<h3 id="4、自适应中值滤波"><a href="#4、自适应中值滤波" class="headerlink" title="4、自适应中值滤波"></a>4、自适应中值滤波</h3><p>具体内容: 利用 OpenCV 对灰度图像像素进行操作，设计自适应中值滤波算法对椒盐图像进行去噪。模板大小 7*7（对比中值滤波器的效果） </p>
-<p>完成程度：自适应的中值滤波和自适应的均值滤波具有相似的原理，与均值滤波不同的便是，中值滤波适应的是模板的大小，而均值滤波适应的是去噪比例大小。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//4、自适应中值滤波</span><br><span class="hljs-comment">// 自适应中值滤波</span><br><span class="hljs-function">Mat <span class="hljs-title">self_adapt_median_filter</span><span class="hljs-params">(Mat image, <span class="hljs-type">int</span> self_adapt_median_filter_size)</span> </span>&#123;<br>	<span class="hljs-comment">// 滤波窗口尺寸必须为奇数</span><br>	Mat pScr = image.<span class="hljs-built_in">clone</span>();<br>	<span class="hljs-comment">// 1为加载图像的颜色类型,1为原图返回,0为灰度返回</span><br>	<span class="hljs-type">int</span> row = pScr.rows;<br>	<span class="hljs-type">int</span> col = pScr.cols;<br>	<span class="hljs-type">int</span> channel = pScr.<span class="hljs-built_in">channels</span>();<br>	<span class="hljs-comment">// 滤波器窗口的起始尺寸</span><br>	<span class="hljs-type">int</span> pos = (self_adapt_median_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>;<br>	<span class="hljs-comment">// 每个滤波窗口中心位置都计算滤波窗口内通道值的平均值</span><br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> m = pos; m &lt; row - pos; m++) &#123;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> n = pos; n &lt; col - pos; n++) &#123;<br>			<span class="hljs-type">int</span> minValue = <span class="hljs-number">255</span>;<br>			<span class="hljs-type">int</span> maxValue = <span class="hljs-number">0</span>;<br>			<span class="hljs-type">int</span> medValue = <span class="hljs-number">0</span>;<br>			vector&lt;<span class="hljs-type">int</span>&gt; filter_value;<br>			<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = m - (self_adapt_median_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; i &lt;= m + (self_adapt_median_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; i++) &#123;<br>				<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = n - (self_adapt_median_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; j &lt;= n + (self_adapt_median_filter_size - <span class="hljs-number">1</span>) / <span class="hljs-number">2</span>; j++) &#123;<br>					filter_value.<span class="hljs-built_in">push_back</span>(<span class="hljs-built_in">int</span>(pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j)));<br>					<span class="hljs-keyword">if</span> (<span class="hljs-built_in">int</span>(pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j)) &gt; maxValue)<br>						maxValue = <span class="hljs-built_in">int</span>(pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j));<br>					<span class="hljs-keyword">if</span> (<span class="hljs-built_in">int</span>(pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j)) &lt; minValue)<br>						minValue = <span class="hljs-built_in">int</span>(pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(i, j));<br>				&#125;<br>			&#125;<br>			<span class="hljs-built_in">sort</span>(filter_value.<span class="hljs-built_in">begin</span>(), filter_value.<span class="hljs-built_in">end</span>());<br>			medValue = filter_value[<span class="hljs-built_in">int</span>(self_adapt_median_filter_size * self_adapt_median_filter_size / <span class="hljs-number">2</span>)];<br>			<span class="hljs-type">int</span> fxy = <span class="hljs-built_in">int</span>(pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(m, n));<br>			<span class="hljs-keyword">if</span> (medValue &gt; minValue &amp;&amp; medValue &lt; maxValue)<br>				<span class="hljs-keyword">if</span> (fxy &lt;= minValue || fxy &gt;= maxValue)<br>					pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(m, n) = medValue;<br>				<span class="hljs-keyword">else</span><br>					pScr.<span class="hljs-built_in">at</span>&lt;uchar&gt;(m, n) = medValue;<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-keyword">return</span> pScr;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">self_median</span><span class="hljs-params">(Mat image, <span class="hljs-type">int</span> size)</span> </span>&#123;<br><br>	Mat res = image.<span class="hljs-built_in">clone</span>();<br>	res = <span class="hljs-built_in">guassion</span>(res);<br>	res = <span class="hljs-built_in">self_adapt_median_filter</span>(image, <span class="hljs-number">7</span>);<br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;使用自适应中值滤波&quot;</span>, res);<br>	<br>&#125;<br></code></pre></td></tr></table></figure>
-<img src="/2022/10/19/digital-image-test04/image-20240302185829105.png" class="" title="image-20240302185829105">
-<h3 id="5、彩色图像均值滤波"><a href="#5、彩色图像均值滤波" class="headerlink" title="5、彩色图像均值滤波"></a>5、彩色图像均值滤波</h3><p>具体内容: 利用 OpenCV 对彩色图像 RGB 三个通道的像素进行操作，利用算术均值滤波器和几何均值滤波器进行彩色图像去噪。模板大小为 5*5。</p>
-<p>完成程度：分别对彩色图像的三个通道加入高斯噪声，然后再合并三个通道，得到的便是加入有高斯噪声的彩色图像。通过对带有噪声的彩色图像进行通道分离，再分别使用自适应的均值滤波对三个通道进行处理，最终合并以后便是，处理的结果。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">//5、彩色图像均值滤波</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">color_quzao</span><span class="hljs-params">(Mat image, <span class="hljs-type">int</span> size)</span> </span>&#123;<br>	vector&lt;Mat&gt;channels;<br>	vector&lt;Mat&gt;channels1;<br>	<span class="hljs-built_in">split</span>(image, channels);<br>	channels1 = channels;<br><br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; ++i) &#123;<br>		channels[i] = <span class="hljs-built_in">guassion</span>(channels[i]);<br>	&#125;<br>	Mat res;<br>	Mat res1;<br>	<span class="hljs-built_in">merge</span>(channels, res);<br><br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;彩色图像加入高斯噪声&quot;</span>, res);<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; ++i) &#123;<br>		channels[i] = <span class="hljs-built_in">self_adapt_mean_filter</span>(channels[i].<span class="hljs-built_in">clone</span>(), <span class="hljs-number">7</span>);<br><br>		channels1[i] = <span class="hljs-built_in">self_adapt_median_filter</span>(channels[i].<span class="hljs-built_in">clone</span>(), <span class="hljs-number">7</span>);<br>	&#125;<br><br>	<span class="hljs-built_in">merge</span>(channels, res);<br>	<span class="hljs-built_in">merge</span>(channels1, res1);<br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;自适应均值滤波处理彩色图像&quot;</span>, res);<br>	<span class="hljs-built_in">imshow</span>(<span class="hljs-string">&quot;自适应中值滤波处理彩色图像&quot;</span>, res1);<br><br>&#125;<br></code></pre></td></tr></table></figure>
-<img src="/2022/10/19/digital-image-test04/image-20240302185837682.png" class="" title="image-20240302185837682">
-<img src="/2022/10/19/digital-image-test04/image-20240302185841933.png" class="" title="image-20240302185841933">]]></content>
-      <categories>
-        <category>算法实践</category>
-      </categories>
-      <tags>
-        <tag>数字图像</tag>
-        <tag>OpenCV</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C/C++中gcc/g++的参数详解</title>
     <url>/2024/03/02/gcc-parameters/</url>
     <content><![CDATA[<h2 id="C-C-中gcc-g-的参数详解"><a href="#C-C-中gcc-g-的参数详解" class="headerlink" title="C/C++中gcc/g++的参数详解"></a>C/C++中gcc/g++的参数详解</h2><blockquote>
@@ -6080,122 +6196,6 @@ p<k<FT_p[1]</script><p>那么就转发给$FT_p[1]$结点，此节点负责结点
       </tags>
   </entry>
   <entry>
-    <title>EDA基础知识总结</title>
-    <url>/2023/09/04/eda-summary/</url>
-    <content><![CDATA[<h3 id="一、布局"><a href="#一、布局" class="headerlink" title="一、布局"></a>一、布局</h3><h4 id="布局算法：二次线长布局算法-力矢量布局"><a href="#布局算法：二次线长布局算法-力矢量布局" class="headerlink" title="布局算法：二次线长布局算法+力矢量布局"></a><strong>布局算法：二次线长布局算法+力矢量布局</strong></h4><p>设计目标：调整不同元胞在元胞中的摆放位置，使得元胞在版图中的连线最短，同时确保在布局中没有重叠</p>
-<blockquote>
-<p>二次线长布局分为两个阶段</p>
-<p>第一阶段：依据元胞的中心对元胞进行布局，从而对二次线长函数最小化</p>
-<p>第二阶段：将元胞中集中在许多元胞重叠的大的结群打散，从而使所有单元原来的重叠消除</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs \">输入：线网连接，限制的版图区域<br>输出：所有元胞的x坐标和y坐标<br></code></pre></td></tr></table></figure>
-<h4 id="数据结构设计"><a href="#数据结构设计" class="headerlink" title="数据结构设计"></a>数据结构设计</h4><p>1、元胞可以抽象成一个含有x，y坐标的结构体</p>
-<p>2、网表抽象为二维map，记录不同元胞之间的连线情况，同时x，y代表元胞在map中所处的位置信息</p>
-<h4 id="算法主要思想"><a href="#算法主要思想" class="headerlink" title="算法主要思想"></a>算法主要思想</h4><p><strong>第一阶段：全局布局（二次线长布局）</strong></p>
-<blockquote>
-<p>在全局布局的过程中，将元胞的坐标抽象成为中心点的坐标，不考虑其面积、大小以及布局的合法化，仅仅是以最优化模块之间的线长为目标。</p>
-</blockquote>
-<figure class="highlight llvm"><table><tr><td class="code"><pre><code class="hljs llvm">已知线网的的连接，限制的版图区域，求不同元胞在版图中摆放的位置，使得所有元胞在版图中的连线最短。<br>求：所有的元胞的<span class="hljs-keyword">x</span>坐标和y坐标。<br><br><span class="hljs-number">1</span>、列出所有连接的元胞线网的X的总线长L(p)：所有的<span class="hljs-keyword">x</span>距离的差的平方<br><span class="hljs-number">2</span>、分别对所有参数中的<span class="hljs-keyword">x</span>求偏导，并令偏导为<span class="hljs-number">0</span><br><span class="hljs-number">3</span>、列出方程组，解出来的<span class="hljs-keyword">x</span>阵列就是所需要求的解<br>对于Y方向也是同理<br><br>该算法只是以中心点作为元胞的坐标，所有没有考虑到不同元胞的大小，会存在重叠的问题<br></code></pre></td></tr></table></figure>
-<p>距离计算代价函数</p>
-<img src="/2023/09/04/eda-summary/image-20230818160028154.png" class="" title="image-20230818160028154">
-<p>通过求偏导数，解出x和y。</p>
-<p><strong>第二阶段：详细布局（力矢量布局）</strong></p>
-<blockquote>
-<p>用于在已经布置好的版图中，新加入一个元胞，通过找到让该元胞平衡的状态，来确定该元胞在版图中的位置。</p>
-<p>采用力学中的质点弹簧系统来建模，每个元胞运动吸引其他元胞，其中吸引力与距离成正比。如果所有元胞到达它们的平衡位置，线长将得到最小化。<strong>将目标转化为将所有的元胞放在一个力平衡的位置上。</strong>——<strong>称为零力目标</strong>（ZFT）</p>
-</blockquote>
-<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-number">1</span>、以二次线长布局过后的布局为初始布局<br><span class="hljs-number">2</span>、为每个布局中的元胞设定坐标，并标记为UNMOVED<br><span class="hljs-number">3</span>、对元胞按照元胞的连接数进行排序，该顺序就是元胞迭代的顺序<br><span class="hljs-number">4</span>、迭代的取出每一个元胞，并寻找它的ZFT位置，直到所有的都完成<br><span class="hljs-number">5</span>、若ZFT位置被占据，则移动到其他的位置<br><br>第<span class="hljs-number">5</span>步确定<span class="hljs-selector-tag">p</span>的ZFT时，若ZFT被元胞<span class="hljs-selector-tag">q</span>占据，则移动位置的确定<br><span class="hljs-number">1</span>、如果可能，将<span class="hljs-selector-tag">p</span>移动到靠近<span class="hljs-selector-tag">q</span>的位置<br><span class="hljs-number">2</span>、若交换<span class="hljs-selector-tag">p</span>，<span class="hljs-selector-tag">q</span>后，代价变小，则交换<br><span class="hljs-number">3</span>、链式移动，<span class="hljs-selector-tag">p</span>移动到<span class="hljs-selector-tag">q</span>，<span class="hljs-selector-tag">q</span>移动到下一个，以此类推<br><span class="hljs-number">4</span>、波状移动，<span class="hljs-selector-tag">p</span>移动到<span class="hljs-selector-tag">q</span>，再重新计算<span class="hljs-selector-tag">q</span>的ZFT<br></code></pre></td></tr></table></figure>
-<p>Loss为权重乘以坐标差的累计和</p>
-<p><strong>时间复杂度</strong></p>
-<p>假设元胞的数量为n</p>
-<p>二次线长布局的时间复杂度为：O(n^2)，需要遍历一遍map，找到各个节点之间的连线信息</p>
-<p>力矢量布局的时间复杂度为：O(n^2)</p>
-<h3 id="二、布线"><a href="#二、布线" class="headerlink" title="二、布线"></a>二、布线</h3><h4 id="布线算法：FLUTE算法"><a href="#布线算法：FLUTE算法" class="headerlink" title="布线算法：FLUTE算法"></a>布线算法：FLUTE算法</h4><p>设计目标：找到能将节点连接的最小斯坦纳生成树</p>
-<blockquote>
-<p>在EDA的布线中，各个板块的IO接口以及时钟接口之间，通常是走的斯坦纳线，而直接求斯坦纳最小树是NP完全问题，使用FLUTE算法可以将RSMT问题转化为查找表的问题</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="code"><pre><code class="hljs">输入：pin结点，以及结点的位置<br>输出：将所有结点连接起来的斯坦纳树<br></code></pre></td></tr></table></figure>
-<h4 id="算法数据结构设计"><a href="#算法数据结构设计" class="headerlink" title="算法数据结构设计"></a>算法数据结构设计</h4><p><strong>1、POWV（Potentially optimal wirelength vectors）</strong></p>
-<p>在FLUTE算法中，会使用一种带有信息（权重）的数据结构（向量）来表示一种斯坦纳树，任意一棵斯坦纳树都可以使用唯一的POWV来表示，一个POWV向量可以表示多棵不一样的斯坦纳树，如下图。</p>
-<blockquote>
-<p>前面三位表示x方向上的length</p>
-<p>后面三位表示y方向上的length</p>
-</blockquote>
-<img src="/2023/09/04/eda-summary/image-20230828141138808.png" class="" title="image-20230828141138808">
-<p><strong>2、POST（potentially optimal Steiner tree）</strong></p>
-<p>对每一个POWV都会对应存储一个POST，也就是说，不是存储所有的斯坦纳树，只是存储一个可能的斯坦纳树，因为同一个向量的所有斯坦纳树的代价总和总是一样的。POWV和POST会构建成一个映射关系，同时将其存入到一个Table中，表中还包含POWV的总权重。而此时，权重最小的则可代表一个最小斯坦纳生成树。</p>
-<p><strong>3、table可以使用哈希表来进行设计</strong></p>
-<p>使用POWV做表头，权重和POST作为value，给出节点后，生成所有的可能的POWV表，再通过权重对其进行排序，取其POST作为斯坦纳树结果。</p>
-<h4 id="算法主要思想-1"><a href="#算法主要思想-1" class="headerlink" title="算法主要思想"></a>算法主要思想</h4><figure class="highlight stata"><table><tr><td class="code"><pre><code class="hljs stata">总体流程：<br>所有<span class="hljs-keyword">N</span>点线网根据pin脚的位置都可以划分到<span class="hljs-keyword">n</span>！个group中，每个group中存有POWV，对于一个线网最优线长可由POWV来获得，FLUTE算法首先会预计算这些POWV形成一个查找表。<br>与POWV一起存储的还有<span class="hljs-keyword">POST</span>，一个POWV对应多个<span class="hljs-keyword">POST</span>，一个<span class="hljs-keyword">POST</span>只有一个POWV<br>基于此，要得到一棵RSMT，只需要计算线网所在的组对应的POWV的线长，然后返回对应的<span class="hljs-keyword">POST</span>即可<br>上述查找表算法最高支持9点线网，对于9点以上的需要递归的切分线网<br></code></pre></td></tr></table></figure>
-<ul>
-<li>生成查找表算法</li>
-</ul>
-<img src="/2023/09/04/eda-summary/image-20230828144127572.png" class="" title="image-20230828144127572">
-<h4 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h4><p>时间复杂度为：O(nlgn)</p>
-<h3 id="三、静态时序分析"><a href="#三、静态时序分析" class="headerlink" title="三、静态时序分析"></a>三、静态时序分析</h3><h4 id="单元库"><a href="#单元库" class="headerlink" title="单元库"></a>单元库</h4><p>在静态时序分析中，单元库（library）是指一个集合，其中包含了各种标准的逻辑元件、时序元件和组合元件的建模。单元库中的元件通常带有特定的时钟延迟和逻辑功能，以及电压和温度等方面的参数，通过使用单元库，可以在时序分析中模拟和评估设计的时序特性，以帮助发现和解决潜在的时序冲突和时序失效问题。</p>
-<h4 id="互连寄生"><a href="#互连寄生" class="headerlink" title="互连寄生"></a>互连寄生</h4><p>互连寄生是指在集成电路或电子系统中，由于导线或连接器的存在，引起的非理想的电特性和效果。主要包括电容和电阻，互连寄生会对电路的信号传输、功耗、噪声和时序等方面产生不良的影响。</p>
-<p>电阻寄生：互连导线的电阻会引起信号的衰减和功率损耗。较长的导线通常具有更大的电阻。</p>
-<p>电容寄生：互连导线的电容会引起信号的延迟和功耗。电容会存储和释放电荷，导致信号传输速度变慢。</p>
-<h4 id="单元时延（NLDM表格）"><a href="#单元时延（NLDM表格）" class="headerlink" title="单元时延（NLDM表格）"></a>单元时延（NLDM表格）</h4><p>单元时延（NLDM表格），全称为非线性延迟模型（Non-Linear Delay Model），是一种常用的静态时序分析中的时延模型。在数字电路设计中，时延模型用于描述逻辑元件（如门级电路或时序元件）的输出到输入之间的传播延迟。</p>
-<p>NLDM表格是一种常见的时延模型，它以表格的形式表示输入到输出之间的传播延迟。表格的输入是逻辑元件的输入端的不同组合，并且通常包括输入的电压和电流等参数。表格的输出是逻辑元件的输出端的延迟时间，通常以纳秒或皮秒为单位。</p>
-<p>NLDM表格通常由电路设计工具根据所用的逻辑元件和工艺库生成。基于这个模型，可以进行静态时序分析，以评估电路的时序性能，如时钟周期、信号传输延迟和时序失效等。</p>
-<h4 id="线网时延（Elmore计算）"><a href="#线网时延（Elmore计算）" class="headerlink" title="线网时延（Elmore计算）"></a>线网时延（Elmore计算）</h4><p>线网时延，也称为Elmore时延，是一种常用的近似计算方法，用于估计电路中导线上的传播延迟。它是一种简化的时延模型，适用于传输线上电压/电流从输入端到达输出端的时间。</p>
-<figure class="highlight"><table><tr><td class="code"><pre><code class="hljs">Elmore计算基于以下假设和简化：<br>1、传输线上的时延主要由传播速度和传输线上的等效电容决定。<br>2、传播速度是恒定的，不考虑传输线上的阻抗匹配或反射等因素。<br>3、传输线被近似为一系列等效电容连接起来的节点。<br><br>根据这些假设，Elmore计算使用以下步骤来估计线网时延：<br>1、将电路中的传输线划分为一系列节点，每个节点对应于传输线上一个等效电容。<br>2、从输入端开始，依次计算每个节点的时延。每个节点的时延等于前一节点的时延加上当前节点的等效电容与前一节点电流之积。<br>3、在达到输出端后，最后一个节点的时延就是整个线网的传播延迟。<br></code></pre></td></tr></table></figure>
-<h4 id="串扰噪声的定义"><a href="#串扰噪声的定义" class="headerlink" title="串扰噪声的定义"></a>串扰噪声的定义</h4><p>噪声是指电路中任意节点上不希望出现的电压或电流的偏差。当噪声作用于某个电路节点上时，它可以瞬间破坏该节点上存储的逻辑信息。如果这一破坏状态被锁存到锁存器中，那么将会导致功能性错误。</p>
-<p>主要有毛刺和延时噪声。</p>
-<h4 id="时序检查（Setup-Hold）"><a href="#时序检查（Setup-Hold）" class="headerlink" title="时序检查（Setup/Hold）"></a>时序检查（Setup/Hold）</h4><p>时序检查是在数字电路设计中进行的一种重要时序分析，用于验证和确保输入信号在时钟边沿触发时的稳定性和正确性。</p>
-<p>Setup Time：是指在时钟边沿到达之前，输入信号必须稳定在其有效值的时间。如果输入信号在设置时间窗口内没有稳定，可能会导致电路中的逻辑冲突和错误。</p>
-<p>Hold Time：是指在时钟边沿到达之后，输入信号必须继续保持在其有效值的时间。如果输入信号在保持时间之前改变或不稳定，也会导致电路中的逻辑错误。</p>
-<h4 id="时序路径定义"><a href="#时序路径定义" class="headerlink" title="时序路径定义"></a>时序路径定义</h4><p>时序路径（Timing Path）是指信号从一个寄存器节点（如时钟触发器）通过逻辑路径传播到另一个寄存器节点的路径。它描述了数据在电路中的传输和处理过程，并对时序分析和时序优化提供了重要信息。</p>
-<p>通过分析时序路径，可以确定信号在路径中的传播延迟，包括设置时间和保持时间等重要时序要求。时序路径分析可用于预测时钟频率、检测时序冲突、优化时序性能，以及验证设计是否满足时序规约等。</p>
-<h4 id="时序约束命令"><a href="#时序约束命令" class="headerlink" title="时序约束命令"></a>时序约束命令</h4><img src="/2023/09/04/eda-summary/image-20230818170602715.png" class="" title="image-20230818170602715">
-<h3 id="四、EDA性能"><a href="#四、EDA性能" class="headerlink" title="四、EDA性能"></a>四、EDA性能</h3><ul>
-<li><p>解决EDA软件中的性能问题</p>
-<p>算法：优化数据结构，提高算法性能，降低算法的复杂度</p>
-<p>硬件：确保计算机的硬件资源重组，对于一些矩阵操作可以考虑使用GPU加速</p>
-<p>分布式：将问题拆解成可以并行计算的小问题，开发支持并行计算的EDA工具</p>
-</li>
-</ul>
-<h3 id="五、EDA后端"><a href="#五、EDA后端" class="headerlink" title="五、EDA后端"></a>五、EDA后端</h3><ul>
-<li>EDA后端软件开发的流程</li>
-</ul>
-<img src="/2023/09/04/eda-summary/EDA%E6%B5%81%E7%A8%8B.jpg" class="">
-<h3 id="六、EDA工具"><a href="#六、EDA工具" class="headerlink" title="六、EDA工具"></a>六、EDA工具</h3><ul>
-<li><p>常见的EDA仿真工具和Debug工具分别有哪些？它们有什么优势和不足？</p>
-<p>仿真工具：</p>
-<ul>
-<li>ModelSim/QuestaSim (Mentor)</li>
-<li>VCS (Synopsys)</li>
-<li>Xilinx Vivado Simulator (Xilinx)</li>
-<li>Incisive (Cadence)</li>
-<li>Icarus Verilog</li>
-</ul>
-<p>优势：</p>
-<ul>
-<li>高度准确和精确的模拟功能。</li>
-<li>可以模拟各种不同级别的设计，从门级仿真到系统级仿真。</li>
-<li>支持时序和功能仿真，可以检测和调试设计中的逻辑错误和时序问题。</li>
-</ul>
-<p>不足：</p>
-<ul>
-<li>仿真时间较长，尤其是对于大型和复杂的设计。</li>
-<li>需要大量的计算资源（CPU和内存）。</li>
-<li>对于某些特定的设计场景，可能需要针对特定工具进行配置和优化。</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>学习笔记</category>
-      </categories>
-      <tags>
-        <tag>物理设计</tag>
-        <tag>EDA</tag>
-        <tag>布局</tag>
-        <tag>布线</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Git常见用法</title>
     <url>/2024/01/04/git/</url>
     <content><![CDATA[<h4 id="怎样撤销一个已经push到远端的版本"><a href="#怎样撤销一个已经push到远端的版本" class="headerlink" title="怎样撤销一个已经push到远端的版本"></a>怎样撤销一个已经push到远端的版本</h4><figure class="highlight arcade"><table><tr><td class="code"><pre><code class="hljs arcade">每次<span class="hljs-built_in">push</span>之前线pull一下<br><br><span class="hljs-number">1</span>、查看当前提交的信息，找到需要撤回到的版本号复制，一串十六进制的数<br>git <span class="hljs-built_in">log</span><br><br><span class="hljs-number">2</span>、使用git reset<br>git reset --soft 复制的版本号<br><br><span class="hljs-number">3</span>、强制回退当前版本号<br><span class="hljs-comment">// 确认一下当前版本</span><br>git <span class="hljs-built_in">log</span><br><span class="hljs-comment">// 谨慎使用，强制使用本地仓库代码修改远程仓库</span><br>git <span class="hljs-built_in">push</span> orgin master --force<br></code></pre></td></tr></table></figure>
@@ -6247,7 +6247,7 @@ p<k<FT_p[1]</script><p>那么就转发给$FT_p[1]$结点，此节点负责结点
 <p>同一时间只放置一个单元</p>
 </blockquote>
 <p><strong>算法伪代码</strong></p>
-<p><style>.nbwsgquuqymh{}</style><img src="/2023/09/10/iEDA-test/image-20230823094215828.png" class="nbwsgquuqymh" alt="image-20230823094215828"></p>
+<p><style>.boycrfzfjdsk{}</style><img src="/2023/09/10/iEDA-test/image-20230823094215828.png" class="boycrfzfjdsk" alt="image-20230823094215828"></p>
 <p><strong>核心代码</strong></p>
 <img src="/2023/09/10/iEDA-test/image-20230825151306959.png" class="" title="image-20230825151306959">
 <figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><span class="hljs-number">1</span>、根据单元的x坐标进行排序<br><span class="hljs-number">2</span>、对于每一个排序好的单元，按照顺序取出每一个单元<br><span class="hljs-number">3</span>、遍历第一行，找出当前行中放置该单元后能够使得<span class="hljs-keyword">cost</span>最小的位置<br><span class="hljs-number">4</span>、按照第<span class="hljs-number">3</span>步的方式遍历每一行，找出全局中能够放置当前单元并使得<span class="hljs-keyword">cost</span>最小的位置<br><span class="hljs-number">5</span>、放置该单元<br></code></pre></td></tr></table></figure>
@@ -6265,7 +6265,7 @@ p<k<FT_p[1]</script><p>那么就转发给$FT_p[1]$结点，此节点负责结点
 <figure class="highlight markdown"><table><tr><td class="code"><pre><code class="hljs markdown">函数的主要步骤如下：<br><span class="hljs-bullet">1.</span> 获取实例的形状（inst<span class="hljs-emphasis">_shape）。</span><br><span class="hljs-emphasis">2. 从_</span>layout对象中获取指定行的间隔列表（interval<span class="hljs-emphasis">_list）。</span><br><span class="hljs-emphasis">3. 通过搜索找到最近的间隔，即与实例重叠的间隔（interval_</span>idx）。<br><span class="hljs-bullet">   -</span> 如果找不到重叠的间隔，则返回INT32<span class="hljs-emphasis">_MAX表示失败。</span><br><span class="hljs-emphasis">4. 检查选定的间隔是否能够容纳实例的宽度，如果不行，则查找最近的非满间隔，并重新选择。</span><br><span class="hljs-emphasis">   - 如果找不到合适的间隔，则返回INT32_</span>MAX表示失败。<br><span class="hljs-bullet">5.</span> 将实例安排到选定的间隔中，形成一个簇（target<span class="hljs-emphasis">_cluster）。</span><br><span class="hljs-emphasis">6. 计算移动代价（movement_</span>cost）：<br><span class="hljs-bullet">   -</span> 从簇中的每个实例计算到目标位置的x方向移动代价，并累加到movement<span class="hljs-emphasis">_cost中。</span><br><span class="hljs-emphasis">   - 计算实例在y方向上的移动代价。</span><br><span class="hljs-emphasis">   - 将实例在x和y方向上的移动代价相加，得到实例的位移代价（inst_</span>displacement）。<br><span class="hljs-bullet">   -</span> 将实例位移代价加到movement<span class="hljs-emphasis">_cost中。</span><br><span class="hljs-emphasis">7. 根据最大移动约束处罚超过最大移动约束的位移代价。</span><br><span class="hljs-emphasis">8. 如果is_</span>trial为false，即非试验性放置，则替换簇的信息（replaceClusterInfo）和更新间隔的剩余长度（updateRemainLength）。<br><span class="hljs-bullet">9.</span> 返回移动代价（movement<span class="hljs-emphasis">_cost）。</span><br></code></pre></td></tr></table></figure>
 <h3 id="三、Tetris算法"><a href="#三、Tetris算法" class="headerlink" title="三、Tetris算法"></a>三、Tetris算法</h3><p><code>Abacus</code>是在<code>Tetris</code>算法上的改进，在<code>Tetris</code>中，对于<code>placeRow</code>的选择是一个单次即可完成的过程，即在当前行中找到了能够合适的位置以后即将该<code>instance</code>放置到该行。因此整体算法流程相似，但复杂度会降低很多。</p>
 <figure class="highlight llvm"><table><tr><td class="code"><pre><code class="hljs llvm"><span class="hljs-number">1</span>、根据单元的<span class="hljs-keyword">x</span>坐标进行排序<br><span class="hljs-number">2</span>、对于每一个排序好的单元，按照顺序取出每一个单元<br><span class="hljs-number">3</span>、遍历第一行，找出当前行中放置该单元后能够使得cost最小的位置<br><span class="hljs-number">4</span>、放置该单元<br><br>若改行无法放置该单元，进行换行策略选择，重新执行，直到所有行都无法放置，返回<span class="hljs-keyword">false</span><br></code></pre></td></tr></table></figure>
-<p><style>.fcbgshitxjhq{zoom: 67%;}</style><img src="/2023/09/10/iEDA-test/image-20230825163454933.png" class="fcbgshitxjhq" alt="image-20230825163454933"></p>
+<p><style>.nkbbvrfauwbr{zoom: 67%;}</style><img src="/2023/09/10/iEDA-test/image-20230825163454933.png" class="nkbbvrfauwbr" alt="image-20230825163454933"></p>
 <p>因此对<code>iEDA</code>原始代码<code>Abacus</code>算法调整成<code>Tetris</code>只需要确定两个策略即可：1、如何选择当前<code>instance</code>初始行的策略。2、若初始行无法放置当前<code>instance</code>后，选择其它行的调整策略。</p>
 <ul>
 <li><p>选择初始行策略</p>
@@ -6914,6 +6914,105 @@ p<k<FT_p[1]</script><p>那么就转发给$FT_p[1]$结点，此节点负责结点
       <tags>
         <tag>算法</tag>
         <tag>数学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++多线程编程</title>
+    <url>/2024/03/03/thread-pool/</url>
+    <content><![CDATA[<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3><h2 id="C-11多线程编程"><a href="#C-11多线程编程" class="headerlink" title="C++11多线程编程"></a>C++11多线程编程</h2><h3 id="C-11-Thread线程库的基本用法"><a href="#C-11-Thread线程库的基本用法" class="headerlink" title="C++11 Thread线程库的基本用法"></a>C++11 Thread线程库的基本用法</h3><blockquote>
+<p>进程：运行中的程序，线程：进程中的进程</p>
+<p>一个操作系统可以有多个进程，一个进程中可以有多个线程，线程的最大数量取决于电脑CPU的核数</p>
+</blockquote>
+<p>导入头文件thread</p>
+<ul>
+<li>创建线程    <code>thread th(function, arg)</code></li>
+</ul>
+<p>创建线程需要绑定一个函数，function表示已经定义的函数名，通过arg可以传入函数的参数，线程在std标准库当中</p>
+<p>创建线程对函数加引用<code>&amp;</code>和不加引用的区别</p>
+<p>当线程需要执行的函数中需要使用引用传递参数时，在主线程中传入变量值，程序将无法通过编译，需要使用<code>std::ref</code>来确保引用传递</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">threadFunction</span><span class="hljs-params">(<span class="hljs-type">int</span> &amp;x)</span> </span>&#123;<br>    <span class="hljs-comment">// 现在x确实是主线程中x的引用</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-type">int</span> x = <span class="hljs-number">0</span>;<br>    <span class="hljs-comment">// 编译报错</span><br>    <span class="hljs-comment">// std::thread t(threadFunction, x)</span><br>    <span class="hljs-function">std::thread <span class="hljs-title">t</span><span class="hljs-params">(threadFunction, std::ref(x))</span></span>; <span class="hljs-comment">// 使用std::ref来确保引用传递</span><br>    t.<span class="hljs-built_in">join</span>();<br>    <span class="hljs-comment">// 现在主线程的x可能会被子线程修改</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>join</code>和<code>detach</code></li>
+</ul>
+<p>join：调用此接口，当前线程会一直阻塞，直到目标线程完成，如果目标线程十分耗时，主线程会一直阻塞。让主线程等待其他线程结束以后才结束。</p>
+<p><code>detach</code>：让目标线程称为守护线程（daemon threads）。一旦detach之后，目标线程将独立执行，即便其对应的thread对象销毁也不影响线程的执行，并且，无法再与其通信</p>
+<p>可以通过<code>joinable()</code>接口查询是否可以对接口进行join和detach</p>
+<h3 id="互斥量解决多线程数据共享问题"><a href="#互斥量解决多线程数据共享问题" class="headerlink" title="互斥量解决多线程数据共享问题"></a>互斥量解决多线程数据共享问题</h3><p>当一个资源需要被多个线程进行使用并修改的时候，就会存在资源的冲突</p>
+<p>下面的函数线程<code>t</code>和<code>t2</code>都需要对变量<code>a</code>进行1000000次的自增操作，因为线程的并行操作，所以两个线程在进行取a的值的时候，有可能获取到同样的值，再次写回时，原本需要+2最终只完成了+1，或者运行较快的线程的写入值会被运行较慢的线程覆盖，这就导致了结果会小于原来预期的值</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;thread&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">thread_function</span><span class="hljs-params">(<span class="hljs-type">int</span>&amp; a)</span></span>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000000</span>; i++)<br>    &#123;<br>        a += <span class="hljs-number">1</span>;<br>    &#125;<br>    <br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-type">int</span> a = <span class="hljs-number">0</span>;<br><br>    <span class="hljs-function">std::thread <span class="hljs-title">t</span><span class="hljs-params">(thread_function, std::ref(a))</span></span>;<br>    <span class="hljs-function">std::thread <span class="hljs-title">t2</span><span class="hljs-params">(thread_function, std::ref(a))</span></span>;<br><br>    t.<span class="hljs-built_in">join</span>();<br>    t2.<span class="hljs-built_in">join</span>();<br><br>    std::cout&lt;&lt;a&lt;&lt;std::endl;<br>    <br>&#125;<br></code></pre></td></tr></table></figure>
+<img src="/2024/03/03/thread-pool/image-20240303195554869.png" class="" title="image-20240303195554869">
+<p>这个情况就需要两个线程对a进行互斥使用，用到<code>mutex</code></p>
+<p>在需要对资源<code>a</code>进行访问的前后，分别进行加锁和解锁，确保这一段临界区只由一个线程访问</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;thread&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span></span><br><br><span class="hljs-comment">// 互斥信号量</span><br>std::mutex m;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">thread_function</span><span class="hljs-params">(<span class="hljs-type">int</span>&amp; a)</span></span>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000000</span>; i++)<br>    &#123;<br>        <span class="hljs-comment">// 加锁</span><br>        m.<span class="hljs-built_in">lock</span>();<br>        a += <span class="hljs-number">1</span>;<br>        m.<span class="hljs-built_in">unlock</span>();<br>    &#125;<br>    <br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-type">int</span> a = <span class="hljs-number">0</span>;<br><br>    <span class="hljs-function">std::thread <span class="hljs-title">t</span><span class="hljs-params">(thread_function, std::ref(a))</span></span>;<br>    <span class="hljs-function">std::thread <span class="hljs-title">t2</span><span class="hljs-params">(thread_function, std::ref(a))</span></span>;<br><br>    t.<span class="hljs-built_in">join</span>();<br>    t2.<span class="hljs-built_in">join</span>();<br><br>    std::cout&lt;&lt;a&lt;&lt;std::endl;<br>    <br>&#125;<br></code></pre></td></tr></table></figure>
+<img src="/2024/03/03/thread-pool/image-20240303200213188.png" class="" title="image-20240303200213188">
+<h3 id="lock-guard与unique-lock"><a href="#lock-guard与unique-lock" class="headerlink" title="lock_guard与unique_lock"></a>lock_guard与unique_lock</h3><ul>
+<li>lock_guard</li>
+</ul>
+<p>lock_guard是一种互斥量封装类，用于保护共享数据，防止多个线程同时访问统一资源而导致数据竞争问题</p>
+<p>当构造函数被调用时，该互斥量会被自动锁定</p>
+<p>当析构函数被调用时，该互斥量会自动解锁</p>
+<p>该对象不能复制或移动，只能在局部作用域中使用</p>
+<p>使用到的就是RAII思想</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++">std::mutex m;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">thread_function</span><span class="hljs-params">(<span class="hljs-type">int</span>&amp; a)</span></span>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000000</span>; i++)<br>    &#123;<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lg</span><span class="hljs-params">(m)</span></span>;<br>        <span class="hljs-comment">// m.lock();</span><br>        a += <span class="hljs-number">1</span>;<br>        <span class="hljs-comment">// 不需要对锁释放，当作用域结束自动释放</span><br>        <span class="hljs-comment">// m.unlock();</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>unique_lock，构造函数会自动加锁，传入<code>std::defer_lock</code>后会延迟加锁</li>
+</ul>
+<p>unique_lock是一个互斥量封装类，用于在多线程中对互斥量进行加锁和解锁操作，特点是，可以对互斥量进行更加灵活的管理，包括延迟加锁、条件变量、超时等</p>
+<p><code>lock()</code>：尝试对互斥量进行加锁，如果当前互斥量被其他线程持有则会阻塞</p>
+<p><code>try_lock()</code>L：尝试对互斥量进行加锁，如果被占有则返回false</p>
+<p><code>try_lock_for(const std::chrono::duration&lt;Rep, Period&gt;&amp; rel_time)</code>：尝试加锁，如果被占有，则超时以后会释放</p>
+<h3 id="std-call-once使用场景"><a href="#std-call-once使用场景" class="headerlink" title="std::call_once使用场景"></a>std::call_once使用场景</h3><p>单例设计模式是一种常见的设计模式，用于确保某个类只能创建一个实例，由于单例实例是全局唯一的，因此在多线程环境中使用单例模式时，需要考虑线程安全的问题</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 单例模式</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Log</span>&#123;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-built_in">Log</span>() &#123;&#125;;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Log</span>(<span class="hljs-type">const</span> Log&amp; log) = <span class="hljs-keyword">delete</span>;<br>    Log&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Log&amp; log) = <span class="hljs-keyword">delete</span>;<br>    <br>    <span class="hljs-function"><span class="hljs-type">static</span> Log&amp; <span class="hljs-title">GetInstance</span><span class="hljs-params">()</span></span>&#123;<br>        <span class="hljs-type">static</span> Log * log = <span class="hljs-literal">nullptr</span>;<br>        <span class="hljs-keyword">if</span>(!log)&#123;<br>            log = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Log</span>();<br>        &#125;<br>        <span class="hljs-keyword">return</span> log;<br>    &#125;<br>    <br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">PrintLog</span><span class="hljs-params">(std::string msg)</span></span>&#123;<br>        std::cout &lt;&lt; msg &lt;&lt; std::endl;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在多线程的情况下，如果都需要使用到同一个单例，当多个线程同时获取log时，如果此时log都为空，单例就会被多次初始化，违背了单例模式的设计初衷</p>
+<p><code>call_once</code>可以确保某个函数指挥被调用一次</p>
+<p>call_once只能在线程中使用</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 原型</span><br><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> Callable, <span class="hljs-keyword">class</span>... Args&gt;</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">call_once</span><span class="hljs-params">(std::once_flag&amp;flag, Callable&amp;&amp; func, Args&amp;&amp;...args)</span></span>;<br></code></pre></td></tr></table></figure>
+<p>对单例模式的修改</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// 单例模式</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Log</span>&#123;<br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-built_in">Log</span>() &#123;&#125;;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// 声明一个变量</span><br>    <span class="hljs-type">static</span> std::once_flag once;<br>    <span class="hljs-built_in">Log</span>(<span class="hljs-type">const</span> Log&amp; log) = <span class="hljs-keyword">delete</span>;<br>    Log&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> Log&amp; log) = <span class="hljs-keyword">delete</span>;<br>    <br>    <span class="hljs-function"><span class="hljs-type">static</span> Log&amp; <span class="hljs-title">GetInstance</span><span class="hljs-params">()</span></span>&#123;<br>        <span class="hljs-type">static</span> Log * log = <span class="hljs-literal">nullptr</span>;<br>        <br>        <span class="hljs-comment">// 单次调用</span><br>        std::<span class="hljs-built_in">call_once</span>(once, init);<br>        <span class="hljs-keyword">return</span> log;<br>    &#125;<br>    <span class="hljs-comment">// 封装一个初始化的函数</span><br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span></span>&#123;<br>        <span class="hljs-keyword">if</span>(!log)&#123;<br>            log = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Log</span>();<br>        &#125;<br>    &#125;<br>    <br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">PrintLog</span><span class="hljs-params">(std::string msg)</span></span>&#123;<br>        std::cout &lt;&lt; msg &lt;&lt; std::endl;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="condition-variable使用场景"><a href="#condition-variable使用场景" class="headerlink" title="condition_variable使用场景"></a>condition_variable使用场景</h3><p>使用步骤如下</p>
+<ul>
+<li><p>创建一个std::condition_variable对象</p>
+</li>
+<li><p>创建一个互斥锁std::mutex，用来保护共享资源的访问</p>
+</li>
+<li><p>在需要等待条件变量的地方</p>
+<p>使用std::unique_lock&lt; std::mutex &gt;对象锁定互斥锁并调用std::condition_variable::wait_for()或std::condition_variable::wait_until()函数等待条件变量</p>
+</li>
+<li><p>在其他线程中需要通知等待的线程时，调用std::condition_variable::notify_one()或者std::condition_variable::notify_all()函数通知等待的线程</p>
+</li>
+</ul>
+<p>生产者消费者模型</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;queue&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;thread&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;condition_variable&gt;</span></span><br><br>std::queue&lt;<span class="hljs-type">int</span>&gt; q;<br>std::condition_variable cv;<br>std::mutex m;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Producer</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100</span>; i++)<br>    &#123;<br>        <span class="hljs-function">std::unique_lock&lt;std::mutex&gt; <span class="hljs-title">ul</span><span class="hljs-params">(m)</span></span>;<br>        q.<span class="hljs-built_in">push</span>(i);<br>        cv.<span class="hljs-built_in">notify_one</span>();<br>        std::cout&lt;&lt;<span class="hljs-string">&quot;Produced: &quot;</span>&lt;&lt;i&lt;&lt;std::endl;<br>        std::this_thread::<span class="hljs-built_in">sleep_for</span>(std::chrono::<span class="hljs-built_in">microseconds</span>(<span class="hljs-number">10000</span>));<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">Consumer</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>)<br>    &#123;<br>        <span class="hljs-function">std::unique_lock&lt;std::mutex&gt; <span class="hljs-title">ul</span><span class="hljs-params">(m)</span></span>;<br>        cv.<span class="hljs-built_in">wait</span>(ul, []&#123;<span class="hljs-keyword">return</span> !q.<span class="hljs-built_in">empty</span>();&#125;);<br>        std::cout&lt;&lt;<span class="hljs-string">&quot;Consumed: &quot;</span>&lt;&lt;q.<span class="hljs-built_in">front</span>()&lt;&lt;std::endl;<br>        q.<span class="hljs-built_in">pop</span>();<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-function">std::thread <span class="hljs-title">t1</span><span class="hljs-params">(Producer)</span></span>;<br>    <span class="hljs-function">std::thread <span class="hljs-title">t2</span><span class="hljs-params">(Consumer)</span></span>;<br><br>    t1.<span class="hljs-built_in">join</span>();<br>    t2.<span class="hljs-built_in">join</span>();<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<img src="/2024/03/03/thread-pool/image-20240303211229196.png" class="" title="image-20240303211229196">
+<h3 id="线程池的实现"><a href="#线程池的实现" class="headerlink" title="线程池的实现"></a>线程池的实现</h3><p>维护一个线程数组：可以初始化线程的个数</p>
+<p>维护一个任务队列：当前正在进行的任务</p>
+<p>线程数组负责从队列取任务，生产者负责从任务队列里加任务（需要提供加任务的接口）</p>
+<img src="/2024/03/03/thread-pool/image-20240303214601818.png" class="" title="image-20240303214601818">
+<p>构造函数中指定起始线程的个数，初始化线程，每一个线程都在循环的在任务队列里取任务并完成，给用户提供一个接口，不断的往任务队列中添加任务，并且每次添加任务过后会通知一个维护的线程去完成任务</p>
+<p>每一次访问tasks和stop变量的时候，这是临界区，都需要进行加锁</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;mutex&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;queue&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;thread&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;functional&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;condition_variable&gt;</span></span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">ThreadPool</span><br>&#123;<br><span class="hljs-keyword">private</span>:<br>    std::vector&lt;std::thread&gt; threads;<br>    std::queue&lt;std::function&lt;<span class="hljs-type">void</span>()&gt;&gt; tasks;<br>    std::condition_variable cv;<br>    std::mutex m;<br>    <span class="hljs-type">bool</span> stop;<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// 构造函数，构造一共大小为n的线程池</span><br>    <span class="hljs-comment">// 每一个线程执行的函数是检查tasks是否为空，或者stop是否为true</span><br>    <span class="hljs-comment">// 从tasks中取出任务执行，取任务的时候，和访问stop的时候都需要加锁</span><br>    <span class="hljs-built_in">ThreadPool</span>(<span class="hljs-type">int</span> n) : <span class="hljs-built_in">stop</span>(<span class="hljs-literal">false</span>)&#123;<br>        <span class="hljs-keyword">for</span>( <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; ++i )&#123;<br>            threads.<span class="hljs-built_in">emplace_back</span>([<span class="hljs-keyword">this</span>]&#123;<br>                <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>)&#123;<br>                    std::unique_lock&lt;std::mutex&gt; <span class="hljs-built_in">ul</span>(m);<br>                    cv.<span class="hljs-built_in">wait</span>(ul, [<span class="hljs-keyword">this</span>]&#123;<br>                        <span class="hljs-keyword">return</span> stop || !tasks.<span class="hljs-built_in">empty</span>();<br>                        &#125;);<br><br>                    <span class="hljs-keyword">if</span>( stop &amp;&amp; tasks.<span class="hljs-built_in">empty</span>() )&#123;<br>                        <span class="hljs-keyword">return</span>;<br>                    &#125;<br><br>                    <span class="hljs-comment">// 使用右值引用，避免拷贝</span><br>                    std::function&lt;<span class="hljs-built_in">void</span>()&gt; <span class="hljs-built_in">task</span>(std::<span class="hljs-built_in">move</span>(tasks.<span class="hljs-built_in">front</span>()));<br>                    tasks.<span class="hljs-built_in">pop</span>();<br>                    ul.<span class="hljs-built_in">unlock</span>();<br>                    <span class="hljs-built_in">task</span>();<br>                &#125;<br>            &#125;);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">// 析构函数，将stop置为true，然后notify_all</span><br>    <span class="hljs-comment">// 然后join所有的线程</span><br>    ~<span class="hljs-built_in">ThreadPool</span>()&#123;<br>        &#123;<br>            <span class="hljs-function">std::unique_lock&lt;std::mutex&gt; <span class="hljs-title">ul</span><span class="hljs-params">(m)</span></span>;<br>            stop = <span class="hljs-literal">true</span>;<br>        &#125;<br>        cv.<span class="hljs-built_in">notify_all</span>();<br>        <span class="hljs-keyword">for</span>( <span class="hljs-keyword">auto</span>&amp; t : threads )&#123;<br>            t.<span class="hljs-built_in">join</span>();<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">// 添加任务，将任务放入tasks中，然后notify_one</span><br>    <span class="hljs-comment">// 用到模板以及多个变量的传参，可以使用通用型函数</span><br>    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> F, <span class="hljs-keyword">class</span>... Args&gt;</span><br><span class="hljs-function">    <span class="hljs-type">void</span> <span class="hljs-title">enqueue</span><span class="hljs-params">(F&amp;&amp; f, Args&amp;&amp;... args)</span></span>&#123;<br>        <span class="hljs-comment">// 使用std::bind将传入的函数和参数绑定</span><br>        <span class="hljs-comment">// 因为传入的是万能引用，使用forward可以让参数自动选择是右值还是左值引用</span><br>        std::function&lt;<span class="hljs-type">void</span>()&gt; task = std::<span class="hljs-built_in">bind</span>(std::forward&lt;F&gt;(f), std::forward&lt;Args&gt;(args)...);<br>        &#123;<br>            <span class="hljs-function">std::unique_lock&lt;std::mutex&gt; <span class="hljs-title">ul</span><span class="hljs-params">(m)</span></span>;<br>            tasks.<span class="hljs-built_in">emplace</span>(std::<span class="hljs-built_in">move</span>(task));<br>        &#125;<br>        <span class="hljs-comment">// 通知一个线程执行任务</span><br>        cv.<span class="hljs-built_in">notify_one</span>();<br>    &#125;<br><br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;<br>    <span class="hljs-function">ThreadPool <span class="hljs-title">tp</span><span class="hljs-params">(<span class="hljs-number">4</span>)</span></span>;<br>    <span class="hljs-keyword">for</span>( <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">8</span>; ++i )&#123;<br>        tp.<span class="hljs-built_in">enqueue</span>([i]&#123;<br>            <span class="hljs-comment">// 用printf而不是cout，避免输出混乱</span><br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Thread %d is working\n&quot;</span>, i);<br>            std::this_thread::<span class="hljs-built_in">sleep_for</span>(std::chrono::<span class="hljs-built_in">seconds</span>(<span class="hljs-number">1</span>));<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Thread %d is done\n&quot;</span>, i);<br>        &#125;);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+<ul>
+<li>使用cout输出</li>
+</ul>
+<p>cout的单个输出是线程安全的，这种线程安全是针对在操作系统层面，即每一次<code>&lt;&lt;</code>的调用都是原子的，但是多个<code>&lt;&lt;</code>进行串联输出的时候，整个表达式并不是原子的，因此在串联输出的过程中，会被其他输出线程打断</p>
+<img src="/2024/03/03/thread-pool/image-20240303224717307.png" class="" title="image-20240303224717307">
+<ul>
+<li>使用printf输出</li>
+</ul>
+<blockquote>
+<p>printf(“Thread %d is working\n”, i);</p>
+</blockquote>
+<p>使用printf输出则是将串联的输出转化为单一的输出，因此单条语句不会产生混乱，但是多个线程输出还是会产生混乱。</p>
+<img src="/2024/03/03/thread-pool/image-20240303224732958.png" class="" title="image-20240303224732958">
+]]></content>
+      <categories>
+        <category>技术研究 算法实践 学习笔记</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>多线程</tag>
+        <tag>并行</tag>
+        <tag>Thread</tag>
       </tags>
   </entry>
   <entry>
