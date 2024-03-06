@@ -1419,3 +1419,17 @@ mysqlshow
 **mysqlimport/source**
 
 ​	用于数据的导入工具
+
+
+
+## QA
+
+1、InnoDB数据页中的数据存储
+
+2、B+树是如何进行查询的
+
+3、MySql单表最大限制，为什么
+
+4、索引失效有哪些
+
+5、count（*）和count（1）哪个性能好一些
