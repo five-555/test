@@ -1,33 +1,15 @@
 ---
-title: build_sample_redis
-categories: 技术研究 算法实践 学习笔记
+title: 简易Redis
+categories: 算法实践
 date: 2024-02-27 11:29:57
-tags:
+tags: [数据库, Redis, 数据库缓存, C++]
 cover:
 top_img:
 ---
 
-
-
-印象比较深的问题
-
-1、对哈希表的扫描使用回调函数
-
-2、container_of的宏定义，从结构体中的对象找到这个结构体的地址
-
-3、渐进式的哈希存储理解更深刻
-
-改进
-
-功能上的该进，完善命令
-
-性能上的改进，智能指针管理内存，循环引用的问题，使用static
-
-
-
 ## 实现的命令
 
-```
+```txt
 // hashtable
 set key value	向哈希表中插入键值对
 get key			从哈希表中查找键对应的值
@@ -486,4 +468,18 @@ bool ZSet::zset_add(const char *name, size_t len, double score) {
 
 
 
+
+印象比较深的问题
+
+1、对哈希表的扫描使用回调函数
+
+2、container_of的宏定义，从结构体中的对象找到这个结构体的地址
+
+3、渐进式的哈希存储理解更深刻
+
+改进
+
+功能上的该进，完善命令
+
+性能上的改进，智能指针管理内存，循环引用的问题，使用static
 
