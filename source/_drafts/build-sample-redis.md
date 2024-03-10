@@ -1,33 +1,15 @@
 ---
-title: build_sample_redis
-categories: 技术研究 算法实践 学习笔记
+title: 简易Redis
+categories: 算法实践
 date: 2024-02-27 11:29:57
-tags:
+tags: [数据库, Redis, 数据库缓存, C++]
 cover:
 top_img:
 ---
 
-
-
-印象比较深的问题
-
-1、对哈希表的扫描使用回调函数
-
-2、container_of的宏定义，从结构体中的对象找到这个结构体的地址
-
-3、渐进式的哈希存储理解更深刻
-
-改进
-
-功能上的该进，完善命令
-
-性能上的改进，智能指针管理内存，循环引用的问题，使用static
-
-
-
 ## 实现的命令
 
-```
+```txt
 // hashtable
 set key value	向哈希表中插入键值对
 get key			从哈希表中查找键对应的值
@@ -488,6 +470,7 @@ bool ZSet::zset_add(const char *name, size_t len, double score) {
 项目介绍，这个项目实现了一个建议的redis，使用hashmap来管理键值对数据，使用hashmap+AVL数来管理Zset数据，并实现了hashmap的渐进式扩容，减少因为扩容重新哈希化带来rehash的代价太大。使用poll技术来实现IO多路复用，完成一个服务端与多个客户端建立连接的过程，使用双向链表来管理连接，通过最小堆来控制val的生存时间，并通过将两者结合的方式，控制poll的最大超时时间，
 
 
+<<<<<<< HEAD
 
 1、最小堆的维护，当为某一个key设置好ttl时，会将key当中需要维护的ttl放入到最小堆当中，每一次轮询结束以后，会统一进行处理，已经失效的key
 
@@ -498,4 +481,19 @@ bool ZSet::zset_add(const char *name, size_t len, double score) {
 4、线程池的作用，实现异步清楚较大的key，
 
 5、zset里面的节点。有一个AVLnode，hnode，score，name
+=======
+印象比较深的问题
+
+1、对哈希表的扫描使用回调函数
+
+2、container_of的宏定义，从结构体中的对象找到这个结构体的地址
+
+3、渐进式的哈希存储理解更深刻
+
+改进
+
+功能上的该进，完善命令
+
+性能上的改进，智能指针管理内存，循环引用的问题，使用static
+>>>>>>> 8a80ee2ee02f93d516ccafdf01fe7ac55273f35c
 
