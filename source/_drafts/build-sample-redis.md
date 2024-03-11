@@ -19,8 +19,8 @@ keys			打印出哈希表中所有的keys
 // zset
 zadd key score name		向键为key中，插入name，score
 zscore key name			按照key和name查找score
-zrem					
-zscore
+zrem key name			删除键为key中的name元素
+zscore key name			查找键为key的name的score
 zquery
 
 ```
@@ -483,3 +483,8 @@ bool ZSet::zset_add(const char *name, size_t len, double score) {
 
 性能上的改进，智能指针管理内存，循环引用的问题，使用static
 
+项目介绍，这个项目实现了一个建议的redis，使用自己设计的hashmap来管理键值对数据，使用hashmap+AVL数来管理Zset数据，并实现了hashmap的渐进式扩容，减少因为扩容重新哈希化带来rehash的代价太大。使用poll技术来实现IO多路复用，完成一个服务端与多个客户端建立连接的过程，使用双向链表来管理连接，通过最小堆来控制键值对的生存时间，并通过将两者结合的方式，控制poll的最大超时时间也就是阻塞时间
+1、最小堆的维护，当为某一个key设置好ttl时，会将key当中需要维护的ttl放入到最小堆当中，每一次轮询结束以后，会统一进行处理，已经失效的key
+2、双向链表的维护，poll当中，会把第一个fd设置成为用于处理连接事件的fd，当有连接事件发生的时候，会处理连接，接受一个新的连接，并将其放入到双向链表的头部，会有一个conn的结构体，里面实现了读写缓存，以及接受当前连接的空闲队列节点，以及建立连接的时间，然后会把这个连接放入到空闲队列当中的头部。
+3、过期时间的处理，会在每一次poll以及对应的事件处理结束以后，对当前的key进行ttl的检查，包括conn的过期时间和key的过期时间，会对空闲队列中的一些长期占用时间的连接进行清除，以及最小堆当中过期的key进行清理（不断地pop掉最小堆当中的数据，直到没有那些超时数据）
+4、线程池的作用，实现异步清楚较大的key，
