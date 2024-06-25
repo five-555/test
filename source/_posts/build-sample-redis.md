@@ -1,13 +1,30 @@
 ---
-title: 简易Redis
+title: 高性能键值存储系统实现
+tags:
+  - 数据库
+  - Redis
+  - 数据库缓存
+  - C++
 categories: 算法实践
 date: 2024-02-27 11:29:57
-tags: [数据库, Redis, 数据库缓存, C++]
 cover:
 top_img:
 ---
+### 
 
-## 实现的命令
+# 简易Redis的实现
+
+这个项目实现了一个简易的redis，使用hashmap来管理键值对数据，使用hashmap+AVL数来管理Zset数据，并实现了hashmap的渐进式扩容，减少因为扩容重新哈希化带来rehash的代价。使用poll技术来实现IO多路复用，完成一个服务端与多个客户端建立连接的过程，使用双向链表来管理连接，通过最小堆来控制val的生存时间，并通过将两者结合的方式，控制poll的最大超时时间，用来确保每一次poll的陷入内核和退出内核在主进程中都有处理的任务。
+
+1、最小堆的维护，当为某一个key设置好ttl时，会将key当中需要维护的ttl放入到最小堆当中，每一次轮询结束以后，会统一进行处理，已经失效的key
+
+2、双向链表的维护，poll当中，会把第一个fd设置成为用于处理连接事件的fd，当有连接事件发生的时候，会处理连接，接受一个新的连接，并将其放入到双向链表的头部，会有一个conn的结构体，里面实现了读写缓存，以及接受当前连接的空闲队列节点，以及建立连接的时间，然后会把这个连接放入到空闲队列当中的头部。
+
+3、过期时间的处理，会在每一次poll以及对应的事件处理结束以后，对当前的key进行ttl的检查，包括conn的过期时间和key的过期时间，会对空闲队列中的一些长期占用时间的连接进行清除，以及最小堆当中过期的key进行清理（不断地pop掉最小堆当中的数据，直到没有那些超时数据）。
+
+4、线程池的作用，当缓存数据过多时，实现异步清除。
+
+## 一、实现的命令
 
 ```txt
 // hashtable
@@ -27,7 +44,7 @@ zquery
 
 
 
-## Socket编程相关语法
+## 二、Socket编程相关语法
 
 ### 服务端
 
@@ -41,23 +58,54 @@ type：指定套接字类型
 
 protocol：0表示为TCP协议
 
-```c++
-// IPV4地址、提供面向连接的可靠数据传输服务、TCP协议
-int fd = socket(AF_INET, SOCK_STREAM, 0);
-if (fd < 0) {
-    die("socket()");
-}
-```
-
-
-
 * 设置socket可选项
 * Bind，绑定ip和端口号
 * Listen
 
 ```c++
-// server
-fd = 
+void Server::run_server() {
+    
+    // init coding...
+
+    if (fd < 0) {
+        die("socket()");
+    }
+
+    int val = 1;
+    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val));
+
+    // bind
+    struct sockaddr_in addr = {};
+    addr.sin_family = AF_INET;
+    addr.sin_port = ntohs(1234);
+    addr.sin_addr.s_addr = ntohl(0);
+    int rv = bind(fd, (const sockaddr *)&addr, sizeof(addr));
+    if (rv) {
+        die("bind()");
+    }
+
+    // listen
+    rv = listen(fd, SOMAXCONN);
+    if (rv) {
+        die("listen()");
+    }
+
+    // coding...
+}
+
+int main() {
+    int fd = socket(AF_INET, SOCK_STREAM, 0);
+    // bind
+    struct sockaddr_in addr = {};
+    addr.sin_family = AF_INET;
+    addr.sin_port = ntohs(1234);
+    addr.sin_addr.s_addr = ntohl(0);    // wildcard address 0.0.0.0
+    Server server(addr, fd);
+    
+    server.run_server();
+    return 0;
+}
+
 ```
 
 ### 客户端
@@ -65,6 +113,37 @@ fd =
 * 创建句柄
 * 设置IP地址和端口号
 * Connect
+
+```C++
+void Client::run_client(int argc, char **argv) {
+    if (fd < 0) {
+        die("socket()");
+    }
+
+    int rv = connect(fd, (const struct sockaddr *)&addr, sizeof(addr));
+    if (rv) {
+        die("connect");
+    }
+
+    // coding...
+
+    close(fd);
+}
+
+int main(int argc, char **argv) {
+    int fd = socket(AF_INET, SOCK_STREAM, 0);
+
+    struct sockaddr_in addr = {};
+    addr.sin_family = AF_INET;
+    addr.sin_port = ntohs(1234);
+    addr.sin_addr.s_addr = ntohl(INADDR_LOOPBACK);  // 127.0.0.1
+    
+    Client client(addr, fd);
+    client.run_client(argc, argv);
+
+    return 0;
+}
+```
 
 **使用的协议**
 
@@ -74,13 +153,14 @@ len表示后面的字长，msg表示要获取的数据
 
 
 
-## 事件循环和非阻塞型IO
+## 三、事件循环和非阻塞型IO
 
 > 在服务器端网络编程中，处理并发连接有三种方法：forking、多线程（multi-threading）和事件循环（event loops）。forking会为每个客户端连接创建新的进程以实现并发。多线程使用线程而不是进程。事件循环使用轮询和非阻塞 I/O，通常在单个线程上运行。由于进程和线程的开销，大多数现代生产级软件使用事件循环来进行网络编程。
 
+在项目中用到了IO多路复用中的poll技术来实现，在服务端使用单个进程和多个客户端建立连接，在客户端看来，像是每一个客户端都和一个独立的服务端建立了连接并进行数据通信，而在服务端看来，它所完成的则是在不同的时间段服务不同的客户，但由于时间片比较小，就会让客户端感觉好像实现了多个进程通信的过程。
 
 
-## 哈希表数据结构
+## 四、哈希表数据结构
 
 ### 数据结构
 
@@ -231,9 +311,48 @@ struct Entry {
 };
 ```
 
+### 渐进式rehash过程
+
+在哈希表的构建时，使用的是用二维指针来存储哈希表，解决哈希冲突的方式是常用的拉链法（使用链表存储映射值相等的哈希元素），第一个维度作为哈希映射的key值来定位到具体的映射链表，第二个维度则是用来解决哈希冲突的，考虑到哈希表定义本身的属性，我们是希望哈希表的哈希冲突尽可能少，也就是我们的链表的长度尽可能短，随着我们插入的数据不断增加，我们产生的哈希冲突也是会增加的。
+
+在这里我们定义了一个负载因子`k_max_load_factor`，在实际插入的过程中，当当前用于查找的哈希表中的负载（元素个数/掩码）大于负载因子，会启动rehash的过程，我们会申请一张比原来哈希表大两倍的哈希表，将当前哈希表中的数据重新映射到这一张新的哈希表中。这样我们原来短，高的哈希表，就会变成长，矮的哈希表。
+
+我们知道，当哈希表中的元素过多的时候，需要对所有元素都一起进行rehash是一个非常耗时的过程，如果我们只有一张哈希表，我们在进行rehash的过程中，还不能够允许其他插入、删除以及查询操作，为了解决这样一个问题，我们采用将rehash分散在各个其他语句的步骤，在我们负载因子达到一定程度的时候，我们会启动渐进式rehash，当我们有其他插入或者查询语句到来的时候，我们会先进行部分node的rehsah，再进行查询语句。我们可以看下面例子。
+
+```C++
+HNode *HMap::lookup(HNode *key, bool (*eq)(HNode *, HNode *)) {
+    help_resizing();
+    HNode **from = ht1.lookup(key, eq);
+    from = from ? from : ht2.lookup(key, eq);
+    return from ? *from : NULL;
+}
+
+// class HMap
+void HMap::help_resizing() {
+    size_t nwork = 0;
+    while (nwork < k_resizing_work && ht2.get_size() > 0) {
+        // scan for nodes from ht2 and move them to ht1
+        HNode **from = &ht2.get_tab()[resizing_pos];
+        if (!*from) {
+            resizing_pos++;
+            continue;
+        }
+
+        ht1.insert(ht2.detach(from));
+        nwork++;
+    }
+
+    if (ht2.get_size() == 0 && ht2.get_tab()) {
+        // done
+        delete[] ht2.get_tab();
+        ht2 = HTab{};
+    }
+}
+```
 
 
-## 平衡二叉树
+
+## 五、平衡二叉树
 
 平衡二叉树是一种特殊的二叉搜索树，对平衡二叉树来说，它的中序遍历是有序的，并且左右子树的高度差会处于一个平衡的状态，这样可以保证每次查找都能够在比较快的时间内完成。
 
@@ -350,7 +469,7 @@ private:
 
 
 
-## zset数据结构
+## 六、zset数据结构
 
 zset在Redis中是使用跳表+哈希表来实现的
 
@@ -378,14 +497,14 @@ public:
 
   在ZSet中包含一个tree指向平衡二叉树的根节点，平衡二叉树关联着ZNode中的tree，同时维护一张HMap哈希表，用于对数据的快速查找
 
-  |                             接口                             |                    功能                     |
-  | :----------------------------------------------------------: | :-----------------------------------------: |
-  |      ZNode *zset_lookup(const char *name, size_t len);       |  根据传入的name来进行查找，从哈希表中查找   |
-  |  bool zset_add(const char *name, size_t len, double score);  |          向ZSet中添加一个节点元素           |
-  |        ZNode *zset_pop(const char *name, size_t len);        |    从ZSet中弹出一个元素，按照name来弹出     |
-  | ZNode *zset_query(double score, const char *name, size_t len); |     查找ZSet中分数以及name都相等的ZNode     |
-  |      ZNode *znode_offset(ZNode *node, int64_t offset);       |     根据分数的便宜从AVLtree中查找ZNode      |
-  |                     void zset_dispose();                     | 清空当前的ZSet，包括AVL树的清空和hmap的清空 |
+|                             接口                             |                    功能                     |
+| :----------------------------------------------------------: | :-----------------------------------------: |
+|      ZNode *zset_lookup(const char *name, size_t len);       |  根据传入的name来进行查找，从哈希表中查找   |
+|  bool zset_add(const char *name, size_t len, double score);  |          向ZSet中添加一个节点元素           |
+|        ZNode *zset_pop(const char *name, size_t len);        |    从ZSet中弹出一个元素，按照name来弹出     |
+| ZNode *zset_query(double score, const char *name, size_t len); |     查找ZSet中分数以及name都相等的ZNode     |
+|      ZNode *znode_offset(ZNode *node, int64_t offset);       |     根据分数的偏移从AVLtree中查找ZNode      |
+|                     void zset_dispose();                     | 清空当前的ZSet，包括AVL树的清空和hmap的清空 |
 
 ```C++
 class ZSet
@@ -459,34 +578,83 @@ bool ZSet::zset_add(const char *name, size_t len, double score) {
 }
 ```
 
+zset_pop
+
+> 通过name在zset数据结构中弹出对应的节点
+
+* 先从哈希表中查找对应的哈希节点
+* 通过找到的节点找到节点的Znode
+* 在AVL书中删除对应的Znode，并返回当前节点
+
+```C++
+ZNode *ZSet::zset_pop(const char *name, size_t len) {
+    if(!tree) {
+        return nullptr;
+    }
+
+    HKey key;
+    key.node.hcode = str_hash((uint8_t*)name, len);
+    key.name = name;
+    key.len = len;
+    HNode *found = hmap.lookup(&key.node, &hcmp);
+    if(!found) {
+        return nullptr;
+    }
+
+    ZNode *node = found->owner;
+    tree = tree->avl_del(&node->tree);
+    return node;
+}
+```
+
+zset_query
+
+> 通过分数以及name查找的znode
+
+* 先通过分数在AVL树上进行查找，是一个二分查找的过程
+* 再通过比较查找得到的节点的name是否相等来对比返回结果
+
+```C++
+ZNode *ZSet::zset_query(double score, const char *name, size_t len) {
+    AVLNode *found = nullptr;
+    AVLNode *cur = tree;
+    while(cur) {
+        if(zless(cur, score, name, len)) {
+            cur = cur->right;
+        } else {
+            found = cur;
+            cur = cur->left;
+        }
+    }
+    return found ? found->owner : nullptr;
+}
+
+bool ZSet::zless(AVLNode *lhs, double score, const char *name, size_t len) {
+    // 根据指针偏移找到ZNode
+    auto zl = lhs->owner;
+    if (zl->score != score) {
+        return zl->score < score;
+    }
+    int rv = memcmp(zl->name, name, min(zl->len, len));
+    if (rv != 0) {
+        return rv < 0;
+    }
+    return zl->len < len;
+}
+```
+
+znode_offset
+
+> 根据score的偏移在AVL树中查找Znode。在我们的代码中AVL节点的定义，参考上面的avl_offset文字算法伪代码
+
+```C++
+ZNode *ZSet::znode_offset(ZNode *node, int64_t offset) {
+    AVLNode *tnode = node ? tree->avl_offset(&node->tree, offset) : nullptr;
+    return tnode ? tnode->owner : nullptr;
+}
+```
 
 
-事件循环和时间管理
-
-使用链表来控制连接的顺序，将conn加入到队列当中，每进入一个则设置好时间
+## 七、测试效果
 
 
-
-项目介绍，这个项目实现了一个建议的redis，使用hashmap来管理键值对数据，使用hashmap+AVL数来管理Zset数据，并实现了hashmap的渐进式扩容，减少因为扩容重新哈希化带来rehash的代价太大。使用poll技术来实现IO多路复用，完成一个服务端与多个客户端建立连接的过程，使用双向链表来管理连接，通过最小堆来控制val的生存时间，并通过将两者结合的方式，控制poll的最大超时时间，
-
-印象比较深的问题
-
-1、对哈希表的扫描使用回调函数
-
-2、container_of的宏定义，从结构体中的对象找到这个结构体的地址
-
-3、渐进式的哈希存储理解更深刻
-
-改进
-
-功能上的该进，完善命令
-
-性能上的改进，智能指针管理内存，循环引用的问题，使用static
-
-项目介绍，这个项目实现了一个建议的redis，使用自己设计的hashmap来管理键值对数据，使用hashmap+AVL数来管理Zset数据，并实现了hashmap的渐进式扩容，减少因为扩容重新哈希化带来rehash的代价太大。使用poll技术来实现IO多路复用，完成一个服务端与多个客户端建立连接的过程，使用双向链表来管理连接，通过最小堆来控制键值对的生存时间，并通过将两者结合的方式，控制poll的最大超时时间也就是阻塞时间
-1、最小堆的维护，当为某一个key设置好ttl时，会将key当中需要维护的ttl放入到最小堆当中，每一次轮询结束以后，会统一进行处理，已经失效的key
-2、双向链表的维护，poll当中，会把第一个fd设置成为用于处理连接事件的fd，当有连接事件发生的时候，会处理连接，接受一个新的连接，并将其放入到双向链表的头部，会有一个conn的结构体，里面实现了读写缓存，以及接受当前连接的空闲队列节点，以及建立连接的时间，然后会把这个连接放入到空闲队列当中的头部。
-3、过期时间的处理，会在每一次poll以及对应的事件处理结束以后，对当前的key进行ttl的检查，包括conn的过期时间和key的过期时间，会对空闲队列中的一些长期占用时间的连接进行清除，以及最小堆当中过期的key进行清理（不断地pop掉最小堆当中的数据，直到没有那些超时数据）
-4、线程池的作用，实现异步清楚较大的key，
-
-5、zset里面的节点。有一个AVLnode，hnode，score，name
