@@ -1,11 +1,15 @@
 ---
 title: 设计模式
+tags:
+  - 设计模式
+  - UML
+  - 软件工程
 categories: 技术研究
 date: 2024-06-26 14:19:26
-tags: [设计模式, UML, 软件工程]
 cover:
 top_img:
 ---
+### 
 
 # 设计模式
 
@@ -773,9 +777,219 @@ int main() {
 
 ## 八、观察者模式
 
+> 观察者模式定义了一种一对多的依赖关系，当一个对象的状态发生改变时，其所有依赖者都会收到通知，并自动更新，主要用于分布式事件处理系统、消息发布/订阅机制，以及各种需要对象间解耦的场景。关键在于主题和观察者之间不直接进行通信，而是通过注册和通知机制进行交互。
 
+观察者模式通常包含几个核心角色
+
+* 主题：它是具有状态的对象，并维护这一个观察这列表。一般我们主题会提供添加、删除和通知观察者的方法
+* 观察者：观察者是接收主题通知的对象。观察者会实现一个更新方法，当我们收到主题的通知时，会调用该方法进行更新操作
+* 具体主题：具体主题时主题的具体实现类，会维护具体主题需要通知的观察者列表，并且在状态发生改变的时候通知观察者
+* 具体观察者：具体观察者是观察者的具体实现类。不同的观察者可能会实现各自的更新方法，方法中会定义收到主题通知时要执行的具体操作
+
+在我们使用的时候，基本逻辑就是，主题维护一个观察者列表，我们需要关注这个主题的观察者通过主题的实例对象来进行注册，注册到对应的主题当中，在我们的主题中会通过实现`notify`的方法，主动的调用观察者的更新函数。
+
+比较常见的场景就是`ros`的发布与订阅机制，订阅的节点通过订阅来将自己加入到具体的主题当中，当有主题到来的时候，就是状态触发的过程，就会通知各个订阅者进行相应的操作。
+
+```C++
+#include <iostream>
+#include <string>
+#include <list>
+#include <algorithm>
+
+// 前向声明
+class Subject;
+
+// Observer接口
+class Observer {
+public:
+    virtual ~Observer() {}
+    virtual void update(Subject* subject) = 0;
+};
+
+// Subject接口
+class Subject {
+private:
+    std::list<Observer*> observers; // 观察者列表
+
+public:
+    virtual ~Subject() {}
+
+    // 注册观察者
+    void attach(Observer* obs) {
+        observers.push_back(obs);
+    }
+
+    // 注销观察者
+    void detach(Observer* obs) {
+        observers.remove(obs);
+    }
+
+    // 通知所有注册的观察者
+    void notify() {
+        for (auto& observer : observers) {
+            observer->update(this);
+        }
+    }
+
+    // 获取状态（必须由具体的主题实现）
+    virtual std::string getState() const = 0;
+};
+
+// 具体的Subject实现
+class ConcreteSubject : public Subject {
+private:
+    std::string state;
+
+public:
+    // 设置新状态并通知观察者
+    void setState(const std::string& newState) {
+        state = newState;
+        notify();
+    }
+
+    // 覆盖getState方法
+    std::string getState() const override {
+        return state;
+    }
+};
+
+// 具体的Observer实现
+class ConcreteObserver : public Observer {
+public:
+    void update(Subject* subject) override {
+        if (subject) {
+            std::cout << "Observer received a new state: " << subject->getState() << std::endl;
+        }
+    }
+};
+
+int main() {
+    // 创建主题和观察者
+    ConcreteSubject* concreteSubject = new ConcreteSubject();
+    Observer* observer1 = new ConcreteObserver();
+    Observer* observer2 = new ConcreteObserver();
+
+    // 注册观察者
+    concreteSubject->attach(observer1);
+    concreteSubject->attach(observer2);
+
+    // 改变状态并通知观察者
+    concreteSubject->setState("state1");
+
+    // 注销一个观察者并再次改变状态
+    concreteSubject->detach(observer1);
+    concreteSubject->setState("state2");
+
+    // 清理资源
+    delete observer1;
+    delete observer2;
+    delete concreteSubject;
+
+    return 0;
+}
+```
 
 ## 九、策略模式
 
+策略模式可以定义一系列的算法行为，并且把它们封装起来，提供给客户一定的自由度，能够使它们进行互相替换，策略模式允许算法独立于使用它们的客户端的变化。
+
+![策略模式-01](design-model/策略模式_01.png)
+
+在C++中我们会定义一个抽象策略基类，不同的策略会继承于这个抽象类，并重写基类中需要进行策略呼唤的方法。
+
+在我们客户端需要使用策略的对象当中，会有一个抽象策略基类的指针，用于引用到子类的不同策略对象实例。通过不同的策略实例的调用就能够在我们客户端用到不同的方法了。
+
+```C++
+#include <iostream>
+#include <vector>
+#include <algorithm> // std::sort
+
+// Strategy Interface
+class SortingStrategy {
+public:
+    virtual void sort(std::vector<int>& dataset) = 0;
+    virtual ~SortingStrategy() {}
+};
+
+// Concrete Strategy A: Bubble Sort
+class BubbleSort : public SortingStrategy {
+public:
+    void sort(std::vector<int>& dataset) override {
+        bool swapped = true;
+        while (swapped) {
+            swapped = false;
+            for (size_t i = 1; i < dataset.size(); ++i) {
+                if (dataset[i - 1] > dataset[i]) {
+                    std::swap(dataset[i - 1], dataset[i]);
+                    swapped = true;
+                }
+            }
+        }
+    }
+};
+
+// Concrete Strategy B: Standard Library Sort
+class StdSort : public SortingStrategy {
+public:
+    void sort(std::vector<int>& dataset) override {
+        std::sort(dataset.begin(), dataset.end());
+    }
+};
+
+// Context
+class SortedList {
+private:
+    std::vector<int> m_items;
+    SortingStrategy* m_strategy;
+
+public:
+    SortedList(SortingStrategy* strategy) : m_strategy(strategy) {}
+
+    void set_strategy(SortingStrategy* strategy) {
+        m_strategy = strategy;
+    }
+
+    void add(int value) {
+        m_items.push_back(value);
+    }
+
+    void sort() {
+        m_strategy->sort(m_items);
+        for (int item : m_items) {
+            std::cout << item << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    ~SortedList() {
+        delete m_strategy;
+    }
+};
+
+// Client Code
+int main() {
+    std::vector<int> dataset = {5, 2, 9, 1, 5, 6};
+
+    // Use BubbleSort
+    SortedList* bubble_sorted_list = new SortedList(new BubbleSort());
+    for (int value : dataset) {
+        bubble_sorted_list->add(value);
+    }
+    std::cout << "Bubble Sorted: ";
+    bubble_sorted_list->sort();
+    delete bubble_sorted_list;
+
+    // Use StdSort
+    SortedList* std_sorted_list = new SortedList(new StdSort());
+    for (int value : dataset) {
+        std_sorted_list->add(value);
+    }
+    std::cout << "Std Sorted: ";
+    std_sorted_list->sort();
+    delete std_sorted_list;
+
+    return 0;
+}
+```
 
 参考链接：[菜鸟教程](https://www.runoob.com/design-pattern/design-pattern-tutorial.html)
