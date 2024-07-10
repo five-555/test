@@ -1,11 +1,13 @@
 ---
 title: Go语言学习-函数
+tags:
+  - Golang
 categories: 技术研究
 date: 2024-07-09 16:41:53
-tags: [Golang]
 cover:
 top_img:
 ---
+### 
 
 # 函数
 
@@ -37,8 +39,6 @@ func divide(dividend, divisor float64) (float64, error) {
     return dividend / divisor, nil
 }
 ```
-
-## 错误
 
 ## 函数值
 
@@ -73,12 +73,63 @@ fmt.Println(strings.Map(add1, "VMS"))      // "WNT"
 fmt.Println(strings.Map(add1, "Admix"))    // "Benjy"
 ```
 
-## 匿名函数
-
 ## 可变参数
 
-## Defferred函数
+参数数量可变的函数称为可变参数函数。在`go`中一般通过`...`的形式来接收任意数量的参数，比如使用`vals ...int`接收任意数量的`int`类型参数。我们可以通过切片的方式来读取参数列表里面实际的值。在实际的运行过程中，调用者会隐式的创建一个数组，并将原始参数复制到数组当中，再把数组的一个切片作为参数传给被调用的函数。
 
-## Panic异常
+```go
+func sum(vals ...int) int {
+    total := 0
+    for _, val := range vals {
+        total += val
+    }
+    return total
+}
+```
 
-## Recover捕获异常
+## 错误
+
+* Defferred函数
+
+    `defer`机制类似于延迟执行的感觉，在我们的代码当中，可能会因为打开某一些文件，但是由于打开失败或者一些其他的原因，导致我们的执行异常退出，或者提前退出，这个时候要确保能够让文件正常关闭，我们可以使用`defer`来在文件关闭语句前标记，这样子，即使异常退出，在函数返回前也会执行`defer`的语句，通常`defer`修饰的语句执行顺序和定义的顺序相反。
+
+* Panic异常
+
+    `Go`的类型系统会在编译时捕获很多错误，但有些错误只能在运行时检查，如数组访问越界、空指针引用等，这些运行时错误会引起`panic`异常。
+
+    一般来说，当`panic`异常发生时，程序会中断运行，并立即执行在该协程中的被延迟的`defer`函数，随后输出错误日志。通常会在发生严重错误的时候来使用。
+
+* Recover捕获异常
+
+    在`Go`语言中，异常捕获是通过内置的`recover`函数实现的。当一个`goroutine`发生`panic`时，你可以使用`defer`机制来确保调用`recover`，这样就能拦截到`panic`引起的异常并进行处理。
+
+    `recover`只有在`defer`延迟执行的函数中直接调用时才有效。如果`panic`被触发，`recover`会捕获到引发`panic`的值，并且恢复正常的程序执行流程，即不再继续向上传递`panic`，转而执行`recover`所在的`defer`之后的代码。如果没有发生`panic`，或者`recover`没有在适当的位置被调用，则`recover`返回`nil`。
+
+    ```go
+    package main
+
+    import "fmt"
+
+    func potentiallyPanic() {
+        panic("something went wrong")
+    }
+
+    func catchPanic() {
+        if r := recover(); r != nil {
+            fmt.Println("Recovered from panic:", r)
+        }
+    }
+
+    func main() {
+        // 使用 defer 语句注册 catchPanic 函数
+        // 它将在 main 函数返回前最后执行
+        defer catchPanic()
+
+        // 这个函数可能会触发 panic
+        potentiallyPanic()
+
+        // 这行代码不会被执行，因为上面的函数已经触发了 panic
+        fmt.Println("This line will not be executed.")
+    }
+
+    ```
