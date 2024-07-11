@@ -1,5 +1,5 @@
 ---
-title: Go语言学习-函数
+title: Go语言学习-函数、方法、接口
 tags:
   - Golang
 categories: 技术研究
@@ -9,7 +9,7 @@ top_img:
 ---
 ### 
 
-# 函数
+# 函数-function
 
 `Go`语言中，函数的命名定义需要`func`来作为唯一标识，并且使用首字母大小写来区分，在当前文件夹下的某一个函数是否可以通过`import bag`的方式来对其他文件的可见性，如果是大写则说明可以导入，小写则只能在当前文件内可见。
 
@@ -133,3 +133,100 @@ func sum(vals ...int) int {
     }
 
     ```
+
+# 方法-way
+
+> 在函数声明时，在函数的名字之前放上一个变量，这个函数就会变成一个方法，这一个附加的参数会将该函数附加到这种类型上，也就是说，我们为这一个类型定义了独占的方法。
+
+```go
+package geometry
+
+import "math"
+
+type Point struct{ X, Y float64 }
+
+// traditional function
+func Distance(p, q Point) float64 {
+    return math.Hypot(q.X-p.X, q.Y-p.Y)
+}
+
+// 同样的效果，但是我们把Distance函数定义在了Point类型的内部
+// 因为在Point内部，我们可以直接的访问Point的内部成员
+// 我们可以使用Point.Distance来调用这个方法
+func (p Point) Distance(q Point) float64 {
+    return math.Hypot(q.X-p.X, q.Y-p.Y)
+}
+```
+
+基于指针对象的方法
+
+当我们调用一个函数时，会对其每一个参数值进行拷贝，如果一个函数需要更新一个变量，或者函数的其中一个参数实在太大我们希望能够避免这种默认的拷贝，我们可以使用指针。在实际的运用中，我们一般会约定，如果`Point`这一个类有一个指针作为接收器的方法，那么所有的`Point`的方法都必须有一个指针接收器。
+
+具体的使用方法就是，我们使用指针作为接收器，并且使用对象的引用来作为方法的调用者
+
+```go
+func (p *Point) ScaleBy(factor float64) {
+    p.X *= factor
+    p.Y *= factor
+}
+
+// 使用引用调用
+r := &Point{1, 2}
+r.ScaleBy(2)
+fmt.Println(*r) // "{2, 4}"
+
+p := Point{1, 2}
+pptr := &p
+pptr.ScaleBy(2)
+fmt.Println(p) // "{2, 4}"
+
+p := Point{1, 2}
+(&p).ScaleBy(2)
+fmt.Println(p) // "{2, 4}"
+
+// 引用的符号也可以省略
+// 因为编译器会隐式的帮我们使用&p去调用这个方法，不过这种简写方法只适用于变量（可以取到地址的变量）
+p.ScaleBy(2)
+
+// 临时变量则无法编译完成
+Point{1, 2}.ScaleBy(2) // compile error: can't take address of Point literal
+
+```
+
+
+
+# 接口-interface
+
+> 接口类型是对其他类型行为的抽象和概括，因为接口类型不会和特定的实现细节绑定在一起，通过这种抽象的方式我们可以让我们的函数更加灵活和更具有适应能力。在`C++`中，通常会使用面向对象多态的特性通过定义抽象类的方式来完成.
+
+在`Go`中是使用接口类型来实现的，接口类型是一种抽象的类型，它不会暴露出它所代表的对象的内部值的结构和这个对象支持的基础操作的集合，它只会表现出它自己的方法。我们只知道通过这个接口来做什么事情。
+
+如果我们定义了一个接口，并在这个接口中定义了一些抽象的方法，如果我们有其他的结构体或者类型的数据，实现了这个接口中的所有抽象方法，那么接口和这个结构体就满足接口的合约，我们就可以使用接口来接收这个结构体，并调用对应的方法，就类似于`C++`中抽象类和子类的关系。
+
+
+```go
+type MyInterface interface {
+    Method1(param1 int) string
+    Method2() error
+}
+
+type ConcreteType struct {
+    // ...
+}
+
+func (ct ConcreteType) Method1(param1 int) string {
+    // 实现逻辑...
+    return "result"
+}
+
+func (ct ConcreteType) Method2() error {
+    // 实现逻辑...
+    return nil
+}
+
+// 具体调用
+var myVar MyInterface = ConcreteType{}
+result := myVar.Method1(123)
+err := myVar.Method2()
+// 处理 result 和 err
+```
