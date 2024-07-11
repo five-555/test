@@ -6650,9 +6650,9 @@ p<k<FT_p[1]</script><p>那么就转发给$FT_p[1]$结点，此节点负责结点
       </tags>
   </entry>
   <entry>
-    <title>Go语言学习-函数</title>
+    <title>Go语言学习-函数、方法、接口</title>
     <url>/2024/07/09/go-function/</url>
-    <content><![CDATA[<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3><h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><p><code>Go</code>语言中，函数的命名定义需要<code>func</code>来作为唯一标识，并且使用首字母大小写来区分，在当前文件夹下的某一个函数是否可以通过<code>import bag</code>的方式来对其他文件的可见性，如果是大写则说明可以导入，小写则只能在当前文件内可见。</p>
+    <content><![CDATA[<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3><h1 id="函数-function"><a href="#函数-function" class="headerlink" title="函数-function"></a>函数-function</h1><p><code>Go</code>语言中，函数的命名定义需要<code>func</code>来作为唯一标识，并且使用首字母大小写来区分，在当前文件夹下的某一个函数是否可以通过<code>import bag</code>的方式来对其他文件的可见性，如果是大写则说明可以导入，小写则只能在当前文件内可见。</p>
 <p>函数通过四个属性来唯一确定函数签名-函数名、形参列表、返回值列表、函数体。</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">name</span><span class="hljs-params">(parameter-list)</span></span> (result-list) &#123;<br>    body<br>&#125;<br></code></pre></td></tr></table></figure>
 <p><em>多返回值</em></p>
@@ -6682,8 +6682,23 @@ p<k<FT_p[1]</script><p>那么就转发给$FT_p[1]$结点，此节点负责结点
 <li><p>Recover捕获异常</p>
 <p>  在<code>Go</code>语言中，异常捕获是通过内置的<code>recover</code>函数实现的。当一个<code>goroutine</code>发生<code>panic</code>时，你可以使用<code>defer</code>机制来确保调用<code>recover</code>，这样就能拦截到<code>panic</code>引起的异常并进行处理。</p>
 <p>  <code>recover</code>只有在<code>defer</code>延迟执行的函数中直接调用时才有效。如果<code>panic</code>被触发，<code>recover</code>会捕获到引发<code>panic</code>的值，并且恢复正常的程序执行流程，即不再继续向上传递<code>panic</code>，转而执行<code>recover</code>所在的<code>defer</code>之后的代码。如果没有发生<code>panic</code>，或者<code>recover</code>没有在适当的位置被调用，则<code>recover</code>返回<code>nil</code>。</p>
-  <figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span><br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">potentiallyPanic</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-built_in">panic</span>(<span class="hljs-string">&quot;something went wrong&quot;</span>)<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">catchPanic</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">if</span> r := <span class="hljs-built_in">recover</span>(); r != <span class="hljs-literal">nil</span> &#123;<br>        fmt.Println(<span class="hljs-string">&quot;Recovered from panic:&quot;</span>, r)<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-comment">// 使用 defer 语句注册 catchPanic 函数</span><br>    <span class="hljs-comment">// 它将在 main 函数返回前最后执行</span><br>    <span class="hljs-keyword">defer</span> catchPanic()<br><br>    <span class="hljs-comment">// 这个函数可能会触发 panic</span><br>    potentiallyPanic()<br><br>    <span class="hljs-comment">// 这行代码不会被执行，因为上面的函数已经触发了 panic</span><br>    fmt.Println(<span class="hljs-string">&quot;This line will not be executed.&quot;</span>)<br>&#125;<br><br></code></pre></td></tr></table></figure></li>
+  <figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;fmt&quot;</span><br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">potentiallyPanic</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-built_in">panic</span>(<span class="hljs-string">&quot;something went wrong&quot;</span>)<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">catchPanic</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-keyword">if</span> r := <span class="hljs-built_in">recover</span>(); r != <span class="hljs-literal">nil</span> &#123;<br>        fmt.Println(<span class="hljs-string">&quot;Recovered from panic:&quot;</span>, r)<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    <span class="hljs-comment">// 使用 defer 语句注册 catchPanic 函数</span><br>    <span class="hljs-comment">// 它将在 main 函数返回前最后执行</span><br>    <span class="hljs-keyword">defer</span> catchPanic()<br><br>    <span class="hljs-comment">// 这个函数可能会触发 panic</span><br>    potentiallyPanic()<br><br>    <span class="hljs-comment">// 这行代码不会被执行，因为上面的函数已经触发了 panic</span><br>    fmt.Println(<span class="hljs-string">&quot;This line will not be executed.&quot;</span>)<br>&#125;<br><br></code></pre></td></tr></table></figure>
+</li>
 </ul>
+<h1 id="方法-way"><a href="#方法-way" class="headerlink" title="方法-way"></a>方法-way</h1><blockquote>
+<p>在函数声明时，在函数的名字之前放上一个变量，这个函数就会变成一个方法，这一个附加的参数会将该函数附加到这种类型上，也就是说，我们为这一个类型定义了独占的方法。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">package</span> geometry<br><br><span class="hljs-keyword">import</span> <span class="hljs-string">&quot;math&quot;</span><br><br><span class="hljs-keyword">type</span> Point <span class="hljs-keyword">struct</span>&#123; X, Y <span class="hljs-type">float64</span> &#125;<br><br><span class="hljs-comment">// traditional function</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Distance</span><span class="hljs-params">(p, q Point)</span></span> <span class="hljs-type">float64</span> &#123;<br>    <span class="hljs-keyword">return</span> math.Hypot(q.X-p.X, q.Y-p.Y)<br>&#125;<br><br><span class="hljs-comment">// 同样的效果，但是我们把Distance函数定义在了Point类型的内部</span><br><span class="hljs-comment">// 因为在Point内部，我们可以直接的访问Point的内部成员</span><br><span class="hljs-comment">// 我们可以使用Point.Distance来调用这个方法</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p Point)</span></span> Distance(q Point) <span class="hljs-type">float64</span> &#123;<br>    <span class="hljs-keyword">return</span> math.Hypot(q.X-p.X, q.Y-p.Y)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>基于指针对象的方法</p>
+<p>当我们调用一个函数时，会对其每一个参数值进行拷贝，如果一个函数需要更新一个变量，或者函数的其中一个参数实在太大我们希望能够避免这种默认的拷贝，我们可以使用指针。在实际的运用中，我们一般会约定，如果<code>Point</code>这一个类有一个指针作为接收器的方法，那么所有的<code>Point</code>的方法都必须有一个指针接收器。</p>
+<p>具体的使用方法就是，我们使用指针作为接收器，并且使用对象的引用来作为方法的调用者</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *Point)</span></span> ScaleBy(factor <span class="hljs-type">float64</span>) &#123;<br>    p.X *= factor<br>    p.Y *= factor<br>&#125;<br><br><span class="hljs-comment">// 使用引用调用</span><br>r := &amp;Point&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;<br>r.ScaleBy(<span class="hljs-number">2</span>)<br>fmt.Println(*r) <span class="hljs-comment">// &quot;&#123;2, 4&#125;&quot;</span><br><br>p := Point&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;<br>pptr := &amp;p<br>pptr.ScaleBy(<span class="hljs-number">2</span>)<br>fmt.Println(p) <span class="hljs-comment">// &quot;&#123;2, 4&#125;&quot;</span><br><br>p := Point&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;<br>(&amp;p).ScaleBy(<span class="hljs-number">2</span>)<br>fmt.Println(p) <span class="hljs-comment">// &quot;&#123;2, 4&#125;&quot;</span><br><br><span class="hljs-comment">// 引用的符号也可以省略</span><br><span class="hljs-comment">// 因为编译器会隐式的帮我们使用&amp;p去调用这个方法，不过这种简写方法只适用于变量（可以取到地址的变量）</span><br>p.ScaleBy(<span class="hljs-number">2</span>)<br><br><span class="hljs-comment">// 临时变量则无法编译完成</span><br>Point&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;.ScaleBy(<span class="hljs-number">2</span>) <span class="hljs-comment">// compile error: can&#x27;t take address of Point literal</span><br><br></code></pre></td></tr></table></figure>
+<h1 id="接口-interface"><a href="#接口-interface" class="headerlink" title="接口-interface"></a>接口-interface</h1><blockquote>
+<p>接口类型是对其他类型行为的抽象和概括，因为接口类型不会和特定的实现细节绑定在一起，通过这种抽象的方式我们可以让我们的函数更加灵活和更具有适应能力。在<code>C++</code>中，通常会使用面向对象多态的特性通过定义抽象类的方式来完成.</p>
+</blockquote>
+<p>在<code>Go</code>中是使用接口类型来实现的，接口类型是一种抽象的类型，它不会暴露出它所代表的对象的内部值的结构和这个对象支持的基础操作的集合，它只会表现出它自己的方法。我们只知道通过这个接口来做什么事情。</p>
+<p>如果我们定义了一个接口，并在这个接口中定义了一些抽象的方法，如果我们有其他的结构体或者类型的数据，实现了这个接口中的所有抽象方法，那么接口和这个结构体就满足接口的合约，我们就可以使用接口来接收这个结构体，并调用对应的方法，就类似于<code>C++</code>中抽象类和子类的关系。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> MyInterface <span class="hljs-keyword">interface</span> &#123;<br>    Method1(param1 <span class="hljs-type">int</span>) <span class="hljs-type">string</span><br>    Method2() <span class="hljs-type">error</span><br>&#125;<br><br><span class="hljs-keyword">type</span> ConcreteType <span class="hljs-keyword">struct</span> &#123;<br>    <span class="hljs-comment">// ...</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(ct ConcreteType)</span></span> Method1(param1 <span class="hljs-type">int</span>) <span class="hljs-type">string</span> &#123;<br>    <span class="hljs-comment">// 实现逻辑...</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;result&quot;</span><br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(ct ConcreteType)</span></span> Method2() <span class="hljs-type">error</span> &#123;<br>    <span class="hljs-comment">// 实现逻辑...</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span><br>&#125;<br><br><span class="hljs-comment">// 具体调用</span><br><span class="hljs-keyword">var</span> myVar MyInterface = ConcreteType&#123;&#125;<br>result := myVar.Method1(<span class="hljs-number">123</span>)<br>err := myVar.Method2()<br><span class="hljs-comment">// 处理 result 和 err</span><br></code></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>技术研究</category>
@@ -7603,6 +7618,45 @@ p<k<FT_p[1]</script><p>那么就转发给$FT_p[1]$结点，此节点负责结点
       <tags>
         <tag>操作系统</tag>
         <tag>进程通信</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>如何使用GDB进行调试</title>
+    <url>/2024/07/11/gdb-debug/</url>
+    <content><![CDATA[<h1 id="如何使用GDB调试"><a href="#如何使用GDB调试" class="headerlink" title="如何使用GDB调试"></a>如何使用GDB调试</h1><p>GDB (全称为GNU Debuger) 是一款由 GNU 开源组织发布、基于 UNIX/LINUX 操作系统的命令行程序调试工具。对于一名 Linux 下工作的 C++ 程序员，GDB 是必不可少的工具。<br>Linux下工作的程序员都习惯用命令行开发，所以这种命令行调试工具并不会觉得难用；其次，基于 Linux 服务器等的无图形界面开发，使用 Vim+GDB 可以在任意一台电脑上直接调试，不用花时间安装复杂的 IDE 环境。</p>
+<h2 id="GDB常见调试命令"><a href="#GDB常见调试命令" class="headerlink" title="GDB常见调试命令"></a>GDB常见调试命令</h2><p>1、启动GDB</p>
+<blockquote>
+<p>对于 C/C++ 程序调试，需要在编译前加入 -g 参数选项，表示加入一些调试信息。这样在编译后生成的可执行文件才能使用 GDB 进行调试。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">g++ -g main -o demo // 生成可执行文件<br><br>gdb demo // 启动GDB调试<br></code></pre></td></tr></table></figure>
+<p>2、相关命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">// 查看接下来的10行<br>list<br><br>// 打断点<br><span class="hljs-built_in">break</span> n<br><span class="hljs-built_in">break</span> file:n<br><span class="hljs-built_in">break</span> func // 在函数入口<br><br>// 查看断点<br>info <span class="hljs-built_in">break</span><br><br>// 删除断点<br>delete    // 所有<br>delete n    // 删除第n个断点<br><span class="hljs-built_in">disable</span> n    // 关闭<br><span class="hljs-built_in">enable</span>    // 开启<br><br><br>// 运行控制指令<br>run  // 全速运行，遇到断点会停下，run 可以用 r 缩写替代<br>next // 单步调试，next 可以用 n 缩写替代<br>step // 单步调试，step 可以用 s 缩写替代<br><span class="hljs-built_in">continue</span> // 继续执行直到遇到下一个断点停下，没有断点直接结束，可以用 c 缩写替代<br><span class="hljs-keyword">until</span> n  // 直接跳转到指定行号程序，n 表示行号<br>finish   // 当程序运行在函数中时，直接执行完当前函数并打印函数返回信息<br><span class="hljs-built_in">kill</span>  // 直接结束当前进程，程序可以从头运行<br>quit  // 退出 GDB，quit 可以用 q 缩写替代<br><br>// 打印变量x信息<br><span class="hljs-built_in">print</span> x<br><br>// 显示当前堆栈帧的局部变量的名称和值<br>info locals<br>// 显示当前函数的参数<br>info args<br>// 显示所有全局和静态变量的名称和值，可能会比较多<br>info variables<br>// 查看某个特定类型的所有实例<br>info variables int/string<br>// 查看复杂表达式，数组结构体等<br><span class="hljs-built_in">print</span> myStruct.fileName<br><span class="hljs-built_in">print</span> myArray[3]<br></code></pre></td></tr></table></figure>
+<h2 id="打印vector"><a href="#打印vector" class="headerlink" title="打印vector"></a>打印vector</h2><p>打印整个 vector：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">print</span> myVector<br></code></pre></td></tr></table></figure>
+<p>打印特定的元素：</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">print</span> myVector[0]<br></code></pre></td></tr></table></figure>
+<p>手动打印<code>std::vector</code>的元素<code>std::vector</code>的数据通常是连续存储的，可以根据其内部表示来查看元素。以下是一个例子，使用指向开始和结束的指针（取决于<code>std::vector</code>在你的<code>STL</code>实现中的具体布局）：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">// n小于size<br><span class="hljs-built_in">print</span> *myVector._M_impl._M_start@n<br></code></pre></td></tr></table></figure>
+<p>这里，<code>_M_impl._M_start</code>是 GCC 的 <code>libstdc++</code> 实现细节，它可能因不同版本的 <code>STL</code> 或不同编译器而异。也就是说，如果使用的是别的库比如 LLVM’s libc++，那么内部成员名可能会有不同。</p>
+<p>在上面的命令中：</p>
+<ul>
+<li>myVector 是 vector 变量的名称。</li>
+<li>_M_impl._M_start 是 vector 内部的起始元素指针（对于 libstdc++）。</li>
+<li>@ 操作符是 GDB 的一个功能，它允许按照数组的语法打印从某个指针开始的一系列对象。</li>
+<li>myVector.size() 是 vector 的大小，告诉 GDB 应该打印多少个元素。</li>
+</ul>
+<p>如果不确定 vector 内部结构的话，你可以先打印出 vector 对象自身来探索它的内部结构：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">print</span> myVector<br></code></pre></td></tr></table></figure>
+<p>然后根据显示的结构信息来适配上面的命令。</p>
+<p><strong>注</strong>： 如果程序使用了优化编译选项（比如 <code>-O2</code>），编译器可能会省略掉一些调试信息或改变代码的布局。如果发现 <code>GDB</code> 无法获取 <code>vector</code> 的正确信息，需要在没有优化的情况下重新编译程序。</p>
+]]></content>
+      <categories>
+        <category>技术研究</category>
+      </categories>
+      <tags>
+        <tag>C++</tag>
+        <tag>GDB</tag>
+        <tag>Debug</tag>
       </tags>
   </entry>
 </search>
