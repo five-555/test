@@ -1,15 +1,17 @@
 ---
-title: Go语言基本语法
-date: 2023-12-14 17:16:50
-tags: [go语言 并发]
-categories: 学习笔记
+title: Go语言学习-基本语法
+tags:
+  - Golang
+categories: 技术研究
 cover: /img/default_cover05.jpg
+date: 2024-07-10 17:16:50
 top_img:
 ---
 
-## 基本语法
 
-### GO语言特性
+# Go语言学习-基本语法
+
+## GO语言特性
 
 * 并发编程
 
@@ -51,13 +53,13 @@ func main() {
 }
 ```
 
-### 数据类型
+## 数据类型
 
 * 常量
 
   使用`const`声明，可以限定常量类型，也可以不指定类型（称为字面常量）
 
-```
+```go
 const limit = 512
 const top uint16 = 1421
 const Pi float64 = 3.1415926
@@ -75,7 +77,7 @@ const (
 
   `iota`是一个可以被编译器修改的常量，在`const`关键字出现时被重置为`0`，在下一个`const`出现之前，每出现一次`iota`，所代表的数字自动加1
 
-```
+```go
 const (
     a = iota  //a == 0
     b = iota  //b ==1
@@ -144,7 +146,7 @@ const d = iota //d==0,因为const的出现，iota被重置为0
 | `string(chars)`  | chars 类型是 `[]rune` 或者 `[]int32`, 将之转换为字符串       |
 | `[]byte(s)`      | 无副本的将字符串 s 转换为一个原始的字节的切片数组，不保证转换的字节是合法的 UTF-8 编码字节 |
 
-### 顺序编程
+## 顺序编程
 
 * if
 
@@ -199,61 +201,3 @@ for item := range aChannel { // 迭代通道
 **defer**
 
 * 当函数执行到最后时，`defer`语句会按照逆序执行，最后该函数返回，`defer`会在`return`之后执行。
-
-### 面向对象编程
-
-* 自定义类型及结构体
-
-  Go的代码是以包结构来组织的，如果标识符（变量名，函数名，自定义类型），以大写字母开头的标识符是可以导出的，可以在任何导入了定义该标识符的包中使用，Go语言不支持继承，只支持组合。
-
-  * 
-
-* 方法
-
-* 组合
-
-* 接口
-
-  > 接口是一组方法签名。当一个类型为接口中的所有方法提供定义时，它被称为实现该接口。接口指定类型应具有的方法，类型决定如何实现这些方法。
-
-  接口定义了一组方法的集合，任何类型只要实现了接口中定义的所有方法，就被认为实现了该接口。
-
-  接口在Go中的实现方式是隐式的，无需显性地声明，这种设计允许对象在不同的上下文中被看作是不同的类型，从而实现了多态性。
-
-```go
-package main
-
-import "fmt"
-
-// Animal 接口定义了 Speak 方法
-type Animal interface {
-    Speak() string
-}
-
-// Dog 类型实现了 Animal 接口
-type Dog struct{}
-
-func (d Dog) Speak() string {
-    return "Woof!"
-}
-
-// Cat 类型实现了 Animal 接口
-type Cat struct{}
-
-func (c Cat) Speak() string {
-    return "Meow!"
-}
-
-func main() {
-    // 定义一个接口类型的变量
-    var animal Animal
-
-    // 可以将不同类型的对象赋值给接口变量
-    animal = Dog{}
-    fmt.Println(animal.Speak()) // 输出: Woof!
-
-    animal = Cat{}
-    fmt.Println(animal.Speak()) // 输出: Meow!
-}
-```
-
