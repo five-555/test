@@ -7,7 +7,7 @@ cover:
 top_img:
 ---
 
-# Goroutines和Channels32kol
+# Goroutines和Channels
 
 `Go`语言中的并发程序一般会使用两种手段来实现。第一种是`goroutine`，第二种是`channel`，其支持`CSP`：communicating sequential processes，叫做顺序通信进程。
 
@@ -29,5 +29,79 @@ go f() // create a new goroutine that calls f(); don't wait
 
 ## example-并发的Clock服务
 
+> 一个连接中开启一个协程
 
+在我们的例子中，实现了使用协程的方式去服务多个客户端的代码，它会在客户端与服务端建立连接以后，调用`go handleConn`，随后服务端会开启一个协程，让这个服务函数异步的在客户端中执行。随后主协程就会继续执行for循环语句，如果没有随后的连接，就会阻塞在`accept`，如果有连接，就会再次开启一个协程。
 
+**服务端**
+
+```go
+// Clock1 is a TCP server that periodically writes the time.
+package main
+
+import (
+    "io"
+    "log"
+    "net"
+    "time"
+)
+
+func main() {
+    listener, err := net.Listen("tcp", "localhost:8000")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    for {
+        conn, err := listener.Accept()
+        if err != nil {
+            log.Print(err) // e.g., connection aborted
+            continue
+        }
+        
+        // 关键并发语句
+        go handleConn(conn)
+    }
+}
+
+func handleConn(c net.Conn) {
+    defer c.Close()
+    for {
+        _, err := io.WriteString(c, time.Now().Format("15:04:05\n"))
+        if err != nil {
+            return // e.g., client disconnected
+        }
+        time.Sleep(1 * time.Second)
+    }
+}
+```
+
+**客户端**
+
+```go
+// Netcat1 is a read-only TCP client.
+package main
+
+import (
+    "io"
+    "log"
+    "net"
+    "os"
+)
+
+func main() {
+    conn, err := net.Dial("tcp", "localhost:8000")
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer conn.Close()
+    mustCopy(os.Stdout, conn)
+}
+
+// 连接中的数据在终端显示出来
+func mustCopy(dst io.Writer, src io.Reader) {
+    if _, err := io.Copy(dst, src); err != nil {
+        log.Fatal(err)
+    }
+}
+```
