@@ -1294,6 +1294,30 @@
       </tags>
   </entry>
   <entry>
+    <title>Go语言学习-协程、管道、并发</title>
+    <url>/2024/07/10/go-mutil-routine/</url>
+    <content><![CDATA[<h1 id="Goroutines和Channels"><a href="#Goroutines和Channels" class="headerlink" title="Goroutines和Channels"></a>Goroutines和Channels</h1><p><code>Go</code>语言中的并发程序一般会使用两种手段来实现。第一种是<code>goroutine</code>，第二种是<code>channel</code>，其支持<code>CSP</code>：communicating sequential processes，叫做顺序通信进程。</p>
+<p><code>CSP</code>是一种现代的并发编程模型，在这种编程模型中值会在不同的运行实例（groutine）中传递，尽管大多数情况下仍然是被限制在单一实例中。</p>
+<h2 id="Goroutines-协程"><a href="#Goroutines-协程" class="headerlink" title="Goroutines-协程"></a>Goroutines-协程</h2><blockquote>
+<p>每一个并发的执行单元叫做一个<code>goroutine</code>（协程），如果有多个函数，函数之间不存在调用关系，那么这两个函数就有并发执行的可能。我们可以把协程理解为一个轻量级线程。它们允许我们使用的时候并发的执行函数，和传统的操作系统线程相比，协程更加高效，消耗的资源更少。</p>
+</blockquote>
+<p>当一个程序启动时，其主函数会在一个单独的<code>goroutine</code>中运行，称为主协程，新的协程会使用<code>go</code>语句来创建。在语法上，我们只要在一个方法调用前加上关键字<code>go</code>，就会使得这个函数在一个新创建的<code>goroutine</code>中运行。</p>
+<p>当我们的协程已经启动以后，除了从主函数退出或者直接终止程序之外，没有其它的编程方法能够让一个<code>goroutine</code>来打断另一个的执行，当然我们也有协程间的通信来让一个协程请求其它的协程，但是这也是当前协程主动让出的结果。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go">f()    <span class="hljs-comment">// call f(); wait for it to return</span><br><span class="hljs-keyword">go</span> f() <span class="hljs-comment">// create a new goroutine that calls f(); don&#x27;t wait</span><br></code></pre></td></tr></table></figure>
+<h2 id="example-并发的Clock服务"><a href="#example-并发的Clock服务" class="headerlink" title="example-并发的Clock服务"></a>example-并发的Clock服务</h2><blockquote>
+<p>一个连接中开启一个协程</p>
+</blockquote>
+<p>在我们的例子中，实现了使用协程的方式去服务多个客户端的代码，它会在客户端与服务端建立连接以后，调用<code>go handleConn</code>，随后服务端会开启一个协程，让这个服务函数异步的在客户端中执行。随后主协程就会继续执行for循环语句，如果没有随后的连接，就会阻塞在<code>accept</code>，如果有连接，就会再次开启一个协程。</p>
+<p><strong>服务端</strong></p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// Clock1 is a TCP server that periodically writes the time.</span><br><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;io&quot;</span><br>    <span class="hljs-string">&quot;log&quot;</span><br>    <span class="hljs-string">&quot;net&quot;</span><br>    <span class="hljs-string">&quot;time&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    listener, err := net.Listen(<span class="hljs-string">&quot;tcp&quot;</span>, <span class="hljs-string">&quot;localhost:8000&quot;</span>)<br>    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>        log.Fatal(err)<br>    &#125;<br><br>    <span class="hljs-keyword">for</span> &#123;<br>        conn, err := listener.Accept()<br>        <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>            log.Print(err) <span class="hljs-comment">// e.g., connection aborted</span><br>            <span class="hljs-keyword">continue</span><br>        &#125;<br>        <br>        <span class="hljs-comment">// 关键并发语句</span><br>        <span class="hljs-keyword">go</span> handleConn(conn)<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">handleConn</span><span class="hljs-params">(c net.Conn)</span></span> &#123;<br>    <span class="hljs-keyword">defer</span> c.Close()<br>    <span class="hljs-keyword">for</span> &#123;<br>        _, err := io.WriteString(c, time.Now().Format(<span class="hljs-string">&quot;15:04:05\n&quot;</span>))<br>        <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-comment">// e.g., client disconnected</span><br>        &#125;<br>        time.Sleep(<span class="hljs-number">1</span> * time.Second)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>客户端</strong></p>
+<figure class="highlight go"><table><tr><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// Netcat1 is a read-only TCP client.</span><br><span class="hljs-keyword">package</span> main<br><br><span class="hljs-keyword">import</span> (<br>    <span class="hljs-string">&quot;io&quot;</span><br>    <span class="hljs-string">&quot;log&quot;</span><br>    <span class="hljs-string">&quot;net&quot;</span><br>    <span class="hljs-string">&quot;os&quot;</span><br>)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>    conn, err := net.Dial(<span class="hljs-string">&quot;tcp&quot;</span>, <span class="hljs-string">&quot;localhost:8000&quot;</span>)<br>    <span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>        log.Fatal(err)<br>    &#125;<br>    <span class="hljs-keyword">defer</span> conn.Close()<br>    mustCopy(os.Stdout, conn)<br>&#125;<br><br><span class="hljs-comment">// 连接中的数据在终端显示出来</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">mustCopy</span><span class="hljs-params">(dst io.Writer, src io.Reader)</span></span> &#123;<br>    <span class="hljs-keyword">if</span> _, err := io.Copy(dst, src); err != <span class="hljs-literal">nil</span> &#123;<br>        log.Fatal(err)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>技术研究</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Go语言学习-基本语法</title>
     <url>/2024/07/10/go-base/</url>
     <content><![CDATA[<h1 id="Go语言学习-基本语法"><a href="#Go语言学习-基本语法" class="headerlink" title="Go语言学习-基本语法"></a>Go语言学习-基本语法</h1><h2 id="GO语言特性"><a href="#GO语言特性" class="headerlink" title="GO语言特性"></a>GO语言特性</h2><ul>
@@ -4136,7 +4160,7 @@
 <p>同一时间只放置一个单元</p>
 </blockquote>
 <p><strong>算法伪代码</strong></p>
-<p><style>.xufjigkwffyy{}</style><img src="/2023/09/10/iEDA-test/image-20230823094215828.png" class="xufjigkwffyy" alt="image-20230823094215828"></p>
+<p><style>.kegshwkgwacd{}</style><img src="/2023/09/10/iEDA-test/image-20230823094215828.png" class="kegshwkgwacd" alt="image-20230823094215828"></p>
 <p><strong>核心代码</strong></p>
 <img src="/2023/09/10/iEDA-test/image-20230825151306959.png" class="" title="image-20230825151306959">
 <figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><span class="hljs-number">1</span>、根据单元的x坐标进行排序<br><span class="hljs-number">2</span>、对于每一个排序好的单元，按照顺序取出每一个单元<br><span class="hljs-number">3</span>、遍历第一行，找出当前行中放置该单元后能够使得<span class="hljs-keyword">cost</span>最小的位置<br><span class="hljs-number">4</span>、按照第<span class="hljs-number">3</span>步的方式遍历每一行，找出全局中能够放置当前单元并使得<span class="hljs-keyword">cost</span>最小的位置<br><span class="hljs-number">5</span>、放置该单元<br></code></pre></td></tr></table></figure>
@@ -4154,7 +4178,7 @@
 <figure class="highlight markdown"><table><tr><td class="code"><pre><code class="hljs markdown">函数的主要步骤如下：<br><span class="hljs-bullet">1.</span> 获取实例的形状（inst<span class="hljs-emphasis">_shape）。</span><br><span class="hljs-emphasis">2. 从_</span>layout对象中获取指定行的间隔列表（interval<span class="hljs-emphasis">_list）。</span><br><span class="hljs-emphasis">3. 通过搜索找到最近的间隔，即与实例重叠的间隔（interval_</span>idx）。<br><span class="hljs-bullet">   -</span> 如果找不到重叠的间隔，则返回INT32<span class="hljs-emphasis">_MAX表示失败。</span><br><span class="hljs-emphasis">4. 检查选定的间隔是否能够容纳实例的宽度，如果不行，则查找最近的非满间隔，并重新选择。</span><br><span class="hljs-emphasis">   - 如果找不到合适的间隔，则返回INT32_</span>MAX表示失败。<br><span class="hljs-bullet">5.</span> 将实例安排到选定的间隔中，形成一个簇（target<span class="hljs-emphasis">_cluster）。</span><br><span class="hljs-emphasis">6. 计算移动代价（movement_</span>cost）：<br><span class="hljs-bullet">   -</span> 从簇中的每个实例计算到目标位置的x方向移动代价，并累加到movement<span class="hljs-emphasis">_cost中。</span><br><span class="hljs-emphasis">   - 计算实例在y方向上的移动代价。</span><br><span class="hljs-emphasis">   - 将实例在x和y方向上的移动代价相加，得到实例的位移代价（inst_</span>displacement）。<br><span class="hljs-bullet">   -</span> 将实例位移代价加到movement<span class="hljs-emphasis">_cost中。</span><br><span class="hljs-emphasis">7. 根据最大移动约束处罚超过最大移动约束的位移代价。</span><br><span class="hljs-emphasis">8. 如果is_</span>trial为false，即非试验性放置，则替换簇的信息（replaceClusterInfo）和更新间隔的剩余长度（updateRemainLength）。<br><span class="hljs-bullet">9.</span> 返回移动代价（movement<span class="hljs-emphasis">_cost）。</span><br></code></pre></td></tr></table></figure>
 <h3 id="三、Tetris算法"><a href="#三、Tetris算法" class="headerlink" title="三、Tetris算法"></a>三、Tetris算法</h3><p><code>Abacus</code>是在<code>Tetris</code>算法上的改进，在<code>Tetris</code>中，对于<code>placeRow</code>的选择是一个单次即可完成的过程，即在当前行中找到了能够合适的位置以后即将该<code>instance</code>放置到该行。因此整体算法流程相似，但复杂度会降低很多。</p>
 <figure class="highlight llvm"><table><tr><td class="code"><pre><code class="hljs llvm"><span class="hljs-number">1</span>、根据单元的<span class="hljs-keyword">x</span>坐标进行排序<br><span class="hljs-number">2</span>、对于每一个排序好的单元，按照顺序取出每一个单元<br><span class="hljs-number">3</span>、遍历第一行，找出当前行中放置该单元后能够使得cost最小的位置<br><span class="hljs-number">4</span>、放置该单元<br><br>若改行无法放置该单元，进行换行策略选择，重新执行，直到所有行都无法放置，返回<span class="hljs-keyword">false</span><br></code></pre></td></tr></table></figure>
-<p><style>.xngduuplfpuq{zoom: 67%;}</style><img src="/2023/09/10/iEDA-test/image-20230825163454933.png" class="xngduuplfpuq" alt="image-20230825163454933"></p>
+<p><style>.grilaavxkron{zoom: 67%;}</style><img src="/2023/09/10/iEDA-test/image-20230825163454933.png" class="grilaavxkron" alt="image-20230825163454933"></p>
 <p>因此对<code>iEDA</code>原始代码<code>Abacus</code>算法调整成<code>Tetris</code>只需要确定两个策略即可：1、如何选择当前<code>instance</code>初始行的策略。2、若初始行无法放置当前<code>instance</code>后，选择其它行的调整策略。</p>
 <ul>
 <li><p>选择初始行策略</p>
@@ -4431,8 +4455,8 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>物理设计</tag>
         <tag>EDA</tag>
+        <tag>物理设计</tag>
         <tag>布局</tag>
         <tag>布线</tag>
       </tags>
@@ -4823,9 +4847,9 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>物理设计</tag>
         <tag>EDA</tag>
         <tag>电子设计自动化</tag>
+        <tag>物理设计</tag>
         <tag>VLSI</tag>
       </tags>
   </entry>
@@ -5010,8 +5034,8 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>集成电路</tag>
         <tag>EDA</tag>
+        <tag>集成电路</tag>
         <tag>静态时序分析</tag>
       </tags>
   </entry>
@@ -5739,9 +5763,9 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>集成电路</tag>
-        <tag>物理设计</tag>
         <tag>EDA</tag>
+        <tag>物理设计</tag>
+        <tag>集成电路</tag>
         <tag>Pyhsical Design</tag>
       </tags>
   </entry>
@@ -6688,8 +6712,8 @@
       <tags>
         <tag>神经网络</tag>
         <tag>PyTorch</tag>
-        <tag>AI</tag>
         <tag>DeepLearning</tag>
+        <tag>AI</tag>
       </tags>
   </entry>
   <entry>

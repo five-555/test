@@ -7,6 +7,7 @@ cover:
 top_img:
 ---
 
+
 # Goroutines和Channels
 
 `Go`语言中的并发程序一般会使用两种手段来实现。第一种是`goroutine`，第二种是`channel`，其支持`CSP`：communicating sequential processes，叫做顺序通信进程。
