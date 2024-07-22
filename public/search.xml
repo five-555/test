@@ -568,8 +568,681 @@
 <p>  多次反转链表</p>
 </li>
 </ul>
+<h2 id="array"><a href="#array" class="headerlink" title="array"></a>array</h2><p><code>array</code>是一种固定大小的数组，相对于传统的数组来说，提供了更加安全和方便的接口，它的长度在编译的时候就已经确定，所以不支持动态的调整数组的大小。</p>
+<p><strong>常用的接口</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>成员函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>容量相关</td>
+<td><code>size()</code></td>
+<td>返回数组中元素的个数。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>max_size()</code></td>
+<td>返回数组所能容纳的最大元素数量。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>empty()</code></td>
+<td>检查数组是否为空。</td>
+</tr>
+<tr>
+<td>元素访问</td>
+<td><code>operator[]</code></td>
+<td>使用下标访问元素，不进行边界检查。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>at(size_type n)</code></td>
+<td>使用下标访问元素，进行边界检查。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>front()</code></td>
+<td>访问第一个元素。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>back()</code></td>
+<td>访问最后一个元素。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>data()</code></td>
+<td>返回指向数组首个元素的指针。</td>
+</tr>
+<tr>
+<td>修改内容</td>
+<td><code>fill(const T&amp; value)</code></td>
+<td>用指定的值填充整个数组。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>swap(array&amp; other)</code></td>
+<td>交换两个数组的内容。</td>
+</tr>
+<tr>
+<td>迭代器</td>
+<td><code>begin()</code> / <code>cbegin()</code></td>
+<td>返回指向数组首个元素的迭代器。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>end()</code> / <code>cend()</code></td>
+<td>返回指向数组末尾元素之后位置的迭代器。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>rbegin()</code> / <code>crbegin()</code></td>
+<td>返回指向数组最后一个元素的反向迭代器。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>rend()</code> / <code>crend()</code></td>
+<td>返回指向数组第一个元素之前位置的反向迭代器。</td>
+</tr>
+</tbody>
+</table>
+</div>
 <h2 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h2><p><code>deque</code>是<code>STL</code>容器中的双端队列，是支持能够从头增加元素的一种容器，相比于<code>vector</code>在插入上来说，会更加灵活。<code>deque</code>的内部不是使用单一连续内存块来存储元素的，而是采用一个中央控制器来管理多个固定大小的数组（成为缓冲区或段）。每个缓冲区可能存储多个元素，中央控制器是一个动态数组，包含指向这些缓冲区的指针。这样的设计，能够使得在两端添加或者一处元素时无需移动其他元素。</p>
-<h2 id="array"><a href="#array" class="headerlink" title="array"></a>array</h2><h1 id="容器适配器"><a href="#容器适配器" class="headerlink" title="容器适配器"></a>容器适配器</h1><h2 id="queue"><a href="#queue" class="headerlink" title="queue"></a>queue</h2><h2 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h2><h2 id="priority-queue"><a href="#priority-queue" class="headerlink" title="priority_queue"></a>priority_queue</h2><h1 id="关联容器"><a href="#关联容器" class="headerlink" title="关联容器"></a>关联容器</h1><h2 id="set"><a href="#set" class="headerlink" title="set"></a>set</h2><h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><h2 id="mutilset"><a href="#mutilset" class="headerlink" title="mutilset"></a>mutilset</h2><h2 id="mutilmap"><a href="#mutilmap" class="headerlink" title="mutilmap"></a>mutilmap</h2><h1 id="无序关联容器"><a href="#无序关联容器" class="headerlink" title="无序关联容器"></a>无序关联容器</h1><h2 id="unordered-set"><a href="#unordered-set" class="headerlink" title="unordered_set"></a>unordered_set</h2><h2 id="unordered-map"><a href="#unordered-map" class="headerlink" title="unordered_map"></a>unordered_map</h2><h2 id="unordered-mutilset"><a href="#unordered-mutilset" class="headerlink" title="unordered_mutilset"></a>unordered_mutilset</h2><h2 id="unordered-mutilmap"><a href="#unordered-mutilmap" class="headerlink" title="unordered_mutilmap"></a>unordered_mutilmap</h2>]]></content>
+<p><code>deque</code>和<code>vector</code>都支持随机访问，但是相比于<code>vector</code>之下，<code>deque</code>对某一个元素的访问，效率相比之下会低一些，<code>deque</code>所支持的随机访问并不是通过首地址+偏移量来直接映射到内存地址空间的，而是会通过一个中央控制器的结构来计算出所要查询的元素所在的块以及在块中的偏移量。</p>
+<p><strong>常用的接口</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>成员函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>容量相关</td>
+<td><code>size()</code></td>
+<td>返回容器中元素的个数。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>empty()</code></td>
+<td>检查容器是否为空。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>max_size()</code></td>
+<td>返回容器所能容纳的最大元素数量。</td>
+</tr>
+<tr>
+<td>修改内容</td>
+<td><code>clear()</code></td>
+<td>移除所有元素，容器大小变为 0。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>insert(position, val)</code></td>
+<td>在迭代器 <code>position</code> 指定的位置插入值为 <code>val</code> 的元素。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>insert(position, n, val)</code></td>
+<td>在迭代器 <code>position</code> 指定的位置插入 <code>n</code> 个值为 <code>val</code> 的元素。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>insert(position, first, last)</code></td>
+<td>在迭代器 <code>position</code> 指定的位置插入来自范围 <code>[first, last)</code> 的元素。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>emplace(position, args...)</code></td>
+<td>在迭代器 <code>position</code> 指定的位置就地构造元素。（C++11）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>erase(position)</code> / <code>erase(first, last)</code></td>
+<td>删除位于迭代器 <code>position</code> 或 <code>[first, last)</code> 范围内的元素。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>push_back(val)</code></td>
+<td>在容器尾部添加一个新元素。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>emplace_back(args...)</code></td>
+<td>在容器尾部就地构造一个新元素。（C++11）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>pop_back()</code></td>
+<td>移除容器尾部的最后一个元素。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>push_front(val)</code></td>
+<td>在容器头部添加一个新元素。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>emplace_front(args...)</code></td>
+<td>在容器头部就地构造一个新元素。（C++11）</td>
+</tr>
+<tr>
+<td></td>
+<td><code>pop_front()</code></td>
+<td>移除容器头部的第一个元素。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>resize(n)</code></td>
+<td>改变容器中元素的数量为 <code>n</code>。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>swap(deque)</code></td>
+<td>与另一个同类型双端队列 <code>deque</code> 交换数据。</td>
+</tr>
+<tr>
+<td>元素访问</td>
+<td><code>front()</code></td>
+<td>访问第一个元素。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>back()</code></td>
+<td>访问最后一个元素。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>operator[]</code></td>
+<td>使用下标访问元素，不进行边界检查。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>at()</code></td>
+<td>使用下标访问元素，进行边界检查。</td>
+</tr>
+<tr>
+<td>迭代器</td>
+<td><code>begin()</code> / <code>cbegin()</code></td>
+<td>返回指向容器开始的迭代器。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>end()</code> / <code>cend()</code></td>
+<td>返回指向容器结束（最后元素的下一个位置）的迭代器。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>rbegin()</code> / <code>crbegin()</code></td>
+<td>返回反向迭代器的起始位置。</td>
+</tr>
+<tr>
+<td></td>
+<td><code>rend()</code> / <code>crend()</code></td>
+<td>返回反向迭代器的结束位置。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="容器适配器"><a href="#容器适配器" class="headerlink" title="容器适配器"></a>容器适配器</h1><p>前面我们讲了<code>deque</code>的相关用法，我们可以发现，这是一种双端都不受限制的容器，因为在容器的头部和尾部，我们都可以进行容器元素的插入和删除操作，而如果我们把容器的某一端的插入或者删除操作给予一定的限制，那么就可以衍生出另外两种常用的容器队列<code>queue</code>和栈<code>stack</code>，而在我们的<code>C++</code>容器中，<code>queue</code>和<code>stack</code>的底层默认便是基于<code>deque</code>来实现的。</p>
+<h2 id="queue"><a href="#queue" class="headerlink" title="queue"></a>queue</h2><p><code>queue</code>是一个先进先出<code>FIFO</code>的数据结构，底层是基于<code>deque</code>来实现的，通常我们会限制<code>deque</code>一端的入队和另一端的出队，这样我们就能够实现一个队列的数据结构，通常用于按照顺序处理元素的场景。比较经典的就是在我们的广度优先算法中使用比较广泛，还有树的层序遍历。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;queue&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">bfs</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::vector&lt;<span class="hljs-type">int</span>&gt;&gt;&amp; graph, <span class="hljs-type">int</span> start)</span> </span>&#123;<br>    std::queue&lt;<span class="hljs-type">int</span>&gt; q;<br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">bool</span>&gt; <span class="hljs-title">visited</span><span class="hljs-params">(graph.size(), <span class="hljs-literal">false</span>)</span></span>;<br><br>    q.<span class="hljs-built_in">push</span>(start);<br>    visited[start] = <span class="hljs-literal">true</span>;<br><br>    <span class="hljs-keyword">while</span> (!q.<span class="hljs-built_in">empty</span>()) &#123;<br>        <span class="hljs-type">int</span> node = q.<span class="hljs-built_in">front</span>();<br>        q.<span class="hljs-built_in">pop</span>();<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Visited node: &quot;</span> &lt;&lt; node &lt;&lt; std::endl;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> neighbor : graph[node]) &#123;<br>            <span class="hljs-keyword">if</span> (!visited[neighbor]) &#123;<br>                q.<span class="hljs-built_in">push</span>(neighbor);<br>                visited[neighbor] = <span class="hljs-literal">true</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-comment">// 这里图的描述方式是邻接表的方式</span><br>    std::vector&lt;std::vector&lt;<span class="hljs-type">int</span>&gt;&gt; graph = &#123;<br>        &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;,<br>        &#123;<span class="hljs-number">0</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;,<br>        &#123;<span class="hljs-number">0</span>, <span class="hljs-number">4</span>&#125;,<br>        &#123;<span class="hljs-number">1</span>, <span class="hljs-number">5</span>&#125;,<br>        &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">5</span>&#125;,<br>        &#123;<span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;<br>    &#125;;<br><br>    <span class="hljs-built_in">bfs</span>(graph, <span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<p><strong>常用的接口</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>接口</th>
+<th>描述</th>
+<th>示例代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>push(value)</code></td>
+<td>将元素添加到队列的末尾</td>
+<td><code>q.push(1);</code></td>
+</tr>
+<tr>
+<td><code>pop()</code></td>
+<td>移除队列的第一个元素</td>
+<td><code>q.pop();</code></td>
+</tr>
+<tr>
+<td><code>front()</code></td>
+<td>返回队列的第一个元素，但不删除</td>
+<td><code>int front = q.front();</code></td>
+</tr>
+<tr>
+<td><code>back()</code></td>
+<td>返回队列的最后一个元素，但不删除</td>
+<td><code>int back = q.back();</code></td>
+</tr>
+<tr>
+<td><code>empty()</code></td>
+<td>检查队列是否为空</td>
+<td><code>bool isEmpty = q.empty();</code></td>
+</tr>
+<tr>
+<td><code>size()</code></td>
+<td>返回队列中元素的个数</td>
+<td><code>std::size_t size = q.size();</code></td>
+</tr>
+<tr>
+<td><code>emplace(args...)</code></td>
+<td>就地构造元素并添加到队列的末尾</td>
+<td><code>q.emplace(2);</code></td>
+</tr>
+<tr>
+<td><code>swap(queue)</code></td>
+<td>交换两个队列的内容</td>
+<td><code>q1.swap(q2);</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h2><p><code>stack</code>也是一种受限制的双端队列，我们会同时限制一端的入队和出队，这样就能够实现一个栈的性质。适用的场景有：表达式求值（后缀表达式）、括号匹配、深度优先遍历等。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;vector&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stack&gt;</span></span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">dfs</span><span class="hljs-params">(<span class="hljs-type">const</span> std::vector&lt;std::vector&lt;<span class="hljs-type">int</span>&gt;&gt;&amp; graph, <span class="hljs-type">int</span> start)</span> </span>&#123;<br>    std::stack&lt;<span class="hljs-type">int</span>&gt; s;<br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">bool</span>&gt; <span class="hljs-title">visited</span><span class="hljs-params">(graph.size(), <span class="hljs-literal">false</span>)</span></span>;<br><br>    s.<span class="hljs-built_in">push</span>(start);<br>    visited[start] = <span class="hljs-literal">true</span>;<br><br>    <span class="hljs-keyword">while</span> (!s.<span class="hljs-built_in">empty</span>()) &#123;<br>        <span class="hljs-type">int</span> node = s.<span class="hljs-built_in">top</span>();<br>        s.<span class="hljs-built_in">pop</span>();<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;Visited node: &quot;</span> &lt;&lt; node &lt;&lt; std::endl;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> neighbor : graph[node]) &#123;<br>            <span class="hljs-keyword">if</span> (!visited[neighbor]) &#123;<br>                s.<span class="hljs-built_in">push</span>(neighbor);<br>                visited[neighbor] = <span class="hljs-literal">true</span>;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    std::vector&lt;std::vector&lt;<span class="hljs-type">int</span>&gt;&gt; graph = &#123;<br>        &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;,<br>        &#123;<span class="hljs-number">0</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;,<br>        &#123;<span class="hljs-number">0</span>, <span class="hljs-number">4</span>&#125;,<br>        &#123;<span class="hljs-number">1</span>, <span class="hljs-number">5</span>&#125;,<br>        &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">5</span>&#125;,<br>        &#123;<span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;<br>    &#125;;<br><br>    <span class="hljs-built_in">dfs</span>(graph, <span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>常用的接口</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>接口</th>
+<th>描述</th>
+<th>示例代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>push(value)</code></td>
+<td>将元素添加到栈顶</td>
+<td><code>s.push(1);</code></td>
+</tr>
+<tr>
+<td><code>pop()</code></td>
+<td>移除栈顶的元素</td>
+<td><code>s.pop();</code></td>
+</tr>
+<tr>
+<td><code>top()</code></td>
+<td>返回栈顶的元素，但不删除</td>
+<td><code>int top = s.top();</code></td>
+</tr>
+<tr>
+<td><code>empty()</code></td>
+<td>检查栈是否为空</td>
+<td><code>bool isEmpty = s.empty();</code></td>
+</tr>
+<tr>
+<td><code>size()</code></td>
+<td>返回栈中元素的个数</td>
+<td><code>std::size_t size = s.size();</code></td>
+</tr>
+<tr>
+<td><code>emplace(args...)</code></td>
+<td>就地构造元素并添加到栈顶</td>
+<td><code>s.emplace(2);</code></td>
+</tr>
+<tr>
+<td><code>swap(stack)</code></td>
+<td>交换两个栈的内容</td>
+<td><code>s1.swap(s2);</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="priority-queue"><a href="#priority-queue" class="headerlink" title="priority_queue"></a>priority_queue</h2><p><a href="https://www.zdon.fun/2024/03/06/c-priority-queue/">参考：C++优先队列的用法</a></p>
+<h1 id="关联容器"><a href="#关联容器" class="headerlink" title="关联容器"></a>关联容器</h1><p>关联容器和顺序容器底层的实现方式存在一定的差异，关联容器通常底层的实现采用的数的结构，我们这里用到的是红黑树，而红黑树是一种相对平衡的二叉搜索树。</p>
+<p><strong>红黑树的特点</strong></p>
+<p>自平衡：红黑树通过颜色属性（红或黑）和旋转操作来保持树的平衡，确保树的高度约为 O(log n)。</p>
+<p>节点颜色规则：</p>
+<pre><code>每个节点是红色或黑色。
+
+根节点是黑色。
+
+叶子节点（NIL节点）是黑色。
+
+红色节点的子节点必须是黑色（即红色节点不能连续）。
+
+从任一节点到其每个叶子的路径都包含相同数量的黑色节点。
+</code></pre><p>旋转操作：红黑树使用左旋和右旋操作来调整树的结构以保持平衡。</p>
+<h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><p><code>map</code>是<code>C++</code>当中的关联容器，可以将元素按照键值对的形式组织起来，在默认情况下，我们对一个<code>map</code>使用迭代器进行遍历的话，我们可以发现<code>map</code>中的<code>key</code>是按照递增的方式来输出的，这是因为对<code>map</code>的遍历过程实际上就是一个二叉搜索树的中序遍历的一个过程。</p>
+<p>通常情况下，我们的<code>key</code>是唯一的，如果我们在已经存在<code>key</code>的情况之下，再次插入同样的<code>key</code>和<code>value</code>的话，只会对原始<code>key</code>所对应的<code>value</code>进行更新操作，如果我们想要存储同一个<code>key</code>的多个<code>value</code>值，我们可以使用<code>STL</code>中的另一个容器<code>mutilmap</code>。</p>
+<p>在我们构造<code>map</code>时，默认会按照<code>key</code>的升序构造，同时，我们可以通过加入<code>greater</code>参数来让我们的<code>map</code>按照<code>key</code>的降序构造。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++">std::map&lt;<span class="hljs-type">int</span>, std::string, std::greater&lt;<span class="hljs-type">int</span>&gt;&gt; m;<br><br><span class="hljs-comment">// 自定义比较函数，小于升序，大于降序</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">CustomCompare</span> &#123;<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b)</span> <span class="hljs-type">const</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> a &gt; b;<br>    &#125;<br>&#125;;<br><br>std::map&lt;<span class="hljs-type">int</span>, std::string, CustomCompare&gt; m;<br><br></code></pre></td></tr></table></figure>
+<p>如果想要使用自定义的对象作为<code>map</code>的<code>key</code>，我们需要在对象中，对<code>&lt;</code>进行运算符重载，表示自定义的比较函数。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Point</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-type">int</span> x, y;<br><br>    <span class="hljs-built_in">Point</span>(<span class="hljs-type">int</span> x, <span class="hljs-type">int</span> y) : <span class="hljs-built_in">x</span>(x), <span class="hljs-built_in">y</span>(y) &#123;&#125;<br><br>    <span class="hljs-type">bool</span> <span class="hljs-keyword">operator</span>&lt;(<span class="hljs-type">const</span> Point&amp; other) <span class="hljs-type">const</span> &#123;<br>        <span class="hljs-keyword">if</span> (x != other.x) <span class="hljs-keyword">return</span> x &lt; other.x;<br>        <span class="hljs-keyword">return</span> y &lt; other.y;<br>    &#125;<br><br>    <span class="hljs-comment">// 用于输出 Point 对象</span><br>    <span class="hljs-keyword">friend</span> std::ostream&amp; <span class="hljs-keyword">operator</span>&lt;&lt;(std::ostream&amp; os, <span class="hljs-type">const</span> Point&amp; point) &#123;<br>        os &lt;&lt; <span class="hljs-string">&quot;(&quot;</span> &lt;&lt; point.x &lt;&lt; <span class="hljs-string">&quot;, &quot;</span> &lt;&lt; point.y &lt;&lt; <span class="hljs-string">&quot;)&quot;</span>;<br>        <span class="hljs-keyword">return</span> os;<br>    &#125;<br>&#125;;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    std::map&lt;Point, std::string&gt; pointMap;<br><br>    <span class="hljs-comment">// 插入键值对</span><br>    pointMap[<span class="hljs-built_in">Point</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)] = <span class="hljs-string">&quot;Point 1&quot;</span>;<br>    pointMap[<span class="hljs-built_in">Point</span>(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>)] = <span class="hljs-string">&quot;Point 2&quot;</span>;<br>    pointMap[<span class="hljs-built_in">Point</span>(<span class="hljs-number">1</span>, <span class="hljs-number">3</span>)] = <span class="hljs-string">&quot;Point 3&quot;</span>;<br><br>    <span class="hljs-comment">// 遍历并输出 map 中的键值对</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> <span class="hljs-keyword">auto</span>&amp; pair : pointMap) &#123;<br>        std::cout &lt;&lt; pair.first &lt;&lt; <span class="hljs-string">&quot;: &quot;</span> &lt;&lt; pair.second &lt;&lt; std::endl;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><strong>常用的接口</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>接口</th>
+<th>描述</th>
+<th>示例代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>insert(&#123;key, value&#125;)</code></td>
+<td>插入键值对</td>
+<td><code>m.insert(&#123;1, &quot;one&quot;&#125;);</code></td>
+</tr>
+<tr>
+<td><code>erase(iterator)</code></td>
+<td>移除指定位置的元素</td>
+<td><code>m.erase(m.begin());</code></td>
+</tr>
+<tr>
+<td><code>erase(key)</code></td>
+<td>移除指定键的元素</td>
+<td><code>m.erase(1);</code></td>
+</tr>
+<tr>
+<td><code>find(key)</code></td>
+<td>查找键，返回指向键值对的迭代器，不存在则返回 <code>end()</code></td>
+<td><code>auto it = m.find(1);</code></td>
+</tr>
+<tr>
+<td><code>operator[](key)</code></td>
+<td>访问或插入指定键的元素</td>
+<td><code>std::string value = m[1];</code></td>
+</tr>
+<tr>
+<td><code>begin()</code> / <code>end()</code></td>
+<td>返回指向第一个元素和最后一个元素之后位置的迭代器</td>
+<td><code>for (auto it = m.begin(); it != m.end(); ++it)</code></td>
+</tr>
+<tr>
+<td><code>size()</code></td>
+<td>返回元素个数</td>
+<td><code>size_t size = m.size();</code></td>
+</tr>
+<tr>
+<td><code>empty()</code></td>
+<td>检查容器是否为空</td>
+<td><code>bool isEmpty = m.empty();</code></td>
+</tr>
+<tr>
+<td><code>clear()</code></td>
+<td>清空所有元素</td>
+<td><code>m.clear();</code></td>
+</tr>
+<tr>
+<td><code>emplace(key, value)</code></td>
+<td>插入键值对，如果键已存在则不插入</td>
+<td><code>m.emplace(4, &quot;four&quot;);</code></td>
+</tr>
+<tr>
+<td><code>count(key)</code></td>
+<td>返回指定键的元素个数（0或1）</td>
+<td><code>size_t count = m.count(2);</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="set"><a href="#set" class="headerlink" title="set"></a>set</h2><p><code>set</code>可以理解成<code>key</code>和<code>value</code>均相等的<code>map</code>。其余的性质和<code>map</code>都类似，只是在<code>map</code>中存储的是键值对，而在<code>set</code>中存储的是<code>key</code>。</p>
+<p><strong>常用的接口</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>接口</th>
+<th>描述</th>
+<th>示例代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>insert(value)</code></td>
+<td>插入元素</td>
+<td><code>s.insert(10);</code></td>
+</tr>
+<tr>
+<td><code>erase(iterator)</code></td>
+<td>移除指定位置的元素</td>
+<td><code>s.erase(s.begin());</code></td>
+</tr>
+<tr>
+<td><code>erase(value)</code></td>
+<td>移除指定值的元素</td>
+<td><code>s.erase(10);</code></td>
+</tr>
+<tr>
+<td><code>find(value)</code></td>
+<td>查找元素，返回指向元素的迭代器，不存在则返回 <code>end()</code></td>
+<td><code>auto it = s.find(10);</code></td>
+</tr>
+<tr>
+<td><code>count(value)</code></td>
+<td>返回元素的数量（<code>set</code> 中只可能为 0 或 1）</td>
+<td><code>size_t count = s.count(10);</code></td>
+</tr>
+<tr>
+<td><code>begin()</code> / <code>end()</code></td>
+<td>返回指向第一个元素和最后一个元素之后位置的迭代器</td>
+<td><code>for (auto it = s.begin(); it != s.end(); ++it)</code></td>
+</tr>
+<tr>
+<td><code>size()</code></td>
+<td>返回元素个数</td>
+<td><code>size_t size = s.size();</code></td>
+</tr>
+<tr>
+<td><code>empty()</code></td>
+<td>检查容器是否为空</td>
+<td><code>bool isEmpty = s.empty();</code></td>
+</tr>
+<tr>
+<td><code>clear()</code></td>
+<td>清空所有元素  </td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="unordered-map"><a href="#unordered-map" class="headerlink" title="unordered_map"></a>unordered_map</h2><p>从命名我们就可以看出，<code>unordered_map</code>是无序的，无序所指的是它的<code>key</code>，当我们需要遍历<code>unordered_map</code>的时候，输出的键值对的顺序是随机的。</p>
+<p>在<code>unordered_map</code>的底层是用哈希表来完成的，所以我们在插入，以及查询哈希表中的元素可以在<code>O(1)</code>的时间复杂度以内完成，前提是在哈希冲突较少的情况下。</p>
+<p><strong>常用的接口</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>接口</th>
+<th>描述</th>
+<th>示例代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>insert(&#123;key, value&#125;)</code></td>
+<td>插入键值对</td>
+<td><code>um.insert(&#123;1, &quot;one&quot;&#125;);</code></td>
+</tr>
+<tr>
+<td><code>erase(iterator)</code></td>
+<td>移除指定位置的元素</td>
+<td><code>um.erase(um.begin());</code></td>
+</tr>
+<tr>
+<td><code>erase(key)</code></td>
+<td>移除指定键的元素</td>
+<td><code>um.erase(1);</code></td>
+</tr>
+<tr>
+<td><code>find(key)</code></td>
+<td>查找键，返回指向键值对的迭代器，不存在则返回 <code>end()</code></td>
+<td><code>auto it = um.find(1);</code></td>
+</tr>
+<tr>
+<td><code>operator[](key)</code></td>
+<td>访问或插入指定键的元素</td>
+<td><code>std::string value = um[1];</code></td>
+</tr>
+<tr>
+<td><code>begin()</code> / <code>end()</code></td>
+<td>返回指向第一个元素和最后一个元素之后位置的迭代器</td>
+<td><code>for (auto it = um.begin(); it != um.end(); ++it)</code></td>
+</tr>
+<tr>
+<td><code>size()</code></td>
+<td>返回元素个数</td>
+<td><code>size_t size = um.size();</code></td>
+</tr>
+<tr>
+<td><code>empty()</code></td>
+<td>检查容器是否为空</td>
+<td><code>bool isEmpty = um.empty();</code></td>
+</tr>
+<tr>
+<td><code>clear()</code></td>
+<td>清空所有元素</td>
+<td><code>um.clear();</code></td>
+</tr>
+<tr>
+<td><code>emplace(key, value)</code></td>
+<td>插入键值对，如果键已存在则不插入</td>
+<td><code>um.emplace(4, &quot;four&quot;);</code></td>
+</tr>
+<tr>
+<td><code>count(key)</code></td>
+<td>返回指定键的元素个数（0或1）</td>
+<td><code>size_t count = um.count(2);</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="unordered-set"><a href="#unordered-set" class="headerlink" title="unordered_set"></a>unordered_set</h2><p><code>unordered_set</code>是<code>C++</code>中的无序容器，它存储唯一的元素，并且以无序的方式进行组织。底层实现是基于哈希表，因此插入和查找元素的时间复杂度是常数级别的。</p>
+<p><strong>常用的接口</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>接口</th>
+<th>描述</th>
+<th>示例代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>insert(value)</code></td>
+<td>插入元素</td>
+<td><code>us.insert(10);</code></td>
+</tr>
+<tr>
+<td><code>erase(iterator)</code></td>
+<td>移除指定位置的元素</td>
+<td><code>us.erase(us.begin());</code></td>
+</tr>
+<tr>
+<td><code>erase(value)</code></td>
+<td>移除指定值的元素</td>
+<td><code>us.erase(10);</code></td>
+</tr>
+<tr>
+<td><code>find(value)</code></td>
+<td>查找元素，返回指向元素的迭代器，不存在则返回 <code>end()</code></td>
+<td><code>auto it = us.find(10);</code></td>
+</tr>
+<tr>
+<td><code>count(value)</code></td>
+<td>返回元素的数量（<code>unordered_set</code> 中只可能为 0 或 1）</td>
+<td><code>size_t count = us.count(10);</code></td>
+</tr>
+<tr>
+<td><code>begin()</code> / <code>end()</code></td>
+<td>返回指向第一个元素和最后一个元素之后位置的迭代器</td>
+<td><code>for (auto it = us.begin(); it != us.end(); ++it)</code></td>
+</tr>
+<tr>
+<td><code>size()</code></td>
+<td>返回元素个数</td>
+<td><code>size_t size = us.size();</code></td>
+</tr>
+<tr>
+<td><code>empty()</code></td>
+<td>检查容器是否为空</td>
+<td><code>bool isEmpty = us.empty();</code></td>
+</tr>
+<tr>
+<td><code>clear()</code></td>
+<td>清空所有元素</td>
+<td><code>us.clear();</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="unordered-set-1"><a href="#unordered-set-1" class="headerlink" title="unordered_set"></a>unordered_set</h2><p><code>unordered_set</code>是<code>C++</code>中的无序容器，它存储唯一的元素，并且以无序的方式进行组织。底层实现是基于哈希表，因此插入和查找元素的时间复杂度是常数级别的。</p>
+<p><strong>常用的接口</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>接口</th>
+<th>描述</th>
+<th>示例代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>insert(value)</code></td>
+<td>插入元素</td>
+<td><code>us.insert(10);</code></td>
+</tr>
+<tr>
+<td><code>erase(iterator)</code></td>
+<td>移除指定位置的元素</td>
+<td><code>us.erase(us.begin());</code></td>
+</tr>
+<tr>
+<td><code>erase(value)</code></td>
+<td>移除指定值的元素</td>
+<td><code>us.erase(10);</code></td>
+</tr>
+<tr>
+<td><code>find(value)</code></td>
+<td>查找元素，返回指向元素的迭代器，不存在则返回 <code>end()</code></td>
+<td><code>auto it = us.find(10);</code></td>
+</tr>
+<tr>
+<td><code>count(value)</code></td>
+<td>返回元素的数量（<code>unordered_set</code> 中只可能为 0 或 1）</td>
+<td><code>size_t count = us.count(10);</code></td>
+</tr>
+<tr>
+<td><code>begin()</code> / <code>end()</code></td>
+<td>返回指向第一个元素和最后一个元素之后位置的迭代器</td>
+<td><code>for (auto it = us.begin(); it != us.end(); ++it)</code></td>
+</tr>
+<tr>
+<td><code>size()</code></td>
+<td>返回元素个数</td>
+<td><code>size_t size = us.size();</code></td>
+</tr>
+<tr>
+<td><code>empty()</code></td>
+<td>检查容器是否为空</td>
+<td><code>bool isEmpty = us.empty();</code></td>
+</tr>
+<tr>
+<td><code>clear()</code></td>
+<td>清空所有元素</td>
+<td><code>us.clear();</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
       <categories>
         <category>技术研究</category>
       </categories>
@@ -3463,7 +4136,7 @@
 <p>同一时间只放置一个单元</p>
 </blockquote>
 <p><strong>算法伪代码</strong></p>
-<p><style>.cbsztoqmfivt{}</style><img src="/2023/09/10/iEDA-test/image-20230823094215828.png" class="cbsztoqmfivt" alt="image-20230823094215828"></p>
+<p><style>.xufjigkwffyy{}</style><img src="/2023/09/10/iEDA-test/image-20230823094215828.png" class="xufjigkwffyy" alt="image-20230823094215828"></p>
 <p><strong>核心代码</strong></p>
 <img src="/2023/09/10/iEDA-test/image-20230825151306959.png" class="" title="image-20230825151306959">
 <figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><span class="hljs-number">1</span>、根据单元的x坐标进行排序<br><span class="hljs-number">2</span>、对于每一个排序好的单元，按照顺序取出每一个单元<br><span class="hljs-number">3</span>、遍历第一行，找出当前行中放置该单元后能够使得<span class="hljs-keyword">cost</span>最小的位置<br><span class="hljs-number">4</span>、按照第<span class="hljs-number">3</span>步的方式遍历每一行，找出全局中能够放置当前单元并使得<span class="hljs-keyword">cost</span>最小的位置<br><span class="hljs-number">5</span>、放置该单元<br></code></pre></td></tr></table></figure>
@@ -3481,7 +4154,7 @@
 <figure class="highlight markdown"><table><tr><td class="code"><pre><code class="hljs markdown">函数的主要步骤如下：<br><span class="hljs-bullet">1.</span> 获取实例的形状（inst<span class="hljs-emphasis">_shape）。</span><br><span class="hljs-emphasis">2. 从_</span>layout对象中获取指定行的间隔列表（interval<span class="hljs-emphasis">_list）。</span><br><span class="hljs-emphasis">3. 通过搜索找到最近的间隔，即与实例重叠的间隔（interval_</span>idx）。<br><span class="hljs-bullet">   -</span> 如果找不到重叠的间隔，则返回INT32<span class="hljs-emphasis">_MAX表示失败。</span><br><span class="hljs-emphasis">4. 检查选定的间隔是否能够容纳实例的宽度，如果不行，则查找最近的非满间隔，并重新选择。</span><br><span class="hljs-emphasis">   - 如果找不到合适的间隔，则返回INT32_</span>MAX表示失败。<br><span class="hljs-bullet">5.</span> 将实例安排到选定的间隔中，形成一个簇（target<span class="hljs-emphasis">_cluster）。</span><br><span class="hljs-emphasis">6. 计算移动代价（movement_</span>cost）：<br><span class="hljs-bullet">   -</span> 从簇中的每个实例计算到目标位置的x方向移动代价，并累加到movement<span class="hljs-emphasis">_cost中。</span><br><span class="hljs-emphasis">   - 计算实例在y方向上的移动代价。</span><br><span class="hljs-emphasis">   - 将实例在x和y方向上的移动代价相加，得到实例的位移代价（inst_</span>displacement）。<br><span class="hljs-bullet">   -</span> 将实例位移代价加到movement<span class="hljs-emphasis">_cost中。</span><br><span class="hljs-emphasis">7. 根据最大移动约束处罚超过最大移动约束的位移代价。</span><br><span class="hljs-emphasis">8. 如果is_</span>trial为false，即非试验性放置，则替换簇的信息（replaceClusterInfo）和更新间隔的剩余长度（updateRemainLength）。<br><span class="hljs-bullet">9.</span> 返回移动代价（movement<span class="hljs-emphasis">_cost）。</span><br></code></pre></td></tr></table></figure>
 <h3 id="三、Tetris算法"><a href="#三、Tetris算法" class="headerlink" title="三、Tetris算法"></a>三、Tetris算法</h3><p><code>Abacus</code>是在<code>Tetris</code>算法上的改进，在<code>Tetris</code>中，对于<code>placeRow</code>的选择是一个单次即可完成的过程，即在当前行中找到了能够合适的位置以后即将该<code>instance</code>放置到该行。因此整体算法流程相似，但复杂度会降低很多。</p>
 <figure class="highlight llvm"><table><tr><td class="code"><pre><code class="hljs llvm"><span class="hljs-number">1</span>、根据单元的<span class="hljs-keyword">x</span>坐标进行排序<br><span class="hljs-number">2</span>、对于每一个排序好的单元，按照顺序取出每一个单元<br><span class="hljs-number">3</span>、遍历第一行，找出当前行中放置该单元后能够使得cost最小的位置<br><span class="hljs-number">4</span>、放置该单元<br><br>若改行无法放置该单元，进行换行策略选择，重新执行，直到所有行都无法放置，返回<span class="hljs-keyword">false</span><br></code></pre></td></tr></table></figure>
-<p><style>.jwjefassbszy{zoom: 67%;}</style><img src="/2023/09/10/iEDA-test/image-20230825163454933.png" class="jwjefassbszy" alt="image-20230825163454933"></p>
+<p><style>.xngduuplfpuq{zoom: 67%;}</style><img src="/2023/09/10/iEDA-test/image-20230825163454933.png" class="xngduuplfpuq" alt="image-20230825163454933"></p>
 <p>因此对<code>iEDA</code>原始代码<code>Abacus</code>算法调整成<code>Tetris</code>只需要确定两个策略即可：1、如何选择当前<code>instance</code>初始行的策略。2、若初始行无法放置当前<code>instance</code>后，选择其它行的调整策略。</p>
 <ul>
 <li><p>选择初始行策略</p>
@@ -3758,8 +4431,8 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>EDA</tag>
         <tag>物理设计</tag>
+        <tag>EDA</tag>
         <tag>布局</tag>
         <tag>布线</tag>
       </tags>
@@ -4150,9 +4823,9 @@
         <category>学习笔记</category>
       </categories>
       <tags>
+        <tag>物理设计</tag>
         <tag>EDA</tag>
         <tag>电子设计自动化</tag>
-        <tag>物理设计</tag>
         <tag>VLSI</tag>
       </tags>
   </entry>
@@ -4337,8 +5010,8 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>EDA</tag>
         <tag>集成电路</tag>
+        <tag>EDA</tag>
         <tag>静态时序分析</tag>
       </tags>
   </entry>
@@ -5066,9 +5739,9 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>EDA</tag>
-        <tag>物理设计</tag>
         <tag>集成电路</tag>
+        <tag>物理设计</tag>
+        <tag>EDA</tag>
         <tag>Pyhsical Design</tag>
       </tags>
   </entry>
