@@ -106,3 +106,14 @@ func mustCopy(dst io.Writer, src io.Reader) {
     }
 }
 ```
+
+# Channels-通道
+
+我们说`goroutine`是`Go`语言程序的并发体，而这些比线程还要更轻量级的并发体之间的通信方式是通过`channel`来完成的，一个`channel`是一个通信机制，它可以让一个`goroutine`通过它给另一个`goroutine`发送值信息。每个`channel`都有一个特殊的类型，这个类型是`channel`可以发送的数据类型。
+
+例如：我们可以创建一个可发送`int`数据类型的`channel`
+
+```go
+ch := make(chan int)
+```
+
