@@ -232,6 +232,76 @@
       </tags>
   </entry>
   <entry>
+    <title>论文-MapReduce</title>
+    <url>/2024/07/24/paper-mapreduce/</url>
+    <content><![CDATA[<h1 id="论文-MapReduce"><a href="#论文-MapReduce" class="headerlink" title="论文-MapReduce"></a>论文-MapReduce</h1><blockquote>
+<p><a href="https://pdos.csail.mit.edu/6.824/papers/mapreduce.pdf">论文链接</a></p>
+</blockquote>
+<p><code>MapReduce</code>是一种编程模型，用于处理和生成大规模数据集，用户指定一个<code>map</code>函数，该函数处理一组输入数据（键值对）以生成一组中间键/值对，并指定一个<code>reduce</code>函数来合并所有与同一个键相关的中间值。</p>
+<p>以这种函数式风格编写的程序会自动并行化，并在大规模集群的商品机器上执行。运行时系统负责分割输入数据、在一组机器上调度程序的执行、处理机器故障以及管理必要的机器间通信。这使得没有并行和分布式系统经验的程序员也能轻松利用大型分布式系统的资源。</p>
+<p>我们可以理解为<code>MapReduce</code>隐藏了在一组机器运行过程中进行通信的细节，当然还有并行化、容错、数据分发和负载平衡的复杂细节，使得程序员可以和开发普通程序一样开发分布式的应用。</p>
+<h1 id="例子-词频统计"><a href="#例子-词频统计" class="headerlink" title="例子-词频统计"></a>例子-词频统计</h1><figure class="highlight c++"><table><tr><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;mapreduce/mapreduce.h&quot;</span></span><br><br><span class="hljs-comment">// 用户定义的map函数</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">WordCounter</span> : <span class="hljs-keyword">public</span> Mapper &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">Map</span><span class="hljs-params">(<span class="hljs-type">const</span> MapInput&amp; input)</span> </span>&#123;<br>        <span class="hljs-type">const</span> string&amp; text = input.<span class="hljs-built_in">value</span>();<br>        <span class="hljs-type">const</span> <span class="hljs-type">int</span> n = text.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; ) &#123;<br>            <span class="hljs-comment">// 跳过前导空白字符</span><br>            <span class="hljs-keyword">while</span> ((i &lt; n) &amp;&amp; <span class="hljs-built_in">isspace</span>(text[i]))<br>                i++;<br><br>            <span class="hljs-comment">// 找到单词的结尾</span><br>            <span class="hljs-type">int</span> start = i;<br>            <span class="hljs-keyword">while</span> ((i &lt; n) &amp;&amp; !<span class="hljs-built_in">isspace</span>(text[i]))<br>                i++;<br><br>            <span class="hljs-keyword">if</span> (start &lt; i)<br>                <span class="hljs-built_in">Emit</span>(text.<span class="hljs-built_in">substr</span>(start, i - start), <span class="hljs-string">&quot;1&quot;</span>);<br>        &#125;<br>    &#125;<br>&#125;;<br><span class="hljs-built_in">REGISTER_MAPPER</span>(WordCounter);<br><br><span class="hljs-comment">// 用户定义的reduce函数</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Adder</span> : <span class="hljs-keyword">public</span> Reducer &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">Reduce</span><span class="hljs-params">(ReduceInput* input)</span> </span>&#123;<br>        <span class="hljs-comment">// 遍历具有相同键的所有条目并累加值</span><br>        int64 value = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span> (!input-&gt;<span class="hljs-built_in">done</span>()) &#123;<br>            value += <span class="hljs-built_in">StringToInt</span>(input-&gt;<span class="hljs-built_in">value</span>());<br>            input-&gt;<span class="hljs-built_in">NextValue</span>();<br>        &#125;<br><br>        <span class="hljs-comment">// 为 input-&gt;key() 发出累加结果</span><br>        <span class="hljs-built_in">Emit</span>(<span class="hljs-built_in">IntToString</span>(value));<br>    &#125;<br>&#125;;<br><span class="hljs-built_in">REGISTER_REDUCER</span>(Adder);<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>** argv)</span> </span>&#123;<br>    <span class="hljs-built_in">ParseCommandLineFlags</span>(argc, argv);<br><br>    MapReduceSpecification spec;<br><br>    <span class="hljs-comment">// 将输入文件列表存储到 &quot;spec&quot; 中</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; argc; i++) &#123;<br>        MapReduceInput* input = spec.<span class="hljs-built_in">add_input</span>();<br>        input-&gt;<span class="hljs-built_in">set_format</span>(<span class="hljs-string">&quot;text&quot;</span>);<br>        input-&gt;<span class="hljs-built_in">set_filepattern</span>(argv[i]);<br>        input-&gt;<span class="hljs-built_in">set_mapper_class</span>(<span class="hljs-string">&quot;WordCounter&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-comment">// 指定输出文件</span><br>    MapReduceOutput* out = spec.<span class="hljs-built_in">output</span>();<br>    out-&gt;<span class="hljs-built_in">set_filebase</span>(<span class="hljs-string">&quot;/gfs/test/freq&quot;</span>);<br>    out-&gt;<span class="hljs-built_in">set_num_tasks</span>(<span class="hljs-number">100</span>);<br>    out-&gt;<span class="hljs-built_in">set_format</span>(<span class="hljs-string">&quot;text&quot;</span>);<br>    out-&gt;<span class="hljs-built_in">set_reducer_class</span>(<span class="hljs-string">&quot;Adder&quot;</span>);<br><br>    <span class="hljs-comment">// 可选：在map任务中进行部分累加以节省网络带宽</span><br>    out-&gt;<span class="hljs-built_in">set_combiner_class</span>(<span class="hljs-string">&quot;Adder&quot;</span>);<br><br>    <span class="hljs-comment">// 调整参数：最多使用2000台机器，每个任务使用100 MB内存</span><br>    spec.<span class="hljs-built_in">set_machines</span>(<span class="hljs-number">2000</span>);<br>    spec.<span class="hljs-built_in">set_map_megabytes</span>(<span class="hljs-number">100</span>);<br>    spec.<span class="hljs-built_in">set_reduce_megabytes</span>(<span class="hljs-number">100</span>);<br><br>    <span class="hljs-comment">// 现在运行它</span><br>    MapReduceResult result;<br>    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">MapReduce</span>(spec, &amp;result)) <span class="hljs-built_in">abort</span>();<br><br>    <span class="hljs-comment">// 完成：&#x27;result&#x27; 结构包含关于计数器、耗时、使用的机器数量等信息</span><br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>map</code>函数发出每个单词及其相关的出现次数（示例中为“1”）。<code>reduce</code>函数将所有为特定单词发出的计数相加。</p>
+<p>我们还可以编写代码以填写<code>mapreduce</code>规范对象，指定输入和输出文件的名称以及可选的调整参数。然后调用<code>MapReduce</code>函数，传递该规范对象。用户的代码与<code>MapReduce</code>库（用C++实现）链接在一起。附录A包含此示例的完整程序文本。</p>
+<p>事实上<code>MapReduce</code>在很多能够拆分成小任务的一些需求中都能够得到很好的应用，<code>URL</code>访问频率统计、倒排索引等。</p>
+<ul>
+<li><p>分布式<code>Grep</code>：<code>map</code>函数在匹配提供的模式时发出一行。<code>reduce</code>函数是一个标识函数，它只是将提供的中间数据复制到输出中。</p>
+</li>
+<li><p><code>URL</code>访问频率统计：<code>map</code>函数处理网页请求日志并输出〈<code>URL</code>，1〉。<code>reduce</code>函数将同一<code>URL</code>的所有值相加并发出〈<code>URL</code>，总计数〉对。</p>
+</li>
+<li><p>倒排索引：<code>map</code>函数解析每个文档，并发出〈词，文档ID〉对序列。<code>reduce</code>函数接受给定词的所有对，排序相应的文档ID并发出〈词，文档ID列表〉对。所有输出对的集合形成一个简单的倒排索引。很容易扩展此计算以跟踪词的位置。</p>
+</li>
+</ul>
+<h1 id="MapReduce的整体执行流程"><a href="#MapReduce的整体执行流程" class="headerlink" title="MapReduce的整体执行流程"></a>MapReduce的整体执行流程</h1><p>当用户程序调用<code>MapReduce</code>函数时，会发生以下的一系列操作（图中的编号对应这列表的序号）</p>
+<p>1、用户程序中的<code>MapReduce</code>库首先将输入文件分割成<code>M</code>个部分，每个部分通常为<code>16MB</code>到<code>64MB</code>（用户可以通过一个可选参数来控制）。然后它在集群中的许多机器上启动该程序的多个副本。</p>
+<p>2、程序的一个副本是特殊的——<strong>主控Master</strong>。其余的是<strong>工作节点Worker</strong>，由主控分配任务。主控有<code>M</code>个<code>map</code>任务和<code>R</code>个<code>reduce</code>任务要分配。主控选择空闲的工作节点并分配给它们<code>map</code>任务或<code>reduce</code>任务。</p>
+<p>3、被分配<code>map</code>任务的工作节点读取相应输入分割的内容。从输入数据解析出键/值对，并将每个对传递给用户定义的<code>Map</code>函数。<code>Map</code>函数生成的中间键/值对缓存在内存中。</p>
+<p>4、定期地，这些缓冲对被写入本地磁盘，并由分区函数分成<code>R</code>个区域。这些缓冲对在本地磁盘上的位置传递回主控，主控负责将这些位置转发给<code>reduce</code>工作节点。</p>
+<p>5、当主控通知<code>reduce</code>工作节点这些位置时，它使用远程过程调用从<code>map</code>工作节点的本地磁盘读取缓冲数据。当<code>reduce</code>工作节点读取了所有中间数据后，它按中间键排序，以便将相同键的所有出现都分组在一起。由于通常许多不同的键映射到同一个<code>reduce</code>任务，排序是必要的。如果中间数据量太大而无法放入内存，则使用外部排序。</p>
+<p>6、<code>reduce</code>工作节点迭代排序后的中间数据，并且对于遇到的每个唯一中间键，它将该键及其对应的中间值集合传递给用户的<code>Reduce</code>函数。<code>Reduce</code>函数的输出被附加到该<code>reduce</code>分区的最终输出文件中。</p>
+<p>7、当所有<code>map</code>任务和<code>reduce</code>任务完成时，主控唤醒用户程序。此时，用户程序中的<code>MapReduce</code>调用返回。</p>
+<p>完成后，<code>mapreduce</code>执行的输出在<code>R</code>个输出文件中可用（每个<code>reduce</code>任务一个输出文件，文件名由用户指定）。通常，用户不需要将这些<code>R</code>个输出文件合并成一个文件——他们通常将这些文件作为另一个<code>MapReduce</code>调用的输入，或使用能够处理分区输入的其他分布式应用程序。</p>
+<img src="/2024/07/24/paper-mapreduce/mapreduce-01.png" class="" title="mapreduce-01">
+<p><code>Master</code>会保存多个数据结构，对于每一个<code>map</code>任务和<code>reduce</code>任务，它的存储状态（空闲、进行中或完成）和工作节点的身份等。同时也是中间文件区域的位置从<code>map</code>任务传播到<code>reduce</code>任务的中介，对于每一个完成的<code>map</code>任务，<code>Master</code>存储这它生成的<code>R</code>个中间文件区域的位置和大小，完成以后会将信息传递给<code>reduce</code>。</p>
+<h1 id="容错"><a href="#容错" class="headerlink" title="容错"></a>容错</h1><blockquote>
+<p>主要讨论当节点出现故障以后，会进行怎样的后续处理，保证容错</p>
+</blockquote>
+<h2 id="工作节点故障"><a href="#工作节点故障" class="headerlink" title="工作节点故障"></a>工作节点故障</h2><p><code>Master</code>会定期<code>ping</code>每个工作节点。如果在一定时间内没有收到工作节点的响应，主节点会将该工作节点标记为故障，该工作节点完成的任何<code>map</code>任务都被重置为初始空闲状态，因此可以在其他工作节点上进行调度。同样进行中的<code>map</code>任务或者<code>reduce</code>任务也会被置为空闲。</p>
+<p>完成的<code>map</code>任务在故障发生时重新执行，因为它们的输出存储在故障机器的本地磁盘上，因此无法访问。例如：当<code>map</code>任务首先由工作节点<code>A</code>执行，然后由于<code>A</code>失败而由工作节点<code>B</code>重新执行时，所有执行<code>reduce</code>任务的工作节点都会被通知重新执行。任何尚未从工作节点<code>A</code>读取数据的<code>reduce</code>任务将从工作节点<code>B</code>读取数据。</p>
+<p>完成的<code>reduce</code>任务不需要重新执行，因为它们的输出存储在全局文件系统中。</p>
+<h2 id="主节点故障"><a href="#主节点故障" class="headerlink" title="主节点故障"></a>主节点故障</h2><p>主节点会定期的写入当前主控数据结构的检查点，如果主节点任务失败，可以从最后一个检查点状态来启动新的副本。简单的来说，主节点会使用数据结构来维护当前工作节点的状态和任务状态，通过定期的将这些状态写入到文件中，就可以从最近一次写入的文件中恢复主节点。</p>
+<p>在论文中还讲了语义的一致性，个人理解大致的意思就是，类似于多线程的操作，没有办法保证执行过程中的顺序，但是可以保持最终一致性，就是说我们在单台机器完成同样的任务和使用<code>MapReduce</code>在多台机器中完成任务在最终的表现上是一致的。</p>
+<h1 id="改进措施"><a href="#改进措施" class="headerlink" title="改进措施"></a>改进措施</h1><p>论文中提出了一些能够使得<code>MapReduce</code>更加灵活和高效的改进措施。</p>
+<ul>
+<li><p>分区函数</p>
+<p>  由用户指定他们希望的<code>reduce任务/输出文件的数量</code>。通过中间键的分区函数将数据分区到这些任务中。提供默认的分区使用函数，使得分区保持平衡。分区的目的是让用户机器自己决定自己能够承载的任务数，而按键分区则是能够尽可能的确保同一个<code>key</code>保存在同一个输出文件中</p>
+</li>
+<li><p>有序处理</p>
+<p>  保证在给定分区内，中间键/值对按键递增顺序处理。这种排序保证使每个分区生成排序的输出文件变得容易，当输出文件格式需要支持按键的高效随机访问查找时，或者用户发现按键排序的数据更方便时，这很有用</p>
+</li>
+<li><p>合并函数</p>
+<p>  在每台机器执行完<code>map</code>任务以后，每一个<code>map</code>函数都会生成对应的输出文件，将这些发送给<code>reduce</code>之前，可以将执行的<code>map</code>任务完成后的输出进行合并，能够很好的提高效益</p>
+</li>
+</ul>
+<blockquote>
+<p>更多内容还是参考论文吧</p>
+</blockquote>
+<p>在后续的章节中，论文中还给出了对于<code>Google</code>在实际应用当中对于某些任务处理的性能分析，例如：</p>
+<img src="/2024/07/24/paper-mapreduce/mapreduce-02.png" class="" title="mapreduce-02">
+<p>图中展示的是分布式<code>grep</code>程序运行过程，<code>grep</code>程序扫描<code>1010</code>个<code>100</code>字节的记录，搜索一个相对稀有的三个字符的模式（该模式出现在92,337个记录中）。输入被分割成大约<code>64MB</code>的部分（<code>M</code> = 15000），所有输出放在一个文件中（<code>R</code> = 1）。</p>
+<p>计算随时间的进展。<code>Y</code>轴显示扫描输入数据的速率。随着分配给该<code>MapReduce</code>计算的机器数量的增加，速率逐渐上升，当1764个工作节点被分配时达到<code>30GB/s</code>以上。当<code>map</code>任务完成时，速率开始下降并在计算开始后大约80秒时降为零。整个计算从开始到结束大约需要150秒。这包括大约一分钟的启动开销。开销是由于将程序传播到所有工作节点，以及与<code>GFS</code>交互以打开1000个输入文件集并获取本地性优化所需的信息而产生的。</p>
+<p>文章是2004年发出的，考虑到当时的网络，<code>MapReduce</code>评估瓶颈主要在于当时的网络带宽的限制，所以感觉只会在必要的情况下进行不同机器之间的通信，而更多计算和依赖都会在本地完成，这样就能够降低网络带宽带来的影响，文章也提到了，网络带宽是一种稀缺资源。因此，我们系统中的许多优化目标是减少跨网络发送的数据量：本地性优化允许我们从本地磁盘读取数据，写入单个副本的中间数据到本地磁盘节省了网络带宽。挺牛的！</p>
+]]></content>
+      <categories>
+        <category>技术研究</category>
+      </categories>
+      <tags>
+        <tag>MapReduce</tag>
+        <tag>分布式</tag>
+        <tag>集群</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C++中常见容器的使用方法</title>
     <url>/2024/07/12/c-stl-use/</url>
     <content><![CDATA[<h1 id="序列容器"><a href="#序列容器" class="headerlink" title="序列容器"></a>序列容器</h1><blockquote>
@@ -3948,11 +4018,17 @@
       </tags>
   </entry>
   <entry>
-    <title>Git常见用法</title>
+    <title>Git小case</title>
     <url>/2024/01/04/git/</url>
-    <content><![CDATA[<h4 id="怎样撤销一个已经push到远端的版本"><a href="#怎样撤销一个已经push到远端的版本" class="headerlink" title="怎样撤销一个已经push到远端的版本"></a>怎样撤销一个已经push到远端的版本</h4><figure class="highlight arcade"><table><tr><td class="code"><pre><code class="hljs arcade">每次<span class="hljs-built_in">push</span>之前线pull一下<br><br><span class="hljs-number">1</span>、查看当前提交的信息，找到需要撤回到的版本号复制，一串十六进制的数<br>git <span class="hljs-built_in">log</span><br><br><span class="hljs-number">2</span>、使用git reset<br>git reset --soft 复制的版本号<br><br><span class="hljs-number">3</span>、强制回退当前版本号<br><span class="hljs-comment">// 确认一下当前版本</span><br>git <span class="hljs-built_in">log</span><br><span class="hljs-comment">// 谨慎使用，强制使用本地仓库代码修改远程仓库</span><br>git <span class="hljs-built_in">push</span> orgin master --force<br></code></pre></td></tr></table></figure>
-<h4 id="新建分支并同步到远端的分支"><a href="#新建分支并同步到远端的分支" class="headerlink" title="新建分支并同步到远端的分支"></a>新建分支并同步到远端的分支</h4><figure class="highlight mipsasm"><table><tr><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># 在本地新建一个名字为branch_name的分支，并与远端的origin/branch_name同步</span><br>git checkout -<span class="hljs-keyword">b </span><span class="hljs-keyword">branch_name </span><span class="hljs-keyword">origin/branch_name</span><br></code></pre></td></tr></table></figure>
-<h4 id="解决git-clone超时的问题"><a href="#解决git-clone超时的问题" class="headerlink" title="解决git clone超时的问题"></a>解决git clone超时的问题</h4><p>从github上clone代码仓库报错<code>Failed to connect to github.com port 443 after 21038 ms: Couldn&#39;t connect to server</code>且尝试去ping一下github官网会丢包</p>
+    <content><![CDATA[<p><strong>实习中使用git经验</strong></p>
+<p>类似的应用类的工具，最好是在实践应用当中积攒相关经验，有了两端实习经历，发现在不同的实习单位，对于<code>git</code>的使用规范都有一定的要求，并且不同单位可能要求也有所不一样。</p>
+<p>第一家单位在对代码仓库进行管理的时候，因为团队的人数不多，在远程的分支不会很多，本地的分支不会轻易的往远程进行推送，更多的是，如果有新的<code>feature</code>，会由系统管理员开启一个分支，而参与到这个<code>feature</code>开发的人员使用同一个分支来完成，通常参与到同一个<code>feature</code>开发的人员不会很多，也就是2-5人，所以会共同在这一个分支上开发。开发流程就是，先拉取，后推送，如果有冲突，直接在本地自行<code>merge</code>解决，涉及到其他开发人员的共同<code>review</code>关联代码，当完成一个<code>feature</code>以后，将分支合入主线。</p>
+<p>而另一家单位，由于团队人员比较多，代码模块也比较大，所以开发人员在开发的过程中，每天都会先从<code>feature</code>的分支中切出一个自己的分支，会在自己的分支上进行开发，开发完以后，再将自己分支合入到<code>feature</code>，而合入的过程也并不是简单粗暴的使用<code>git merge</code>，而是使用<code>git cherry-pick -i</code>将自己分支的<code>commit</code>一个一个交互式的<code>pick</code>到<code>feature</code>分支上。如果<code>commit</code>比较多的话，会使用<code>git rebase</code>先压缩<code>commit</code>以后再进行<code>pick</code>。</p>
+<p>相比之下，个人认为第二种方式会更加规范一些，适合开发团队较大的企业。属于某个人的分支也能够很精准的定位到个人，通过<code>git graph</code>插件工具查看所有分支以后，可以很震惊的发现，使用这样的方式，在远端的所有分支，不会有交叉，每一条分支，无论是个人的分支还是统一的分支都是平行的往前推进的。但是不好的地方就是，当分支使用完毕以后，往往会忘记删除，导致远程分支太多，需要专门去管理对应的分支。</p>
+<p>分割线<br>——————————————————————————————————————</p>
+<h2 id="怎样撤销一个已经push到远端的版本"><a href="#怎样撤销一个已经push到远端的版本" class="headerlink" title="怎样撤销一个已经push到远端的版本"></a>怎样撤销一个已经push到远端的版本</h2><figure class="highlight arcade"><table><tr><td class="code"><pre><code class="hljs arcade">每次<span class="hljs-built_in">push</span>之前线pull一下<br><br><span class="hljs-number">1</span>、查看当前提交的信息，找到需要撤回到的版本号复制，一串十六进制的数<br>git <span class="hljs-built_in">log</span><br><br><span class="hljs-number">2</span>、使用git reset<br>git reset --soft 复制的版本号<br><br><span class="hljs-number">3</span>、强制回退当前版本号<br><span class="hljs-comment">// 确认一下当前版本</span><br>git <span class="hljs-built_in">log</span><br><span class="hljs-comment">// 谨慎使用，强制使用本地仓库代码修改远程仓库</span><br>git <span class="hljs-built_in">push</span> orgin master --force<br></code></pre></td></tr></table></figure>
+<h2 id="新建分支并同步到远端的分支"><a href="#新建分支并同步到远端的分支" class="headerlink" title="新建分支并同步到远端的分支"></a>新建分支并同步到远端的分支</h2><figure class="highlight mipsasm"><table><tr><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-comment"># 在本地新建一个名字为branch_name的分支，并与远端的origin/branch_name同步</span><br>git checkout -<span class="hljs-keyword">b </span><span class="hljs-keyword">branch_name </span><span class="hljs-keyword">origin/branch_name</span><br></code></pre></td></tr></table></figure>
+<h2 id="解决git-clone超时的问题"><a href="#解决git-clone超时的问题" class="headerlink" title="解决git clone超时的问题"></a>解决git clone超时的问题</h2><p>从github上clone代码仓库报错<code>Failed to connect to github.com port 443 after 21038 ms: Couldn&#39;t connect to server</code>且尝试去ping一下github官网会丢包</p>
 <img src="/2024/01/04/git/image-20231204110955462.png" class="" title="image-20231204110955462">
 <p>解决方案</p>
 <p>修改系统的hosts，跳过域名解析的过程，直接用ip地址访问</p>
@@ -3960,7 +4036,7 @@
 <img src="/2024/01/04/git/image-20231204111125551.png" class="" title="image-20231204111125551">
 <p>修改hosts需要给文件更高的权限</p>
 <img src="/2024/01/04/git/image-20231204111350240.png" class="" title="image-20231204111350240">
-<h4 id="github中git-push出现超时的问题"><a href="#github中git-push出现超时的问题" class="headerlink" title="github中git push出现超时的问题"></a>github中git push出现超时的问题</h4><img src="/2024/01/04/git/image-20231204112945547.png" class="" title="image-20231204112945547">
+<h2 id="github中git-push出现超时的问题"><a href="#github中git-push出现超时的问题" class="headerlink" title="github中git push出现超时的问题"></a>github中git push出现超时的问题</h2><img src="/2024/01/04/git/image-20231204112945547.png" class="" title="image-20231204112945547">
 <p>解决方案</p>
 <p>1、打开本机的代理服务器</p>
 <img src="/2024/01/04/git/image-20231204113100512.png" class="" title="image-20231204113100512">
@@ -3968,19 +4044,21 @@
 <img src="/2024/01/04/git/image-20231204113208566.png" class="" title="image-20231204113208566">
 <p>3、设置http代理服务器</p>
 <img src="/2024/01/04/git/image-20231204113304822.png" class="" title="image-20231204113304822">
-<h4 id="linux中输出一个文件夹下面的所有文件名"><a href="#linux中输出一个文件夹下面的所有文件名" class="headerlink" title="linux中输出一个文件夹下面的所有文件名"></a>linux中输出一个文件夹下面的所有文件名</h4><ul>
+<h2 id="linux中输出一个文件夹下面的所有文件名"><a href="#linux中输出一个文件夹下面的所有文件名" class="headerlink" title="linux中输出一个文件夹下面的所有文件名"></a>linux中输出一个文件夹下面的所有文件名</h2><ul>
 <li><strong><code>/path/to/directory</code></strong>: 替换为目标目录的路径。</li>
 <li><strong><code>-maxdepth 1</code></strong>: 限制<code>find</code>的搜索深度为1，即仅在指定的目录中搜索，而不会搜索其子目录。</li>
 <li><strong><code>-type f</code></strong>: 限制搜索结果为普通文件（不包括目录和其他类型的文件）。</li>
 <li><strong><code>-exec basename &#123;&#125; \;</code></strong>: 对每一个找到的文件执行<code>basename</code>命令，即输出文件的基本名称。<code>&#123;&#125;</code>是<code>find</code>命令的占位符，表示每个找到的文件的路径。<code>\;</code>表示命令结束。</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">find /path/to/directory -maxdepth 1 -<span class="hljs-built_in">type</span> f -<span class="hljs-built_in">exec</span> <span class="hljs-built_in">basename</span> &#123;&#125; \;<br></code></pre></td></tr></table></figure>
-<h4 id="git查看远端仓库地址"><a href="#git查看远端仓库地址" class="headerlink" title="git查看远端仓库地址"></a>git查看远端仓库地址</h4><figure class="highlight dsconfig"><table><tr><td class="code"><pre><code class="hljs dsconfig"><span class="hljs-string">git</span> <span class="hljs-string">remote</span> -<span class="hljs-string">v</span><br><br><span class="hljs-comment"># 更改远程仓库</span><br><span class="hljs-string">git</span> <span class="hljs-string">remote</span> <span class="hljs-built_in">set-url</span> <span class="hljs-string">origin</span> 仓库地址<br></code></pre></td></tr></table></figure>
-<h4 id="查看代码贡献量"><a href="#查看代码贡献量" class="headerlink" title="查看代码贡献量"></a>查看代码贡献量</h4><blockquote>
+<h2 id="git查看远端仓库地址"><a href="#git查看远端仓库地址" class="headerlink" title="git查看远端仓库地址"></a>git查看远端仓库地址</h2><figure class="highlight dsconfig"><table><tr><td class="code"><pre><code class="hljs dsconfig"><span class="hljs-string">git</span> <span class="hljs-string">remote</span> -<span class="hljs-string">v</span><br><br><span class="hljs-comment"># 更改远程仓库</span><br><span class="hljs-string">git</span> <span class="hljs-string">remote</span> <span class="hljs-built_in">set-url</span> <span class="hljs-string">origin</span> 仓库地址<br></code></pre></td></tr></table></figure>
+<h2 id="查看代码贡献量"><a href="#查看代码贡献量" class="headerlink" title="查看代码贡献量"></a>查看代码贡献量</h2><blockquote>
 <p>按照各个作者的修改代码总数排序</p>
 </blockquote>
 <figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --pretty=<span class="hljs-string">&quot;%aN&quot;</span> | <span class="hljs-built_in">sort</span> | <span class="hljs-built_in">uniq</span> -c | <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> count author; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> -n <span class="hljs-string">&quot;<span class="hljs-variable">$author</span> &quot;</span>; git <span class="hljs-built_in">log</span> --author=<span class="hljs-string">&quot;<span class="hljs-variable">$author</span>&quot;</span> --pretty=tformat: --numstat | awk <span class="hljs-string">&#x27;&#123; add += $1; subs += $2 &#125; END &#123; total = add + subs; printf &quot;%d\n&quot;, total &#125;&#x27;</span>; <span class="hljs-keyword">done</span> | <span class="hljs-built_in">sort</span> -rnk2<br></code></pre></td></tr></table></figure>
-]]></content>
+<h2 id="git-pull-报错"><a href="#git-pull-报错" class="headerlink" title="git pull 报错"></a>git pull 报错</h2><img src="/2024/01/04/git/image.png" class="" title="error">
+<p>如果我们远程有一些分支已经删除，但是本地还存在有远程已经删除的分支的引用，<code>git pull</code>就会拉取失败。这个时候我们需要先将本地与远程同步，删除本地在远程未引用的分支，然后再次拉取代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs git">git remote prune origin<br><br>git pull<br></code></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>技术研究</category>
       </categories>
@@ -4160,7 +4238,7 @@
 <p>同一时间只放置一个单元</p>
 </blockquote>
 <p><strong>算法伪代码</strong></p>
-<p><style>.kegshwkgwacd{}</style><img src="/2023/09/10/iEDA-test/image-20230823094215828.png" class="kegshwkgwacd" alt="image-20230823094215828"></p>
+<p><style>.txqrydwlkmoe{}</style><img src="/2023/09/10/iEDA-test/image-20230823094215828.png" class="txqrydwlkmoe" alt="image-20230823094215828"></p>
 <p><strong>核心代码</strong></p>
 <img src="/2023/09/10/iEDA-test/image-20230825151306959.png" class="" title="image-20230825151306959">
 <figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><span class="hljs-number">1</span>、根据单元的x坐标进行排序<br><span class="hljs-number">2</span>、对于每一个排序好的单元，按照顺序取出每一个单元<br><span class="hljs-number">3</span>、遍历第一行，找出当前行中放置该单元后能够使得<span class="hljs-keyword">cost</span>最小的位置<br><span class="hljs-number">4</span>、按照第<span class="hljs-number">3</span>步的方式遍历每一行，找出全局中能够放置当前单元并使得<span class="hljs-keyword">cost</span>最小的位置<br><span class="hljs-number">5</span>、放置该单元<br></code></pre></td></tr></table></figure>
@@ -4178,7 +4256,7 @@
 <figure class="highlight markdown"><table><tr><td class="code"><pre><code class="hljs markdown">函数的主要步骤如下：<br><span class="hljs-bullet">1.</span> 获取实例的形状（inst<span class="hljs-emphasis">_shape）。</span><br><span class="hljs-emphasis">2. 从_</span>layout对象中获取指定行的间隔列表（interval<span class="hljs-emphasis">_list）。</span><br><span class="hljs-emphasis">3. 通过搜索找到最近的间隔，即与实例重叠的间隔（interval_</span>idx）。<br><span class="hljs-bullet">   -</span> 如果找不到重叠的间隔，则返回INT32<span class="hljs-emphasis">_MAX表示失败。</span><br><span class="hljs-emphasis">4. 检查选定的间隔是否能够容纳实例的宽度，如果不行，则查找最近的非满间隔，并重新选择。</span><br><span class="hljs-emphasis">   - 如果找不到合适的间隔，则返回INT32_</span>MAX表示失败。<br><span class="hljs-bullet">5.</span> 将实例安排到选定的间隔中，形成一个簇（target<span class="hljs-emphasis">_cluster）。</span><br><span class="hljs-emphasis">6. 计算移动代价（movement_</span>cost）：<br><span class="hljs-bullet">   -</span> 从簇中的每个实例计算到目标位置的x方向移动代价，并累加到movement<span class="hljs-emphasis">_cost中。</span><br><span class="hljs-emphasis">   - 计算实例在y方向上的移动代价。</span><br><span class="hljs-emphasis">   - 将实例在x和y方向上的移动代价相加，得到实例的位移代价（inst_</span>displacement）。<br><span class="hljs-bullet">   -</span> 将实例位移代价加到movement<span class="hljs-emphasis">_cost中。</span><br><span class="hljs-emphasis">7. 根据最大移动约束处罚超过最大移动约束的位移代价。</span><br><span class="hljs-emphasis">8. 如果is_</span>trial为false，即非试验性放置，则替换簇的信息（replaceClusterInfo）和更新间隔的剩余长度（updateRemainLength）。<br><span class="hljs-bullet">9.</span> 返回移动代价（movement<span class="hljs-emphasis">_cost）。</span><br></code></pre></td></tr></table></figure>
 <h3 id="三、Tetris算法"><a href="#三、Tetris算法" class="headerlink" title="三、Tetris算法"></a>三、Tetris算法</h3><p><code>Abacus</code>是在<code>Tetris</code>算法上的改进，在<code>Tetris</code>中，对于<code>placeRow</code>的选择是一个单次即可完成的过程，即在当前行中找到了能够合适的位置以后即将该<code>instance</code>放置到该行。因此整体算法流程相似，但复杂度会降低很多。</p>
 <figure class="highlight llvm"><table><tr><td class="code"><pre><code class="hljs llvm"><span class="hljs-number">1</span>、根据单元的<span class="hljs-keyword">x</span>坐标进行排序<br><span class="hljs-number">2</span>、对于每一个排序好的单元，按照顺序取出每一个单元<br><span class="hljs-number">3</span>、遍历第一行，找出当前行中放置该单元后能够使得cost最小的位置<br><span class="hljs-number">4</span>、放置该单元<br><br>若改行无法放置该单元，进行换行策略选择，重新执行，直到所有行都无法放置，返回<span class="hljs-keyword">false</span><br></code></pre></td></tr></table></figure>
-<p><style>.grilaavxkron{zoom: 67%;}</style><img src="/2023/09/10/iEDA-test/image-20230825163454933.png" class="grilaavxkron" alt="image-20230825163454933"></p>
+<p><style>.fpafmpdxlklp{zoom: 67%;}</style><img src="/2023/09/10/iEDA-test/image-20230825163454933.png" class="fpafmpdxlklp" alt="image-20230825163454933"></p>
 <p>因此对<code>iEDA</code>原始代码<code>Abacus</code>算法调整成<code>Tetris</code>只需要确定两个策略即可：1、如何选择当前<code>instance</code>初始行的策略。2、若初始行无法放置当前<code>instance</code>后，选择其它行的调整策略。</p>
 <ul>
 <li><p>选择初始行策略</p>
@@ -4455,8 +4533,8 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>EDA</tag>
         <tag>物理设计</tag>
+        <tag>EDA</tag>
         <tag>布局</tag>
         <tag>布线</tag>
       </tags>
@@ -4847,9 +4925,9 @@
         <category>学习笔记</category>
       </categories>
       <tags>
+        <tag>物理设计</tag>
         <tag>EDA</tag>
         <tag>电子设计自动化</tag>
-        <tag>物理设计</tag>
         <tag>VLSI</tag>
       </tags>
   </entry>
@@ -5034,8 +5112,8 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>EDA</tag>
         <tag>集成电路</tag>
+        <tag>EDA</tag>
         <tag>静态时序分析</tag>
       </tags>
   </entry>
@@ -5763,9 +5841,9 @@
         <category>学习笔记</category>
       </categories>
       <tags>
-        <tag>EDA</tag>
-        <tag>物理设计</tag>
         <tag>集成电路</tag>
+        <tag>物理设计</tag>
+        <tag>EDA</tag>
         <tag>Pyhsical Design</tag>
       </tags>
   </entry>

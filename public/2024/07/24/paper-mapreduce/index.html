@@ -1,0 +1,245 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>论文-MapReduce | Zdon</title><meta name="author" content="Zdon"><meta name="copyright" content="Zdon"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="论文-MapReduce 论文链接  MapReduce是一种编程模型，用于处理和生成大规模数据集，用户指定一个map函数，该函数处理一组输入数据（键值对）以生成一组中间键&#x2F;值对，并指定一个reduce函数来合并所有与同一个键相关的中间值。 以这种函数式风格编写的程序会自动并行化，并在大规模集群的商品机器上执行。运行时系统负责分割输入数据、在一组机器上调度程序的执行、处理机器故障以及管理必要的机器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文-MapReduce">
+<meta property="og:url" content="http://zdon.fun/2024/07/24/paper-mapreduce/">
+<meta property="og:site_name" content="Zdon">
+<meta property="og:description" content="论文-MapReduce 论文链接  MapReduce是一种编程模型，用于处理和生成大规模数据集，用户指定一个map函数，该函数处理一组输入数据（键值对）以生成一组中间键&#x2F;值对，并指定一个reduce函数来合并所有与同一个键相关的中间值。 以这种函数式风格编写的程序会自动并行化，并在大规模集群的商品机器上执行。运行时系统负责分割输入数据、在一组机器上调度程序的执行、处理机器故障以及管理必要的机器">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zdon.fun/img/default_cover10.jpg">
+<meta property="article:published_time" content="2024-07-24T02:18:03.000Z">
+<meta property="article:modified_time" content="2024-07-25T09:35:40.896Z">
+<meta property="article:author" content="Zdon">
+<meta property="article:tag" content="MapReduce">
+<meta property="article:tag" content="分布式">
+<meta property="article:tag" content="集群">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zdon.fun/img/default_cover10.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://zdon.fun/2024/07/24/paper-mapreduce/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '论文-MapReduce',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-07-25 17:35:40'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">44</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">64</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/default_cover10.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Zdon"><span class="site-name">Zdon</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">论文-MapReduce</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2024-07-24T02:18:03.000Z" title="发表于 2024-07-24 10:18:03">2024-07-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/">技术研究</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="论文-MapReduce"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="论文-MapReduce"><a href="#论文-MapReduce" class="headerlink" title="论文-MapReduce"></a>论文-MapReduce</h1><blockquote>
+<p><a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.824/papers/mapreduce.pdf">论文链接</a></p>
+</blockquote>
+<p><code>MapReduce</code>是一种编程模型，用于处理和生成大规模数据集，用户指定一个<code>map</code>函数，该函数处理一组输入数据（键值对）以生成一组中间键/值对，并指定一个<code>reduce</code>函数来合并所有与同一个键相关的中间值。</p>
+<p>以这种函数式风格编写的程序会自动并行化，并在大规模集群的商品机器上执行。运行时系统负责分割输入数据、在一组机器上调度程序的执行、处理机器故障以及管理必要的机器间通信。这使得没有并行和分布式系统经验的程序员也能轻松利用大型分布式系统的资源。</p>
+<p>我们可以理解为<code>MapReduce</code>隐藏了在一组机器运行过程中进行通信的细节，当然还有并行化、容错、数据分发和负载平衡的复杂细节，使得程序员可以和开发普通程序一样开发分布式的应用。</p>
+<h1 id="例子-词频统计"><a href="#例子-词频统计" class="headerlink" title="例子-词频统计"></a>例子-词频统计</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;mapreduce/mapreduce.h&quot;</span></span><br><br><span class="hljs-comment">// 用户定义的map函数</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">WordCounter</span> : <span class="hljs-keyword">public</span> Mapper &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">Map</span><span class="hljs-params">(<span class="hljs-type">const</span> MapInput&amp; input)</span> </span>&#123;<br>        <span class="hljs-type">const</span> string&amp; text = input.<span class="hljs-built_in">value</span>();<br>        <span class="hljs-type">const</span> <span class="hljs-type">int</span> n = text.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; ) &#123;<br>            <span class="hljs-comment">// 跳过前导空白字符</span><br>            <span class="hljs-keyword">while</span> ((i &lt; n) &amp;&amp; <span class="hljs-built_in">isspace</span>(text[i]))<br>                i++;<br><br>            <span class="hljs-comment">// 找到单词的结尾</span><br>            <span class="hljs-type">int</span> start = i;<br>            <span class="hljs-keyword">while</span> ((i &lt; n) &amp;&amp; !<span class="hljs-built_in">isspace</span>(text[i]))<br>                i++;<br><br>            <span class="hljs-keyword">if</span> (start &lt; i)<br>                <span class="hljs-built_in">Emit</span>(text.<span class="hljs-built_in">substr</span>(start, i - start), <span class="hljs-string">&quot;1&quot;</span>);<br>        &#125;<br>    &#125;<br>&#125;;<br><span class="hljs-built_in">REGISTER_MAPPER</span>(WordCounter);<br><br><span class="hljs-comment">// 用户定义的reduce函数</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Adder</span> : <span class="hljs-keyword">public</span> Reducer &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">Reduce</span><span class="hljs-params">(ReduceInput* input)</span> </span>&#123;<br>        <span class="hljs-comment">// 遍历具有相同键的所有条目并累加值</span><br>        int64 value = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span> (!input-&gt;<span class="hljs-built_in">done</span>()) &#123;<br>            value += <span class="hljs-built_in">StringToInt</span>(input-&gt;<span class="hljs-built_in">value</span>());<br>            input-&gt;<span class="hljs-built_in">NextValue</span>();<br>        &#125;<br><br>        <span class="hljs-comment">// 为 input-&gt;key() 发出累加结果</span><br>        <span class="hljs-built_in">Emit</span>(<span class="hljs-built_in">IntToString</span>(value));<br>    &#125;<br>&#125;;<br><span class="hljs-built_in">REGISTER_REDUCER</span>(Adder);<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>** argv)</span> </span>&#123;<br>    <span class="hljs-built_in">ParseCommandLineFlags</span>(argc, argv);<br><br>    MapReduceSpecification spec;<br><br>    <span class="hljs-comment">// 将输入文件列表存储到 &quot;spec&quot; 中</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt; argc; i++) &#123;<br>        MapReduceInput* input = spec.<span class="hljs-built_in">add_input</span>();<br>        input-&gt;<span class="hljs-built_in">set_format</span>(<span class="hljs-string">&quot;text&quot;</span>);<br>        input-&gt;<span class="hljs-built_in">set_filepattern</span>(argv[i]);<br>        input-&gt;<span class="hljs-built_in">set_mapper_class</span>(<span class="hljs-string">&quot;WordCounter&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-comment">// 指定输出文件</span><br>    MapReduceOutput* out = spec.<span class="hljs-built_in">output</span>();<br>    out-&gt;<span class="hljs-built_in">set_filebase</span>(<span class="hljs-string">&quot;/gfs/test/freq&quot;</span>);<br>    out-&gt;<span class="hljs-built_in">set_num_tasks</span>(<span class="hljs-number">100</span>);<br>    out-&gt;<span class="hljs-built_in">set_format</span>(<span class="hljs-string">&quot;text&quot;</span>);<br>    out-&gt;<span class="hljs-built_in">set_reducer_class</span>(<span class="hljs-string">&quot;Adder&quot;</span>);<br><br>    <span class="hljs-comment">// 可选：在map任务中进行部分累加以节省网络带宽</span><br>    out-&gt;<span class="hljs-built_in">set_combiner_class</span>(<span class="hljs-string">&quot;Adder&quot;</span>);<br><br>    <span class="hljs-comment">// 调整参数：最多使用2000台机器，每个任务使用100 MB内存</span><br>    spec.<span class="hljs-built_in">set_machines</span>(<span class="hljs-number">2000</span>);<br>    spec.<span class="hljs-built_in">set_map_megabytes</span>(<span class="hljs-number">100</span>);<br>    spec.<span class="hljs-built_in">set_reduce_megabytes</span>(<span class="hljs-number">100</span>);<br><br>    <span class="hljs-comment">// 现在运行它</span><br>    MapReduceResult result;<br>    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">MapReduce</span>(spec, &amp;result)) <span class="hljs-built_in">abort</span>();<br><br>    <span class="hljs-comment">// 完成：&#x27;result&#x27; 结构包含关于计数器、耗时、使用的机器数量等信息</span><br><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p><code>map</code>函数发出每个单词及其相关的出现次数（示例中为“1”）。<code>reduce</code>函数将所有为特定单词发出的计数相加。</p>
+<p>我们还可以编写代码以填写<code>mapreduce</code>规范对象，指定输入和输出文件的名称以及可选的调整参数。然后调用<code>MapReduce</code>函数，传递该规范对象。用户的代码与<code>MapReduce</code>库（用C++实现）链接在一起。附录A包含此示例的完整程序文本。</p>
+<p>事实上<code>MapReduce</code>在很多能够拆分成小任务的一些需求中都能够得到很好的应用，<code>URL</code>访问频率统计、倒排索引等。</p>
+<ul>
+<li><p>分布式<code>Grep</code>：<code>map</code>函数在匹配提供的模式时发出一行。<code>reduce</code>函数是一个标识函数，它只是将提供的中间数据复制到输出中。</p>
+</li>
+<li><p><code>URL</code>访问频率统计：<code>map</code>函数处理网页请求日志并输出〈<code>URL</code>，1〉。<code>reduce</code>函数将同一<code>URL</code>的所有值相加并发出〈<code>URL</code>，总计数〉对。</p>
+</li>
+<li><p>倒排索引：<code>map</code>函数解析每个文档，并发出〈词，文档ID〉对序列。<code>reduce</code>函数接受给定词的所有对，排序相应的文档ID并发出〈词，文档ID列表〉对。所有输出对的集合形成一个简单的倒排索引。很容易扩展此计算以跟踪词的位置。</p>
+</li>
+</ul>
+<h1 id="MapReduce的整体执行流程"><a href="#MapReduce的整体执行流程" class="headerlink" title="MapReduce的整体执行流程"></a>MapReduce的整体执行流程</h1><p>当用户程序调用<code>MapReduce</code>函数时，会发生以下的一系列操作（图中的编号对应这列表的序号）</p>
+<p>1、用户程序中的<code>MapReduce</code>库首先将输入文件分割成<code>M</code>个部分，每个部分通常为<code>16MB</code>到<code>64MB</code>（用户可以通过一个可选参数来控制）。然后它在集群中的许多机器上启动该程序的多个副本。</p>
+<p>2、程序的一个副本是特殊的——<strong>主控Master</strong>。其余的是<strong>工作节点Worker</strong>，由主控分配任务。主控有<code>M</code>个<code>map</code>任务和<code>R</code>个<code>reduce</code>任务要分配。主控选择空闲的工作节点并分配给它们<code>map</code>任务或<code>reduce</code>任务。</p>
+<p>3、被分配<code>map</code>任务的工作节点读取相应输入分割的内容。从输入数据解析出键/值对，并将每个对传递给用户定义的<code>Map</code>函数。<code>Map</code>函数生成的中间键/值对缓存在内存中。</p>
+<p>4、定期地，这些缓冲对被写入本地磁盘，并由分区函数分成<code>R</code>个区域。这些缓冲对在本地磁盘上的位置传递回主控，主控负责将这些位置转发给<code>reduce</code>工作节点。</p>
+<p>5、当主控通知<code>reduce</code>工作节点这些位置时，它使用远程过程调用从<code>map</code>工作节点的本地磁盘读取缓冲数据。当<code>reduce</code>工作节点读取了所有中间数据后，它按中间键排序，以便将相同键的所有出现都分组在一起。由于通常许多不同的键映射到同一个<code>reduce</code>任务，排序是必要的。如果中间数据量太大而无法放入内存，则使用外部排序。</p>
+<p>6、<code>reduce</code>工作节点迭代排序后的中间数据，并且对于遇到的每个唯一中间键，它将该键及其对应的中间值集合传递给用户的<code>Reduce</code>函数。<code>Reduce</code>函数的输出被附加到该<code>reduce</code>分区的最终输出文件中。</p>
+<p>7、当所有<code>map</code>任务和<code>reduce</code>任务完成时，主控唤醒用户程序。此时，用户程序中的<code>MapReduce</code>调用返回。</p>
+<p>完成后，<code>mapreduce</code>执行的输出在<code>R</code>个输出文件中可用（每个<code>reduce</code>任务一个输出文件，文件名由用户指定）。通常，用户不需要将这些<code>R</code>个输出文件合并成一个文件——他们通常将这些文件作为另一个<code>MapReduce</code>调用的输入，或使用能够处理分区输入的其他分布式应用程序。</p>
+<img src="/2024/07/24/paper-mapreduce/mapreduce-01.png" class="" title="mapreduce-01">
+<p><code>Master</code>会保存多个数据结构，对于每一个<code>map</code>任务和<code>reduce</code>任务，它的存储状态（空闲、进行中或完成）和工作节点的身份等。同时也是中间文件区域的位置从<code>map</code>任务传播到<code>reduce</code>任务的中介，对于每一个完成的<code>map</code>任务，<code>Master</code>存储这它生成的<code>R</code>个中间文件区域的位置和大小，完成以后会将信息传递给<code>reduce</code>。</p>
+<h1 id="容错"><a href="#容错" class="headerlink" title="容错"></a>容错</h1><blockquote>
+<p>主要讨论当节点出现故障以后，会进行怎样的后续处理，保证容错</p>
+</blockquote>
+<h2 id="工作节点故障"><a href="#工作节点故障" class="headerlink" title="工作节点故障"></a>工作节点故障</h2><p><code>Master</code>会定期<code>ping</code>每个工作节点。如果在一定时间内没有收到工作节点的响应，主节点会将该工作节点标记为故障，该工作节点完成的任何<code>map</code>任务都被重置为初始空闲状态，因此可以在其他工作节点上进行调度。同样进行中的<code>map</code>任务或者<code>reduce</code>任务也会被置为空闲。</p>
+<p>完成的<code>map</code>任务在故障发生时重新执行，因为它们的输出存储在故障机器的本地磁盘上，因此无法访问。例如：当<code>map</code>任务首先由工作节点<code>A</code>执行，然后由于<code>A</code>失败而由工作节点<code>B</code>重新执行时，所有执行<code>reduce</code>任务的工作节点都会被通知重新执行。任何尚未从工作节点<code>A</code>读取数据的<code>reduce</code>任务将从工作节点<code>B</code>读取数据。</p>
+<p>完成的<code>reduce</code>任务不需要重新执行，因为它们的输出存储在全局文件系统中。</p>
+<h2 id="主节点故障"><a href="#主节点故障" class="headerlink" title="主节点故障"></a>主节点故障</h2><p>主节点会定期的写入当前主控数据结构的检查点，如果主节点任务失败，可以从最后一个检查点状态来启动新的副本。简单的来说，主节点会使用数据结构来维护当前工作节点的状态和任务状态，通过定期的将这些状态写入到文件中，就可以从最近一次写入的文件中恢复主节点。</p>
+<p>在论文中还讲了语义的一致性，个人理解大致的意思就是，类似于多线程的操作，没有办法保证执行过程中的顺序，但是可以保持最终一致性，就是说我们在单台机器完成同样的任务和使用<code>MapReduce</code>在多台机器中完成任务在最终的表现上是一致的。</p>
+<h1 id="改进措施"><a href="#改进措施" class="headerlink" title="改进措施"></a>改进措施</h1><p>论文中提出了一些能够使得<code>MapReduce</code>更加灵活和高效的改进措施。</p>
+<ul>
+<li><p>分区函数</p>
+<p>  由用户指定他们希望的<code>reduce任务/输出文件的数量</code>。通过中间键的分区函数将数据分区到这些任务中。提供默认的分区使用函数，使得分区保持平衡。分区的目的是让用户机器自己决定自己能够承载的任务数，而按键分区则是能够尽可能的确保同一个<code>key</code>保存在同一个输出文件中</p>
+</li>
+<li><p>有序处理</p>
+<p>  保证在给定分区内，中间键/值对按键递增顺序处理。这种排序保证使每个分区生成排序的输出文件变得容易，当输出文件格式需要支持按键的高效随机访问查找时，或者用户发现按键排序的数据更方便时，这很有用</p>
+</li>
+<li><p>合并函数</p>
+<p>  在每台机器执行完<code>map</code>任务以后，每一个<code>map</code>函数都会生成对应的输出文件，将这些发送给<code>reduce</code>之前，可以将执行的<code>map</code>任务完成后的输出进行合并，能够很好的提高效益</p>
+</li>
+</ul>
+<blockquote>
+<p>更多内容还是参考论文吧</p>
+</blockquote>
+<p>在后续的章节中，论文中还给出了对于<code>Google</code>在实际应用当中对于某些任务处理的性能分析，例如：</p>
+<img src="/2024/07/24/paper-mapreduce/mapreduce-02.png" class="" title="mapreduce-02">
+<p>图中展示的是分布式<code>grep</code>程序运行过程，<code>grep</code>程序扫描<code>1010</code>个<code>100</code>字节的记录，搜索一个相对稀有的三个字符的模式（该模式出现在92,337个记录中）。输入被分割成大约<code>64MB</code>的部分（<code>M</code> = 15000），所有输出放在一个文件中（<code>R</code> = 1）。</p>
+<p>计算随时间的进展。<code>Y</code>轴显示扫描输入数据的速率。随着分配给该<code>MapReduce</code>计算的机器数量的增加，速率逐渐上升，当1764个工作节点被分配时达到<code>30GB/s</code>以上。当<code>map</code>任务完成时，速率开始下降并在计算开始后大约80秒时降为零。整个计算从开始到结束大约需要150秒。这包括大约一分钟的启动开销。开销是由于将程序传播到所有工作节点，以及与<code>GFS</code>交互以打开1000个输入文件集并获取本地性优化所需的信息而产生的。</p>
+<p>文章是2004年发出的，考虑到当时的网络，<code>MapReduce</code>评估瓶颈主要在于当时的网络带宽的限制，所以感觉只会在必要的情况下进行不同机器之间的通信，而更多计算和依赖都会在本地完成，这样就能够降低网络带宽带来的影响，文章也提到了，网络带宽是一种稀缺资源。因此，我们系统中的许多优化目标是减少跨网络发送的数据量：本地性优化允许我们从本地磁盘读取数据，写入单个副本的中间数据到本地磁盘节省了网络带宽。挺牛的！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://zdon.fun">Zdon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://zdon.fun/2024/07/24/paper-mapreduce/">http://zdon.fun/2024/07/24/paper-mapreduce/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zdon.fun" target="_blank">Zdon</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MapReduce/">MapReduce</a><a class="post-meta__tags" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a><a class="post-meta__tags" href="/tags/%E9%9B%86%E7%BE%A4/">集群</a></div><div class="post_share"><div class="social-share" data-image="/img/default_cover10.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/07/12/c-stl-use/" title="C++中常见容器的使用方法"><img class="cover" src="/img/default_cover09.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">C++中常见容器的使用方法</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Zdon</div><div class="author-info__description">我来自偶然，像一颗尘土。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">44</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">64</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://gitee.com/wzd520"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/wzd520" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:wuzdon@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BA%E6%96%87-MapReduce"><span class="toc-number">1.</span> <span class="toc-text">论文-MapReduce</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BE%8B%E5%AD%90-%E8%AF%8D%E9%A2%91%E7%BB%9F%E8%AE%A1"><span class="toc-number">2.</span> <span class="toc-text">例子-词频统计</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MapReduce%E7%9A%84%E6%95%B4%E4%BD%93%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">MapReduce的整体执行流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%B9%E9%94%99"><span class="toc-number">4.</span> <span class="toc-text">容错</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E8%8A%82%E7%82%B9%E6%95%85%E9%9A%9C"><span class="toc-number">4.1.</span> <span class="toc-text">工作节点故障</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E8%8A%82%E7%82%B9%E6%95%85%E9%9A%9C"><span class="toc-number">4.2.</span> <span class="toc-text">主节点故障</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%94%B9%E8%BF%9B%E6%8E%AA%E6%96%BD"><span class="toc-number">5.</span> <span class="toc-text">改进措施</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/07/24/paper-mapreduce/" title="论文-MapReduce"><img src="/img/default_cover10.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文-MapReduce"/></a><div class="content"><a class="title" href="/2024/07/24/paper-mapreduce/" title="论文-MapReduce">论文-MapReduce</a><time datetime="2024-07-24T02:18:03.000Z" title="发表于 2024-07-24 10:18:03">2024-07-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/12/c-stl-use/" title="C++中常见容器的使用方法"><img src="/img/default_cover09.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++中常见容器的使用方法"/></a><div class="content"><a class="title" href="/2024/07/12/c-stl-use/" title="C++中常见容器的使用方法">C++中常见容器的使用方法</a><time datetime="2024-07-12T01:52:08.000Z" title="发表于 2024-07-12 09:52:08">2024-07-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/11/gdb-debug/" title="如何使用GDB进行调试"><img src="/img/default_cover02.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何使用GDB进行调试"/></a><div class="content"><a class="title" href="/2024/07/11/gdb-debug/" title="如何使用GDB进行调试">如何使用GDB进行调试</a><time datetime="2024-07-11T07:12:23.000Z" title="发表于 2024-07-11 15:12:23">2024-07-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/10/go-mutil-routine/" title="Go语言学习-协程、管道、并发"><img src="/img/default_cover01.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Go语言学习-协程、管道、并发"/></a><div class="content"><a class="title" href="/2024/07/10/go-mutil-routine/" title="Go语言学习-协程、管道、并发">Go语言学习-协程、管道、并发</a><time datetime="2024-07-10T14:10:44.000Z" title="发表于 2024-07-10 22:10:44">2024-07-10</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/10/go-base/" title="Go语言学习-基本语法"><img src="/img/default_cover05.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Go语言学习-基本语法"/></a><div class="content"><a class="title" href="/2024/07/10/go-base/" title="Go语言学习-基本语法">Go语言学习-基本语法</a><time datetime="2024-07-10T09:16:50.000Z" title="发表于 2024-07-10 17:16:50">2024-07-10</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/default_cover10.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By Zdon</div><div class="footer_custom_text">没有人是一座孤岛</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'QABC9cDUiFvfbJkVsG3I0mp1-gzGzoHsz',
+      appKey: '7s6lJmCCK7Bczu8Z93wTmEWb',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine@1.5.1/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="true" data-click="false"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.12.0"></script></div></div></body></html>
