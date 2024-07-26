@@ -1,7 +1,7 @@
 ---
 title: 论文-MapReduce
 date: 2024-07-24 10:18:03
-tags: [MapReduce, 分布式, 集群]
+tags: [MapReduce, 分布式, 集群, 网络通信]
 categories: 技术研究
 cover:
 top_img:
