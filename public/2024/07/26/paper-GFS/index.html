@@ -1,0 +1,206 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>论文-GFS（Google File System） | Zdon</title><meta name="author" content="Zdon"><meta name="copyright" content="Zdon"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="论文-GFS（Google File System） 论文链接  通常我们设计大型分布式系统或者大型存储系统的出发点是，我们需要获得巨大的性能加成，进而利用数百台计算机的资源来同时完成大量工作。之后很自然的想法便是将数据分割放到大量的服务器上，这样就可以并行的从多台服务器读取数据。这种方式称之为分片Sharding。 而当我们在成百上千台服务器进行分片，量多了便会出现一些常态的故障。如果我们有数千">
+<meta property="og:type" content="article">
+<meta property="og:title" content="论文-GFS（Google File System）">
+<meta property="og:url" content="http://zdon.fun/2024/07/26/paper-GFS/">
+<meta property="og:site_name" content="Zdon">
+<meta property="og:description" content="论文-GFS（Google File System） 论文链接  通常我们设计大型分布式系统或者大型存储系统的出发点是，我们需要获得巨大的性能加成，进而利用数百台计算机的资源来同时完成大量工作。之后很自然的想法便是将数据分割放到大量的服务器上，这样就可以并行的从多台服务器读取数据。这种方式称之为分片Sharding。 而当我们在成百上千台服务器进行分片，量多了便会出现一些常态的故障。如果我们有数千">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zdon.fun/img/default_cover06.jpg">
+<meta property="article:published_time" content="2024-07-26T01:54:48.000Z">
+<meta property="article:modified_time" content="2024-07-26T11:38:04.100Z">
+<meta property="article:author" content="Zdon">
+<meta property="article:tag" content="GFS">
+<meta property="article:tag" content="分布式">
+<meta property="article:tag" content="集群">
+<meta property="article:tag" content="网络通信">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zdon.fun/img/default_cover06.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://zdon.fun/2024/07/26/paper-GFS/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '论文-GFS（Google File System）',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-07-26 19:38:04'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">45</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/default_cover06.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Zdon"><span class="site-name">Zdon</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">论文-GFS（Google File System）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2024-07-26T01:54:48.000Z" title="发表于 2024-07-26 09:54:48">2024-07-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E7%A0%94%E7%A9%B6/">技术研究</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="论文-GFS（Google File System）"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="论文-GFS（Google-File-System）"><a href="#论文-GFS（Google-File-System）" class="headerlink" title="论文-GFS（Google File System）"></a>论文-GFS（Google File System）</h1><blockquote>
+<p><a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.824/papers/vm-ft.pdf">论文链接</a></p>
+</blockquote>
+<p>通常我们设计大型分布式系统或者大型存储系统的出发点是，我们需要获得巨大的<strong>性能加成</strong>，进而利用数百台计算机的资源来同时完成大量工作。之后很自然的想法便是将数据分割放到大量的服务器上，这样就可以并行的从多台服务器读取数据。这种方式称之为分片<code>Sharding</code>。</p>
+<p>而当我们在成百上千台服务器进行分片，量多了便会出现一些常态的故障。如果我们有数千台服务器，每台服务器平均每三年故障一次，那么我们平均每天就会有3台服务器宕机。所以我们需要自动化的方法而不是人工介入来修复错误，我们需要一个自动容错系统，这便是<strong>容错</strong>。</p>
+<p>实现容错最有用的方式便是复制，我们可以通过维护多个数据的副本，当其中一个故障了以后，变使用另一个。因此想要拥有容错能力，就要有<strong>复制</strong>。</p>
+<p>而很显然，我们是会把同样的数据放在不同的服务器上，也就是说同一份数据会拥有多个副本，有多个副本就有可能因为并发的原因导致不同副本的不一致，也许我们可以通过一些手段去实现<strong>一致性</strong>，让我们的结果符合是基于其，但是这样的效果，往往伴随着性能的降低，而这便回到了我们开始的性能问题。</p>
+<p><code>Google</code>文件系统是一个用于大型分布式数据密集型应用程序的可拓展分布式文件系统。分布式文件系统是一种文件系统架构，用于在网络中多个服务器和存储设备之间共享文件和数据。主要目标是允许用户远程访问存储在多个不同地理位置的服务器上的数据，就像这些文件存储在本地计算机上一样。分布式文件系统支持文件的存储和管理，使得文件能够跨多个物理存储设备分散存储，同时为用户提供统一连贯的访问接口。所追求的目标在于性能、可拓展性、可靠性、可用性。</p>
+<p><code>GFS</code>提供一些熟悉的文件系统接口，文件在目录中层次化组织，并由路径名进行标识，包括支持创建、删除、打开、关闭、读取和写入文件的常规操作。</p>
+<p><code>GFS</code>还有快照和记录追加操作，快照以低成本创建文件或者目录树的副本，记录追加允许多个客户端同时向同一个文件追加数据，同时保证每个客户端追加的原子性，许多客户端可以同时追加数据而无需额外的锁定。</p>
+<h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><p><code>GFS</code>集群由一个主控和多个块服务器组成，并由多个客户端访问，集群中的节点通常是运行用户级服务器进程的普通<code>linux</code>机器。文件被分割成固定大小的块，每个块由<code>master</code>在块创建时分配的不可变且全局唯一的64位块句柄标识。块服务器将块存储在本地磁盘上作为<code>linux</code>文件，并按块句柄和字节范围读取或者写入块数据。通常为了可靠性，会保存多个副本。</p>
+<p><code>master</code>维护所有文件系统元数据。这包括命名空间、访问控制信息、从文件到块的映射以及块的当前位置信息。它还控制系统范围的活动，如块租约管理、孤立块的垃圾回收和块服务器之间的块迁移。<code>master</code>定期通过心跳消息与每个块服务器通信，向其发送指令并收集其状态。</p>
+<p>链接到每个应用程序的<code>GFS</code>客户端代码实现文件系统<code>API</code>，并与<code>master</code>和块服务器通信以代表应用程序读写数据。客户端与<code>master</code>交互以进行元数据操作，但所有数据承载的通信都直接与块服务器进行。</p>
+<img src="/2024/07/26/paper-GFS/gfs-01.png" class="" title="gfs-01">
+<p>假设我们一个客户端想要读取<code>GFS</code>中的内容，首先会使用固定的块大小，将应用程序指定的文件名和字节偏移量转化为文件中的块索引，然后向<code>master</code>发送包含文件名和块索引的请求，<code>master</code>会恢复相应的句柄和副本的位置。客户端随后便会向其中的一个副本发送请求，通常时最近的副本。请求指定块句柄和该块内的字节范围。进一步读取相同块不需要更多的客户端-主控交互，直到缓存信息过期或文件重新打开。</p>
+<h2 id="块大小"><a href="#块大小" class="headerlink" title="块大小"></a>块大小</h2><p>在<code>GFS</code>中采用了<code>64MB</code>作为文件系统中的块大小，这实际上是一个比较打的文件系统块，很显然，我们的数据是存储在块服务器上的，如果我们仅仅是需要写入或者访问小文件的话，那么块内会存在比较大的内部碎片。</p>
+<p>当然论文中也给出了使用大块的优势：首先，它减少了客户端与主控交互的需求，因为对同一块的读取和写入只需要一次向主控请求块位置信息。对于工作负载，这种减少尤其显著，因为应用程序主要顺序读取和写入大文件。即使对于小的随机读取，客户端也可以舒适地缓存多<code>TB</code>工作集的所有块位置信息。其次，由于在一个大块上，客户端更有可能在给定块上执行许多操作，它可以通过在一段时间内保持与块服务器的持久<code>TCP</code>连接来减少网络开销。第三，它减少了主控存储的元数据量。这允许我们将元数据保存在内存中，在内存中运行速度其实就会快很多。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://zdon.fun">Zdon</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://zdon.fun/2024/07/26/paper-GFS/">http://zdon.fun/2024/07/26/paper-GFS/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://zdon.fun" target="_blank">Zdon</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/GFS/">GFS</a><a class="post-meta__tags" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a><a class="post-meta__tags" href="/tags/%E9%9B%86%E7%BE%A4/">集群</a><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/">网络通信</a></div><div class="post_share"><div class="social-share" data-image="/img/default_cover06.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/07/24/paper-mapreduce/" title="论文-MapReduce"><img class="cover" src="/img/default_cover11.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">论文-MapReduce</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/07/24/paper-mapreduce/" title="论文-MapReduce"><img class="cover" src="/img/default_cover11.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-24</div><div class="title">论文-MapReduce</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Zdon</div><div class="author-info__description">我来自偶然，像一颗尘土。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">45</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">66</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://gitee.com/wzd520"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://gitee.com/wzd520" target="_blank" title="Gitee"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:wuzdon@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BA%E6%96%87-GFS%EF%BC%88Google-File-System%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">论文-GFS（Google File System）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9D%97%E5%A4%A7%E5%B0%8F"><span class="toc-number">1.2.</span> <span class="toc-text">块大小</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/07/26/paper-GFS/" title="论文-GFS（Google File System）"><img src="/img/default_cover06.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文-GFS（Google File System）"/></a><div class="content"><a class="title" href="/2024/07/26/paper-GFS/" title="论文-GFS（Google File System）">论文-GFS（Google File System）</a><time datetime="2024-07-26T01:54:48.000Z" title="发表于 2024-07-26 09:54:48">2024-07-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/24/paper-mapreduce/" title="论文-MapReduce"><img src="/img/default_cover11.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文-MapReduce"/></a><div class="content"><a class="title" href="/2024/07/24/paper-mapreduce/" title="论文-MapReduce">论文-MapReduce</a><time datetime="2024-07-24T02:18:03.000Z" title="发表于 2024-07-24 10:18:03">2024-07-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/12/c-stl-use/" title="C++中常见容器的使用方法"><img src="/img/default_cover08.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++中常见容器的使用方法"/></a><div class="content"><a class="title" href="/2024/07/12/c-stl-use/" title="C++中常见容器的使用方法">C++中常见容器的使用方法</a><time datetime="2024-07-12T01:52:08.000Z" title="发表于 2024-07-12 09:52:08">2024-07-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/11/gdb-debug/" title="如何使用GDB进行调试"><img src="/img/default_cover11.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="如何使用GDB进行调试"/></a><div class="content"><a class="title" href="/2024/07/11/gdb-debug/" title="如何使用GDB进行调试">如何使用GDB进行调试</a><time datetime="2024-07-11T07:12:23.000Z" title="发表于 2024-07-11 15:12:23">2024-07-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/10/go-mutil-routine/" title="Go语言学习-协程、管道、并发"><img src="/img/default_cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Go语言学习-协程、管道、并发"/></a><div class="content"><a class="title" href="/2024/07/10/go-mutil-routine/" title="Go语言学习-协程、管道、并发">Go语言学习-协程、管道、并发</a><time datetime="2024-07-10T14:10:44.000Z" title="发表于 2024-07-10 22:10:44">2024-07-10</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/default_cover06.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2024 By Zdon</div><div class="footer_custom_text">没有人是一座孤岛</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'QABC9cDUiFvfbJkVsG3I0mp1-gzGzoHsz',
+      appKey: '7s6lJmCCK7Bczu8Z93wTmEWb',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine@1.5.1/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="true" data-click="false"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.12.0"></script></div></div></body></html>
