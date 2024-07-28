@@ -1,5 +1,5 @@
 ---
-title: 论文-GFS（Google File System）
+title: GFS（Google File System）
 date: 2024-07-26 09:54:48
 tags: [GFS, 分布式, 集群, 网络通信]
 categories: 技术研究
@@ -17,7 +17,7 @@ top_img:
 
 而很显然，我们是会把同样的数据放在不同的服务器上，也就是说同一份数据会拥有多个副本，有多个副本就有可能因为并发的原因导致不同副本的不一致，也许我们可以通过一些手段去实现**一致性**，让我们的结果符合是基于其，但是这样的效果，往往伴随着性能的降低，而这便回到了我们开始的性能问题。
 
-# 论文-GFS（Google File System）
+# GFS（Google File System）
 
 > 论文链接:[https://pdos.csail.mit.edu/6.824/papers/vm-ft.pdf](https://pdos.csail.mit.edu/6.824/papers/vm-ft.pdf)
 
