@@ -658,4 +658,16 @@ ZNode *ZSet::znode_offset(ZNode *node, int64_t offset) {
 
 ## 七、测试效果
 
+**测试哈希表**
 
+单个客户端短连接
+
+![test_hashtable](build-sample-redis/test_01.png)
+
+单个客户端持续连接交互式
+
+> TODO:另一台电脑上代码，对客户端有改进
+
+**测试zset**
+
+单个客户端短连接
